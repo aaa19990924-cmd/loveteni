@@ -1488,6 +1488,9 @@ footer {
   .with-sidebar { grid-template-columns: 1fr; gap: 32px; }
   .sidebar { position: static; }
   .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .header-inner { gap: 16px; }
+  .gnav-item { padding: 8px 10px; font-size: 12px; }
+  .header-search { width: 160px; }
 }
 @media (max-width: 720px) {
   .container, .container-narrow { padding: 0 20px; }
@@ -1538,6 +1541,8 @@ footer {
     </div>
     <nav class="gnav" id="gnav">
       <span class="gnav-item active" onclick="navigate('rackets')" data-page="rackets">ラケット</span>
+      <span class="gnav-item" onclick="navigate('strings')" data-page="strings">ガット</span>
+      <span class="gnav-item" onclick="navigate('grips')" data-page="grips">グリップ</span>
       <span class="gnav-item" onclick="navigate('diagnosis')" data-page="diagnosis">診断</span>
       <span class="gnav-item" onclick="navigate('column')" data-page="column">コラム</span>
       <span class="gnav-item" onclick="navigate('news')" data-page="news">最新情報</span>
@@ -1834,6 +1839,155 @@ footer {
   </div>
 </div>
 
+<!-- ===== STRINGS (ガット) ===== -->
+<div id="view-strings" class="view">
+  <div class="page-hero">
+    <div class="container">
+      <div class="page-hero-eyebrow">STRINGS DATABASE</div>
+      <h1 class="page-hero-title">ガットを探す</h1>
+      <p class="page-hero-desc">8ブランド・50種類以上のテニスストリングを掲載しています。</p>
+    </div>
+  </div>
+  <div class="page-body">
+    <div class="container">
+      <div class="brand-grid" id="stringBrandGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== STRING BRAND DETAIL ===== -->
+<div id="view-string-brand" class="view">
+  <div class="page-body">
+    <div class="container">
+      <div class="crumb" id="crumb-string-brand"></div>
+      <button class="back-btn" onclick="navigate('strings')">← ブランド一覧</button>
+      <div class="with-sidebar">
+        <aside class="sidebar">
+          <div class="sidebar-title">STRING BRANDS</div>
+          <ul class="sidebar-list" id="stringBrandSidebar"></ul>
+        </aside>
+        <div>
+          <div class="brand-detail-header">
+            <div class="brand-detail-name" id="string-brand-name"></div>
+            <div class="brand-detail-desc" id="string-brand-desc"></div>
+          </div>
+          <div style="font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:0.2em;color:var(--mute);text-transform:uppercase;margin-bottom:18px">SERIES LINEUP</div>
+          <div class="series-grid" id="stringSeriesGrid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== STRING SERIES (Product list) ===== -->
+<div id="view-string-series" class="view">
+  <div class="page-body">
+    <div class="container">
+      <div class="crumb" id="crumb-string-series"></div>
+      <button class="back-btn" id="back-to-string-brand">← ブランドに戻る</button>
+      <div class="with-sidebar">
+        <aside class="sidebar">
+          <div class="sidebar-title">STRING BRANDS</div>
+          <ul class="sidebar-list" id="stringBrandSidebar2"></ul>
+        </aside>
+        <div>
+          <h1 class="page-hero-title" style="font-size:32px;margin-bottom:8px" id="string-series-title"></h1>
+          <div style="font-family:'DM Sans',sans-serif;font-size:12px;color:var(--mute);letter-spacing:0.04em" id="string-series-count"></div>
+          <div class="racket-grid" id="stringProductGrid" style="margin-top:32px"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== STRING DETAIL ===== -->
+<div id="view-string-detail" class="view">
+  <div class="page-body">
+    <div class="container">
+      <div class="crumb" id="crumb-string-detail"></div>
+      <button class="back-btn" id="back-to-string-series">← 一覧に戻る</button>
+      <div class="detail-layout">
+        <div class="detail-img-area" id="string-detail-img-area"><div class="empty-icon">🎾</div></div>
+        <div>
+          <div class="detail-brand" id="string-detail-brand"></div>
+          <h1 class="detail-model" id="string-detail-model"></h1>
+          <p class="detail-concept" id="string-detail-concept"></p>
+          <div class="detail-specs-grid" id="string-detail-specs"></div>
+          <button class="detail-cta-btn" id="string-detail-rakuten-btn">楽天で価格をチェック →</button>
+        </div>
+      </div>
+      <div class="rakuten-section">
+        <div class="rakuten-section-title">楽天での販売価格</div>
+        <div id="string-rakuten-results"><div class="loading"><span class="spin"></span>楽天を検索中...</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== GRIPS (グリップ) ===== -->
+<div id="view-grips" class="view">
+  <div class="page-hero">
+    <div class="container">
+      <div class="page-hero-eyebrow">GRIPS DATABASE</div>
+      <h1 class="page-hero-title">グリップを探す</h1>
+      <p class="page-hero-desc">8ブランド・25種類以上のオーバーグリップ・リプレースメントグリップを掲載しています。</p>
+    </div>
+  </div>
+  <div class="page-body">
+    <div class="container">
+      <div class="brand-grid" id="gripBrandGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== GRIP BRAND DETAIL ===== -->
+<div id="view-grip-brand" class="view">
+  <div class="page-body">
+    <div class="container">
+      <div class="crumb" id="crumb-grip-brand"></div>
+      <button class="back-btn" onclick="navigate('grips')">← ブランド一覧</button>
+      <div class="with-sidebar">
+        <aside class="sidebar">
+          <div class="sidebar-title">GRIP BRANDS</div>
+          <ul class="sidebar-list" id="gripBrandSidebar"></ul>
+        </aside>
+        <div>
+          <div class="brand-detail-header">
+            <div class="brand-detail-name" id="grip-brand-name"></div>
+            <div class="brand-detail-desc" id="grip-brand-desc"></div>
+          </div>
+          <div style="font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:0.2em;color:var(--mute);text-transform:uppercase;margin-bottom:18px">PRODUCT LINEUP</div>
+          <div class="racket-grid" id="gripProductGrid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== GRIP DETAIL ===== -->
+<div id="view-grip-detail" class="view">
+  <div class="page-body">
+    <div class="container">
+      <div class="crumb" id="crumb-grip-detail"></div>
+      <button class="back-btn" id="back-to-grip-brand">← ブランドに戻る</button>
+      <div class="detail-layout">
+        <div class="detail-img-area" id="grip-detail-img-area"><div class="empty-icon">🎾</div></div>
+        <div>
+          <div class="detail-brand" id="grip-detail-brand"></div>
+          <h1 class="detail-model" id="grip-detail-model"></h1>
+          <p class="detail-concept" id="grip-detail-concept"></p>
+          <div class="detail-specs-grid" id="grip-detail-specs"></div>
+          <button class="detail-cta-btn" id="grip-detail-rakuten-btn">楽天で価格をチェック →</button>
+        </div>
+      </div>
+      <div class="rakuten-section">
+        <div class="rakuten-section-title">楽天での販売価格</div>
+        <div id="grip-rakuten-results"><div class="loading"><span class="spin"></span>楽天を検索中...</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ===== DIAGNOSIS ===== -->
 <div id="view-diagnosis" class="view">
   <div class="page-hero">
@@ -2120,6 +2274,8 @@ footer {
         <h4>CONTENTS</h4>
         <ul>
           <li><a onclick="navigate('rackets')">ラケット</a></li>
+          <li><a onclick="navigate('strings')">ガット</a></li>
+          <li><a onclick="navigate('grips')">グリップ</a></li>
           <li><a onclick="navigate('diagnosis')">ラケット診断</a></li>
           <li><a onclick="navigate('column')">コラム</a></li>
           <li><a onclick="navigate('news')">最新情報</a></li>
@@ -2155,6 +2311,8 @@ footer {
 </footer>
 
 <script src="racket-data.js"></script>
+<script src="strings-data.js"></script>
+<script src="grips-data.js"></script>
 <script>
 // ===== BRAND DATA =====
 const BRAND_INFO = {
@@ -2183,6 +2341,11 @@ let currentBrand = null;
 let currentSeries = null;
 let filteredRackets = [];
 let allRackets = [];
+let allStrings = [];
+let allGrips = [];
+let currentStringBrand = null;
+let currentStringSeries = null;
+let currentGripBrand = null;
 let compareRackets = [null, null];
 let votes = {};
 let newsCache = null;
@@ -2190,9 +2353,15 @@ let isHistoryNav = false; // ブラウザの戻る/進むでナビゲートし�
 
 window.onload = function() {
   allRackets = typeof RACKET_DATABASE !== 'undefined' ? RACKET_DATABASE : [];
+  allStrings = typeof STRING_DATABASE !== 'undefined' ? STRING_DATABASE : [];
+  allGrips = typeof GRIP_DATABASE !== 'undefined' ? GRIP_DATABASE : [];
   renderBrandGrid();
   renderHomeBrands();
   renderBrandSidebar();
+  renderStringBrandGrid();
+  renderStringBrandSidebar();
+  renderGripBrandGrid();
+  renderGripBrandSidebar();
   initQuiz();
   renderMatches();
   renderRules();
@@ -2221,6 +2390,16 @@ window.addEventListener('popstate', (e) => {
       selectSeries(state.brand, state.series);
     } else if (state.view === 'detail' && state.racketId) {
       selectRacket(state.racketId);
+    } else if (state.view === 'string-brand' && state.brand) {
+      selectStringBrand(state.brand);
+    } else if (state.view === 'string-series' && state.brand && state.series) {
+      selectStringSeries(state.brand, state.series);
+    } else if (state.view === 'string-detail' && state.stringId) {
+      selectString(state.stringId);
+    } else if (state.view === 'grip-brand' && state.brand) {
+      selectGripBrand(state.brand);
+    } else if (state.view === 'grip-detail' && state.gripId) {
+      selectGrip(state.gripId);
     } else {
       navigate(state.view);
     }
@@ -2853,6 +3032,249 @@ async function loadRakutenResults(r) {
 
 function openRakuten(btn, brand, model) {
   window.open(`https://search.rakuten.co.jp/search/mall/${encodeURIComponent(brand+' '+model+' テニスラケット')}/?genreId=101227`, '_blank');
+}
+
+function openRakutenString(brand, model) {
+  window.open(`https://search.rakuten.co.jp/search/mall/${encodeURIComponent(brand+' '+model+' テニスガット')}/`, '_blank');
+}
+
+function openRakutenGrip(brand, model) {
+  window.open(`https://search.rakuten.co.jp/search/mall/${encodeURIComponent(brand+' '+model+' テニスグリップ')}/`, '_blank');
+}
+
+// ===== STRINGS (ガット) =====
+function renderStringBrandGrid() {
+  const html = STRING_BRANDS.map((brand, i) => {
+    const info = STRING_BRAND_INFO[brand];
+    const count = allStrings.filter(s => s.brand === brand).length;
+    return `<div class="brand-card" onclick="selectStringBrand('${brand}')">
+      <div class="brand-card-num">${String(i+1).padStart(2,'0')} / ${String(STRING_BRANDS.length).padStart(2,'0')}</div>
+      <div class="brand-accent-bar"></div>
+      <div class="brand-card-name"><em>${info.tagline}</em>${brand}</div>
+      <div class="brand-card-meta">${info.series.length}シリーズ · ${count}モデル</div>
+      <div class="brand-card-arrow">VIEW MORE →</div>
+    </div>`;
+  }).join('');
+  const el = document.getElementById('stringBrandGrid');
+  if (el) el.innerHTML = html;
+}
+
+function renderStringBrandSidebar() {
+  const html = STRING_BRANDS.map(brand =>
+    `<li><a onclick="selectStringBrand('${brand}')" id="ssb-${brand.replace(/\s/g,'-')}">
+      <span class="sidebar-dot" style="background:${STRING_BRAND_INFO[brand].color}"></span>${brand}
+    </a></li>`
+  ).join('');
+  const e1 = document.getElementById('stringBrandSidebar');
+  const e2 = document.getElementById('stringBrandSidebar2');
+  if (e1) e1.innerHTML = html;
+  if (e2) e2.innerHTML = html.replace(/id="ssb-/g, 'id="ssb2-');
+}
+
+function selectStringBrand(brand) {
+  currentStringBrand = brand;
+  currentStringSeries = null;
+  const info = STRING_BRAND_INFO[brand];
+  if (!info) return;
+  document.getElementById('string-brand-name').textContent = brand;
+  document.getElementById('string-brand-desc').textContent = info.desc;
+  document.getElementById('crumb-string-brand').innerHTML = `<span onclick="navigate('strings')">STRINGS</span><span class="sep">/</span><span class="current">${brand}</span>`;
+  document.getElementById('stringSeriesGrid').innerHTML = info.series.map(s => {
+    const cnt = getStringsBySeries(brand, s.name).length;
+    return `<div class="series-card" onclick="selectStringSeries('${brand}','${s.name.replace(/'/g,"\\'")}')">
+      <div class="series-name">${s.name}</div>
+      <div class="series-desc">${s.desc}</div>
+      <div class="series-bottom">
+        ${cnt > 0 ? `<div class="series-count">${cnt} MODELS</div>` : '<div></div>'}
+        <div class="series-arrow">→</div>
+      </div>
+    </div>`;
+  }).join('');
+  document.querySelectorAll('[id^="ssb-"], [id^="ssb2-"]').forEach(e => e.classList.remove('active'));
+  const ids = [`ssb-${brand.replace(/\s/g,'-')}`, `ssb2-${brand.replace(/\s/g,'-')}`];
+  ids.forEach(id => { const e = document.getElementById(id); if (e) e.classList.add('active'); });
+  navigate('string-brand', true);
+  if (!isHistoryNav) history.pushState({ view: 'string-brand', brand }, '', `#string-brand/${brand}`);
+}
+
+function selectStringSeries(brand, series) {
+  currentStringBrand = brand;
+  currentStringSeries = series;
+  const strings = getStringsBySeries(brand, series);
+  document.getElementById('back-to-string-brand').onclick = () => selectStringBrand(brand);
+  document.getElementById('string-series-title').textContent = `${brand} ${series}`;
+  document.getElementById('string-series-count').textContent = `${strings.length} モデル`;
+  document.getElementById('crumb-string-series').innerHTML = `<span onclick="navigate('strings')">STRINGS</span><span class="sep">/</span><span onclick="selectStringBrand('${brand}')">${brand}</span><span class="sep">/</span><span class="current">${series}</span>`;
+  renderStringGrid(strings);
+  navigate('string-series', true);
+  if (!isHistoryNav) history.pushState({ view: 'string-series', brand, series }, '', `#string-series/${brand}/${series}`);
+}
+
+function renderStringGrid(strings) {
+  const grid = document.getElementById('stringProductGrid');
+  if (!grid) return;
+  if (!strings.length) {
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🎾</div><div class="empty-text">モデルデータ準備中です</div></div>`;
+    return;
+  }
+  grid.innerHTML = strings.map(s => `
+    <div class="racket-card" onclick="selectString('${s.id}')">
+      <div class="racket-img"><div class="ph">🎾</div></div>
+      <div class="racket-info">
+        <div class="racket-brand-text">${s.brand}</div>
+        <div class="racket-model">${s.model}</div>
+        <div class="racket-specs">
+          <div>種類 <strong>${s.type}</strong></div>
+          <div>ゲージ <strong>${s.gauge}</strong></div>
+          <div>長さ <strong>${s.length||'-'}</strong></div>
+          <div>カラー <strong>${(s.color||'-').split('/')[0]}</strong></div>
+        </div>
+        <button class="rakuten-btn" onclick="event.stopPropagation();openRakutenString('${s.brand}','${s.model.replace(/'/g,"\\'")}')">楽天で価格チェック →</button>
+      </div>
+    </div>`).join('');
+}
+
+function selectString(id) {
+  const s = allStrings.find(x => x.id === id);
+  if (!s) return;
+  document.getElementById('back-to-string-series').onclick = () => selectStringSeries(currentStringBrand, currentStringSeries);
+  document.getElementById('crumb-string-detail').innerHTML = `<span onclick="navigate('strings')">STRINGS</span><span class="sep">/</span><span onclick="selectStringBrand('${currentStringBrand}')">${currentStringBrand}</span><span class="sep">/</span><span onclick="selectStringSeries('${currentStringBrand}','${(currentStringSeries||'').replace(/'/g,"\\'")}')">${currentStringSeries}</span><span class="sep">/</span><span class="current">${s.model}</span>`;
+  document.getElementById('string-detail-brand').textContent = s.brand;
+  document.getElementById('string-detail-model').textContent = s.model;
+  document.getElementById('string-detail-concept').textContent = s.concept || '';
+  document.getElementById('string-detail-specs').innerHTML = [
+    ['種類', s.type, ''], ['ゲージ', s.gauge, ''],
+    ['長さ', s.length || '-', ''], ['カラー', s.color || '-', ''],
+    s.year ? ['発売年', s.year, ''] : null,
+    s.players && s.players.length ? ['使用選手', s.players.join('・'), ''] : null
+  ].filter(Boolean).map(([l,v,u]) => `<div class="detail-spec-item"><div class="detail-spec-label">${l}</div><div class="detail-spec-value">${v}<span class="detail-spec-unit">${u}</span></div></div>`).join('');
+  document.getElementById('string-detail-img-area').innerHTML = '<div class="empty-icon">🎾</div>';
+  document.getElementById('string-detail-rakuten-btn').onclick = () => openRakutenString(s.brand, s.model);
+  loadRakutenResultsGeneric(s, 'string-rakuten-results', 'string-detail-img-area', 'テニスガット');
+  navigate('string-detail', true);
+  if (!isHistoryNav) history.pushState({ view: 'string-detail', stringId: id }, '', `#string-detail/${id}`);
+}
+
+// ===== GRIPS (グリップ) =====
+function renderGripBrandGrid() {
+  const html = GRIP_BRANDS.map((brand, i) => {
+    const info = GRIP_BRAND_INFO[brand];
+    const count = allGrips.filter(g => g.brand === brand).length;
+    return `<div class="brand-card" onclick="selectGripBrand('${brand}')">
+      <div class="brand-card-num">${String(i+1).padStart(2,'0')} / ${String(GRIP_BRANDS.length).padStart(2,'0')}</div>
+      <div class="brand-accent-bar"></div>
+      <div class="brand-card-name"><em>${info.tagline}</em>${brand}</div>
+      <div class="brand-card-meta">${count}モデル</div>
+      <div class="brand-card-arrow">VIEW MORE →</div>
+    </div>`;
+  }).join('');
+  const el = document.getElementById('gripBrandGrid');
+  if (el) el.innerHTML = html;
+}
+
+function renderGripBrandSidebar() {
+  const html = GRIP_BRANDS.map(brand =>
+    `<li><a onclick="selectGripBrand('${brand}')" id="gsb-${brand.replace(/\s/g,'-')}">
+      <span class="sidebar-dot" style="background:${GRIP_BRAND_INFO[brand].color}"></span>${brand}
+    </a></li>`
+  ).join('');
+  const e1 = document.getElementById('gripBrandSidebar');
+  if (e1) e1.innerHTML = html;
+}
+
+function selectGripBrand(brand) {
+  currentGripBrand = brand;
+  const info = GRIP_BRAND_INFO[brand];
+  if (!info) return;
+  document.getElementById('grip-brand-name').textContent = brand;
+  document.getElementById('grip-brand-desc').textContent = info.desc;
+  document.getElementById('crumb-grip-brand').innerHTML = `<span onclick="navigate('grips')">GRIPS</span><span class="sep">/</span><span class="current">${brand}</span>`;
+  const grips = getGripsByBrand(brand);
+  renderGripGrid(grips);
+  document.querySelectorAll('[id^="gsb-"]').forEach(e => e.classList.remove('active'));
+  const el = document.getElementById(`gsb-${brand.replace(/\s/g,'-')}`);
+  if (el) el.classList.add('active');
+  navigate('grip-brand', true);
+  if (!isHistoryNav) history.pushState({ view: 'grip-brand', brand }, '', `#grip-brand/${brand}`);
+}
+
+function renderGripGrid(grips) {
+  const grid = document.getElementById('gripProductGrid');
+  if (!grid) return;
+  if (!grips.length) {
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🎾</div><div class="empty-text">モデルデータ準備中です</div></div>`;
+    return;
+  }
+  grid.innerHTML = grips.map(g => `
+    <div class="racket-card" onclick="selectGrip('${g.id}')">
+      <div class="racket-img"><div class="ph">🎾</div></div>
+      <div class="racket-info">
+        <div class="racket-brand-text">${g.brand}</div>
+        <div class="racket-model">${g.model}</div>
+        <div class="racket-specs">
+          <div>種類 <strong>${g.type}</strong></div>
+          <div>タイプ <strong>${g.texture}</strong></div>
+          <div>厚さ <strong>${g.thickness}</strong></div>
+          <div>カラー <strong>${(g.colors||'-').split('/')[0]}</strong></div>
+        </div>
+        <button class="rakuten-btn" onclick="event.stopPropagation();openRakutenGrip('${g.brand}','${g.model.replace(/'/g,"\\'")}')">楽天で価格チェック →</button>
+      </div>
+    </div>`).join('');
+}
+
+function selectGrip(id) {
+  const g = allGrips.find(x => x.id === id);
+  if (!g) return;
+  document.getElementById('back-to-grip-brand').onclick = () => selectGripBrand(currentGripBrand);
+  document.getElementById('crumb-grip-detail').innerHTML = `<span onclick="navigate('grips')">GRIPS</span><span class="sep">/</span><span onclick="selectGripBrand('${currentGripBrand}')">${currentGripBrand}</span><span class="sep">/</span><span class="current">${g.model}</span>`;
+  document.getElementById('grip-detail-brand').textContent = g.brand;
+  document.getElementById('grip-detail-model').textContent = g.model;
+  document.getElementById('grip-detail-concept').textContent = g.concept || '';
+  document.getElementById('grip-detail-specs').innerHTML = [
+    ['種類', g.type, ''], ['タイプ', g.texture, ''],
+    ['厚さ', g.thickness, ''], ['カラー', g.colors || '-', ''],
+    g.year ? ['発売年', g.year, ''] : null,
+    g.players && g.players.length ? ['使用選手', g.players.join('・'), ''] : null
+  ].filter(Boolean).map(([l,v,u]) => `<div class="detail-spec-item"><div class="detail-spec-label">${l}</div><div class="detail-spec-value">${v}<span class="detail-spec-unit">${u}</span></div></div>`).join('');
+  document.getElementById('grip-detail-img-area').innerHTML = '<div class="empty-icon">🎾</div>';
+  document.getElementById('grip-detail-rakuten-btn').onclick = () => openRakutenGrip(g.brand, g.model);
+  loadRakutenResultsGeneric(g, 'grip-rakuten-results', 'grip-detail-img-area', 'テニスグリップ');
+  navigate('grip-detail', true);
+  if (!isHistoryNav) history.pushState({ view: 'grip-detail', gripId: id }, '', `#grip-detail/${id}`);
+}
+
+// ガット・グリップ共通の楽天検索（品番なし、キーワードのみ）
+async function loadRakutenResultsGeneric(item, resultsId, imgAreaId, suffix) {
+  const c = document.getElementById(resultsId);
+  if (!c) return;
+  const kw = (item.searchKeyword || `${item.brand} ${item.model}`) + ' ' + suffix;
+  c.innerHTML = '<div class="loading"><span class="spin"></span>楽天を検索中...</div>';
+  try {
+    const res = await fetch(`/api/rakuten-search?keyword=${encodeURIComponent(kw)}`);
+    const data = await res.json();
+    if (!data.items || !data.items.length) {
+      const errMsg = data.error ? `（${data.error}）` : '';
+      c.innerHTML = `<div class="loading">楽天市場で見つかりませんでした${errMsg}</div>`;
+      return;
+    }
+    const first = data.items.find(i => i.largeImageUrl);
+    if (first) {
+      const imgArea = document.getElementById(imgAreaId);
+      if (imgArea) imgArea.innerHTML = `<img src="${first.largeImageUrl}" alt="${item.model}" onerror="this.parentElement.innerHTML='<div class=empty-icon>🎾</div>'">`;
+    }
+    const hasProspo = data.items.some(i => i.isProSports);
+    const headerLabel = hasProspo ? '🏪 PRO SPORTS優先表示' : '🏪 楽天市場';
+    c.innerHTML = `<div style="font-size:11px;color:var(--accent);margin-bottom:12px;font-family:'DM Sans',sans-serif;letter-spacing:0.1em">${headerLabel}</div><div class="rakuten-grid">${data.items.slice(0,8).map(it => `
+      <div class="rakuten-item">
+        <div class="rakuten-item-img">${it.imageUrl ? `<img src="${it.largeImageUrl||it.imageUrl}" loading="lazy">` : '<div style="font-size:30px;opacity:0.15">🎾</div>'}</div>
+        <div class="rakuten-item-info">
+          <div class="rakuten-item-name">${it.name}</div>
+          <div class="rakuten-item-shop">${it.shopName}</div>
+          <div class="rakuten-item-price">¥${it.price.toLocaleString()}</div>
+          <a href="${it.itemUrl}" target="_blank" class="rakuten-item-btn">楽天で見る</a>
+        </div>
+      </div>`).join('')}</div>`;
+  } catch(e) { c.innerHTML = '<div class="loading">読み込みに失敗しました</div>'; }
 }
 
 // ===== QUIZ =====

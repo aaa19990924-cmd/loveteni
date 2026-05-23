@@ -133,6 +133,7 @@ header {
   transition: all 0.15s;
   cursor: pointer;
   position: relative;
+  white-space: nowrap;
 }
 .gnav-item:hover { color: var(--accent); }
 .gnav-item.active { color: var(--accent); }
@@ -1571,28 +1572,6 @@ footer {
       <div class="hero-cta">
         <button class="btn btn-primary" onclick="navigate('rackets')">ラケットを探す <span class="btn-arrow">→</span></button>
         <button class="btn btn-outline" onclick="navigate('diagnosis')">ラケット診断 <span class="btn-arrow">→</span></button>
-      </div>
-    </div>
-  </div>
-
-  <!-- STATS BAR -->
-  <div class="stats-bar">
-    <div class="stats-bar-inner">
-      <div class="stat-item">
-        <div class="stat-num">9<small>ブランド</small></div>
-        <div class="stat-label">PARTNERS</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">180+<small>モデル</small></div>
-        <div class="stat-label">RACKETS</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">2026<small>年版</small></div>
-        <div class="stat-label">UPDATED</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">8<small>カテゴリ</small></div>
-        <div class="stat-label">CONTENTS</div>
       </div>
     </div>
   </div>
@@ -3119,7 +3098,7 @@ function renderStringGrid(strings) {
   }
   grid.innerHTML = strings.map(s => `
     <div class="racket-card" onclick="selectString('${s.id}')">
-      <div class="racket-img"><div class="ph">🎾</div></div>
+      <div class="racket-img" id="csi-${s.id}"><div class="ph">🎾</div></div>
       <div class="racket-info">
         <div class="racket-brand-text">${s.brand}</div>
         <div class="racket-model">${s.model}</div>
@@ -3132,6 +3111,8 @@ function renderStringGrid(strings) {
         <button class="rakuten-btn" onclick="event.stopPropagation();openRakutenString('${s.brand}','${s.model.replace(/'/g,"\\'")}')">楽天で価格チェック →</button>
       </div>
     </div>`).join('');
+  // 画像を順次取得（250ms間隔）
+  strings.forEach((s, i) => setTimeout(() => loadItemImage(s, 'csi', 'テニスガット'), i * 250));
 }
 
 function selectString(id) {
@@ -3207,7 +3188,7 @@ function renderGripGrid(grips) {
   }
   grid.innerHTML = grips.map(g => `
     <div class="racket-card" onclick="selectGrip('${g.id}')">
-      <div class="racket-img"><div class="ph">🎾</div></div>
+      <div class="racket-img" id="cgi-${g.id}"><div class="ph">🎾</div></div>
       <div class="racket-info">
         <div class="racket-brand-text">${g.brand}</div>
         <div class="racket-model">${g.model}</div>
@@ -3220,6 +3201,34 @@ function renderGripGrid(grips) {
         <button class="rakuten-btn" onclick="event.stopPropagation();openRakutenGrip('${g.brand}','${g.model.replace(/'/g,"\\'")}')">楽天で価格チェック →</button>
       </div>
     </div>`).join('');
+  // 画像を順次取得（250ms間隔）
+  grips.forEach((g, i) => setTimeout(() => loadItemImage(g, 'cgi', 'テニスグリップ'), i * 250));
+}
+
+// ガット/グリップ共通の画像取得関数（キャッシュ対応）
+async function loadItemImage(item, idPrefix, suffix) {
+  const cacheKey = `${item.searchKeyword || item.brand + ' ' + item.model} ${suffix}`;
+  const cached = getCachedImg(cacheKey);
+  if (cached) { updateItemImg(item, idPrefix, cached); return; }
+  try {
+    const kw = (item.searchKeyword || `${item.brand} ${item.model}`) + ' ' + suffix;
+    const res = await fetch(`/api/rakuten-search?keyword=${encodeURIComponent(kw)}`);
+    const data = await res.json();
+    if (data.items && data.items.length) {
+      const first = data.items.find(i => i.largeImageUrl);
+      if (first && first.largeImageUrl) {
+        setCachedImg(cacheKey, first.largeImageUrl, first);
+        updateItemImg(item, idPrefix, first.largeImageUrl);
+      }
+    }
+  } catch(e) { /* silent */ }
+}
+
+function updateItemImg(item, idPrefix, url) {
+  const c = document.getElementById(`${idPrefix}-${item.id}`);
+  if (!c) return;
+  const thumbUrl = url.replace(/_ex=\d+x\d+/, '_ex=300x300');
+  c.innerHTML = `<img src="${thumbUrl}" alt="${item.model}" loading="lazy" decoding="async" onerror="this.parentElement.innerHTML='<div class=ph>🎾</div>'">`;
 }
 
 function selectGrip(id) {

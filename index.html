@@ -1,0 +1,3040 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LOVETENI ラブテニ｜テニスプレーヤーのためのインフォメーション・プラットフォーム</title>
+<meta name="description" content="ラブテニは、テニスプレーヤーのためのラケット情報・大会情報・トレーニング情報を提供する総合プラットフォームです。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;900&family=Noto+Serif+JP:wght@400;500;700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0d1117;
+  --ink-soft: #1c2128;
+  --paper: #ffffff;
+  --cream: #fafaf7;
+  --silver: #f2f2ee;
+  --line: #e2e2dc;
+  --line-strong: #c9c9c1;
+  --mute: #6b6b65;
+  --mute-soft: #9c9c93;
+  --accent: #00513a;
+  --accent-bright: #008156;
+  --gold: #b8956a;
+  --signal: #d9534f;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-weight: 400;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: 0.01em;
+}
+::selection { background: var(--accent); color: white; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+a { color: inherit; text-decoration: none; }
+
+/* ===== Utility ===== */
+.serif { font-family: 'Noto Serif JP', serif; }
+.mono { font-family: 'DM Sans', sans-serif; letter-spacing: 0.04em; }
+.container { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
+.container-narrow { max-width: 980px; margin: 0 auto; padding: 0 32px; }
+
+/* ===== Topline ===== */
+.topline {
+  background: var(--ink);
+  color: rgba(255,255,255,0.85);
+  font-size: 12px;
+  padding: 8px 0;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: 0.05em;
+}
+.topline-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.topline-left { display: flex; gap: 24px; }
+.topline-right { display: flex; gap: 16px; opacity: 0.7; font-size: 11px; }
+.topline a { transition: opacity 0.2s; }
+.topline a:hover { opacity: 0.7; }
+
+/* ===== Header ===== */
+header {
+  background: rgba(255,255,255,0.96);
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 32px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.logo-mark {
+  width: 32px;
+  height: 32px;
+  background: var(--ink);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 900;
+  font-size: 17px;
+  font-style: italic;
+}
+.logo-text {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--ink);
+}
+.logo-text em {
+  font-style: italic;
+  color: var(--accent);
+}
+.gnav {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+  align-items: center;
+}
+.gnav-item {
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 14px;
+  color: var(--ink);
+  border-radius: 4px;
+  transition: all 0.15s;
+  cursor: pointer;
+  position: relative;
+}
+.gnav-item:hover { color: var(--accent); }
+.gnav-item.active { color: var(--accent); }
+.gnav-item.active::after {
+  content: '';
+  position: absolute;
+  bottom: -25px;
+  left: 14px;
+  right: 14px;
+  height: 2px;
+  background: var(--accent);
+}
+.header-search {
+  width: 220px;
+  position: relative;
+}
+.header-search input {
+  width: 100%;
+  padding: 8px 14px 8px 36px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  font-size: 12px;
+  font-family: inherit;
+  background: var(--cream);
+  outline: none;
+  transition: all 0.2s;
+}
+.header-search input:focus {
+  border-color: var(--accent);
+  background: white;
+}
+.header-search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  color: var(--mute);
+}
+.hamburger {
+  display: none;
+  width: 28px;
+  height: 28px;
+  font-size: 22px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* ===== Hero ===== */
+.hero {
+  background: var(--ink);
+  color: white;
+  position: relative;
+  overflow: hidden;
+  padding: 90px 0 110px;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(0,129,86,0.18) 0%, transparent 65%);
+  pointer-events: none;
+}
+.hero::after {
+  content: 'TENNIS';
+  position: absolute;
+  bottom: -40px;
+  right: -20px;
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 900;
+  font-size: 280px;
+  color: rgba(255,255,255,0.025);
+  letter-spacing: -0.05em;
+  line-height: 1;
+  pointer-events: none;
+  font-style: italic;
+}
+.hero-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 32px;
+  position: relative;
+  z-index: 2;
+}
+.hero-eyebrow {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent-bright);
+  margin-bottom: 28px;
+  font-weight: 500;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 32px;
+  height: 1px;
+  background: var(--accent-bright);
+  vertical-align: middle;
+  margin-right: 14px;
+  margin-bottom: 3px;
+}
+.hero-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 900;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin-bottom: 28px;
+  max-width: 880px;
+}
+.hero-title em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent-bright);
+}
+.hero-desc {
+  font-size: 15px;
+  line-height: 1.9;
+  color: rgba(255,255,255,0.75);
+  max-width: 580px;
+  margin-bottom: 44px;
+}
+.hero-cta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 28px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s;
+  cursor: pointer;
+  font-family: inherit;
+}
+.btn-primary {
+  background: white;
+  color: var(--ink);
+}
+.btn-primary:hover { background: var(--accent-bright); color: white; transform: translateY(-1px); }
+.btn-outline {
+  background: transparent;
+  color: white;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+.btn-outline:hover { border-color: white; background: rgba(255,255,255,0.05); }
+.btn-arrow {
+  font-family: 'DM Sans', sans-serif;
+  transition: transform 0.2s;
+}
+.btn:hover .btn-arrow { transform: translateX(3px); }
+
+/* ===== Stats Bar ===== */
+.stats-bar {
+  background: var(--cream);
+  border-bottom: 1px solid var(--line);
+  padding: 28px 0;
+}
+.stats-bar-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 32px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  border-left: 2px solid var(--accent);
+  padding-left: 16px;
+}
+.stat-num {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.stat-num small { font-size: 14px; font-weight: 500; color: var(--mute); margin-left: 4px; }
+.stat-label {
+  font-size: 11px;
+  color: var(--mute);
+  letter-spacing: 0.1em;
+}
+
+/* ===== Section ===== */
+section {
+  padding: 100px 0;
+  scroll-margin-top: 80px;
+}
+.section-eyebrow {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+.section-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 28px;
+  height: 1px;
+  background: var(--accent);
+  vertical-align: middle;
+  margin-right: 12px;
+  margin-bottom: 3px;
+}
+.section-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  margin-bottom: 16px;
+}
+.section-desc {
+  font-size: 14px;
+  color: var(--mute);
+  max-width: 600px;
+  line-height: 1.9;
+  margin-bottom: 48px;
+}
+.section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 48px;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.section-header-text { flex: 1; min-width: 280px; }
+.section-header .section-desc { margin-bottom: 0; }
+
+/* ===== Service Cards ===== */
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.service-card {
+  background: white;
+  padding: 44px 32px;
+  cursor: pointer;
+  transition: all 0.25s;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 240px;
+}
+.service-card:hover {
+  background: var(--cream);
+}
+.service-card::after {
+  content: '→';
+  position: absolute;
+  bottom: 30px;
+  right: 32px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 20px;
+  color: var(--mute-soft);
+  transition: all 0.25s;
+}
+.service-card:hover::after {
+  color: var(--accent);
+  transform: translateX(4px);
+}
+.service-num {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--mute);
+  letter-spacing: 0.1em;
+  margin-bottom: 28px;
+}
+.service-icon {
+  font-size: 28px;
+  margin-bottom: 18px;
+}
+.service-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 19px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+.service-desc {
+  font-size: 12px;
+  color: var(--mute);
+  line-height: 1.7;
+  flex: 1;
+}
+
+/* ===== News List ===== */
+.news-section { background: var(--cream); }
+.news-list {
+  border-top: 1px solid var(--line-strong);
+}
+.news-item {
+  display: grid;
+  grid-template-columns: 120px 100px 1fr auto;
+  gap: 24px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--line);
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.news-item:hover { background: rgba(255,255,255,0.6); padding-left: 12px; padding-right: 12px; margin: 0 -12px; }
+.news-date {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: var(--mute);
+  letter-spacing: 0.04em;
+}
+.news-tag {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 0;
+  text-align: center;
+  letter-spacing: 0.06em;
+  border: 1px solid;
+  width: fit-content;
+}
+.news-tag.tag-news { color: var(--signal); border-color: var(--signal); }
+.news-tag.tag-product { color: var(--accent); border-color: var(--accent); }
+.news-tag.tag-info { color: var(--ink); border-color: var(--ink); }
+.news-tag.tag-event { color: var(--gold); border-color: var(--gold); }
+.news-title {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.news-arrow {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  color: var(--mute);
+  transition: transform 0.2s;
+}
+.news-item:hover .news-arrow { transform: translateX(4px); color: var(--accent); }
+.news-more {
+  margin-top: 32px;
+  text-align: right;
+}
+
+/* ===== Brand Section ===== */
+.brand-section { background: white; }
+.brand-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+.brand-card {
+  background: white;
+  padding: 36px 28px;
+  cursor: pointer;
+  transition: all 0.25s;
+  position: relative;
+  text-align: left;
+}
+.brand-card:hover {
+  background: var(--ink);
+  color: white;
+}
+.brand-card:hover .brand-card-num,
+.brand-card:hover .brand-card-arrow,
+.brand-card:hover .brand-card-meta { color: rgba(255,255,255,0.7); }
+.brand-card:hover .brand-accent-bar { background: var(--accent-bright); }
+.brand-card-num {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--mute);
+  letter-spacing: 0.1em;
+  margin-bottom: 24px;
+}
+.brand-accent-bar {
+  width: 24px;
+  height: 2px;
+  background: var(--accent);
+  margin-bottom: 16px;
+  transition: background 0.25s;
+}
+.brand-card-name {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  letter-spacing: 0.02em;
+}
+.brand-card-name em {
+  font-style: normal;
+  font-weight: 400;
+  color: var(--mute);
+  font-size: 13px;
+  display: block;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: 0.1em;
+  margin-bottom: 2px;
+}
+.brand-card-meta {
+  font-size: 11px;
+  color: var(--mute);
+  letter-spacing: 0.06em;
+  margin-bottom: 24px;
+}
+.brand-card-arrow {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--mute);
+  transition: all 0.25s;
+}
+.brand-card:hover .brand-card-arrow { transform: translateX(6px); }
+
+/* ===== Tournament Section ===== */
+.tournament-section { background: var(--ink); color: white; }
+.tournament-section .section-eyebrow { color: var(--accent-bright); }
+.tournament-section .section-eyebrow::before { background: var(--accent-bright); }
+.tournament-section .section-desc { color: rgba(255,255,255,0.6); }
+.tournament-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: rgba(255,255,255,0.1);
+  border-top: 1px solid rgba(255,255,255,0.15);
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+.tournament-card {
+  background: var(--ink);
+  padding: 36px 28px;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+.tournament-card:hover { background: var(--ink-soft); }
+.tournament-status {
+  display: inline-block;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  padding: 4px 10px;
+  border: 1px solid;
+  letter-spacing: 0.1em;
+  margin-bottom: 20px;
+  font-weight: 500;
+}
+.tournament-status.live { color: var(--signal); border-color: var(--signal); }
+.tournament-status.upcoming { color: var(--accent-bright); border-color: var(--accent-bright); }
+.tournament-status.scheduled { color: rgba(255,255,255,0.5); border-color: rgba(255,255,255,0.3); }
+.tournament-name {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.tournament-date {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 16px;
+  letter-spacing: 0.04em;
+}
+.tournament-info {
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+  line-height: 1.8;
+}
+
+/* ===== Page Headers ===== */
+.page-hero {
+  background: var(--cream);
+  padding: 80px 0 60px;
+  border-bottom: 1px solid var(--line);
+}
+.page-hero-eyebrow {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+.page-hero-eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 28px;
+  height: 1px;
+  background: var(--accent);
+  vertical-align: middle;
+  margin-right: 12px;
+  margin-bottom: 3px;
+}
+.page-hero-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+.page-hero-desc {
+  font-size: 13px;
+  color: var(--mute);
+  max-width: 580px;
+}
+.page-body { padding: 60px 0; }
+
+/* ===== Breadcrumb ===== */
+.crumb {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--mute);
+  margin-bottom: 16px;
+  letter-spacing: 0.04em;
+}
+.crumb span { cursor: pointer; transition: color 0.15s; }
+.crumb span:hover { color: var(--accent); }
+.crumb .sep { color: var(--line-strong); cursor: default; }
+.crumb .current { color: var(--ink); cursor: default; font-weight: 500; }
+
+/* ===== Layout with sidebar ===== */
+.with-sidebar {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 56px;
+}
+.sidebar { position: sticky; top: 100px; align-self: start; }
+.sidebar-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  color: var(--mute);
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+}
+.sidebar-list { list-style: none; }
+.sidebar-list li { margin-bottom: 2px; }
+.sidebar-list a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  font-size: 13px;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.15s;
+  border-left: 2px solid transparent;
+  padding-left: 12px;
+  margin-left: -12px;
+}
+.sidebar-list a:hover { color: var(--accent); border-left-color: var(--accent); }
+.sidebar-list a.active { color: var(--accent); border-left-color: var(--accent); font-weight: 600; }
+.sidebar-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* ===== Series Grid ===== */
+.brand-detail-header {
+  background: white;
+  padding: 40px;
+  border: 1px solid var(--line);
+  margin-bottom: 40px;
+}
+.brand-detail-name {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 40px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  margin-bottom: 12px;
+}
+.brand-detail-desc {
+  font-size: 13px;
+  color: var(--mute);
+  line-height: 1.9;
+  max-width: 720px;
+}
+.series-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+}
+.series-card {
+  background: white;
+  padding: 28px 24px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+.series-card:hover { background: var(--cream); }
+.series-card:hover .series-arrow { transform: translateX(4px); color: var(--accent); }
+.series-name {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.series-desc {
+  font-size: 12px;
+  color: var(--mute);
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+.series-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+}
+.series-count {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+  font-weight: 500;
+}
+.series-arrow {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  color: var(--mute);
+  transition: all 0.2s;
+}
+
+/* ===== Racket Grid ===== */
+.toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+.toolbar-info { font-size: 12px; color: var(--mute); }
+.sort-select {
+  padding: 8px 28px 8px 12px;
+  border: 1px solid var(--line);
+  background: white;
+  font-size: 12px;
+  font-family: inherit;
+  color: var(--ink);
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path d='M1 1L5 5L9 1' stroke='%236b6b65' fill='none'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+}
+.racket-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 32px 24px;
+}
+.racket-card {
+  cursor: pointer;
+  transition: all 0.25s;
+}
+.racket-card:hover { transform: translateY(-4px); }
+.racket-img {
+  width: 100%;
+  aspect-ratio: 4/5;
+  background: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: 14px;
+  transition: background 0.25s;
+}
+.racket-card:hover .racket-img { background: var(--silver); }
+.racket-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 12px;
+}
+.racket-img .ph { font-size: 42px; opacity: 0.15; }
+.racket-info { padding: 0 4px; }
+.racket-brand-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--mute);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.racket-model {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+}
+.racket-specs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px 12px;
+  font-size: 11px;
+  color: var(--mute);
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  margin-bottom: 12px;
+}
+.racket-specs strong { color: var(--ink); font-weight: 500; }
+.rakuten-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--ink);
+  background: white;
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+}
+.rakuten-btn:hover { background: var(--ink); color: white; }
+
+/* ===== Detail ===== */
+.detail-layout {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 56px;
+  margin-bottom: 56px;
+  align-items: start;
+}
+.detail-img-area {
+  background: var(--cream);
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.detail-img-area img { max-width: 100%; max-height: 100%; object-fit: contain; padding: 28px; }
+.detail-brand {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.detail-model {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: -0.005em;
+  line-height: 1.2;
+  margin-bottom: 18px;
+}
+.detail-concept {
+  font-size: 13px;
+  color: var(--mute);
+  line-height: 1.9;
+  padding-bottom: 28px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 28px;
+}
+.detail-specs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+  border: 1px solid var(--line);
+  margin-bottom: 28px;
+}
+.detail-spec-item {
+  padding: 18px 20px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.detail-spec-item:nth-child(2n) { border-right: none; }
+.detail-spec-item:nth-last-child(-n+2) { border-bottom: none; }
+.detail-spec-label {
+  font-size: 10px;
+  color: var(--mute);
+  letter-spacing: 0.1em;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  font-family: 'DM Sans', sans-serif;
+}
+.detail-spec-value {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 22px;
+  font-weight: 700;
+}
+.detail-spec-unit { font-size: 11px; font-weight: 400; color: var(--mute); margin-left: 4px; font-family: 'DM Sans', sans-serif; }
+.detail-cta-btn {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  background: var(--ink);
+  color: white;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+}
+.detail-cta-btn:hover { background: var(--accent); }
+
+/* ===== Rakuten results section ===== */
+.rakuten-section { background: var(--cream); padding: 56px; }
+.rakuten-section-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 28px;
+}
+.rakuten-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 16px;
+}
+.rakuten-item {
+  background: white;
+  transition: all 0.2s;
+}
+.rakuten-item:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.06); }
+.rakuten-item-img {
+  width: 100%;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--cream);
+}
+.rakuten-item-img img { width: 100%; height: 100%; object-fit: contain; }
+.rakuten-item-info { padding: 12px; }
+.rakuten-item-name {
+  font-size: 11px;
+  margin-bottom: 6px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.5;
+  min-height: 30px;
+}
+.rakuten-item-shop {
+  font-size: 10px;
+  color: var(--mute);
+  margin-bottom: 8px;
+}
+.rakuten-item-price {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+.rakuten-item-btn {
+  display: block;
+  padding: 7px;
+  background: #BF0000;
+  color: white;
+  font-size: 10px;
+  font-weight: 500;
+  text-align: center;
+  letter-spacing: 0.06em;
+  transition: background 0.2s;
+}
+.rakuten-item-btn:hover { background: #9b0000; }
+.loading { padding: 40px; text-align: center; color: var(--mute); font-size: 13px; }
+.spin {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--line);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ===== Back button ===== */
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: var(--mute);
+  cursor: pointer;
+  margin-bottom: 28px;
+  transition: color 0.15s;
+}
+.back-btn:hover { color: var(--accent); }
+
+/* ===== Empty state ===== */
+.empty {
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--mute);
+}
+.empty-icon { font-size: 40px; opacity: 0.2; margin-bottom: 16px; }
+.empty-text { font-size: 13px; }
+
+/* ===== Quiz ===== */
+.quiz-wrap { max-width: 640px; margin: 0 auto; }
+.quiz-card {
+  background: white;
+  border: 1px solid var(--line);
+  padding: 56px 48px;
+  text-align: center;
+}
+.quiz-progress {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 0.15em;
+  margin-bottom: 12px;
+}
+.quiz-bar {
+  height: 2px;
+  background: var(--line);
+  margin-bottom: 36px;
+  overflow: hidden;
+}
+.quiz-bar-fill { height: 100%; background: var(--accent); transition: width 0.4s; }
+.quiz-question {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 36px;
+  line-height: 1.5;
+}
+.quiz-options { display: grid; gap: 10px; }
+.quiz-option {
+  padding: 16px 24px;
+  border: 1px solid var(--line);
+  background: white;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+  font-family: inherit;
+}
+.quiz-option:hover {
+  border-color: var(--accent);
+  background: var(--cream);
+  padding-left: 32px;
+}
+.quiz-result {
+  background: white;
+  border: 1px solid var(--line);
+  padding: 56px 48px;
+  text-align: center;
+}
+.quiz-result-eyebrow {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 0.2em;
+  margin-bottom: 18px;
+  text-transform: uppercase;
+}
+.quiz-result-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+.quiz-result-badge {
+  display: inline-block;
+  font-size: 12px;
+  padding: 6px 18px;
+  background: var(--ink);
+  color: white;
+  margin-bottom: 24px;
+  letter-spacing: 0.05em;
+}
+.quiz-result-desc {
+  font-size: 13px;
+  color: var(--mute);
+  line-height: 2;
+  margin-bottom: 32px;
+}
+.quiz-result-buttons { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+
+/* ===== Column / Card layouts ===== */
+.column-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+.column-card { cursor: pointer; transition: all 0.25s; }
+.column-card:hover .column-thumb { transform: translateY(-4px); }
+.column-card:hover .column-title { color: var(--accent); }
+.column-thumb {
+  width: 100%;
+  aspect-ratio: 4/3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 44px;
+  margin-bottom: 16px;
+  transition: transform 0.25s;
+}
+.column-cat {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.column-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.5;
+  margin-bottom: 10px;
+  transition: color 0.2s;
+}
+.column-meta {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--mute);
+  letter-spacing: 0.04em;
+}
+
+/* ===== Match / Predict ===== */
+.match-card {
+  background: white;
+  border: 1px solid var(--line);
+  padding: 32px;
+  margin-bottom: 16px;
+}
+.match-info {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--mute);
+  letter-spacing: 0.1em;
+  margin-bottom: 24px;
+  text-transform: uppercase;
+}
+.match-players {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 24px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.player-btn {
+  padding: 24px;
+  border: 1px solid var(--line);
+  background: white;
+  cursor: pointer;
+  transition: all 0.25s;
+  text-align: center;
+  font-family: inherit;
+}
+.player-btn:hover { border-color: var(--accent); background: var(--cream); }
+.player-btn.selected-1 { border-color: var(--clay, #c2603a); background: rgba(194,96,58,0.05); }
+.player-btn.selected-2 { border-color: var(--accent); background: rgba(0,81,58,0.05); }
+.player-flag { font-size: 24px; margin-bottom: 10px; }
+.player-name {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 17px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.player-vote {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--mute);
+}
+.vs {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 18px;
+  font-style: italic;
+  color: var(--mute);
+}
+.vote-bar {
+  height: 4px;
+  background: var(--line);
+  overflow: hidden;
+  margin-top: 16px;
+}
+.vote-bar-fill { height: 100%; background: linear-gradient(to right, #c2603a, var(--accent)); transition: width 0.6s; }
+.vote-counts {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--mute);
+  margin-top: 8px;
+}
+
+/* ===== Rules accordion ===== */
+.rule-acc {
+  background: white;
+  border: 1px solid var(--line);
+  border-bottom: none;
+}
+.rule-acc:last-child { border-bottom: 1px solid var(--line); }
+.rule-head {
+  padding: 24px 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.rule-head:hover { background: var(--cream); }
+.rule-head-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 16px;
+  font-weight: 700;
+}
+.rule-arrow { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--mute); transition: transform 0.3s; }
+.rule-body { max-height: 0; overflow: hidden; transition: all 0.4s; padding: 0 28px; }
+.rule-body.open { max-height: 500px; padding: 0 28px 24px; }
+.rule-body p {
+  font-size: 13px;
+  color: var(--mute);
+  line-height: 2;
+  padding-top: 4px;
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+}
+
+/* ===== Video ===== */
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+.video-card { cursor: pointer; transition: all 0.25s; }
+.video-card:hover .video-thumb img { transform: scale(1.05); }
+.video-thumb {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.video-play {
+  width: 48px;
+  height: 48px;
+  border: 1px solid white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 14px;
+  transition: all 0.25s;
+}
+.video-card:hover .video-play { background: white; color: var(--ink); }
+.video-duration {
+  position: absolute;
+  bottom: 8px;
+  right: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: white;
+  background: rgba(0,0,0,0.7);
+  padding: 2px 8px;
+}
+.video-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  line-height: 1.5;
+}
+.video-meta { font-family: 'DM Sans', sans-serif; font-size: 11px; color: var(--mute); }
+
+/* ===== Pro Players ===== */
+.player-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+.player-card {
+  background: white;
+  border: 1px solid var(--line);
+  padding: 28px 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s;
+}
+.player-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.player-avatar {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin: 0 auto 14px;
+}
+.player-card-name {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.player-card-country {
+  font-size: 11px;
+  color: var(--mute);
+  margin-bottom: 12px;
+}
+.player-card-racket {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  padding: 4px 10px;
+  background: var(--cream);
+  letter-spacing: 0.05em;
+}
+
+/* ===== Compare ===== */
+.compare-layout {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 32px;
+  align-items: center;
+  margin-bottom: 48px;
+}
+.compare-slot {
+  background: var(--cream);
+  border: 2px dashed var(--line-strong);
+  padding: 56px 32px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-height: 200px;
+}
+.compare-slot:hover { border-color: var(--accent); background: white; }
+.compare-slot.filled { border-style: solid; border-color: var(--accent); background: white; }
+.compare-vs {
+  font-family: 'Noto Serif JP', serif;
+  font-style: italic;
+  font-size: 28px;
+  color: var(--mute);
+}
+.compare-table { width: 100%; border-collapse: collapse; background: white; border: 1px solid var(--line); }
+.compare-table th, .compare-table td {
+  padding: 16px;
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+  font-size: 13px;
+}
+.compare-table th {
+  background: var(--cream);
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 700;
+}
+.compare-table .winner { color: var(--accent); font-weight: 700; }
+
+/* ===== Footer ===== */
+footer {
+  background: var(--ink);
+  color: rgba(255,255,255,0.6);
+  padding: 80px 0 40px;
+  font-size: 12px;
+}
+.footer-inner { max-width: 1240px; margin: 0 auto; padding: 0 32px; }
+.footer-top {
+  display: grid;
+  grid-template-columns: 2fr repeat(3, 1fr);
+  gap: 56px;
+  margin-bottom: 60px;
+}
+.footer-logo {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.1em;
+  margin-bottom: 16px;
+}
+.footer-tagline {
+  font-size: 12px;
+  line-height: 1.9;
+  margin-bottom: 24px;
+}
+.footer-col h4 {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: white;
+  margin-bottom: 18px;
+  font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+}
+.footer-col ul { list-style: none; }
+.footer-col li { margin-bottom: 10px; }
+.footer-col a { color: rgba(255,255,255,0.6); cursor: pointer; transition: color 0.2s; }
+.footer-col a:hover { color: white; }
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 32px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+.footer-legal { display: flex; gap: 24px; }
+
+/* ===== Views ===== */
+.view { display: none; }
+.view.active { display: block; }
+
+/* ===== Mobile ===== */
+@media (max-width: 1024px) {
+  .stats-bar-inner { grid-template-columns: repeat(2, 1fr); }
+  .service-grid, .brand-grid, .column-grid, .video-grid { grid-template-columns: repeat(2, 1fr); }
+  .player-grid { grid-template-columns: repeat(3, 1fr); }
+  .tournament-list { grid-template-columns: 1fr; }
+  .detail-layout { grid-template-columns: 1fr; gap: 32px; }
+  .with-sidebar { grid-template-columns: 1fr; gap: 32px; }
+  .sidebar { position: static; }
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
+}
+@media (max-width: 720px) {
+  .container, .container-narrow { padding: 0 20px; }
+  .header-inner { padding: 0 20px; gap: 16px; height: 60px; }
+  .header-search, .gnav { display: none; }
+  .hamburger { display: flex; }
+  .topline-inner { padding: 0 20px; font-size: 10px; }
+  .topline-right { display: none; }
+  section { padding: 60px 0; }
+  .hero { padding: 60px 0 80px; }
+  .service-grid, .brand-grid, .column-grid, .video-grid { grid-template-columns: 1fr; }
+  .player-grid { grid-template-columns: repeat(2, 1fr); }
+  .news-item { grid-template-columns: 1fr; gap: 6px; padding: 18px 0; }
+  .news-arrow { display: none; }
+  .footer-top { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; gap: 12px; }
+  .compare-layout { grid-template-columns: 1fr; }
+  .compare-vs { display: none; }
+  .stats-bar-inner { grid-template-columns: 1fr 1fr; }
+  .rakuten-section { padding: 32px 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPLINE -->
+<div class="topline">
+  <div class="topline-inner">
+    <div class="topline-left">
+      <span>🎾 全仏オープン 2026 開幕間近</span>
+      <span>—</span>
+      <span>本戦 5/24（日）スタート</span>
+    </div>
+    <div class="topline-right">
+      <span>JP</span>
+      <span>|</span>
+      <span id="topline-date">2026.05.21</span>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo" onclick="navigate('home')">
+      <div class="logo-mark">L</div>
+      <div class="logo-text">LOVE<em>TENI</em></div>
+    </div>
+    <nav class="gnav" id="gnav">
+      <span class="gnav-item active" onclick="navigate('rackets')" data-page="rackets">ラケット</span>
+      <span class="gnav-item" onclick="navigate('diagnosis')" data-page="diagnosis">診断</span>
+      <span class="gnav-item" onclick="navigate('column')" data-page="column">コラム</span>
+      <span class="gnav-item" onclick="navigate('news')" data-page="news">最新情報</span>
+      <span class="gnav-item" onclick="navigate('tournament')" data-page="tournament">大会</span>
+      <span class="gnav-item" onclick="navigate('predict')" data-page="predict">予想</span>
+      <span class="gnav-item" onclick="navigate('training')" data-page="training">トレーニング</span>
+      <span class="gnav-item" onclick="navigate('rules')" data-page="rules">ルール</span>
+      <span class="gnav-item" onclick="navigate('pros')" data-page="pros">プロ選手</span>
+    </nav>
+    <div class="header-search">
+      <span class="header-search-icon">🔍</span>
+      <input type="text" placeholder="検索..." oninput="onSearch(this.value)">
+    </div>
+    <button class="hamburger" onclick="toggleMobileNav()">☰</button>
+  </div>
+</header>
+
+<!-- ===== HOME ===== -->
+<div id="view-home" class="view active">
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-inner">
+      <div class="hero-eyebrow">INFORMATION PLATFORM FOR TENNIS PLAYERS</div>
+      <h1 class="hero-title">テニスを、<em>もっと深く。</em><br>もっと愉しく。</h1>
+      <p class="hero-desc">ラブテニは、テニスプレーヤーのためのラケット情報・大会情報・トレーニングを集約した総合プラットフォームです。9つのブランド・180モデル以上のラケットから、あなたに最適な一本を見つけてください。</p>
+      <div class="hero-cta">
+        <button class="btn btn-primary" onclick="navigate('rackets')">ラケットを探す <span class="btn-arrow">→</span></button>
+        <button class="btn btn-outline" onclick="navigate('diagnosis')">ラケット診断 <span class="btn-arrow">→</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS BAR -->
+  <div class="stats-bar">
+    <div class="stats-bar-inner">
+      <div class="stat-item">
+        <div class="stat-num">9<small>ブランド</small></div>
+        <div class="stat-label">PARTNERS</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">180+<small>モデル</small></div>
+        <div class="stat-label">RACKETS</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">2026<small>年版</small></div>
+        <div class="stat-label">UPDATED</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">8<small>カテゴリ</small></div>
+        <div class="stat-label">CONTENTS</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SERVICES -->
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <div class="section-header-text">
+          <div class="section-eyebrow">SERVICES</div>
+          <h2 class="section-title">ラブテニで、できること。</h2>
+          <p class="section-desc">プレーヤーの選択をサポートする、8つのサービス。<br>ラケット選びから上達のヒントまで、すべてここで見つかります。</p>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="service-grid">
+        <div class="service-card" onclick="navigate('rackets')">
+          <div class="service-num">01</div>
+          <div class="service-icon">🎾</div>
+          <div class="service-title">ラケットデータベース</div>
+          <div class="service-desc">9ブランド・180モデル以上の最新ラケット情報。スペック・特徴・楽天価格まで一画面で確認できます。</div>
+        </div>
+        <div class="service-card" onclick="navigate('diagnosis')">
+          <div class="service-num">02</div>
+          <div class="service-icon">🔬</div>
+          <div class="service-title">ラケット診断</div>
+          <div class="service-desc">5つの質問に答えるだけで、あなたのプレースタイルに最適な1本をご提案します。</div>
+        </div>
+        <div class="service-card" onclick="navigate('column')">
+          <div class="service-num">03</div>
+          <div class="service-icon">📝</div>
+          <div class="service-title">コラム</div>
+          <div class="service-desc">ラケット選び、技術解説、フィジカル強化など、上達に役立つ記事を多数掲載。</div>
+        </div>
+        <div class="service-card" onclick="navigate('tournament')">
+          <div class="service-num">04</div>
+          <div class="service-icon">🏆</div>
+          <div class="service-title">大会情報</div>
+          <div class="service-desc">グランドスラム・ATP・WTA・国内大会の日程と結果をまとめてチェック。</div>
+        </div>
+        <div class="service-card" onclick="navigate('predict')">
+          <div class="service-num">05</div>
+          <div class="service-icon">🎯</div>
+          <div class="service-title">勝敗予想</div>
+          <div class="service-desc">注目試合の勝敗をみんなで予想。コミュニティの集合知で観戦をもっと楽しく。</div>
+        </div>
+        <div class="service-card" onclick="navigate('training')">
+          <div class="service-num">06</div>
+          <div class="service-icon">💪</div>
+          <div class="service-title">トレーニング動画</div>
+          <div class="service-desc">技術練習・体幹トレーニング・フィジカル強化など、レベル別の動画を厳選。</div>
+        </div>
+        <div class="service-card" onclick="navigate('rules')">
+          <div class="service-num">07</div>
+          <div class="service-icon">📖</div>
+          <div class="service-title">ルールブック</div>
+          <div class="service-desc">基本ルールから細かい規定まで、テニスのルールを分かりやすく解説します。</div>
+        </div>
+        <div class="service-card" onclick="navigate('pros')">
+          <div class="service-num">08</div>
+          <div class="service-icon">⭐</div>
+          <div class="service-title">プロ選手 機材情報</div>
+          <div class="service-desc">トップ選手が使用するラケット・ガット・シューズなど、プロの機材データ。</div>
+        </div>
+        <div class="service-card" onclick="navigate('compare')">
+          <div class="service-num">09</div>
+          <div class="service-icon">⚖️</div>
+          <div class="service-title">ラケット比較</div>
+          <div class="service-desc">2本のラケットを並べてスペックを徹底比較。購入前の意思決定をサポート。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWS -->
+  <section class="news-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-header-text">
+          <div class="section-eyebrow">NEWS &amp; TOPICS</div>
+          <h2 class="section-title">最新情報</h2>
+        </div>
+        <button class="btn btn-outline" style="color:var(--ink);border-color:var(--ink)" onclick="navigate('news')">一覧を見る <span class="btn-arrow">→</span></button>
+      </div>
+    </div>
+    <div class="container">
+      <div class="news-list" id="home-news-list">
+        <div class="loading" style="grid-column:1/-1"><span class="spin"></span>最新ニュースを取得中...</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRANDS -->
+  <section class="brand-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-header-text">
+          <div class="section-eyebrow">BRANDS</div>
+          <h2 class="section-title">パートナーブランド</h2>
+          <p class="section-desc">世界の主要9ブランドのラケットを網羅。<br>各ブランドのフラッグシップから入門モデルまで、最新情報を掲載しています。</p>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="brand-grid" id="homeBrandGrid"></div>
+    </div>
+  </section>
+
+  <!-- TOURNAMENT -->
+  <section class="tournament-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-header-text">
+          <div class="section-eyebrow">TOURNAMENTS</div>
+          <h2 class="section-title" style="color:white">グランドスラム<br>2026 スケジュール</h2>
+          <p class="section-desc">4大大会を中心に、世界のテニスシーンをチェックしよう。</p>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="tournament-list">
+        <div class="tournament-card" onclick="navigate('tournament')">
+          <span class="tournament-status upcoming">● OPENING WEEK</span>
+          <h3 class="tournament-name">全仏オープン</h3>
+          <div class="tournament-date">2026.05.24 — 2026.06.07</div>
+          <div class="tournament-info">予選 5/18-22 / 本戦 5/24開幕<br>ローランギャロス（パリ）/ クレーコート</div>
+        </div>
+        <div class="tournament-card" onclick="navigate('tournament')">
+          <span class="tournament-status scheduled">UPCOMING</span>
+          <h3 class="tournament-name">ウィンブルドン</h3>
+          <div class="tournament-date">2026.06.29 — 2026.07.12</div>
+          <div class="tournament-info">オールイングランドクラブ（ロンドン）<br>グラスコート</div>
+        </div>
+        <div class="tournament-card" onclick="navigate('tournament')">
+          <span class="tournament-status scheduled">SCHEDULED</span>
+          <h3 class="tournament-name">全米オープン</h3>
+          <div class="tournament-date">2026.08.31 — 2026.09.13</div>
+          <div class="tournament-info">USTAビリー・ジーン・キング・ナショナル<br>ハードコート / ニューヨーク</div>
+        </div>
+        <div class="tournament-card" onclick="navigate('tournament')">
+          <span class="tournament-status scheduled">SCHEDULED</span>
+          <h3 class="tournament-name">全豪オープン 2027</h3>
+          <div class="tournament-date">2027.01 予定</div>
+          <div class="tournament-info">メルボルンパーク（メルボルン・豪）<br>ハードコート</div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ===== RACKETS ===== -->
+<div id="view-rackets" class="view">
+  <div class="page-hero">
+    <div class="container">
+      <div class="page-hero-eyebrow">RACKETS DATABASE</div>
+      <h1 class="page-hero-title">ラケットを探す</h1>
+      <p class="page-hero-desc">9ブランド・180モデル以上の最新テニスラケットを掲載しています。</p>
+    </div>
+  </div>
+  <div class="page-body">
+    <div class="container">
+      <div class="brand-grid" id="brandGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== BRAND DETAIL ===== -->
+<div id="view-brand" class="view">
+  <div class="page-body">
+    <div class="container">
+      <div class="crumb" id="crumb-brand"></div>
+      <button class="back-btn" onclick="navigate('rackets')">← ブランド一覧</button>
+      <div class="with-sidebar">
+        <aside class="sidebar">
+          <div class="sidebar-title">BRANDS</div>
+          <ul class="sidebar-list" id="brandSidebar"></ul>
+        </aside>
+        <div>
+          <div class="brand-detail-header">
+            <div class="brand-detail-name" id="brand-name"></div>
+            <div class="brand-detail-desc" id="brand-desc"></div>
+          </div>
+          <div style="font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:0.2em;color:var(--mute);text-transform:uppercase;margin-bottom:18px">SERIES LINEUP</div>
+          <div class="series-grid" id="seriesGrid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SERIES (Racket list) ===== -->
+<div id="view-series" class="view">
+  <div class="page-body">
+    <div class="container">
+      <div class="crumb" id="crumb-series"></div>
+      <button class="back-btn" id="back-to-brand">← ブランドに戻る</button>
+      <div class="with-sidebar">
+        <aside class="sidebar">
+          <div class="sidebar-title">BRANDS</div>
+          <ul class="sidebar-list" id="brandSidebar2"></ul>
+        </aside>
+        <div>
+          <h1 class="page-hero-title" style="font-size:32px;margin-bottom:8px" id="series-title"></h1>
+          <div style="font-family:'DM Sans',sans-serif;font-size:12px;color:var(--mute);letter-spacing:0.04em" id="series-count"></div>
+          <div class="toolbar" style="margin-top:32px">
+            <div class="toolbar-info"></div>
+            <select class="sort-select" onchange="sortRackets(this.value)">
+              <option value="default">おすすめ順</option>
+              <option value="weight-asc">重量 軽い順</option>
+              <option value="weight-desc">重量 重い順</option>
+              <option value="headSize-asc">面積 小さい順</option>
+              <option value="headSize-desc">面積 大きい順</option>
+            </select>
+          </div>
+          <div class="racket-grid" id="racketGrid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DETAIL ===== -->
+<div id="view-detail" class="view">
+  <div class="page-body">
+    <div class="container">
+      <div class="crumb" id="crumb-detail"></div>
+      <button class="back-btn" id="back-to-series">← 一覧に戻る</button>
+      <div class="detail-layout">
+        <div class="detail-img-area" id="detail-img-area"><div class="empty-icon">🎾</div></div>
+        <div>
+          <div class="detail-brand" id="detail-brand"></div>
+          <h1 class="detail-model" id="detail-model"></h1>
+          <p class="detail-concept" id="detail-concept"></p>
+          <div class="detail-specs-grid" id="detail-specs"></div>
+          <button class="detail-cta-btn" id="detail-rakuten-btn">楽天で価格をチェック →</button>
+        </div>
+      </div>
+      <div class="rakuten-section">
+        <div class="rakuten-section-title">楽天での販売価格</div>
+        <div id="rakuten-results"><div class="loading"><span class="spin"></span>楽天を検索中...</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== DIAGNOSIS ===== -->
+<div id="view-diagnosis" class="view">
+  <div class="page-hero">
+    <div class="container">
+      <div class="page-hero-eyebrow">RACKET DIAGNOSIS</div>
+      <h1 class="page-hero-title">ラケット診断</h1>
+      <p class="page-hero-desc">5つの質問に答えるだけで、あなたに最適なラケットをご提案します。</p>
+    </div>
+  </div>
+  <div class="page-body">
+    <div class="container">
+      <div class="quiz-wrap" id="quizContainer"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== COLUMN ===== -->
+<div id="view-column" class="view">
+  <div class="page-hero">
+    <div class="container">
+      <div class="page-hero-eyebrow">COLUMN</div>
+      <h1 class="page-hero-title">コラム</h1>
+      <p class="page-hero-desc">テニスのお役立ち情報・機材レビュー・上達のコツをお届けします。</p>
+    </div>
+  </div>
+  <div class="page-body">
+    <div class="container">
+      <div class="column-grid">
+        <div class="column-card">
+          <div class="column-thumb" style="background:linear-gradient(135deg,#1a4d2e,#008156);color:#d4f558">📊</div>
+          <div class="column-cat">RACKET</div>
+          <h3 class="column-title">2026年最新ラケット完全ガイド — 初心者から上級者まで</h3>
+          <div class="column-meta">2026.05.15 · 読了5分</div>
+        </div>
+        <div class="column-card">
+          <div class="column-thumb" style="background:linear-gradient(135deg,#c2603a,#8e3d1c);color:white">🪢</div>
+          <div class="column-cat">STRING</div>
+          <h3 class="column-title">ガットの種類と選び方 — テンション・素材・太さの基本</h3>
+          <div class="column-meta">2026.05.10 · 読了7分</div>
+        </div>
+        <div class="column-card">
+          <div class="column-thumb" style="background:linear-gradient(135deg,#0d1117,#1c2128);color:#d4f558">🎯</div>
+          <div class="column-cat">TECHNIQUE</div>
+          <h3 class="column-title">スピンサーブをマスターする3つのコツ</h3>
+          <div class="column-meta">2026.05.05 · 読了4分</div>
+        </div>
+        <div class="column-card">
+          <div class="column-thumb" style="background:linear-gradient(135deg,#b8956a,#8c6d49);color:white">💪</div>
+          <div class="column-cat">PHYSICAL</div>
+          <h3 class="column-title">テニスプレーヤーに必要な体幹トレーニング入門</h3>
+          <div class="column-meta">2026.04.28 · 読了6分</div>
+        </div>
+        <div class="column-card">
+          <div class="column-thumb" style="background:linear-gradient(135deg,#f2f2ee,#d8d6d0);color:#0d1117">🏃</div>
+          <div class="column-cat">FOOTWORK</div>
+          <h3 class="column-title">フットワーク改善 — コートの動き方を徹底解説</h3>
+          <div class="column-meta">2026.04.20 · 読了5分</div>
+        </div>
+        <div class="column-card">
+          <div class="column-thumb" style="background:linear-gradient(135deg,#00513a,#0d1117);color:#d4f558">🧠</div>
+          <div class="column-cat">MENTAL</div>
+          <h3 class="column-title">試合で実力を発揮するメンタルコントロール術</h3>
+          <div class="column-meta">2026.04.15 · 読了8分</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== NEWS ===== -->
+<div id="view-news" class="view">
+  <div class="page-hero">
+    <div class="container">
+      <div class="page-hero-eyebrow">NEWS &amp; TOPICS</div>
+      <h1 class="page-hero-title">最新情報</h1>
+      <p class="page-hero-desc">テニス界のニュース・新製品情報をお届けします。</p>
+    </div>
+  </div>
+  <div class="page-body">
+    <div class="container">
+      <div id="news-summary-section" style="display:none;background:var(--cream);padding:24px 28px;margin-bottom:32px;border-left:3px solid var(--accent)">
+        <div style="font-family:'DM Sans',sans-serif;font-size:10px;letter-spacing:0.2em;color:var(--accent);text-transform:uppercase;margin-bottom:10px">AI SUMMARY · 全仏オープン2026</div>
+        <div id="news-summary-text" style="font-size:13px;line-height:1.9;color:var(--ink)"></div>
+        <div style="font-size:10px;color:var(--mute);margin-top:8px;font-family:'DM Sans',sans-serif">※ Gemini AIが最新ニュースから要約しています</div>
+      </div>
+      <div class="news-list" id="page-news-list">
+        <div class="loading" style="grid-column:1/-1"><span class="spin"></span>最新ニュースを取得中...</div>
+      </div>
+      <div id="news-source" style="text-align:center;margin-top:32px;font-size:11px;color:var(--mute);font-family:'DM Sans',sans-serif"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TOURNAMENT ===== -->
+<div id="view-tournament" class="view">
+  <div class="page-hero">
+    <div class="container">
+      <div class="page-hero-eyebrow">TOURNAMENTS</div>
+      <h1 class="page-hero-title">大会情報</h1>
+      <p class="page-hero-desc">グランドスラム・ATP・WTA・国内大会の日程と詳細をご紹介します。</p>
+    </div>
+  </div>
+  <div class="page-body" style="background:var(--ink);color:white">
+    <div class="container">
+      <div style="font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:0.2em;color:var(--accent-bright);text-transform:uppercase;margin-bottom:20px">GRAND SLAM 2026</div>
+      <div class="tournament-list" style="margin-bottom:60px">
+        <div class="tournament-card"><span class="tournament-status upcoming">● OPENING WEEK</span><h3 class="tournament-name">全仏オープン</h3><div class="tournament-date">2026.05.24 — 2026.06.07</div><div class="tournament-info">予選: 5/18-22 / 本戦: 5/24開幕<br>ローランギャロス（パリ）/ クレーコート</div></div>
+        <div class="tournament-card"><span class="tournament-status scheduled">UPCOMING</span><h3 class="tournament-name">ウィンブルドン</h3><div class="tournament-date">2026.06.29 — 2026.07.12</div><div class="tournament-info">オールイングランドクラブ（ロンドン）<br>グラスコート</div></div>
+        <div class="tournament-card"><span class="tournament-status scheduled">SCHEDULED</span><h3 class="tournament-name">全米オープン</h3><div class="tournament-date">2026.08.31 — 2026.09.13</div><div class="tournament-info">USTAビリー・ジーン・キング・ナショナル<br>ハードコート / ニューヨーク</div></div>
+        <div class="tournament-card"><span class="tournament-status scheduled">SCHEDULED</span><h3 class="tournament-name">全豪オープン 2027</h3><div class="tournament-date">2027.01 予定</div><div class="tournament-info">メルボルンパーク（メルボルン）<br>ハードコート</div></div>
+      </div>
+      <div style="font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:0.2em;color:var(--accent-bright);text-transform:uppercase;margin-bottom:20px">FRENCH OPEN 2026 注目選手（ATP / WTA）</div>
+      <div class="tournament-list" style="margin-bottom:60px">
+        <div class="tournament-card">
+          <span class="tournament-status upcoming">ATP TOP 4</span>
+          <h3 class="tournament-name" style="font-size:18px">男子シングルス シード予想</h3>
+          <div class="tournament-info" style="margin-top:14px;line-height:2">
+            ① ヤニック・シナー <span style="opacity:0.5">🇮🇹</span><br>
+            ② カルロス・アルカラス <span style="opacity:0.5">🇪🇸</span><br>
+            ③ アレクサンダー・ズベレフ <span style="opacity:0.5">🇩🇪</span><br>
+            ④ ノバク・ジョコビッチ <span style="opacity:0.5">🇷🇸</span>
+          </div>
+        </div>
+        <div class="tournament-card">
+          <span class="tournament-status upcoming">WTA TOP 4</span>
+          <h3 class="tournament-name" style="font-size:18px">女子シングルス シード予想</h3>
+          <div class="tournament-info" style="margin-top:14px;line-height:2">
+            ① アリナ・サバレンカ <span style="opacity:0.5">🇧🇾</span><br>
+            ② エレナ・ルバキナ <span style="opacity:0.5">🇰🇿</span><br>
+            ③ ココ・ガウフ <span style="opacity:0.5">🇺🇸</span><br>
+            ④ イガ・シフィオンテク <span style="opacity:0.5">🇵🇱</span>
+          </div>
+        </div>
+        <div class="tournament-card">
+          <span class="tournament-status live">🇯🇵 JAPAN</span>
+          <h3 class="tournament-name" style="font-size:18px">日本人選手（本戦出場）</h3>
+          <div class="tournament-info" style="margin-top:14px;line-height:2">
+            <strong style="color:white">女子シングルス</strong><br>
+            ・大坂 なおみ<br>
+            ・内島 萌夏<br>
+            <br>
+            <strong style="color:white">ダブルス</strong><br>
+            青山 修子 / 穂積 絵莉 / 加藤 未唯 / 二宮 真琴
+          </div>
+        </div>
+        <div class="tournament-card">
+          <span class="tournament-status scheduled">INFO</span>
+          <h3 class="tournament-name" style="font-size:18px">注目ポイント</h3>
+          <div class="tournament-info" style="margin-top:14px;line-height:1.8">
+            • 唯一のクレーコート開催<br>
+            • シナーが全豪に続きグランドスラム制覇なるか<br>
+            • アルカラスの連覇に注目<br>
+            • サバレンカが全仏初制覇を狙う
+          </div>
+        </div>
+      </div>
+
+      <div style="font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:0.2em;color:var(--accent-bright);text-transform:uppercase;margin-bottom:20px">DOMESTIC 2026</div>
+      <div class="tournament-list">
+        <div class="tournament-card"><span class="tournament-status scheduled">SCHEDULED</span><h3 class="tournament-name">東レ パン パシフィック オープン</h3><div class="tournament-date">2026.09 予定</div><div class="tournament-info">有明テニスの森（東京）/ ハードコート（WTA）</div></div>
+        <div class="tournament-card"><span class="tournament-status scheduled">SCHEDULED</span><h3 class="tournament-name">楽天ジャパンオープン</h3><div class="tournament-date">2026.10 予定</div><div class="tournament-info">有明テニスの森（東京）/ ハードコート（ATP500）</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PREDICT ===== -->
+<div id="view-predict" class="view">
+  <div class="page-hero">
+    <div class="container">
+      <div class="page-hero-eyebrow">PREDICTIONS</div>
+      <h1 class="page-hero-title">勝敗予想</h1>
+      <p class="page-hero-desc">注目試合の勝敗をみんなで予想しよう。— 全仏オープン 2026</p>
+    </div>
+  </div>
+  <div class="page-body">
+    <div class="container-narrow">
+      <div id="matchList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== TRAINING ===== -->
+<div id="view-training" class="view">
+  <div class="page-hero">
+    <div class="container">
+      <div class="page-hero-eyebrow">TRAINING</div>
+      <h1 class="page-hero-title">トレーニング動画</h1>
+      <p class="page-hero-desc">テニス上達のための練習・筋トレ・フィジカル強化動画を厳選してお届けします。</p>
+    </div>
+  </div>
+  <div class="page-body">
+    <div class="container">
+      <div style="font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:0.2em;color:var(--accent);text-transform:uppercase;margin-bottom:24px">TECHNIQUE</div>
+      <div class="video-grid" style="margin-bottom:60px">
+        <div class="video-card"><div class="video-thumb" style="background:linear-gradient(135deg,#0d1117,#00513a)"><div class="video-play">▶</div><div class="video-duration">5:32</div></div><h4 class="video-title">フォアハンドの基本フォーム完全解説</h4><div class="video-meta">技術 · 初〜中級</div></div>
+        <div class="video-card"><div class="video-thumb" style="background:linear-gradient(135deg,#00513a,#008156)"><div class="video-play">▶</div><div class="video-duration">7:15</div></div><h4 class="video-title">バックハンドスライスの打ち方と使い所</h4><div class="video-meta">技術 · 中級</div></div>
+        <div class="video-card"><div class="video-thumb" style="background:linear-gradient(135deg,#1c2128,#0d1117)"><div class="video-play">▶</div><div class="video-duration">8:44</div></div><h4 class="video-title">サーブ強化プログラム — 100km/hから150km/hへ</h4><div class="video-meta">技術 · 中〜上級</div></div>
+      </div>
+      <div style="font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:0.2em;color:var(--accent);text-transform:uppercase;margin-bottom:24px">PHYSICAL</div>
+      <div class="video-grid">
+        <div class="video-card"><div class="video-thumb" style="background:linear-gradient(135deg,#c2603a,#8e3d1c)"><div class="video-play">▶</div><div class="video-duration">12:00</div></div><h4 class="video-title">テニス選手のための体幹トレーニング10選</h4><div class="video-meta">フィジカル · 全レベル</div></div>
+        <div class="video-card"><div class="video-thumb" style="background:linear-gradient(135deg,#b8956a,#6e5634)"><div class="video-play">▶</div><div class="video-duration">9:30</div></div><h4 class="video-title">肩・腕の怪我予防ストレッチ — 試合前後に</h4><div class="video-meta">ケア · 全レベル</div></div>
+        <div class="video-card"><div class="video-thumb" style="background:linear-gradient(135deg,#00513a,#0d1117)"><div class="video-play">▶</div><div class="video-duration">15:20</div></div><h4 class="video-title">アジリティトレーニング — 瞬発力UP</h4><div class="video-meta">フィジカル · 中〜上級</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== RULES ===== -->
+<div id="view-rules" class="view">
+  <div class="page-hero">
+    <div class="container">
+      <div class="page-hero-eyebrow">RULES</div>
+      <h1 class="page-hero-title">テニスルールブック</h1>
+      <p class="page-hero-desc">基本ルールからレアケースまで、わかりやすく解説します。</p>
+    </div>
+  </div>
+  <div class="page-body">
+    <div class="container-narrow">
+      <div id="ruleList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PROS ===== -->
+<div id="view-pros" class="view">
+  <div class="page-hero">
+    <div class="container">
+      <div class="page-hero-eyebrow">PRO PLAYERS</div>
+      <h1 class="page-hero-title">プロ選手 使用機材</h1>
+      <p class="page-hero-desc">トップ選手のラケット・ガット・シューズ情報をご紹介します。</p>
+    </div>
+  </div>
+  <div class="page-body">
+    <div class="container">
+      <div style="font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:0.2em;color:var(--accent);text-transform:uppercase;margin-bottom:24px">ATP TOP PLAYERS</div>
+      <div class="player-grid" id="proPlayerGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== COMPARE ===== -->
+<div id="view-compare" class="view">
+  <div class="page-hero">
+    <div class="container">
+      <div class="page-hero-eyebrow">COMPARE</div>
+      <h1 class="page-hero-title">ラケット比較</h1>
+      <p class="page-hero-desc">2本のラケットを並べてスペックを比べよう。</p>
+    </div>
+  </div>
+  <div class="page-body">
+    <div class="container">
+      <div class="compare-layout">
+        <div class="compare-slot" id="compareSlot1" onclick="openCompareSelect(1)">
+          <div style="font-size:36px;opacity:0.2;margin-bottom:12px">🎾</div>
+          <div style="font-size:13px;color:var(--mute)">ラケットを選ぶ</div>
+        </div>
+        <div class="compare-vs">vs</div>
+        <div class="compare-slot" id="compareSlot2" onclick="openCompareSelect(2)">
+          <div style="font-size:36px;opacity:0.2;margin-bottom:12px">🎾</div>
+          <div style="font-size:13px;color:var(--mute)">ラケットを選ぶ</div>
+        </div>
+      </div>
+      <div id="compareTable" style="display:none">
+        <table class="compare-table">
+          <thead><tr><th id="comp-head-1"></th><th>SPEC</th><th id="comp-head-2"></th></tr></thead>
+          <tbody id="comp-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">LOVE<em style="color:#d4f558">TENI</em></div>
+        <p class="footer-tagline">テニスプレーヤーのための<br>総合インフォメーション・プラットフォーム。</p>
+      </div>
+      <div class="footer-col">
+        <h4>CONTENTS</h4>
+        <ul>
+          <li><a onclick="navigate('rackets')">ラケット</a></li>
+          <li><a onclick="navigate('diagnosis')">ラケット診断</a></li>
+          <li><a onclick="navigate('column')">コラム</a></li>
+          <li><a onclick="navigate('news')">最新情報</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>EVENTS</h4>
+        <ul>
+          <li><a onclick="navigate('tournament')">大会情報</a></li>
+          <li><a onclick="navigate('predict')">勝敗予想</a></li>
+          <li><a onclick="navigate('training')">トレーニング</a></li>
+          <li><a onclick="navigate('pros')">プロ選手</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>HELP</h4>
+        <ul>
+          <li><a onclick="navigate('rules')">ルールブック</a></li>
+          <li><a onclick="navigate('compare')">ラケット比較</a></li>
+          <li><a>お問い合わせ</a></li>
+          <li><a>サイトについて</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 LOVETENI All Rights Reserved.</div>
+      <div class="footer-legal">
+        <a>プライバシーポリシー</a>
+        <a>利用規約</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="racket-data.js"></script>
+<script>
+// ===== BRAND DATA =====
+const BRAND_INFO = {
+  'Wilson': { desc: 'アメリカ・シカゴ発祥の世界最大のテニスブランド。フェデラー、マレー、セリーナ・ウィリアムズら多くのトップ選手が愛用。PRO STAFFはテニス史上最高峰の一本として知られる。', color: '#e74c3c', tagline: 'AMERICAN ICON',
+    series: [{name:'CLASH',desc:'しなやかで柔らかい打感'},{name:'BLADE',desc:'しなりとコントロールの代名詞'},{name:'SHIFT',desc:'スピン特化の新世代'},{name:'PRO STAFF',desc:'精密コントロールの最高峰'},{name:'ULTRA',desc:'パワーとスピンの融合'},{name:'RF',desc:'フェデラー監修モデル'}]},
+  'Babolat': { desc: 'フランス・リヨン発祥、1875年創業の世界最古のテニスブランド。ナダル、アルカラスらが愛用するPure Aeroが世界的に人気を誇る。', color: '#27ae60', tagline: 'FRENCH HERITAGE',
+    series: [{name:'Pure Strike',desc:'コントロールと精度重視'},{name:'Pure Aero',desc:'スピン系の代名詞'},{name:'Pure Drive',desc:'パワーとスピンの黄金スペック'},{name:'Evo Aero',desc:'快適性重視の中級者向け'}]},
+  'YONEX': { desc: '新潟県三条市発祥の日本代表スポーツブランド。大坂なおみ、西岡良仁らが使用。日本人の体型に合わせた設計で高い評価。', color: '#8e44ad', tagline: 'JAPANESE PRECISION',
+    series: [{name:'EZONE',desc:'広いスウィートエリア'},{name:'VCORE',desc:'スピン系の最高峰'},{name:'PERCEPT',desc:'しなりと振動吸収を両立'},{name:'ASTREL',desc:'軽量で扱いやすい'},{name:'MUSE',desc:'2026年新作'}]},
+  'HEAD': { desc: 'オーストリア発祥の世界トップブランド。ジョコビッチ、ズベレフらが使用。Speedシリーズはジョコビッチ愛用で世界的に有名。', color: '#2c3e50', tagline: 'AUSTRIAN TRADITION',
+    series: [{name:'Speed',desc:'ジョコビッチ使用モデル'},{name:'Gravity',desc:'バランス型'},{name:'Radical',desc:'コントロール性に優れた'},{name:'Extreme',desc:'スピン系上級者向け'},{name:'Prestige',desc:'コントロール最重視'},{name:'Boom',desc:'スピン＆パワー新シリーズ'}]},
+  'DUNLOP': { desc: 'イギリス発祥の老舗ブランド。プレースタイルに合わせた明確なシリーズ分けが特徴で、初心者から上級者まで幅広くカバー。', color: '#e67e22', tagline: 'BRITISH LEGACY',
+    series: [{name:'CX',desc:'コントロール重視'},{name:'SX',desc:'スピン重視'},{name:'FX',desc:'パワー重視'},{name:'LX',desc:'最大パワー志向'}]},
+  'Tecnifibre': { desc: 'フランス発祥のブランド。TF40はコントロール系の最高峰として知られ、ツアープロからの信頼が厚い。', color: '#16a085', tagline: 'FRENCH ENGINEERING',
+    series: [{name:'TF40',desc:'コントロール最重視'},{name:'T-FIGHT',desc:'バランス系'},{name:'TF-X1',desc:'オールラウンド'},{name:'FIRE',desc:'2026年新作'},{name:'TEMPO',desc:'快適性重視'}]},
+  'Prince': { desc: 'アメリカ発祥のブランド。O3（オースリー）テクノロジーなど革新的な技術で知られる。日本ではグローブライドが販売を担当。', color: '#2980b9', tagline: 'AMERICAN INNOVATION',
+    series: [{name:'PHANTOM GRAPHITE',desc:'伝説のグラファイト復活'},{name:'PHANTOM',desc:'究極のオールラウンド'},{name:'TOUR',desc:'競技向けスピード'},{name:'BEAST',desc:'攻撃型モデル'},{name:'EMBLEM',desc:'最強パワーシリーズ'}]},
+  'Kneissl': { desc: 'オーストリア発祥の老舗ブランド。シンプルながら高品質なラケットが特徴。PRIME STARシリーズは個性的なラインアップ。', color: '#c0392b', tagline: 'AUSTRIAN HERITAGE',
+    series: [{name:'PRIME STAR',desc:'高品質・シンプルデザイン'}]},
+  'DIADEM': { desc: 'アメリカ発祥の新興ブランド。世界ランク上位のElina Svitolinaが契約選手。革新的な設計が特徴。', color: '#d35400', tagline: 'NEW WAVE',
+    series: [{name:'AXIS',desc:'スビトリナ使用'},{name:'ELEVATE',desc:'スピン＆コントロール'},{name:'NOVA',desc:'バランス型'},{name:'DREAMER',desc:'快適性重視'}]}
+};
+const BRAND_LIST = Object.keys(BRAND_INFO);
+
+let currentBrand = null;
+let currentSeries = null;
+let filteredRackets = [];
+let allRackets = [];
+let compareRackets = [null, null];
+let votes = {};
+let newsCache = null;
+let isHistoryNav = false; // ブラウザの戻る/進むでナビゲートしたフラグ
+
+window.onload = function() {
+  allRackets = typeof RACKET_DATABASE !== 'undefined' ? RACKET_DATABASE : [];
+  renderBrandGrid();
+  renderHomeBrands();
+  renderBrandSidebar();
+  initQuiz();
+  renderMatches();
+  renderRules();
+  renderProPlayers();
+  loadNews(); // ニュース読み込み
+  updateTodayDate();
+
+  // 初期state設定
+  history.replaceState({ view: 'home' }, '', '#home');
+
+  // URLハッシュから初期画面を判定
+  const hash = location.hash.replace('#', '');
+  if (hash && hash !== 'home') {
+    navigate(hash, true);
+  }
+};
+
+// ブラウザの戻る/進むに対応
+window.addEventListener('popstate', (e) => {
+  isHistoryNav = true;
+  const state = e.state;
+  if (state && state.view) {
+    if (state.view === 'brand' && state.brand) {
+      selectBrand(state.brand);
+    } else if (state.view === 'series' && state.brand && state.series) {
+      selectSeries(state.brand, state.series);
+    } else if (state.view === 'detail' && state.racketId) {
+      selectRacket(state.racketId);
+    } else {
+      navigate(state.view);
+    }
+  } else {
+    navigate('home');
+  }
+  isHistoryNav = false;
+});
+
+function navigate(view, skipPush) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  const el = document.getElementById('view-' + view);
+  if (el) el.classList.add('active');
+  document.querySelectorAll('.gnav-item').forEach(n => n.classList.remove('active'));
+  const active = document.querySelector(`.gnav-item[data-page="${view}"]`);
+  if (active) active.classList.add('active');
+  window.scrollTo(0, 0);
+
+  // ブラウザ履歴に追加（戻る/進む対応）
+  if (!skipPush && !isHistoryNav) {
+    history.pushState({ view }, '', '#' + view);
+  }
+}
+
+function updateTodayDate() {
+  const d = new Date();
+  const dateStr = `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+  const el = document.getElementById('topline-date');
+  if (el) el.textContent = dateStr;
+}
+
+// ===== NEWS =====
+async function loadNews() {
+  try {
+    const res = await fetch('/api/fetch-news');
+    if (!res.ok) throw new Error('Failed to fetch news');
+    const data = await res.json();
+    newsCache = data;
+    renderNews(data);
+  } catch(e) {
+    console.log('News load error:', e);
+    renderNewsError();
+  }
+}
+
+function tagForCategory(cat) {
+  return {
+    'tournament': { cls: 'tag-news', label: '大会' },
+    'product':    { cls: 'tag-product', label: '用具' },
+    'event':      { cls: 'tag-event', label: 'イベント' },
+    'news':       { cls: 'tag-info', label: '情報' }
+  }[cat] || { cls: 'tag-info', label: 'NEWS' };
+}
+
+function renderNews(data) {
+  const articles = data.articles || [];
+  if (articles.length === 0) {
+    renderNewsError();
+    return;
+  }
+
+  // ホーム用（4件）
+  const homeList = document.getElementById('home-news-list');
+  if (homeList) {
+    homeList.innerHTML = articles.slice(0, 4).map(a => {
+      const tag = tagForCategory(a.category);
+      return `<div class="news-item" onclick="window.open('${a.link}','_blank')">
+        <div class="news-date">${a.date || ''}</div>
+        <div><span class="news-tag ${tag.cls}">${tag.label}</span></div>
+        <div class="news-title">${a.title}</div>
+        <div class="news-arrow">→</div>
+      </div>`;
+    }).join('');
+  }
+
+  // 最新情報ページ用（全件）
+  const pageList = document.getElementById('page-news-list');
+  if (pageList) {
+    pageList.innerHTML = articles.map(a => {
+      const tag = tagForCategory(a.category);
+      return `<div class="news-item" onclick="window.open('${a.link}','_blank')">
+        <div class="news-date">${a.date || ''}</div>
+        <div><span class="news-tag ${tag.cls}">${tag.label}</span></div>
+        <div class="news-title">${a.title}</div>
+        <div class="news-arrow">→</div>
+      </div>`;
+    }).join('');
+  }
+
+  // ソース情報
+  const sourceEl = document.getElementById('news-source');
+  if (sourceEl) {
+    const updated = data.updatedAt ? new Date(data.updatedAt).toLocaleString('ja-JP') : '';
+    sourceEl.textContent = `出典: ${data.source || 'tennis365.net'} · 最終更新: ${updated}`;
+  }
+
+  // AI要約
+  if (data.summary) {
+    const sumEl = document.getElementById('news-summary-section');
+    const sumText = document.getElementById('news-summary-text');
+    if (sumEl && sumText) {
+      sumText.textContent = data.summary;
+      sumEl.style.display = 'block';
+    }
+  }
+}
+
+function renderNewsError() {
+  const fallback = `<div class="news-item"><div class="news-date">2026.05.21</div><div><span class="news-tag tag-news">大会</span></div><div class="news-title">全仏オープン 2026 開幕間近 — 本戦は 5/24（日）スタート</div><div class="news-arrow">→</div></div>
+<div class="news-item"><div class="news-date">2026.05.21</div><div><span class="news-tag tag-info">情報</span></div><div class="news-title">ATPランキング 男子1位はシナー、2位アルカラス（5月4日付）</div><div class="news-arrow">→</div></div>
+<div class="news-item"><div class="news-date">2026.05.20</div><div><span class="news-tag tag-info">情報</span></div><div class="news-title">日本人選手: 大坂なおみ・内島萌夏が本戦出場</div><div class="news-arrow">→</div></div>`;
+  const homeList = document.getElementById('home-news-list');
+  const pageList = document.getElementById('page-news-list');
+  if (homeList) homeList.innerHTML = fallback;
+  if (pageList) pageList.innerHTML = fallback;
+}
+
+function toggleMobileNav() {
+  const nav = document.getElementById('gnav');
+  nav.style.display = nav.style.display === 'flex' ? 'none' : 'flex';
+  nav.style.flexDirection = 'column';
+  nav.style.position = 'absolute';
+  nav.style.top = '60px';
+  nav.style.left = '0';
+  nav.style.right = '0';
+  nav.style.background = 'white';
+  nav.style.padding = '20px';
+  nav.style.borderBottom = '1px solid var(--line)';
+}
+
+function onSearch(val) {
+  if (!val.trim()) return;
+  const q = val.toLowerCase();
+  filteredRackets = allRackets.filter(r => r.model.toLowerCase().includes(q) || r.brand.toLowerCase().includes(q));
+  document.getElementById('series-title').textContent = `"${val}" の検索結果`;
+  document.getElementById('series-count').textContent = `${filteredRackets.length} モデル`;
+  document.getElementById('crumb-series').innerHTML = `<span class="current">検索結果</span>`;
+  document.getElementById('back-to-brand').onclick = () => navigate('rackets');
+  renderRacketGrid(filteredRackets);
+  navigate('series');
+}
+
+// ===== BRANDS =====
+function renderBrandGrid() {
+  const html = BRAND_LIST.map((brand,i) => {
+    const info = BRAND_INFO[brand];
+    const count = allRackets.filter(r => r.brand === brand).length;
+    return `<div class="brand-card" onclick="selectBrand('${brand}')">
+      <div class="brand-card-num">${String(i+1).padStart(2,'0')} / ${String(BRAND_LIST.length).padStart(2,'0')}</div>
+      <div class="brand-accent-bar"></div>
+      <div class="brand-card-name"><em>${info.tagline}</em>${brand}</div>
+      <div class="brand-card-meta">${info.series.length}シリーズ · ${count}モデル</div>
+      <div class="brand-card-arrow">VIEW MORE →</div>
+    </div>`;
+  }).join('');
+  document.getElementById('brandGrid').innerHTML = html;
+}
+
+function renderHomeBrands() {
+  const html = BRAND_LIST.slice(0, 9).map((brand,i) => {
+    const info = BRAND_INFO[brand];
+    const count = allRackets.filter(r => r.brand === brand).length;
+    return `<div class="brand-card" onclick="selectBrand('${brand}')">
+      <div class="brand-card-num">${String(i+1).padStart(2,'0')}</div>
+      <div class="brand-accent-bar"></div>
+      <div class="brand-card-name"><em>${info.tagline}</em>${brand}</div>
+      <div class="brand-card-meta">${info.series.length}シリーズ · ${count}モデル</div>
+      <div class="brand-card-arrow">VIEW MORE →</div>
+    </div>`;
+  }).join('');
+  document.getElementById('homeBrandGrid').innerHTML = html;
+}
+
+function renderBrandSidebar() {
+  const html = BRAND_LIST.map(brand =>
+    `<li><a onclick="selectBrand('${brand}')" id="sb-${brand.replace(/\s/g,'-')}">
+      <span class="sidebar-dot" style="background:${BRAND_INFO[brand].color}"></span>${brand}
+    </a></li>`
+  ).join('');
+  document.getElementById('brandSidebar').innerHTML = html;
+  document.getElementById('brandSidebar2').innerHTML = html.replace(/id="sb-/g, 'id="sb2-');
+}
+
+function selectBrand(brand) {
+  currentBrand = brand;
+  currentSeries = null;
+  const info = BRAND_INFO[brand];
+  document.getElementById('brand-name').textContent = brand;
+  document.getElementById('brand-desc').textContent = info.desc;
+  document.getElementById('crumb-brand').innerHTML = `<span onclick="navigate('rackets')">RACKETS</span><span class="sep">/</span><span class="current">${brand}</span>`;
+  document.getElementById('seriesGrid').innerHTML = info.series.map(s => {
+    const cnt = getRacketsBySeries(brand, s.name).length;
+    return `<div class="series-card" onclick="selectSeries('${brand}','${s.name}')">
+      <div class="series-name">${s.name}</div>
+      <div class="series-desc">${s.desc}</div>
+      <div class="series-bottom">
+        ${cnt > 0 ? `<div class="series-count">${cnt} MODELS</div>` : '<div></div>'}
+        <div class="series-arrow">→</div>
+      </div>
+    </div>`;
+  }).join('');
+  document.querySelectorAll('[id^="sb-"], [id^="sb2-"]').forEach(e => e.classList.remove('active'));
+  const ids = [`sb-${brand.replace(/\s/g,'-')}`, `sb2-${brand.replace(/\s/g,'-')}`];
+  ids.forEach(id => { const e = document.getElementById(id); if (e) e.classList.add('active'); });
+  navigate('brand', true);
+  if (!isHistoryNav) history.pushState({ view: 'brand', brand }, '', `#brand/${brand}`);
+}
+
+function getRacketsBySeries(brand, series) {
+  return allRackets.filter(r => {
+    if (r.brand !== brand) return false;
+    const sl = series.toLowerCase().replace(/[\s\-]/g,'');
+    const ml = (r.model||'').toLowerCase().replace(/[\s\-]/g,'');
+    const rl = (r.series||'').toLowerCase().replace(/[\s\-]/g,'');
+    return ml.includes(sl) || rl === sl || rl.includes(sl);
+  });
+}
+
+function selectSeries(brand, series) {
+  currentBrand = brand;
+  currentSeries = series;
+  const rackets = getRacketsBySeries(brand, series);
+  filteredRackets = rackets;
+  document.getElementById('back-to-brand').onclick = () => selectBrand(brand);
+  document.getElementById('series-title').textContent = `${brand} ${series}`;
+  document.getElementById('series-count').textContent = `${rackets.length} モデル`;
+  document.getElementById('crumb-series').innerHTML = `<span onclick="navigate('rackets')">RACKETS</span><span class="sep">/</span><span onclick="selectBrand('${brand}')">${brand}</span><span class="sep">/</span><span class="current">${series}</span>`;
+  renderRacketGrid(rackets);
+  navigate('series', true);
+  if (!isHistoryNav) history.pushState({ view: 'series', brand, series }, '', `#series/${brand}/${series}`);
+}
+
+function renderRacketGrid(rackets) {
+  const grid = document.getElementById('racketGrid');
+  if (!rackets.length) {
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🎾</div><div class="empty-text">モデルデータ準備中です</div></div>`;
+    return;
+  }
+  grid.innerHTML = rackets.map(r => `
+    <div class="racket-card" onclick="selectRacket('${r.id}')">
+      <div class="racket-img" id="ci-${r.id}"><div class="ph">🎾</div></div>
+      <div class="racket-info">
+        <div class="racket-brand-text">${r.brand}</div>
+        <div class="racket-model">${r.model}</div>
+        <div class="racket-specs">
+          <div>重量 <strong>${r.weight}g</strong></div>
+          <div>面積 <strong>${r.headSize}in²</strong></div>
+          <div>バランス <strong>${r.balance}mm</strong></div>
+          <div>パターン <strong>${r.pattern}</strong></div>
+        </div>
+        <button class="rakuten-btn" onclick="event.stopPropagation();openRakuten(this, '${r.brand}', '${r.model}')">楽天で価格チェック →</button>
+      </div>
+    </div>`).join('');
+
+  // シリーズ単位で一括取得（1リクエストで全モデルの画像を取得）
+  if (currentBrand && currentSeries) {
+    loadSeriesImages(currentBrand, currentSeries, rackets);
+  } else {
+    // 検索結果などはシリーズ不明なので個別取得
+    // 品番ありは並列一括、なしは順次（250ms間隔）
+    const withJan2 = rackets.filter(r => r.janCode);
+    const withoutJan2 = rackets.filter(r => !r.janCode);
+    if (withJan2.length > 0) {
+      (async () => {
+        const C = 3;
+        for (let i = 0; i < withJan2.length; i += C) {
+          await Promise.all(withJan2.slice(i, i + C).map(r => loadOneImage(r)));
+          if (i + C < withJan2.length) await new Promise(res => setTimeout(res, 150));
+        }
+      })();
+    }
+    withoutJan2.forEach((r, i) => setTimeout(() => loadOneImage(r), i * 250));
+  }
+}
+
+// ===== Image Cache (localStorage 7日) =====
+const IMG_CACHE_KEY = 'loveteni_img_cache_v8';
+const SERIES_CACHE_KEY = 'loveteni_series_cache_v5';
+const IMG_CACHE_TTL = 7 * 24 * 60 * 60 * 1000;
+let imgCache = null;
+let seriesCache = null;
+
+function loadImgCache() {
+  if (imgCache) return imgCache;
+  try {
+    const raw = localStorage.getItem(IMG_CACHE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      const now = Date.now();
+      const cleaned = {};
+      for (const k in parsed) {
+        if (parsed[k].t && (now - parsed[k].t) < IMG_CACHE_TTL) cleaned[k] = parsed[k];
+      }
+      imgCache = cleaned;
+    } else {
+      imgCache = {};
+    }
+  } catch(e) { imgCache = {}; }
+  return imgCache;
+}
+
+function loadSeriesCache() {
+  if (seriesCache) return seriesCache;
+  try {
+    const raw = localStorage.getItem(SERIES_CACHE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      const now = Date.now();
+      const cleaned = {};
+      for (const k in parsed) {
+        if (parsed[k].t && (now - parsed[k].t) < IMG_CACHE_TTL) cleaned[k] = parsed[k];
+      }
+      seriesCache = cleaned;
+    } else {
+      seriesCache = {};
+    }
+  } catch(e) { seriesCache = {}; }
+  return seriesCache;
+}
+
+function saveImgCache() {
+  try { localStorage.setItem(IMG_CACHE_KEY, JSON.stringify(imgCache)); } catch(e) {}
+}
+
+function saveSeriesCache() {
+  try { localStorage.setItem(SERIES_CACHE_KEY, JSON.stringify(seriesCache)); } catch(e) {}
+}
+
+function getCachedImg(key) {
+  loadImgCache();
+  return imgCache[key]?.url || null;
+}
+
+function setCachedImg(key, url, item) {
+  loadImgCache();
+  imgCache[key] = { url, item, t: Date.now() };
+  saveImgCache();
+}
+
+function getCachedItem(key) {
+  loadImgCache();
+  return imgCache[key]?.item || null;
+}
+
+function getCachedSeriesItems(key) {
+  loadSeriesCache();
+  return seriesCache[key]?.items || null;
+}
+
+function setCachedSeriesItems(key, items) {
+  loadSeriesCache();
+  seriesCache[key] = { items, t: Date.now() };
+  saveSeriesCache();
+}
+
+// 商品名からベストマッチを選ぶ
+function pickBestMatch(r, items) {
+  if (!items || items.length === 0) return null;
+  const modelTokens = (r.model || '').toLowerCase().split(/\s+/).filter(t => t.length > 0);
+  const modelKey = r.model.toLowerCase().replace(/\s+/g, '');
+
+  const scored = items.map(item => {
+    const name = (item.name || '').toLowerCase();
+    let score = 0;
+    
+    // ★ ラケット本体らしさ（強い加点）
+    if (name.includes('ラケット') || name.includes('racket') || name.includes('racquet')) score += 10;
+    if (name.includes('フレーム') || name.includes('frame')) score += 5;
+    if (name.includes('硬式') || name.includes('tennis racquet')) score += 3;
+    
+    // モデル名マッチ
+    modelTokens.forEach(t => { if (t && name.includes(t)) score += 3; });
+    if (name.replace(/\s+/g, '').includes(modelKey)) score += 8;
+    
+    // ★ ラケット以外の商品を強力に除外
+    // オーバーグリップ・テープ・キャップ系
+    if (/オーバーグリップ|over.?grip|リプレイスメント|replacement|グリップテープ|grip.?tape|エンドキャップ|キャップ/.test(name)) score -= 100;
+    // 周辺商品
+    if (/バッグ|bag|ケース|case|シューズ|shoes|ウェア|wear|シャツ|shirt|パンツ|pants|スカート|skirt|キャップ|帽子|ハット|タオル|towel|振動止め|ダンパー|dampener/.test(name)) score -= 50;
+    // ストリング・ガット・小物
+    if (/ガット|string|ストリング|ボール|ball|張上げ|張り上げ|張替|張り替|ストリンガー/.test(name)) score -= 30;
+    // 部品・パーツ・小物
+    if (/グロメット|grommet|バンパー|bumper|ヘッドガード|ステッカー|sticker|アクセサリ|accessory|パーツ|parts/.test(name)) score -= 50;
+    
+    // ★ 価格でフィルタ（ラケットは1万円以上が一般的、ジュニアは5千円以上）
+    const price = item.price || 0;
+    if (price > 0 && price < 3000) score -= 50;  // 3000円未満は確実にラケットじゃない
+    if (price >= 15000) score += 5;  // 1.5万円以上は本体の可能性高い
+    if (price >= 25000) score += 5;  // 2.5万円以上はほぼ確実に本体
+    
+    return { item, score };
+  });
+
+  scored.sort((a, b) => b.score - a.score);
+  // しきい値: スコア10以上ないとマッチとみなさない（精度優先）
+  return scored[0]?.score >= 10 ? scored[0].item : null;
+}
+
+// 画像取得のキャッシュキー（品番優先）
+function imgCacheKey(r) {
+  return r.janCode || r.searchKeyword || `${r.brand} ${r.model}`;
+}
+
+// シリーズ画像取得（一括検索→品番マッチ振り分け、超高速版）
+async function loadSeriesImages(brand, series, rackets, retry = 0) {
+  // まずキャッシュ済みを即表示
+  rackets.forEach(r => {
+    const cached = getCachedImg(imgCacheKey(r));
+    if (cached) updateCardImg(r, cached);
+  });
+
+  // キャッシュ済みを除く未取得のラケットだけ処理
+  const pending = rackets.filter(r => !getCachedImg(imgCacheKey(r)));
+  if (pending.length === 0) return;
+
+  // ★シリーズ単位で1回だけAPI呼び出し（hits=30で30件取得）
+  const cacheKey = `series__${brand}__${series}`;
+  let items = getCachedSeriesItems(cacheKey);
+
+  if (!items) {
+    try {
+      const keyword = `${brand} ${series}`;
+      const res = await fetch(`/api/rakuten-search?keyword=${encodeURIComponent(keyword)}`);
+      if (res.status === 429 || res.status === 500) {
+        if (retry < 3) setTimeout(() => loadSeriesImages(brand, series, rackets, retry + 1), 2000 + Math.random() * 1000);
+        return;
+      }
+      const data = await res.json();
+      items = data.items || [];
+      setCachedSeriesItems(cacheKey, items);
+    } catch(e) {
+      if (retry < 2) setTimeout(() => loadSeriesImages(brand, series, rackets, retry + 1), 1500);
+      return;
+    }
+  }
+
+  // 各ラケットに割り当て：品番があれば品番マッチ優先、なければモデル名マッチ
+  const unmatched = [];
+  pending.forEach(r => {
+    const key = imgCacheKey(r);
+    let match = null;
+
+    if (r.janCode) {
+      // 品番マッチ：商品名に品番が含まれているものを探す
+      match = findByJanCode(r.janCode, items);
+    }
+    if (!match) {
+      // フォールバック：モデル名でベストマッチ検索
+      match = pickBestMatch(r, items);
+    }
+
+    if (match && match.largeImageUrl) {
+      setCachedImg(key, match.largeImageUrl, match);
+      updateCardImg(r, match.largeImageUrl);
+    } else {
+      // シリーズ検索で見つからなかったものは個別検索のキューへ
+      unmatched.push(r);
+    }
+  });
+
+  // シリーズ一括で見つからなかったものだけ個別検索（並列5件）
+  if (unmatched.length > 0) {
+    const CONCURRENCY = 5;
+    for (let i = 0; i < unmatched.length; i += CONCURRENCY) {
+      const batch = unmatched.slice(i, i + CONCURRENCY);
+      Promise.all(batch.map(r => loadOneImage(r)));  // awaitなしで並列発火
+      if (i + CONCURRENCY < unmatched.length) {
+        await new Promise(res => setTimeout(res, 100));
+      }
+    }
+  }
+}
+
+// 品番で商品名から一致するアイテムを探す（ラケット本体を優先）
+function findByJanCode(janCode, items) {
+  if (!janCode || !items || !items.length) return null;
+  const normalize = (s) => (s || '').toUpperCase().replace(/[\s\-]/g, '');
+  const normJan = normalize(janCode);
+  const janCore = normJan.replace(/U\d*$/, '');
+
+  // 「これはラケット本体じゃない」判定
+  const isAccessory = (name) => {
+    const n = (name || '').toLowerCase();
+    return /オーバーグリップ|over.?grip|リプレイスメント|replacement|グリップテープ|grip.?tape|バッグ|bag|ケース|case|ガット|string|ストリング|ボール|ball|ウェア|wear|シャツ|shirt|タオル|towel|振動止め|ダンパー/.test(n);
+  };
+
+  // 完全一致でラケット本体を最優先
+  let candidates = items.filter(item => normalize(item.name).includes(normJan));
+  let racketOnly = candidates.filter(item => !isAccessory(item.name) && (item.price || 0) >= 3000);
+  if (racketOnly.length > 0) return racketOnly[0];
+  if (candidates.length > 0 && !isAccessory(candidates[0].name)) return candidates[0];
+
+  // コア部分でマッチ（グリップサイズ違いを許容）
+  if (janCore.length >= 6) {
+    candidates = items.filter(item => normalize(item.name).includes(janCore));
+    racketOnly = candidates.filter(item => !isAccessory(item.name) && (item.price || 0) >= 3000);
+    if (racketOnly.length > 0) return racketOnly[0];
+    if (candidates.length > 0 && !isAccessory(candidates[0].name)) return candidates[0];
+  }
+  return null;
+}
+
+function updateCardImg(r, url) {
+  const c = document.getElementById(`ci-${r.id}`);
+  if (!c) return;
+  // 一覧用に小さいサイズの画像を使う（軽量＆高速）
+  const thumbUrl = url.replace(/_ex=\d+x\d+/, '_ex=300x300');
+  c.innerHTML = `<img src="${thumbUrl}" alt="${r.model}" loading="lazy" decoding="async" onerror="this.parentElement.innerHTML='<div class=ph>🎾</div>'">`;
+}
+
+// 個別モデルの画像取得（品番優先・高速版）
+async function loadOneImage(r, retry = 0) {
+  const key = imgCacheKey(r);
+  const cached = getCachedImg(key);
+  if (cached) { updateCardImg(r, cached); return; }
+
+  try {
+    let url;
+    if (r.janCode) {
+      // 品番検索：自動でprospo優先（Function内部で処理）
+      url = `/api/rakuten-search?janCode=${encodeURIComponent(r.janCode)}&keyword=${encodeURIComponent(r.searchKeyword || r.model)}`;
+    } else {
+      // キーワード検索：prospo優先、見つからなければ全店
+      const keyword = r.searchKeyword || `${r.brand} ${r.model}`;
+      url = `/api/rakuten-search?keyword=${encodeURIComponent(keyword)}`;
+    }
+
+    const res = await fetch(url);
+    if (res.status === 429 || res.status === 500) {
+      if (retry < 3) setTimeout(() => loadOneImage(r, retry + 1), 2000 + Math.random() * 1000);
+      return;
+    }
+    const data = await res.json();
+    if (data.items && data.items.length) {
+      // 品番検索の場合は先頭の商品が確実に正解
+      const item = r.janCode ? data.items[0] : (pickBestMatch(r, data.items) || data.items[0]);
+      if (item && item.largeImageUrl) {
+        setCachedImg(key, item.largeImageUrl, item);
+        updateCardImg(r, item.largeImageUrl);
+      }
+    }
+  } catch(e) {
+    if (retry < 2) setTimeout(() => loadOneImage(r, retry + 1), 1500);
+  }
+}
+
+// 旧関数（互換用）
+function loadCardImg(r) {
+  loadOneImage(r);
+}
+
+function sortRackets(by) {
+  let s = [...filteredRackets];
+  if (by==='weight-asc') s.sort((a,b)=>a.weight-b.weight);
+  else if (by==='weight-desc') s.sort((a,b)=>b.weight-a.weight);
+  else if (by==='headSize-asc') s.sort((a,b)=>a.headSize-b.headSize);
+  else if (by==='headSize-desc') s.sort((a,b)=>b.headSize-a.headSize);
+  renderRacketGrid(s);
+}
+
+function selectRacket(id) {
+  const r = allRackets.find(x => x.id === id);
+  if (!r) return;
+  document.getElementById('back-to-series').onclick = () => selectSeries(currentBrand, currentSeries);
+  document.getElementById('crumb-detail').innerHTML = `<span onclick="navigate('rackets')">RACKETS</span><span class="sep">/</span><span onclick="selectBrand('${currentBrand}')">${currentBrand}</span><span class="sep">/</span><span onclick="selectSeries('${currentBrand}','${currentSeries}')">${currentSeries}</span><span class="sep">/</span><span class="current">${r.model}</span>`;
+  document.getElementById('detail-brand').textContent = r.brand;
+  document.getElementById('detail-model').textContent = r.model;
+  document.getElementById('detail-concept').textContent = r.concept || '';
+  document.getElementById('detail-specs').innerHTML = [
+    ['重量', r.weight, 'g'], ['フェイス', r.headSize, 'in²'],
+    ['バランス', r.balance, 'mm'], ['パターン', r.pattern, ''],
+    r.beam ? ['ビーム厚', r.beam, ''] : null,
+    r.year ? ['発売年', r.year, ''] : null
+  ].filter(Boolean).map(([l,v,u]) => `<div class="detail-spec-item"><div class="detail-spec-label">${l}</div><div class="detail-spec-value">${v}<span class="detail-spec-unit">${u}</span></div></div>`).join('');
+  document.getElementById('detail-img-area').innerHTML = '<div class="empty-icon">🎾</div>';
+  document.getElementById('detail-rakuten-btn').onclick = () => openRakuten(null, r.brand, r.model);
+  loadRakutenResults(r);
+  navigate('detail', true);
+  if (!isHistoryNav) history.pushState({ view: 'detail', racketId: id }, '', `#detail/${id}`);
+}
+
+async function loadRakutenResults(r) {
+  const c = document.getElementById('rakuten-results');
+  const cacheKey = imgCacheKey(r);
+  const kw = r.searchKeyword || `${r.brand} ${r.model}`;
+
+  // キャッシュ済み画像があれば即表示
+  const cachedImg = getCachedImg(cacheKey);
+  if (cachedImg) {
+    document.getElementById('detail-img-area').innerHTML = `<img src="${cachedImg}" alt="${r.model}" onerror="this.parentElement.innerHTML='<div class=empty-icon>🎾</div>'">`;
+  }
+
+  c.innerHTML = '<div class="loading"><span class="spin"></span>楽天を検索中...</div>';
+  try {
+    // 品番があれば品番検索（高精度）、なければキーワード検索
+    let fetchUrl;
+    if (r.janCode) {
+      fetchUrl = `/api/rakuten-search?janCode=${encodeURIComponent(r.janCode)}&keyword=${encodeURIComponent(kw)}`;
+    } else {
+      fetchUrl = `/api/rakuten-search?keyword=${encodeURIComponent(kw)}`;
+    }
+    const res = await fetch(fetchUrl);
+    const data = await res.json();
+
+    if (!data.items || !data.items.length) {
+      const errMsg = data.error ? `（${data.error}）` : '';
+      c.innerHTML = `<div class="loading">楽天市場で見つかりませんでした${errMsg}</div>`;
+      return;
+    }
+
+    const first = data.items.find(i => i.largeImageUrl);
+    if (first) {
+      setCachedImg(cacheKey, first.largeImageUrl, first);
+      document.getElementById('detail-img-area').innerHTML = `<img src="${first.largeImageUrl}" alt="${r.model}" onerror="this.parentElement.innerHTML='<div class=empty-icon>🎾</div>'">`;
+    }
+    const hasProspo = data.items.some(i => i.isProSports);
+    const headerLabel = hasProspo ? '🏪 PRO SPORTS優先表示' : '🏪 楽天市場';
+    c.innerHTML = `<div style="font-size:11px;color:var(--accent);margin-bottom:12px;font-family:'DM Sans',sans-serif;letter-spacing:0.1em">${headerLabel}</div><div class="rakuten-grid">${data.items.slice(0,8).map(item => `
+      <div class="rakuten-item">
+        <div class="rakuten-item-img">${item.imageUrl ? `<img src="${item.largeImageUrl||item.imageUrl}" loading="lazy">` : '<div style="font-size:30px;opacity:0.15">🎾</div>'}</div>
+        <div class="rakuten-item-info">
+          <div class="rakuten-item-name">${item.name}</div>
+          <div class="rakuten-item-shop">${item.shopName}</div>
+          <div class="rakuten-item-price">¥${item.price.toLocaleString()}</div>
+          <a href="${item.itemUrl}" target="_blank" class="rakuten-item-btn">楽天で見る</a>
+        </div>
+      </div>`).join('')}</div>`;
+  } catch(e) { c.innerHTML = '<div class="loading">読み込みに失敗しました</div>'; }
+}
+
+function openRakuten(btn, brand, model) {
+  window.open(`https://search.rakuten.co.jp/search/mall/${encodeURIComponent(brand+' '+model+' テニスラケット')}/?genreId=101227`, '_blank');
+}
+
+// ===== QUIZ =====
+const QUIZ = [
+  { q: 'テニス歴はどのくらいですか？', opts: ['始めたばかり（〜1年）', '中級者（1〜5年）', '上級者（5年以上）', '競技者レベル'] },
+  { q: 'どんなプレースタイルですか？', opts: ['パワーで押したい', 'スピンで崩したい', 'コントロール重視', 'オールラウンド'] },
+  { q: 'ラケットの重さの好みは？', opts: ['軽め（270g以下）', '普通（280〜295g）', '重め（300g以上）', 'こだわらない'] },
+  { q: '重視するポイントは？', opts: ['打感の柔らかさ', '操作しやすさ', '振り抜きやすさ', 'パワー'] },
+  { q: '予算はどのくらいですか？', opts: ['〜2万円', '2〜3万円', '3〜4万円', '4万円以上OK'] }
+];
+const RESULTS = [
+  { title: 'Wilson CLASH 100', badge: 'BALANCED ALL-ROUNDER', desc: 'しなやかなフレームで打感が柔らかく、コントロールしやすいラケット。初心者から中上級者まで幅広く使えるオールラウンダーです。' },
+  { title: 'Babolat Pure Aero', badge: 'SPIN SPECIALIST', desc: 'ナダルも使用するスピン特化ラケット。重いボールで相手を崩したい攻撃的なプレーヤーに最適です。' },
+  { title: 'YONEX EZONE 100', badge: 'COMFORT MASTER', desc: 'スウィートエリアが広く、快適な打球感が特徴。日本人の体型に合わせた設計で扱いやすさ抜群。' },
+  { title: 'HEAD Speed MP', badge: 'PRECISION & SPEED', desc: 'ジョコビッチが愛用するシリーズ。スピードと精度を求める中上級者に最適な競技志向モデルです。' }
+];
+let quizStep = 0;
+
+function initQuiz() {
+  quizStep = 0;
+  renderQuiz();
+}
+
+function renderQuiz() {
+  const c = document.getElementById('quizContainer');
+  if (quizStep >= QUIZ.length) {
+    const r = RESULTS[Math.floor(Math.random() * RESULTS.length)];
+    c.innerHTML = `<div class="quiz-result">
+      <div class="quiz-result-eyebrow">あなたへのおすすめ</div>
+      <div class="quiz-result-title">${r.title}</div>
+      <div class="quiz-result-badge">${r.badge}</div>
+      <p class="quiz-result-desc">${r.desc}</p>
+      <div class="quiz-result-buttons">
+        <button class="btn btn-primary" style="background:var(--ink);color:white" onclick="initQuiz()">もう一度診断</button>
+        <button class="btn btn-outline" style="color:var(--ink);border-color:var(--ink)" onclick="navigate('rackets')">ラケット一覧へ</button>
+      </div>
+    </div>`;
+    return;
+  }
+  const q = QUIZ[quizStep];
+  const pct = Math.round((quizStep / QUIZ.length) * 100);
+  c.innerHTML = `<div class="quiz-card">
+    <div class="quiz-progress">QUESTION ${quizStep+1} / ${QUIZ.length}</div>
+    <div class="quiz-bar"><div class="quiz-bar-fill" style="width:${pct}%"></div></div>
+    <div class="quiz-question">${q.q}</div>
+    <div class="quiz-options">
+      ${q.opts.map((o,i) => `<button class="quiz-option" onclick="answerQuiz(${i})">${o}</button>`).join('')}
+    </div>
+  </div>`;
+}
+
+function answerQuiz(i) { quizStep++; renderQuiz(); }
+
+// ===== MATCHES =====
+const MATCHES = [
+  { id:'m1', tournament:'全仏オープン2026 準決勝', p1:'C.アルカラス', c1:'🇪🇸', p2:'J.シナー', c2:'🇮🇹' },
+  { id:'m2', tournament:'全仏オープン2026 準決勝', p1:'N.ジョコビッチ', c1:'🇷🇸', p2:'H.ルネ', c2:'🇩🇰' },
+  { id:'m3', tournament:'全仏オープン2026 QF', p1:'A.ズベレフ', c1:'🇩🇪', p2:'T.ポール', c2:'🇺🇸' },
+];
+
+function renderMatches() {
+  MATCHES.forEach(m => { if (!votes[m.id]) votes[m.id] = {p1: Math.floor(Math.random()*80)+20, p2: Math.floor(Math.random()*80)+20, voted: null}; });
+  document.getElementById('matchList').innerHTML = MATCHES.map(m => renderMatchCard(m)).join('');
+}
+
+function renderMatchCard(m) {
+  const v = votes[m.id];
+  const total = v.p1 + v.p2;
+  const pct1 = Math.round((v.p1/total)*100);
+  return `<div class="match-card">
+    <div class="match-info">${m.tournament}</div>
+    <div class="match-players">
+      <button class="player-btn ${v.voted==='p1'?'selected-1':''}" onclick="vote('${m.id}','p1')">
+        <div class="player-flag">${m.c1}</div>
+        <div class="player-name">${m.p1}</div>
+        <div class="player-vote">${v.p1} votes</div>
+      </button>
+      <div class="vs">vs</div>
+      <button class="player-btn ${v.voted==='p2'?'selected-2':''}" onclick="vote('${m.id}','p2')">
+        <div class="player-flag">${m.c2}</div>
+        <div class="player-name">${m.p2}</div>
+        <div class="player-vote">${v.p2} votes</div>
+      </button>
+    </div>
+    <div class="vote-bar"><div class="vote-bar-fill" style="width:${pct1}%"></div></div>
+    <div class="vote-counts"><span>${pct1}%</span><span>${100-pct1}%</span></div>
+  </div>`;
+}
+
+function vote(matchId, player) {
+  const v = votes[matchId];
+  if (v.voted) return;
+  v[player]++;
+  v.voted = player;
+  document.getElementById('matchList').innerHTML = MATCHES.map(m => renderMatchCard(m)).join('');
+}
+
+// ===== RULES =====
+const RULES = [
+  { title: 'スコアの数え方', body: 'テニスのスコアは0=ラブ、1=15（フィフティーン）、2=30（サーティ）、3=40（フォーティ）と数えます。両者40点で「デュース」となり、2点連続で取ったほうがゲームを取ります。6ゲーム先取でセット取得、規定のセット数を先取した選手が勝利です。' },
+  { title: 'サービスのルール', body: 'サービスは対角線のサービスボックスに入れます。1stサービスがフォルトの場合、2ndサービスを打てます。2ndもフォルトになると「ダブルフォルト」で相手のポイントになります。サービス中にフットフォルト（足がベースラインを踏む）も反則です。' },
+  { title: 'インとアウトの判定', body: 'ボールがラインに触れていればイン（有効）です。完全にライン外に出た場合のみアウトになります。クレーコートでは球跡（マーク）を見て判断でき、選手はチャレンジ（ホークアイ）を使って判定に異議を申し立てることができます。' },
+  { title: 'レット（やり直し）のルール', body: 'サービスしたボールがネットに触れてサービスボックスに入った場合は「レット」でやり直しです。また、試合中に異物が入ってきたり、相手のプレーを妨害したりした場合もレットになることがあります。' },
+  { title: 'タイブレーク', body: '6-6になった場合、タイブレークゲームを行います。7点（2点差）先取した側がセットを取ります。タイブレーク中は1,2,3…と普通の数字でカウントします。' },
+  { title: 'チェンジコート', body: '奇数ゲームが終わるたびにコートを交代します。第1ゲーム終了後、第3ゲーム終了後…というように。タイブレーク中は6ポイントごとにチェンジコートします。' },
+  { title: 'チャレンジ（ホークアイ）', body: 'ATP・WTAのツアー大会では、選手は各セット3回までチャレンジを行使できます（成功した場合は残り回数は減りません）。ホークアイがボールの着地点を3Dで解析し、インかアウトかを判定します。' },
+  { title: 'ウォームアップと試合開始', body: 'ウォームアップは通常5分間で、ストローク・ボレー・スマッシュ・サービスの順番で行います。コイントスで勝った方がサービス/レシーブ/コート選択のいずれかを選べます。' },
+];
+
+function renderRules() {
+  document.getElementById('ruleList').innerHTML = RULES.map((r,i) => `
+    <div class="rule-acc">
+      <div class="rule-head" onclick="toggleRule(${i})">
+        <div class="rule-head-title">${String(i+1).padStart(2,'0')}. ${r.title}</div>
+        <div class="rule-arrow" id="ra-${i}">+</div>
+      </div>
+      <div class="rule-body" id="rb-${i}"><p>${r.body}</p></div>
+    </div>`).join('');
+}
+
+function toggleRule(i) {
+  const b = document.getElementById(`rb-${i}`);
+  const a = document.getElementById(`ra-${i}`);
+  b.classList.toggle('open');
+  a.textContent = b.classList.contains('open') ? '−' : '+';
+}
+
+// ===== PRO PLAYERS =====
+const PRO_PLAYERS = [
+  { name: 'C. アルカラス', country: '🇪🇸 SPAIN', racket: 'Babolat Pure Aero' },
+  { name: 'N. ジョコビッチ', country: '🇷🇸 SERBIA', racket: 'HEAD Speed Pro' },
+  { name: 'J. シナー', country: '🇮🇹 ITALY', racket: 'HEAD Speed Pro' },
+  { name: 'A. ズベレフ', country: '🇩🇪 GERMANY', racket: 'HEAD Gravity Pro' },
+  { name: '西岡 良仁', country: '🇯🇵 JAPAN', racket: 'YONEX VCORE 97' },
+  { name: '大坂 なおみ', country: '🇯🇵 JAPAN', racket: 'YONEX EZONE 100' },
+  { name: 'I. スビトリナ', country: '🇺🇦 UKRAINE', racket: 'DIADEM AXIS 100' },
+  { name: 'H. ルネ', country: '🇩🇰 DENMARK', racket: 'Wilson Blade 98' },
+];
+
+function renderProPlayers() {
+  document.getElementById('proPlayerGrid').innerHTML = PRO_PLAYERS.map(p => `
+    <div class="player-card">
+      <div class="player-avatar">${p.name.charAt(0)}</div>
+      <div class="player-card-name">${p.name}</div>
+      <div class="player-card-country">${p.country}</div>
+      <div class="player-card-racket">${p.racket}</div>
+    </div>`).join('');
+}
+
+// ===== COMPARE =====
+function openCompareSelect(slot) {
+  const model = prompt('ラケットモデル名を入力（例: Clash 100 V3.0）');
+  if (!model) return;
+  const r = allRackets.find(x => x.model.toLowerCase().includes(model.toLowerCase()));
+  if (!r) { alert('見つかりませんでした'); return; }
+  compareRackets[slot-1] = r;
+  updateCompare();
+}
+
+function updateCompare() {
+  const [r1, r2] = compareRackets;
+  if (r1) {
+    document.getElementById('compareSlot1').innerHTML = `<div class="racket-brand-text">${r1.brand}</div><div style="font-family:'Noto Serif JP',serif;font-weight:700;font-size:18px;margin-top:10px">${r1.model}</div>`;
+    document.getElementById('compareSlot1').classList.add('filled');
+  }
+  if (r2) {
+    document.getElementById('compareSlot2').innerHTML = `<div class="racket-brand-text">${r2.brand}</div><div style="font-family:'Noto Serif JP',serif;font-weight:700;font-size:18px;margin-top:10px">${r2.model}</div>`;
+    document.getElementById('compareSlot2').classList.add('filled');
+  }
+  if (r1 && r2) {
+    document.getElementById('compareTable').style.display = 'block';
+    document.getElementById('comp-head-1').textContent = r1.model;
+    document.getElementById('comp-head-2').textContent = r2.model;
+    const specs = [['重量', 'weight', 'g', (a,b)=>a<b], ['フェイス', 'headSize', 'in²', (a,b)=>a>b], ['バランス', 'balance', 'mm', null], ['パターン', 'pattern', '', null]];
+    document.getElementById('comp-tbody').innerHTML = specs.map(([label, key, unit, better]) => {
+      const v1 = r1[key], v2 = r2[key];
+      const w1 = better ? (better(v1,v2)?'winner':'') : '';
+      const w2 = better ? (better(v2,v1)?'winner':'') : '';
+      return `<tr><td class="${w1}">${v1}${unit}</td><td>${label}</td><td class="${w2}">${v2}${unit}</td></tr>`;
+    }).join('');
+  }
+}
+</script>
+</body>
+</html>

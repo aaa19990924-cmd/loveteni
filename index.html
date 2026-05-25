@@ -8,6 +8,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;900&family=Noto+Serif+JP:wght@400;500;700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<!-- Supabase JS v2 -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/supabase-auth.js" defer></script>
 <style>
 :root {
   --ink: #0d1117;
@@ -133,7 +136,6 @@ header {
   transition: all 0.15s;
   cursor: pointer;
   position: relative;
-  white-space: nowrap;
 }
 .gnav-item:hover { color: var(--accent); }
 .gnav-item.active { color: var(--accent); }
@@ -1479,6 +1481,197 @@ footer {
 .view { display: none; }
 .view.active { display: block; }
 
+/* ===== Auth UI ===== */
+#auth-btn { position: relative; display: flex; align-items: center; flex-shrink: 0; }
+.btn-login {
+  padding: 7px 16px;
+  background: var(--ink);
+  color: white;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: background 0.2s;
+  cursor: pointer;
+  border: none;
+}
+.btn-login:hover { background: var(--accent); }
+.auth-avatar {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  font-weight: 700;
+  font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  user-select: none;
+  transition: box-shadow 0.2s;
+}
+.auth-avatar:hover { box-shadow: 0 0 0 3px rgba(0,81,58,0.2); }
+.auth-menu {
+  position: absolute; top: calc(100% + 10px); right: 0;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  min-width: 200px;
+  padding: 12px 0;
+  z-index: 999;
+  display: none;
+}
+.auth-menu.open { display: block; }
+.auth-menu-name { padding: 2px 16px 0; font-weight: 600; font-size: 14px; }
+.auth-menu-email { padding: 2px 16px 8px; font-size: 12px; color: var(--mute); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.auth-menu-divider { border: none; border-top: 1px solid var(--line); margin: 4px 0; }
+.auth-menu-item {
+  display: block; width: 100%;
+  padding: 9px 16px;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+  border: none; background: none; color: var(--ink);
+}
+.auth-menu-item:hover { background: var(--silver); }
+.auth-menu-item--danger { color: var(--signal); }
+
+/* ===== Login Modal ===== */
+#login-modal {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(4px);
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+#login-modal.open { display: flex; }
+.login-box {
+  background: white;
+  border-radius: 16px;
+  padding: 36px 32px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.2);
+  position: relative;
+}
+.login-close {
+  position: absolute; top: 16px; right: 18px;
+  font-size: 22px; line-height: 1;
+  cursor: pointer; opacity: 0.4;
+  border: none; background: none;
+  transition: opacity 0.2s;
+}
+.login-close:hover { opacity: 0.8; }
+.login-logo {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--mute); margin-bottom: 6px;
+}
+.login-title { font-size: 22px; font-weight: 700; margin-bottom: 24px; }
+.login-tabs { display: flex; gap: 4px; background: var(--silver); border-radius: 8px; padding: 4px; margin-bottom: 24px; }
+.login-tab-btn {
+  flex: 1; padding: 8px 4px;
+  border-radius: 6px;
+  font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: all 0.2s;
+  border: none; background: none; color: var(--mute);
+  white-space: nowrap;
+}
+.login-tab-btn.active { background: white; color: var(--ink); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+.login-tab-content { display: none; }
+.login-tab-content.active { display: block; }
+.login-label { font-size: 12px; font-weight: 600; color: var(--mute); margin-bottom: 6px; letter-spacing: 0.05em; }
+.login-input {
+  width: 100%; padding: 11px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s;
+  margin-bottom: 14px;
+  display: block;
+}
+.login-input:focus { border-color: var(--accent); }
+.login-btn-row { display: flex; gap: 8px; margin-top: 4px; }
+.btn-primary {
+  flex: 1; padding: 12px;
+  background: var(--ink);
+  color: white;
+  border: none; border-radius: 8px;
+  font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: background 0.2s;
+}
+.btn-primary:hover { background: var(--accent); }
+.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-secondary {
+  flex: 1; padding: 12px;
+  background: white;
+  color: var(--ink);
+  border: 1.5px solid var(--line-strong);
+  border-radius: 8px;
+  font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: all 0.2s;
+}
+.btn-secondary:hover { border-color: var(--ink); }
+.btn-google {
+  width: 100%; padding: 12px;
+  background: white;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 8px;
+  font-size: 14px; font-weight: 600;
+  cursor: pointer; display: flex; align-items: center;
+  justify-content: center; gap: 10px;
+  transition: all 0.2s;
+}
+.btn-google:hover { border-color: var(--ink); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.btn-google-icon { width: 18px; height: 18px; }
+.login-note { font-size: 12px; color: var(--mute); margin-top: 14px; line-height: 1.6; }
+#login-error {
+  background: #fff0f0; border: 1px solid #fcc;
+  color: #c0392b; border-radius: 8px;
+  padding: 10px 14px; font-size: 13px;
+  margin-bottom: 14px; display: none;
+}
+#login-success {
+  background: #f0fff4; border: 1px solid #9decb4;
+  color: #1a7240; border-radius: 8px;
+  padding: 10px 14px; font-size: 13px;
+  margin-bottom: 14px; display: none;
+  white-space: pre-line;
+}
+
+/* ===== Auth Toast ===== */
+#auth-toast {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(16px);
+  background: var(--ink); color: white;
+  padding: 10px 20px; border-radius: 20px;
+  font-size: 14px; font-weight: 500;
+  z-index: 99999;
+  opacity: 0; transition: all 0.3s;
+  pointer-events: none; white-space: nowrap;
+}
+#auth-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ===== マイギアページ ===== */
+.mygear-header { padding: 48px 0 32px; border-bottom: 1px solid var(--line); }
+.mygear-title { font-size: 28px; font-weight: 700; font-family: 'Noto Serif JP', serif; }
+.mygear-subtitle { color: var(--mute); font-size: 14px; margin-top: 6px; }
+.mygear-body { padding: 40px 0 80px; }
+.mygear-loading { text-align: center; padding: 60px; color: var(--mute); }
+.mygear-empty { text-align: center; padding: 80px 20px; }
+.mygear-empty-icon { font-size: 48px; margin-bottom: 16px; }
+.mygear-sections { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 40px; }
+@media (max-width: 768px) {
+  .mygear-sections { grid-template-columns: 1fr; }
+  .login-box { padding: 28px 20px; }
+  .login-tabs { flex-direction: column; }
+}
+
 /* ===== Mobile ===== */
 @media (max-width: 1024px) {
   .stats-bar-inner { grid-template-columns: repeat(2, 1fr); }
@@ -1552,14 +1745,77 @@ footer {
       <span class="gnav-item" onclick="navigate('training')" data-page="training">トレーニング</span>
       <span class="gnav-item" onclick="navigate('rules')" data-page="rules">ルール</span>
       <span class="gnav-item" onclick="navigate('pros')" data-page="pros">プロ選手</span>
+      <span class="gnav-item" onclick="navigateToMygear()" data-page="mygear">マイギア</span>
     </nav>
     <div class="header-search">
       <span class="header-search-icon">🔍</span>
       <input type="text" placeholder="検索..." oninput="onSearch(this.value)">
     </div>
+    <div id="auth-btn"></div>
     <button class="hamburger" onclick="toggleMobileNav()">☰</button>
   </div>
 </header>
+
+<!-- ===== LOGIN MODAL ===== -->
+<div id="login-modal" role="dialog" aria-modal="true" aria-label="ログイン">
+  <div class="login-box">
+    <button class="login-close" onclick="closeLoginModal()" aria-label="閉じる">✕</button>
+    <div class="login-logo">LOVETENI</div>
+    <div class="login-title">ログイン / 新規登録</div>
+
+    <!-- エラー・成功メッセージ -->
+    <div id="login-error"></div>
+    <div id="login-success"></div>
+
+    <!-- タブ -->
+    <div class="login-tabs">
+      <button class="login-tab-btn active" data-tab="magic" onclick="switchLoginTab('magic')">マジックリンク</button>
+      <button class="login-tab-btn" data-tab="password" onclick="switchLoginTab('password')">パスワード</button>
+      <button class="login-tab-btn" data-tab="google" onclick="switchLoginTab('google')">Google</button>
+    </div>
+
+    <!-- マジックリンク（パスワードレス） -->
+    <div class="login-tab-content active" data-tab="magic">
+      <div class="login-label">メールアドレス</div>
+      <input class="login-input" id="magic-email" type="email" placeholder="you@example.com"
+        onkeydown="if(event.key==='Enter') ltSendMagicLink()">
+      <button class="btn-primary" id="magic-send-btn" onclick="ltSendMagicLink()" style="width:100%">
+        マジックリンクを送信
+      </button>
+      <p class="login-note">メールに届くリンクをクリックするだけでログインできます。<br>パスワード不要で安全です。</p>
+    </div>
+
+    <!-- メール + パスワード -->
+    <div class="login-tab-content" data-tab="password">
+      <div class="login-label">メールアドレス</div>
+      <input class="login-input" id="pw-email" type="email" placeholder="you@example.com">
+      <div class="login-label">パスワード（8文字以上）</div>
+      <input class="login-input" id="pw-password" type="password" placeholder="••••••••"
+        onkeydown="if(event.key==='Enter') ltSignInWithPassword()">
+      <div class="login-btn-row">
+        <button class="btn-primary" id="pw-signin-btn" onclick="ltSignInWithPassword()">ログイン</button>
+        <button class="btn-secondary" id="pw-signup-btn" onclick="ltSignUpWithPassword()">新規登録</button>
+      </div>
+    </div>
+
+    <!-- Google -->
+    <div class="login-tab-content" data-tab="google">
+      <p style="color:var(--mute);font-size:14px;margin-bottom:20px;line-height:1.7">
+        Googleアカウントで素早くログインできます。<br>メールアドレスとプロフィール名のみ使用します。
+      </p>
+      <button class="btn-google" onclick="ltSignInWithGoogle()">
+        <svg class="btn-google-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </svg>
+        Googleでログイン
+      </button>
+      <p class="login-note">ログイン後、マイギア・練習記録などの<br>パーソナル機能が使えるようになります。</p>
+    </div>
+  </div>
+</div>
 
 <!-- ===== HOME ===== -->
 <div id="view-home" class="view active">
@@ -1572,6 +1828,28 @@ footer {
       <div class="hero-cta">
         <button class="btn btn-primary" onclick="navigate('rackets')">ラケットを探す <span class="btn-arrow">→</span></button>
         <button class="btn btn-outline" onclick="navigate('diagnosis')">ラケット診断 <span class="btn-arrow">→</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS BAR -->
+  <div class="stats-bar">
+    <div class="stats-bar-inner">
+      <div class="stat-item">
+        <div class="stat-num">9<small>ブランド</small></div>
+        <div class="stat-label">PARTNERS</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">180+<small>モデル</small></div>
+        <div class="stat-label">RACKETS</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">2026<small>年版</small></div>
+        <div class="stat-label">UPDATED</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">8<small>カテゴリ</small></div>
+        <div class="stat-label">CONTENTS</div>
       </div>
     </div>
   </div>
@@ -2292,6 +2570,40 @@ footer {
 <script src="racket-data.js"></script>
 <script src="strings-data.js"></script>
 <script src="grips-data.js"></script>
+<!-- ===== MYGEAR ===== -->
+<div id="view-mygear" class="view">
+  <div class="container">
+    <div class="mygear-header">
+      <div class="mygear-title">マイギア管理</div>
+      <div class="mygear-subtitle">あなたのラケット・ガット・グリップを記録しましょう</div>
+    </div>
+    <div class="mygear-body">
+      <!-- ガット張り替え日数カウンター（将来実装） -->
+      <div class="mygear-sections" id="mygear-stats-row" style="display:none">
+        <div style="background:var(--silver);border-radius:12px;padding:24px">
+          <div style="font-size:12px;color:var(--mute);font-weight:600;letter-spacing:0.05em">現在のラケット</div>
+          <div style="font-size:22px;font-weight:700;margin-top:8px" id="mygear-racket-name">—</div>
+        </div>
+        <div style="background:var(--silver);border-radius:12px;padding:24px">
+          <div style="font-size:12px;color:var(--mute);font-weight:600;letter-spacing:0.05em">張替えから</div>
+          <div style="font-size:22px;font-weight:700;margin-top:8px" id="mygear-days">— 日</div>
+          <div style="font-size:12px;color:var(--mute);margin-top:4px" id="mygear-restring-date"></div>
+        </div>
+        <div style="background:var(--silver);border-radius:12px;padding:24px">
+          <div style="font-size:12px;color:var(--mute);font-weight:600;letter-spacing:0.05em">現在のガット</div>
+          <div style="font-size:22px;font-weight:700;margin-top:8px" id="mygear-gut-name">—</div>
+        </div>
+      </div>
+
+      <!-- コンテンツエリア -->
+      <div id="mygear-content">
+        <div class="mygear-loading">読み込み中...</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <script>
 // ===== BRAND DATA =====
 const BRAND_INFO = {
@@ -3098,7 +3410,7 @@ function renderStringGrid(strings) {
   }
   grid.innerHTML = strings.map(s => `
     <div class="racket-card" onclick="selectString('${s.id}')">
-      <div class="racket-img" id="csi-${s.id}"><div class="ph">🎾</div></div>
+      <div class="racket-img"><div class="ph">🎾</div></div>
       <div class="racket-info">
         <div class="racket-brand-text">${s.brand}</div>
         <div class="racket-model">${s.model}</div>
@@ -3111,8 +3423,6 @@ function renderStringGrid(strings) {
         <button class="rakuten-btn" onclick="event.stopPropagation();openRakutenString('${s.brand}','${s.model.replace(/'/g,"\\'")}')">楽天で価格チェック →</button>
       </div>
     </div>`).join('');
-  // 画像を順次取得（250ms間隔）
-  strings.forEach((s, i) => setTimeout(() => loadItemImage(s, 'csi', 'テニスガット'), i * 250));
 }
 
 function selectString(id) {
@@ -3188,7 +3498,7 @@ function renderGripGrid(grips) {
   }
   grid.innerHTML = grips.map(g => `
     <div class="racket-card" onclick="selectGrip('${g.id}')">
-      <div class="racket-img" id="cgi-${g.id}"><div class="ph">🎾</div></div>
+      <div class="racket-img"><div class="ph">🎾</div></div>
       <div class="racket-info">
         <div class="racket-brand-text">${g.brand}</div>
         <div class="racket-model">${g.model}</div>
@@ -3201,34 +3511,6 @@ function renderGripGrid(grips) {
         <button class="rakuten-btn" onclick="event.stopPropagation();openRakutenGrip('${g.brand}','${g.model.replace(/'/g,"\\'")}')">楽天で価格チェック →</button>
       </div>
     </div>`).join('');
-  // 画像を順次取得（250ms間隔）
-  grips.forEach((g, i) => setTimeout(() => loadItemImage(g, 'cgi', 'テニスグリップ'), i * 250));
-}
-
-// ガット/グリップ共通の画像取得関数（キャッシュ対応）
-async function loadItemImage(item, idPrefix, suffix) {
-  const cacheKey = `${item.searchKeyword || item.brand + ' ' + item.model} ${suffix}`;
-  const cached = getCachedImg(cacheKey);
-  if (cached) { updateItemImg(item, idPrefix, cached); return; }
-  try {
-    const kw = (item.searchKeyword || `${item.brand} ${item.model}`) + ' ' + suffix;
-    const res = await fetch(`/api/rakuten-search?keyword=${encodeURIComponent(kw)}`);
-    const data = await res.json();
-    if (data.items && data.items.length) {
-      const first = data.items.find(i => i.largeImageUrl);
-      if (first && first.largeImageUrl) {
-        setCachedImg(cacheKey, first.largeImageUrl, first);
-        updateItemImg(item, idPrefix, first.largeImageUrl);
-      }
-    }
-  } catch(e) { /* silent */ }
-}
-
-function updateItemImg(item, idPrefix, url) {
-  const c = document.getElementById(`${idPrefix}-${item.id}`);
-  if (!c) return;
-  const thumbUrl = url.replace(/_ex=\d+x\d+/, '_ex=300x300');
-  c.innerHTML = `<img src="${thumbUrl}" alt="${item.model}" loading="lazy" decoding="async" onerror="this.parentElement.innerHTML='<div class=ph>🎾</div>'">`;
 }
 
 function selectGrip(id) {

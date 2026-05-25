@@ -136,6 +136,7 @@ header {
   transition: all 0.15s;
   cursor: pointer;
   position: relative;
+  white-space: nowrap;
 }
 .gnav-item:hover { color: var(--accent); }
 .gnav-item.active { color: var(--accent); }
@@ -1756,25 +1757,20 @@ footer {
   </div>
 </header>
 
+
 <!-- ===== LOGIN MODAL ===== -->
 <div id="login-modal" role="dialog" aria-modal="true" aria-label="ログイン">
   <div class="login-box">
     <button class="login-close" onclick="closeLoginModal()" aria-label="閉じる">✕</button>
     <div class="login-logo">LOVETENI</div>
     <div class="login-title">ログイン / 新規登録</div>
-
-    <!-- エラー・成功メッセージ -->
     <div id="login-error"></div>
     <div id="login-success"></div>
-
-    <!-- タブ -->
     <div class="login-tabs">
       <button class="login-tab-btn active" data-tab="magic" onclick="switchLoginTab('magic')">マジックリンク</button>
       <button class="login-tab-btn" data-tab="password" onclick="switchLoginTab('password')">パスワード</button>
       <button class="login-tab-btn" data-tab="google" onclick="switchLoginTab('google')">Google</button>
     </div>
-
-    <!-- マジックリンク（パスワードレス） -->
     <div class="login-tab-content active" data-tab="magic">
       <div class="login-label">メールアドレス</div>
       <input class="login-input" id="magic-email" type="email" placeholder="you@example.com"
@@ -1784,8 +1780,6 @@ footer {
       </button>
       <p class="login-note">メールに届くリンクをクリックするだけでログインできます。<br>パスワード不要で安全です。</p>
     </div>
-
-    <!-- メール + パスワード -->
     <div class="login-tab-content" data-tab="password">
       <div class="login-label">メールアドレス</div>
       <input class="login-input" id="pw-email" type="email" placeholder="you@example.com">
@@ -1797,8 +1791,6 @@ footer {
         <button class="btn-secondary" id="pw-signup-btn" onclick="ltSignUpWithPassword()">新規登録</button>
       </div>
     </div>
-
-    <!-- Google -->
     <div class="login-tab-content" data-tab="google">
       <p style="color:var(--mute);font-size:14px;margin-bottom:20px;line-height:1.7">
         Googleアカウントで素早くログインできます。<br>メールアドレスとプロフィール名のみ使用します。
@@ -1832,28 +1824,6 @@ footer {
     </div>
   </div>
 
-  <!-- STATS BAR -->
-  <div class="stats-bar">
-    <div class="stats-bar-inner">
-      <div class="stat-item">
-        <div class="stat-num">9<small>ブランド</small></div>
-        <div class="stat-label">PARTNERS</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">180+<small>モデル</small></div>
-        <div class="stat-label">RACKETS</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">2026<small>年版</small></div>
-        <div class="stat-label">UPDATED</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">8<small>カテゴリ</small></div>
-        <div class="stat-label">CONTENTS</div>
-      </div>
-    </div>
-  </div>
-
   <!-- SERVICES -->
   <section>
     <div class="container">
@@ -1861,7 +1831,7 @@ footer {
         <div class="section-header-text">
           <div class="section-eyebrow">SERVICES</div>
           <h2 class="section-title">ラブテニで、できること。</h2>
-          <p class="section-desc">プレーヤーの選択をサポートする、8つのサービス。<br>ラケット選びから上達のヒントまで、すべてここで見つかります。</p>
+          <p class="section-desc">プレーヤーの選択をサポートする、11のサービス。<br>ギア選びから上達のヒントまで、すべてここで見つかります。</p>
         </div>
       </div>
     </div>
@@ -1873,50 +1843,62 @@ footer {
           <div class="service-title">ラケットデータベース</div>
           <div class="service-desc">9ブランド・180モデル以上の最新ラケット情報。スペック・特徴・楽天価格まで一画面で確認できます。</div>
         </div>
-        <div class="service-card" onclick="navigate('diagnosis')">
+        <div class="service-card" onclick="navigate('strings')">
           <div class="service-num">02</div>
+          <div class="service-icon">🧵</div>
+          <div class="service-title">ガットデータベース</div>
+          <div class="service-desc">8ブランド・50モデル以上のテニスストリング情報。ポリ・ナイロン・マルチ・ナチュラルを網羅。</div>
+        </div>
+        <div class="service-card" onclick="navigate('grips')">
+          <div class="service-num">03</div>
+          <div class="service-icon">✊</div>
+          <div class="service-title">グリップデータベース</div>
+          <div class="service-desc">8ブランド・25種類以上のオーバーグリップ・リプレースメントグリップを掲載。</div>
+        </div>
+        <div class="service-card" onclick="navigate('diagnosis')">
+          <div class="service-num">04</div>
           <div class="service-icon">🔬</div>
           <div class="service-title">ラケット診断</div>
           <div class="service-desc">5つの質問に答えるだけで、あなたのプレースタイルに最適な1本をご提案します。</div>
         </div>
-        <div class="service-card" onclick="navigate('column')">
-          <div class="service-num">03</div>
-          <div class="service-icon">📝</div>
-          <div class="service-title">コラム</div>
-          <div class="service-desc">ラケット選び、技術解説、フィジカル強化など、上達に役立つ記事を多数掲載。</div>
-        </div>
-        <div class="service-card" onclick="navigate('tournament')">
-          <div class="service-num">04</div>
-          <div class="service-icon">🏆</div>
-          <div class="service-title">大会情報</div>
-          <div class="service-desc">グランドスラム・ATP・WTA・国内大会の日程と結果をまとめてチェック。</div>
+        <div class="service-card" onclick="navigate('pros')">
+          <div class="service-num">05</div>
+          <div class="service-icon">⭐</div>
+          <div class="service-title">プロ選手 機材情報</div>
+          <div class="service-desc">トップ選手が使用するラケット・ガット・シューズなど、プロの機材データ。</div>
         </div>
         <div class="service-card" onclick="navigate('predict')">
-          <div class="service-num">05</div>
+          <div class="service-num">06</div>
           <div class="service-icon">🎯</div>
           <div class="service-title">勝敗予想</div>
           <div class="service-desc">注目試合の勝敗をみんなで予想。コミュニティの集合知で観戦をもっと楽しく。</div>
         </div>
+        <div class="service-card" onclick="navigate('tournament')">
+          <div class="service-num">07</div>
+          <div class="service-icon">🏆</div>
+          <div class="service-title">大会情報</div>
+          <div class="service-desc">グランドスラム・ATP・WTA・国内大会の日程と結果をまとめてチェック。</div>
+        </div>
+        <div class="service-card" onclick="navigate('column')">
+          <div class="service-num">08</div>
+          <div class="service-icon">📝</div>
+          <div class="service-title">コラム</div>
+          <div class="service-desc">ラケット選び、技術解説、フィジカル強化など、上達に役立つ記事を多数掲載。</div>
+        </div>
         <div class="service-card" onclick="navigate('training')">
-          <div class="service-num">06</div>
+          <div class="service-num">09</div>
           <div class="service-icon">💪</div>
           <div class="service-title">トレーニング動画</div>
           <div class="service-desc">技術練習・体幹トレーニング・フィジカル強化など、レベル別の動画を厳選。</div>
         </div>
         <div class="service-card" onclick="navigate('rules')">
-          <div class="service-num">07</div>
+          <div class="service-num">10</div>
           <div class="service-icon">📖</div>
           <div class="service-title">ルールブック</div>
           <div class="service-desc">基本ルールから細かい規定まで、テニスのルールを分かりやすく解説します。</div>
         </div>
-        <div class="service-card" onclick="navigate('pros')">
-          <div class="service-num">08</div>
-          <div class="service-icon">⭐</div>
-          <div class="service-title">プロ選手 機材情報</div>
-          <div class="service-desc">トップ選手が使用するラケット・ガット・シューズなど、プロの機材データ。</div>
-        </div>
         <div class="service-card" onclick="navigate('compare')">
-          <div class="service-num">09</div>
+          <div class="service-num">11</div>
           <div class="service-icon">⚖️</div>
           <div class="service-title">ラケット比較</div>
           <div class="service-desc">2本のラケットを並べてスペックを徹底比較。購入前の意思決定をサポート。</div>
@@ -2578,7 +2560,6 @@ footer {
       <div class="mygear-subtitle">あなたのラケット・ガット・グリップを記録しましょう</div>
     </div>
     <div class="mygear-body">
-      <!-- ガット張り替え日数カウンター（将来実装） -->
       <div class="mygear-sections" id="mygear-stats-row" style="display:none">
         <div style="background:var(--silver);border-radius:12px;padding:24px">
           <div style="font-size:12px;color:var(--mute);font-weight:600;letter-spacing:0.05em">現在のラケット</div>
@@ -2594,8 +2575,6 @@ footer {
           <div style="font-size:22px;font-weight:700;margin-top:8px" id="mygear-gut-name">—</div>
         </div>
       </div>
-
-      <!-- コンテンツエリア -->
       <div id="mygear-content">
         <div class="mygear-loading">読み込み中...</div>
       </div>
@@ -3410,7 +3389,7 @@ function renderStringGrid(strings) {
   }
   grid.innerHTML = strings.map(s => `
     <div class="racket-card" onclick="selectString('${s.id}')">
-      <div class="racket-img"><div class="ph">🎾</div></div>
+      <div class="racket-img" id="csi-${s.id}"><div class="ph">🎾</div></div>
       <div class="racket-info">
         <div class="racket-brand-text">${s.brand}</div>
         <div class="racket-model">${s.model}</div>
@@ -3423,6 +3402,8 @@ function renderStringGrid(strings) {
         <button class="rakuten-btn" onclick="event.stopPropagation();openRakutenString('${s.brand}','${s.model.replace(/'/g,"\\'")}')">楽天で価格チェック →</button>
       </div>
     </div>`).join('');
+  // 画像を順次取得（250ms間隔）
+  strings.forEach((s, i) => setTimeout(() => loadItemImage(s, 'csi', 'テニスガット'), i * 250));
 }
 
 function selectString(id) {
@@ -3498,7 +3479,7 @@ function renderGripGrid(grips) {
   }
   grid.innerHTML = grips.map(g => `
     <div class="racket-card" onclick="selectGrip('${g.id}')">
-      <div class="racket-img"><div class="ph">🎾</div></div>
+      <div class="racket-img" id="cgi-${g.id}"><div class="ph">🎾</div></div>
       <div class="racket-info">
         <div class="racket-brand-text">${g.brand}</div>
         <div class="racket-model">${g.model}</div>
@@ -3511,6 +3492,34 @@ function renderGripGrid(grips) {
         <button class="rakuten-btn" onclick="event.stopPropagation();openRakutenGrip('${g.brand}','${g.model.replace(/'/g,"\\'")}')">楽天で価格チェック →</button>
       </div>
     </div>`).join('');
+  // 画像を順次取得（250ms間隔）
+  grips.forEach((g, i) => setTimeout(() => loadItemImage(g, 'cgi', 'テニスグリップ'), i * 250));
+}
+
+// ガット/グリップ共通の画像取得関数（キャッシュ対応）
+async function loadItemImage(item, idPrefix, suffix) {
+  const cacheKey = `${item.searchKeyword || item.brand + ' ' + item.model} ${suffix}`;
+  const cached = getCachedImg(cacheKey);
+  if (cached) { updateItemImg(item, idPrefix, cached); return; }
+  try {
+    const kw = (item.searchKeyword || `${item.brand} ${item.model}`) + ' ' + suffix;
+    const res = await fetch(`/api/rakuten-search?keyword=${encodeURIComponent(kw)}`);
+    const data = await res.json();
+    if (data.items && data.items.length) {
+      const first = data.items.find(i => i.largeImageUrl);
+      if (first && first.largeImageUrl) {
+        setCachedImg(cacheKey, first.largeImageUrl, first);
+        updateItemImg(item, idPrefix, first.largeImageUrl);
+      }
+    }
+  } catch(e) { /* silent */ }
+}
+
+function updateItemImg(item, idPrefix, url) {
+  const c = document.getElementById(`${idPrefix}-${item.id}`);
+  if (!c) return;
+  const thumbUrl = url.replace(/_ex=\d+x\d+/, '_ex=300x300');
+  c.innerHTML = `<img src="${thumbUrl}" alt="${item.model}" loading="lazy" decoding="async" onerror="this.parentElement.innerHTML='<div class=ph>🎾</div>'">`;
 }
 
 function selectGrip(id) {

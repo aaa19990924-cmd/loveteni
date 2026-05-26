@@ -1,0 +1,21 @@
+{
+  "_comment": "日本テニス協会(JTA)男子シングルスランキング。毎週月曜に更新してください。",
+  "_source": "https://jta.tournamentsoftware.com/ranking/ranking.aspx?id=51776",
+  "_how_to_update": "1) JTAサイトを開く 2) 順位・選手名・所属・ポイントをコピー 3) このファイルのplayers配列を書き換え 4) updated_atを最新日付に",
+  "updated_at": "2026-05-26",
+  "next_update": "2026-06-02",
+  "tour": "JTA",
+  "category": "男子シングルス",
+  "players": [
+    {"rank": 1,  "name": "選手名を入力",   "club": "所属",     "points": 0},
+    {"rank": 2,  "name": "選手名を入力",   "club": "所属",     "points": 0},
+    {"rank": 3,  "name": "選手名を入力",   "club": "所属",     "points": 0},
+    {"rank": 4,  "name": "選手名を入力",   "club": "所属",     "points": 0},
+    {"rank": 5,  "name": "選手名を入力",   "club": "所属",     "points": 0},
+    {"rank": 6,  "name": "選手名を入力",   "club": "所属",     "points": 0},
+    {"rank": 7,  "name": "選手名を入力",   "club": "所属",     "points": 0},
+    {"rank": 8,  "name": "選手名を入力",   "club": "所属",     "points": 0},
+    {"rank": 9,  "name": "選手名を入力",   "club": "所属",     "points": 0},
+    {"rank": 10, "name": "選手名を入力",   "club": "所属",     "points": 0}
+  ]
+}

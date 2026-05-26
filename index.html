@@ -425,11 +425,19 @@ section {
   font-size: 11px;
   color: var(--mute);
   letter-spacing: 0.1em;
-  margin-bottom: 28px;
+  margin-bottom: 24px;
 }
 .service-icon {
   font-size: 28px;
-  margin-bottom: 18px;
+  margin-bottom: 14px;
+}
+.service-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  margin-bottom: 6px;
 }
 .service-title {
   font-family: 'Noto Serif JP', serif;
@@ -950,6 +958,31 @@ section {
   font-weight: 700;
 }
 .detail-spec-unit { font-size: 11px; font-weight: 400; color: var(--mute); margin-left: 4px; font-family: 'DM Sans', sans-serif; }
+.detail-cta-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+.detail-cta-row .detail-cta-btn {
+  flex: 1;
+  min-width: 180px;
+  margin-bottom: 0;
+}
+.detail-cta-rakuten {
+  background: #BF0000;
+  color: white;
+}
+.detail-cta-rakuten:hover {
+  background: #8B0000;
+}
+.detail-cta-amazon {
+  background: #FF9900;
+  color: #111;
+}
+.detail-cta-amazon:hover {
+  background: #E88800;
+}
 .detail-cta-btn {
   display: block;
   width: 100%;
@@ -1482,6 +1515,117 @@ footer {
 .view { display: none; }
 .view.active { display: block; }
 
+
+/* ===== Rankings ===== */
+.rankings-section { background: white; padding: 64px 0 80px; border-top: 1px solid var(--line); }
+.rankings-tabs { display: flex; gap: 0; margin: 32px 0 0; border-bottom: 1px solid var(--line); }
+.rankings-tab-btn {
+  flex: 0 0 auto;
+  padding: 16px 32px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+  color: var(--mute);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.rankings-tab-btn:hover { color: var(--ink); }
+.rankings-tab-btn.active {
+  border-bottom-color: var(--accent);
+  color: var(--ink);
+}
+.rankings-tab-en {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+.rankings-tab-jp { font-size: 15px; font-weight: 600; }
+.rankings-meta {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--mute);
+  padding: 16px 0 8px;
+  text-transform: uppercase;
+}
+.rankings-search-row { padding: 8px 0 16px; }
+.rankings-search {
+  width: 100%; max-width: 360px;
+  padding: 10px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.rankings-search:focus { border-color: var(--accent); }
+.rankings-list {
+  border-top: 1px solid var(--line);
+  max-height: 540px;
+  overflow-y: auto;
+}
+.rankings-row {
+  display: grid;
+  grid-template-columns: 60px 1fr auto;
+  gap: 16px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--line);
+  align-items: center;
+  transition: background 0.15s;
+}
+.rankings-row:hover { background: var(--cream); }
+.rankings-row.top3 { background: linear-gradient(to right, rgba(0,81,58,0.04), transparent); }
+.rankings-rank {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+}
+.rankings-row.top3 .rankings-rank { color: var(--accent); }
+.rankings-name { font-weight: 600; font-size: 15px; }
+.rankings-detail { font-size: 11px; color: var(--mute); margin-top: 2px; letter-spacing: 0.05em; }
+.rankings-points {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--mute);
+}
+.rankings-points small { font-size: 10px; font-weight: 400; opacity: 0.7; margin-left: 4px; }
+.rankings-loading, .rankings-empty {
+  padding: 40px;
+  text-align: center;
+  color: var(--mute);
+  font-size: 14px;
+}
+.rankings-footer { display: flex; justify-content: space-between; align-items: center; padding: 16px 0 0; flex-wrap: wrap; gap: 12px; }
+.rankings-footer-note { font-size: 11px; color: var(--mute); }
+.rankings-source-link {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 2px;
+  transition: color 0.2s;
+}
+.rankings-source-link:hover { color: var(--accent); border-bottom-color: var(--accent); }
+@media (max-width: 768px) {
+  .rankings-tab-btn { padding: 14px 16px; }
+  .rankings-row { grid-template-columns: 44px 1fr auto; gap: 12px; padding: 12px 12px; }
+  .rankings-rank { font-size: 17px; }
+  .rankings-name { font-size: 14px; }
+  .rankings-list { max-height: 480px; }
+}
+
 /* ===== Auth UI ===== */
 #auth-btn { position: relative; display: flex; align-items: center; flex-shrink: 0; }
 .btn-login {
@@ -1745,7 +1889,7 @@ footer {
       <span class="gnav-item" onclick="navigate('predict')" data-page="predict">予想</span>
       <span class="gnav-item" onclick="navigate('training')" data-page="training">トレーニング</span>
       <span class="gnav-item" onclick="navigate('rules')" data-page="rules">ルール</span>
-      <span class="gnav-item" onclick="navigate('pros')" data-page="pros">プロ選手</span>
+      <span class="gnav-item" onclick="navigate('pros')" data-page="pros">プロのギア</span>
       <span class="gnav-item" onclick="navigateToMygear()" data-page="mygear">マイギア</span>
     </nav>
     <div class="header-search">
@@ -1829,80 +1973,145 @@ footer {
     <div class="container">
       <div class="section-header">
         <div class="section-header-text">
-          <div class="section-eyebrow">SERVICES</div>
-          <h2 class="section-title">ラブテニで、できること。</h2>
-          <p class="section-desc">プレーヤーの選択をサポートする、11のサービス。<br>ギア選びから上達のヒントまで、すべてここで見つかります。</p>
+          <div class="section-eyebrow">ALL FEATURES</div>
+          <h2 class="section-title">テニスのすべてを、ここに。</h2>
+          <p class="section-desc">選ぶ、診る、比べる、学ぶ。<br>プレーヤーのための12機能。</p>
         </div>
       </div>
     </div>
     <div class="container">
       <div class="service-grid">
+
+        <!-- 知る -->
         <div class="service-card" onclick="navigate('rackets')">
           <div class="service-num">01</div>
           <div class="service-icon">🎾</div>
-          <div class="service-title">ラケットデータベース</div>
-          <div class="service-desc">9ブランド・180モデル以上の最新ラケット情報。スペック・特徴・楽天価格まで一画面で確認できます。</div>
+          <div class="service-sub">RACKETS</div>
+          <div class="service-title">ラケット</div>
+          <div class="service-desc">主要9ブランドの最新モデルを一望。スペック・特徴・価格まで、選び抜くための情報がここに。</div>
         </div>
         <div class="service-card" onclick="navigate('strings')">
           <div class="service-num">02</div>
           <div class="service-icon">🧵</div>
-          <div class="service-title">ガットデータベース</div>
-          <div class="service-desc">8ブランド・50モデル以上のテニスストリング情報。ポリ・ナイロン・マルチ・ナチュラルを網羅。</div>
+          <div class="service-sub">STRINGS</div>
+          <div class="service-title">ガット</div>
+          <div class="service-desc">打感、耐久性、反発。ポリエステルからナチュラルまで、ストリングのすべて。</div>
         </div>
         <div class="service-card" onclick="navigate('grips')">
           <div class="service-num">03</div>
           <div class="service-icon">✊</div>
-          <div class="service-title">グリップデータベース</div>
-          <div class="service-desc">8ブランド・25種類以上のオーバーグリップ・リプレースメントグリップを掲載。</div>
+          <div class="service-sub">GRIPS</div>
+          <div class="service-title">グリップ</div>
+          <div class="service-desc">ウェット、ドライ、レザー。手と道具をつなぐ、最後のピース。</div>
         </div>
+
+        <!-- 診る -->
         <div class="service-card" onclick="navigate('diagnosis')">
           <div class="service-num">04</div>
           <div class="service-icon">🔬</div>
+          <div class="service-sub">RACKET FINDER</div>
           <div class="service-title">ラケット診断</div>
-          <div class="service-desc">5つの質問に答えるだけで、あなたのプレースタイルに最適な1本をご提案します。</div>
+          <div class="service-desc">5つの問いに答えるだけ。あなたのプレーに、最適な一本を導く。</div>
+        </div>
+        <div class="service-card" onclick="navigate('string-diagnosis')">
+          <div class="service-num">05</div>
+          <div class="service-icon">🎯</div>
+          <div class="service-sub">STRING FINDER</div>
+          <div class="service-title">ガット診断</div>
+          <div class="service-desc">打感の好み、求める耐久性、テンション志向。あなたに合うストリングを。</div>
+        </div>
+        <div class="service-card" onclick="navigate('pair-diagnosis')">
+          <div class="service-num">06</div>
+          <div class="service-icon">💞</div>
+          <div class="service-sub">PERFECT PAIR</div>
+          <div class="service-title">組み合わせ診断</div>
+          <div class="service-desc">ラケットとガットの相性は、すべてを変える。最高のペアを見つけ出す。</div>
+        </div>
+
+        <!-- 比べる・観る -->
+        <div class="service-card" onclick="navigate('compare')">
+          <div class="service-num">07</div>
+          <div class="service-icon">⚖️</div>
+          <div class="service-sub">COMPARE</div>
+          <div class="service-title">ラケット比較</div>
+          <div class="service-desc">2本を並べて、スペックを徹底比較。購入前の最終確認に。</div>
         </div>
         <div class="service-card" onclick="navigate('pros')">
-          <div class="service-num">05</div>
+          <div class="service-num">08</div>
           <div class="service-icon">⭐</div>
-          <div class="service-title">プロ選手 機材情報</div>
-          <div class="service-desc">トップ選手が使用するラケット・ガット・シューズなど、プロの機材データ。</div>
-        </div>
-        <div class="service-card" onclick="navigate('predict')">
-          <div class="service-num">06</div>
-          <div class="service-icon">🎯</div>
-          <div class="service-title">勝敗予想</div>
-          <div class="service-desc">注目試合の勝敗をみんなで予想。コミュニティの集合知で観戦をもっと楽しく。</div>
+          <div class="service-sub">PRO GEAR</div>
+          <div class="service-title">プロのギア</div>
+          <div class="service-desc">世界のトップ選手が手にする、本物の道具。</div>
         </div>
         <div class="service-card" onclick="navigate('tournament')">
-          <div class="service-num">07</div>
+          <div class="service-num">09</div>
           <div class="service-icon">🏆</div>
+          <div class="service-sub">TOURNAMENTS</div>
           <div class="service-title">大会情報</div>
-          <div class="service-desc">グランドスラム・ATP・WTA・国内大会の日程と結果をまとめてチェック。</div>
+          <div class="service-desc">グランドスラムからローカル大会まで。日程と結果を、ひとまとめに。</div>
         </div>
+        <div class="service-card" onclick="navigate('predict')">
+          <div class="service-num">10</div>
+          <div class="service-icon">🎯</div>
+          <div class="service-sub">PREDICTIONS</div>
+          <div class="service-title">勝敗予想</div>
+          <div class="service-desc">注目試合の行方を、みんなで読む。観戦が、ひと味変わる。</div>
+        </div>
+
+        <!-- 学ぶ -->
         <div class="service-card" onclick="navigate('column')">
-          <div class="service-num">08</div>
+          <div class="service-num">11</div>
           <div class="service-icon">📝</div>
+          <div class="service-sub">COLUMN</div>
           <div class="service-title">コラム</div>
-          <div class="service-desc">ラケット選び、技術解説、フィジカル強化など、上達に役立つ記事を多数掲載。</div>
+          <div class="service-desc">ラケット選び、技術解説、フィジカル。読んで強くなる、テニスの教科書。</div>
         </div>
         <div class="service-card" onclick="navigate('training')">
-          <div class="service-num">09</div>
+          <div class="service-num">12</div>
           <div class="service-icon">💪</div>
-          <div class="service-title">トレーニング動画</div>
-          <div class="service-desc">技術練習・体幹トレーニング・フィジカル強化など、レベル別の動画を厳選。</div>
+          <div class="service-sub">TRAINING</div>
+          <div class="service-title">トレーニング</div>
+          <div class="service-desc">レベル別の練習動画。コートに立つ前に、ここで磨く。</div>
         </div>
-        <div class="service-card" onclick="navigate('rules')">
-          <div class="service-num">10</div>
-          <div class="service-icon">📖</div>
-          <div class="service-title">ルールブック</div>
-          <div class="service-desc">基本ルールから細かい規定まで、テニスのルールを分かりやすく解説します。</div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- RANKINGS -->
+  <section class="rankings-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-header-text">
+          <div class="section-eyebrow">RANKINGS</div>
+          <h2 class="section-title">世界と日本の、いま。</h2>
+          <p class="section-desc">ATPトップ100と、JTA日本ランキング。<br>テニスの現在地を、ここから。</p>
         </div>
-        <div class="service-card" onclick="navigate('compare')">
-          <div class="service-num">11</div>
-          <div class="service-icon">⚖️</div>
-          <div class="service-title">ラケット比較</div>
-          <div class="service-desc">2本のラケットを並べてスペックを徹底比較。購入前の意思決定をサポート。</div>
-        </div>
+      </div>
+      <div class="rankings-tabs">
+        <button class="rankings-tab-btn active" data-rtab="atp" onclick="switchRankingTab('atp')">
+          <span class="rankings-tab-en">ATP</span>
+          <span class="rankings-tab-jp">世界ランキング</span>
+        </button>
+        <button class="rankings-tab-btn" data-rtab="jta" onclick="switchRankingTab('jta')">
+          <span class="rankings-tab-en">JTA</span>
+          <span class="rankings-tab-jp">日本ランキング</span>
+        </button>
+      </div>
+      <div class="rankings-meta" id="rankings-meta">
+        <span class="rankings-updated">— 更新日 —</span>
+      </div>
+      <div class="rankings-search-row">
+        <input type="text" class="rankings-search" id="rankings-search"
+          placeholder="🔍 選手名で検索..." oninput="filterRankings(this.value)">
+      </div>
+      <div class="rankings-list" id="rankings-list">
+        <div class="rankings-loading">読み込み中...</div>
+      </div>
+      <div class="rankings-footer">
+        <div class="rankings-footer-note" id="rankings-footer-note"></div>
+        <a class="rankings-source-link" id="rankings-source-link" href="#" target="_blank" rel="noopener">公式サイトで全件を見る →</a>
       </div>
     </div>
   </section>
@@ -2067,7 +2276,10 @@ footer {
           <h1 class="detail-model" id="detail-model"></h1>
           <p class="detail-concept" id="detail-concept"></p>
           <div class="detail-specs-grid" id="detail-specs"></div>
-          <button class="detail-cta-btn" id="detail-rakuten-btn">楽天で価格をチェック →</button>
+          <div class="detail-cta-row">
+            <button class="detail-cta-btn detail-cta-rakuten" id="detail-rakuten-btn">楽天で探す →</button>
+            <button class="detail-cta-btn detail-cta-amazon" id="detail-amazon-btn">Amazonで探す →</button>
+          </div>
         </div>
       </div>
       <div class="rakuten-section">
@@ -2152,7 +2364,10 @@ footer {
           <h1 class="detail-model" id="string-detail-model"></h1>
           <p class="detail-concept" id="string-detail-concept"></p>
           <div class="detail-specs-grid" id="string-detail-specs"></div>
-          <button class="detail-cta-btn" id="string-detail-rakuten-btn">楽天で価格をチェック →</button>
+          <div class="detail-cta-row">
+            <button class="detail-cta-btn detail-cta-rakuten" id="string-detail-rakuten-btn">楽天で探す →</button>
+            <button class="detail-cta-btn detail-cta-amazon" id="string-detail-amazon-btn">Amazonで探す →</button>
+          </div>
         </div>
       </div>
       <div class="rakuten-section">
@@ -2216,12 +2431,63 @@ footer {
           <h1 class="detail-model" id="grip-detail-model"></h1>
           <p class="detail-concept" id="grip-detail-concept"></p>
           <div class="detail-specs-grid" id="grip-detail-specs"></div>
-          <button class="detail-cta-btn" id="grip-detail-rakuten-btn">楽天で価格をチェック →</button>
+          <div class="detail-cta-row">
+            <button class="detail-cta-btn detail-cta-rakuten" id="grip-detail-rakuten-btn">楽天で探す →</button>
+            <button class="detail-cta-btn detail-cta-amazon" id="grip-detail-amazon-btn">Amazonで探す →</button>
+          </div>
         </div>
       </div>
       <div class="rakuten-section">
         <div class="rakuten-section-title">楽天での販売価格</div>
         <div id="grip-rakuten-results"><div class="loading"><span class="spin"></span>楽天を検索中...</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ===== STRING DIAGNOSIS (プレースホルダー) ===== -->
+<div id="view-string-diagnosis" class="view">
+  <div class="page-hero">
+    <div class="container">
+      <div class="page-hero-eyebrow">STRING FINDER</div>
+      <h1 class="page-hero-title">ガット診断</h1>
+      <p class="page-hero-desc">打感の好み、求める耐久性、テンション志向。あなたに合うストリングを。</p>
+    </div>
+  </div>
+  <div class="page-body">
+    <div class="container" style="text-align:center;padding:80px 20px">
+      <div style="font-size:48px;margin-bottom:16px">🧵</div>
+      <h2 style="font-family:'Noto Serif JP',serif;font-size:24px;margin-bottom:12px">近日公開</h2>
+      <p style="color:var(--mute);font-size:14px;line-height:1.7;max-width:480px;margin:0 auto">
+        プレースタイル・打感の好み・予算からあなたに最適なガットを提案します。<br>
+        いましばらくお待ちください。
+      </p>
+      <button class="btn btn-primary" style="margin-top:28px" onclick="navigate('strings')">ガット一覧へ →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PAIR DIAGNOSIS (プレースホルダー) ===== -->
+<div id="view-pair-diagnosis" class="view">
+  <div class="page-hero">
+    <div class="container">
+      <div class="page-hero-eyebrow">PERFECT PAIR</div>
+      <h1 class="page-hero-title">組み合わせ診断</h1>
+      <p class="page-hero-desc">ラケットとガットの相性は、すべてを変える。最高のペアを見つけ出す。</p>
+    </div>
+  </div>
+  <div class="page-body">
+    <div class="container" style="text-align:center;padding:80px 20px">
+      <div style="font-size:48px;margin-bottom:16px">💞</div>
+      <h2 style="font-family:'Noto Serif JP',serif;font-size:24px;margin-bottom:12px">近日公開</h2>
+      <p style="color:var(--mute);font-size:14px;line-height:1.7;max-width:480px;margin:0 auto">
+        プレースタイルに合わせて、ラケットとガットの最適な組み合わせを提案します。<br>
+        いましばらくお待ちください。
+      </p>
+      <div style="display:flex;gap:12px;justify-content:center;margin-top:28px;flex-wrap:wrap">
+        <button class="btn btn-outline" onclick="navigate('rackets')">ラケット一覧</button>
+        <button class="btn btn-outline" onclick="navigate('strings')">ガット一覧</button>
       </div>
     </div>
   </div>
@@ -2697,6 +2963,7 @@ function navigate(view, skipPush) {
 function updateTodayDate() {
   const d = new Date();
   const dateStr = `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
+  ensureRankingsLoaded();
   const el = document.getElementById('topline-date');
   if (el) el.textContent = dateStr;
 }
@@ -3246,6 +3513,7 @@ function selectRacket(id) {
   ].filter(Boolean).map(([l,v,u]) => `<div class="detail-spec-item"><div class="detail-spec-label">${l}</div><div class="detail-spec-value">${v}<span class="detail-spec-unit">${u}</span></div></div>`).join('');
   document.getElementById('detail-img-area').innerHTML = '<div class="empty-icon">🎾</div>';
   document.getElementById('detail-rakuten-btn').onclick = () => openRakuten(null, r.brand, r.model);
+  document.getElementById('detail-amazon-btn').onclick = () => openAmazon(r.brand, r.model);
   loadRakutenResults(r);
   navigate('detail', true);
   if (!isHistoryNav) history.pushState({ view: 'detail', racketId: id }, '', `#detail/${id}`);
@@ -3311,6 +3579,113 @@ function openRakutenString(brand, model) {
 function openRakutenGrip(brand, model) {
   window.open(`https://search.rakuten.co.jp/search/mall/${encodeURIComponent(brand+' '+model+' テニスグリップ')}/`, '_blank');
 }
+
+// === Amazonアフィリエイト ===
+const AMAZON_TAG = 'loveteni-22';
+
+function openAmazon(brand, model) {
+  const q = encodeURIComponent(`${brand} ${model} テニスラケット`);
+  window.open(`https://www.amazon.co.jp/s?k=${q}&tag=${AMAZON_TAG}`, '_blank');
+}
+
+function openAmazonString(brand, model) {
+  const q = encodeURIComponent(`${brand} ${model} テニスガット`);
+  window.open(`https://www.amazon.co.jp/s?k=${q}&tag=${AMAZON_TAG}`, '_blank');
+}
+
+function openAmazonGrip(brand, model) {
+  const q = encodeURIComponent(`${brand} ${model} テニスグリップ`);
+  window.open(`https://www.amazon.co.jp/s?k=${q}&tag=${AMAZON_TAG}`, '_blank');
+}
+
+
+// ============================================================
+// RANKINGS — フェーズB: 手動JSON管理
+// 将来 フェーズC(有料API) に移行する場合:
+// 　loadRankings() の中の fetch URL を API エンドポイントに差し替えるだけでOK
+// ============================================================
+const RANKINGS_DATA = { atp: null, jta: null };
+let currentRankingTab = 'atp';
+
+async function loadRankings() {
+  try {
+    const [atp, jta] = await Promise.all([
+      fetch('/data/rankings-atp.json').then(r => r.json()),
+      fetch('/data/rankings-jta.json').then(r => r.json())
+    ]);
+    RANKINGS_DATA.atp = atp;
+    RANKINGS_DATA.jta = jta;
+    renderRankings();
+  } catch (e) {
+    const list = document.getElementById('rankings-list');
+    if (list) list.innerHTML = '<div class="rankings-empty">ランキングを読み込めませんでした</div>';
+  }
+}
+
+function switchRankingTab(tab) {
+  currentRankingTab = tab;
+  document.querySelectorAll('.rankings-tab-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.rtab === tab);
+  });
+  document.getElementById('rankings-search').value = '';
+  renderRankings();
+}
+
+function renderRankings(filterText = '') {
+  const data = RANKINGS_DATA[currentRankingTab];
+  const list = document.getElementById('rankings-list');
+  const meta = document.getElementById('rankings-meta');
+  const note = document.getElementById('rankings-footer-note');
+  const link = document.getElementById('rankings-source-link');
+  if (!list || !data) return;
+
+  // メタ表示
+  meta.innerHTML = `<span class="rankings-updated">更新日 ${data.updated_at} ・ ${data.category} ・ ${data.players.length}名掲載</span>`;
+  note.textContent = `※ データは毎週月曜更新予定 / 次回更新: ${data.next_update}`;
+  link.href = data._source || '#';
+
+  // フィルタ
+  let players = data.players;
+  if (filterText) {
+    const q = filterText.toLowerCase().trim();
+    players = players.filter(p =>
+      (p.name || '').toLowerCase().includes(q) ||
+      (p.country || '').toLowerCase().includes(q) ||
+      (p.club || '').toLowerCase().includes(q)
+    );
+  }
+
+  if (players.length === 0) {
+    list.innerHTML = '<div class="rankings-empty">該当する選手が見つかりません</div>';
+    return;
+  }
+
+  list.innerHTML = players.map(p => {
+    const isTop3 = p.rank <= 3;
+    const detail = p.country ? p.country : (p.club || '');
+    return `<div class="rankings-row${isTop3 ? ' top3' : ''}">
+      <div class="rankings-rank">${p.rank}</div>
+      <div>
+        <div class="rankings-name">${p.name}</div>
+        ${detail ? `<div class="rankings-detail">${detail}</div>` : ''}
+      </div>
+      <div class="rankings-points">${(p.points||0).toLocaleString()}<small>pt</small></div>
+    </div>`;
+  }).join('');
+}
+
+function filterRankings(text) {
+  renderRankings(text);
+}
+
+// ホーム表示時にロード（初回のみ）
+let _rankingsLoaded = false;
+function ensureRankingsLoaded() {
+  if (_rankingsLoaded) return;
+  _rankingsLoaded = true;
+  loadRankings();
+}
+
 
 // ===== STRINGS (ガット) =====
 function renderStringBrandGrid() {
@@ -3422,6 +3797,7 @@ function selectString(id) {
   ].filter(Boolean).map(([l,v,u]) => `<div class="detail-spec-item"><div class="detail-spec-label">${l}</div><div class="detail-spec-value">${v}<span class="detail-spec-unit">${u}</span></div></div>`).join('');
   document.getElementById('string-detail-img-area').innerHTML = '<div class="empty-icon">🎾</div>';
   document.getElementById('string-detail-rakuten-btn').onclick = () => openRakutenString(s.brand, s.model);
+  document.getElementById('string-detail-amazon-btn').onclick = () => openAmazonString(s.brand, s.model);
   loadRakutenResultsGeneric(s, 'string-rakuten-results', 'string-detail-img-area', 'テニスガット');
   navigate('string-detail', true);
   if (!isHistoryNav) history.pushState({ view: 'string-detail', stringId: id }, '', `#string-detail/${id}`);
@@ -3538,6 +3914,7 @@ function selectGrip(id) {
   ].filter(Boolean).map(([l,v,u]) => `<div class="detail-spec-item"><div class="detail-spec-label">${l}</div><div class="detail-spec-value">${v}<span class="detail-spec-unit">${u}</span></div></div>`).join('');
   document.getElementById('grip-detail-img-area').innerHTML = '<div class="empty-icon">🎾</div>';
   document.getElementById('grip-detail-rakuten-btn').onclick = () => openRakutenGrip(g.brand, g.model);
+  document.getElementById('grip-detail-amazon-btn').onclick = () => openAmazonGrip(g.brand, g.model);
   loadRakutenResultsGeneric(g, 'grip-rakuten-results', 'grip-detail-img-area', 'テニスグリップ');
   navigate('grip-detail', true);
   if (!isHistoryNav) history.pushState({ view: 'grip-detail', gripId: id }, '', `#grip-detail/${id}`);

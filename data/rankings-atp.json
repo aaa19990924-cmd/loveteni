@@ -1,0 +1,31 @@
+{
+  "_comment": "ATP男子シングルスランキング。毎週月曜に更新してください。",
+  "_source": "https://www.atptour.com/en/rankings/singles",
+  "_how_to_update": "1) ATPサイトを開く 2) 順位・選手名・国・ポイントをコピー 3) このファイルのplayers配列を書き換え 4) updated_atを最新日付に",
+  "updated_at": "2026-02-23",
+  "next_update": "2026-06-02",
+  "tour": "ATP",
+  "category": "シングルス",
+  "players": [
+    {"rank": 1,  "name": "Carlos Alcaraz",                "country": "ESP", "points": 13550},
+    {"rank": 2,  "name": "Jannik Sinner",                 "country": "ITA", "points": 10400},
+    {"rank": 3,  "name": "Novak Djokovic",                "country": "SRB", "points": 5280},
+    {"rank": 4,  "name": "Alexander Zverev",              "country": "GER", "points": 4555},
+    {"rank": 5,  "name": "Lorenzo Musetti",               "country": "ITA", "points": 4405},
+    {"rank": 6,  "name": "Alex de Minaur",                "country": "AUS", "points": 4235},
+    {"rank": 7,  "name": "Taylor Fritz",                  "country": "USA", "points": 4220},
+    {"rank": 8,  "name": "Félix Auger-Aliassime",         "country": "CAN", "points": 4080},
+    {"rank": 9,  "name": "Ben Shelton",                   "country": "USA", "points": 4050},
+    {"rank": 10, "name": "Alexander Bublik",              "country": "KAZ", "points": 3405},
+    {"rank": 11, "name": "Daniil Medvedev",               "country": "—",   "points": 2960},
+    {"rank": 12, "name": "Casper Ruud",                   "country": "NOR", "points": 2665},
+    {"rank": 13, "name": "Jakub Menšík",                  "country": "CZE", "points": 2595},
+    {"rank": 14, "name": "Alejandro Davidovich Fokina",   "country": "ESP", "points": 2470},
+    {"rank": 15, "name": "Jack Draper",                   "country": "GBR", "points": 2460},
+    {"rank": 16, "name": "Karen Khachanov",               "country": "—",   "points": 2450},
+    {"rank": 17, "name": "Holger Rune",                   "country": "DEN", "points": 2340},
+    {"rank": 18, "name": "Andrey Rublev",                 "country": "—",   "points": 2210},
+    {"rank": 19, "name": "Francisco Cerúndolo",           "country": "ARG", "points": 2170},
+    {"rank": 20, "name": "Flavio Cobolli",                "country": "ITA", "points": 2030}
+  ]
+}

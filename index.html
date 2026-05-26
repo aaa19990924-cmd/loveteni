@@ -1885,11 +1885,8 @@ footer {
       <span class="gnav-item" onclick="navigate('diagnosis')" data-page="diagnosis">診断</span>
       <span class="gnav-item" onclick="navigate('column')" data-page="column">コラム</span>
       <span class="gnav-item" onclick="navigate('news')" data-page="news">最新情報</span>
-      <span class="gnav-item" onclick="navigate('tournament')" data-page="tournament">大会</span>
-      <span class="gnav-item" onclick="navigate('predict')" data-page="predict">予想</span>
       <span class="gnav-item" onclick="navigate('training')" data-page="training">トレーニング</span>
       <span class="gnav-item" onclick="navigate('rules')" data-page="rules">ルール</span>
-      <span class="gnav-item" onclick="navigate('pros')" data-page="pros">プロのギア</span>
       <span class="gnav-item" onclick="navigateToMygear()" data-page="mygear">マイギア</span>
     </nav>
     <div class="header-search">
@@ -1975,7 +1972,7 @@ footer {
         <div class="section-header-text">
           <div class="section-eyebrow">ALL FEATURES</div>
           <h2 class="section-title">テニスのすべてを、ここに。</h2>
-          <p class="section-desc">選ぶ、診る、比べる、学ぶ。<br>プレーヤーのための12機能。</p>
+          <p class="section-desc">選ぶ、診る、続ける。<br>プレーヤーのための12機能。</p>
         </div>
       </div>
     </div>
@@ -2036,85 +2033,48 @@ footer {
           <div class="service-title">ラケット比較</div>
           <div class="service-desc">2本を並べて、スペックを徹底比較。購入前の最終確認に。</div>
         </div>
-        <div class="service-card" onclick="navigate('pros')">
-          <div class="service-num">08</div>
-          <div class="service-icon">⭐</div>
-          <div class="service-sub">PRO GEAR</div>
-          <div class="service-title">プロのギア</div>
-          <div class="service-desc">世界のトップ選手が手にする、本物の道具。</div>
-        </div>
-        <div class="service-card" onclick="navigate('tournament')">
-          <div class="service-num">09</div>
-          <div class="service-icon">🏆</div>
-          <div class="service-sub">TOURNAMENTS</div>
-          <div class="service-title">大会情報</div>
-          <div class="service-desc">グランドスラムからローカル大会まで。日程と結果を、ひとまとめに。</div>
-        </div>
-        <div class="service-card" onclick="navigate('predict')">
-          <div class="service-num">10</div>
-          <div class="service-icon">🎯</div>
-          <div class="service-sub">PREDICTIONS</div>
-          <div class="service-title">勝敗予想</div>
-          <div class="service-desc">注目試合の行方を、みんなで読む。観戦が、ひと味変わる。</div>
-        </div>
 
         <!-- 学ぶ -->
         <div class="service-card" onclick="navigate('column')">
-          <div class="service-num">11</div>
+          <div class="service-num">08</div>
           <div class="service-icon">📝</div>
           <div class="service-sub">COLUMN</div>
           <div class="service-title">コラム</div>
           <div class="service-desc">ラケット選び、技術解説、フィジカル。読んで強くなる、テニスの教科書。</div>
         </div>
         <div class="service-card" onclick="navigate('training')">
-          <div class="service-num">12</div>
+          <div class="service-num">09</div>
           <div class="service-icon">💪</div>
           <div class="service-sub">TRAINING</div>
           <div class="service-title">トレーニング</div>
           <div class="service-desc">レベル別の練習動画。コートに立つ前に、ここで磨く。</div>
         </div>
-
-      </div>
-    </div>
-  </section>
-
-
-  <!-- RANKINGS -->
-  <section class="rankings-section">
-    <div class="container">
-      <div class="section-header">
-        <div class="section-header-text">
-          <div class="section-eyebrow">RANKINGS</div>
-          <h2 class="section-title">世界と日本の、いま。</h2>
-          <p class="section-desc">ATPトップ100と、JTA日本ランキング。<br>テニスの現在地を、ここから。</p>
+        <div class="service-card" onclick="navigateToMygear()">
+          <div class="service-num">10</div>
+          <div class="service-icon">🎒</div>
+          <div class="service-sub">MY GEAR</div>
+          <div class="service-title">マイギア</div>
+          <div class="service-desc">自分のラケット・ガット・グリップを記録。張替えの時期も、ひと目で。</div>
         </div>
-      </div>
-      <div class="rankings-tabs">
-        <button class="rankings-tab-btn active" data-rtab="atp" onclick="switchRankingTab('atp')">
-          <span class="rankings-tab-en">ATP</span>
-          <span class="rankings-tab-jp">世界ランキング</span>
-        </button>
-        <button class="rankings-tab-btn" data-rtab="jta" onclick="switchRankingTab('jta')">
-          <span class="rankings-tab-en">JTA</span>
-          <span class="rankings-tab-jp">日本ランキング</span>
-        </button>
-      </div>
-      <div class="rankings-meta" id="rankings-meta">
-        <span class="rankings-updated">— 更新日 —</span>
-      </div>
-      <div class="rankings-search-row">
-        <input type="text" class="rankings-search" id="rankings-search"
-          placeholder="🔍 選手名で検索..." oninput="filterRankings(this.value)">
-      </div>
-      <div class="rankings-list" id="rankings-list">
-        <div class="rankings-loading">読み込み中...</div>
-      </div>
-      <div class="rankings-footer">
-        <div class="rankings-footer-note" id="rankings-footer-note"></div>
-        <a class="rankings-source-link" id="rankings-source-link" href="#" target="_blank" rel="noopener">公式サイトで全件を見る →</a>
+        <div class="service-card" onclick="navigate('log')">
+          <div class="service-num">11</div>
+          <div class="service-icon">📔</div>
+          <div class="service-sub">LOG</div>
+          <div class="service-title">記録</div>
+          <div class="service-desc">練習、試合、スコア。コートの一日を、データとして残す。</div>
+        </div>
+        <div class="service-card" onclick="navigate('stringer')">
+          <div class="service-num">12</div>
+          <div class="service-icon">📍</div>
+          <div class="service-sub">STRINGER FINDER</div>
+          <div class="service-title">ストリンガー検索</div>
+          <div class="service-desc">地域から、信頼できる張り工房を見つける。ガット張替えに、迷わない。</div>
+        </div>
+
       </div>
     </div>
   </section>
+
 
   <!-- NEWS -->
   <section class="news-section">
@@ -2150,46 +2110,6 @@ footer {
     </div>
   </section>
 
-  <!-- TOURNAMENT -->
-  <section class="tournament-section">
-    <div class="container">
-      <div class="section-header">
-        <div class="section-header-text">
-          <div class="section-eyebrow">TOURNAMENTS</div>
-          <h2 class="section-title" style="color:white">グランドスラム<br>2026 スケジュール</h2>
-          <p class="section-desc">4大大会を中心に、世界のテニスシーンをチェックしよう。</p>
-        </div>
-      </div>
-    </div>
-    <div class="container">
-      <div class="tournament-list">
-        <div class="tournament-card" onclick="navigate('tournament')">
-          <span class="tournament-status upcoming">● OPENING WEEK</span>
-          <h3 class="tournament-name">全仏オープン</h3>
-          <div class="tournament-date">2026.05.24 — 2026.06.07</div>
-          <div class="tournament-info">予選 5/18-22 / 本戦 5/24開幕<br>ローランギャロス（パリ）/ クレーコート</div>
-        </div>
-        <div class="tournament-card" onclick="navigate('tournament')">
-          <span class="tournament-status scheduled">UPCOMING</span>
-          <h3 class="tournament-name">ウィンブルドン</h3>
-          <div class="tournament-date">2026.06.29 — 2026.07.12</div>
-          <div class="tournament-info">オールイングランドクラブ（ロンドン）<br>グラスコート</div>
-        </div>
-        <div class="tournament-card" onclick="navigate('tournament')">
-          <span class="tournament-status scheduled">SCHEDULED</span>
-          <h3 class="tournament-name">全米オープン</h3>
-          <div class="tournament-date">2026.08.31 — 2026.09.13</div>
-          <div class="tournament-info">USTAビリー・ジーン・キング・ナショナル<br>ハードコート / ニューヨーク</div>
-        </div>
-        <div class="tournament-card" onclick="navigate('tournament')">
-          <span class="tournament-status scheduled">SCHEDULED</span>
-          <h3 class="tournament-name">全豪オープン 2027</h3>
-          <div class="tournament-date">2027.01 予定</div>
-          <div class="tournament-info">メルボルンパーク（メルボルン・豪）<br>ハードコート</div>
-        </div>
-      </div>
-    </div>
-  </section>
 </div>
 
 <!-- ===== RACKETS ===== -->
@@ -2493,6 +2413,49 @@ footer {
   </div>
 </div>
 
+<!-- ===== LOG (記録) プレースホルダー ===== -->
+<div id="view-log" class="view">
+  <div class="page-hero">
+    <div class="container">
+      <div class="page-hero-eyebrow">LOG</div>
+      <h1 class="page-hero-title">記録</h1>
+      <p class="page-hero-desc">練習、試合、スコア。コートの一日を、データとして残す。</p>
+    </div>
+  </div>
+  <div class="page-body">
+    <div class="container" style="text-align:center;padding:80px 20px">
+      <div style="font-size:48px;margin-bottom:16px">📔</div>
+      <h2 style="font-family:'Noto Serif JP',serif;font-size:24px;margin-bottom:12px">近日公開</h2>
+      <p style="color:var(--mute);font-size:14px;line-height:1.7;max-width:480px;margin:0 auto">
+        練習・試合の記録、対戦相手、スコア、自由メモ。<br>
+        ログインユーザー限定で、上達のプロセスを蓄積できる機能を準備中です。
+      </p>
+      <button class="btn btn-primary" style="margin-top:28px" onclick="navigateToMygear()">マイギアへ →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== STRINGER FINDER プレースホルダー ===== -->
+<div id="view-stringer" class="view">
+  <div class="page-hero">
+    <div class="container">
+      <div class="page-hero-eyebrow">STRINGER FINDER</div>
+      <h1 class="page-hero-title">ストリンガー検索</h1>
+      <p class="page-hero-desc">地域から、信頼できる張り工房を見つける。</p>
+    </div>
+  </div>
+  <div class="page-body">
+    <div class="container" style="text-align:center;padding:80px 20px">
+      <div style="font-size:48px;margin-bottom:16px">📍</div>
+      <h2 style="font-family:'Noto Serif JP',serif;font-size:24px;margin-bottom:12px">近日公開</h2>
+      <p style="color:var(--mute);font-size:14px;line-height:1.7;max-width:480px;margin:0 auto">
+        都道府県別のテニス工房・ストリンガー情報を準備中です。<br>
+        張替え料金、対応ガット、口コミなどから選べる予定です。
+      </p>
+    </div>
+  </div>
+</div>
+
 <!-- ===== DIAGNOSIS ===== -->
 <div id="view-diagnosis" class="view">
   <div class="page-hero">
@@ -2586,95 +2549,6 @@ footer {
   </div>
 </div>
 
-<!-- ===== TOURNAMENT ===== -->
-<div id="view-tournament" class="view">
-  <div class="page-hero">
-    <div class="container">
-      <div class="page-hero-eyebrow">TOURNAMENTS</div>
-      <h1 class="page-hero-title">大会情報</h1>
-      <p class="page-hero-desc">グランドスラム・ATP・WTA・国内大会の日程と詳細をご紹介します。</p>
-    </div>
-  </div>
-  <div class="page-body" style="background:var(--ink);color:white">
-    <div class="container">
-      <div style="font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:0.2em;color:var(--accent-bright);text-transform:uppercase;margin-bottom:20px">GRAND SLAM 2026</div>
-      <div class="tournament-list" style="margin-bottom:60px">
-        <div class="tournament-card"><span class="tournament-status upcoming">● OPENING WEEK</span><h3 class="tournament-name">全仏オープン</h3><div class="tournament-date">2026.05.24 — 2026.06.07</div><div class="tournament-info">予選: 5/18-22 / 本戦: 5/24開幕<br>ローランギャロス（パリ）/ クレーコート</div></div>
-        <div class="tournament-card"><span class="tournament-status scheduled">UPCOMING</span><h3 class="tournament-name">ウィンブルドン</h3><div class="tournament-date">2026.06.29 — 2026.07.12</div><div class="tournament-info">オールイングランドクラブ（ロンドン）<br>グラスコート</div></div>
-        <div class="tournament-card"><span class="tournament-status scheduled">SCHEDULED</span><h3 class="tournament-name">全米オープン</h3><div class="tournament-date">2026.08.31 — 2026.09.13</div><div class="tournament-info">USTAビリー・ジーン・キング・ナショナル<br>ハードコート / ニューヨーク</div></div>
-        <div class="tournament-card"><span class="tournament-status scheduled">SCHEDULED</span><h3 class="tournament-name">全豪オープン 2027</h3><div class="tournament-date">2027.01 予定</div><div class="tournament-info">メルボルンパーク（メルボルン）<br>ハードコート</div></div>
-      </div>
-      <div style="font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:0.2em;color:var(--accent-bright);text-transform:uppercase;margin-bottom:20px">FRENCH OPEN 2026 注目選手（ATP / WTA）</div>
-      <div class="tournament-list" style="margin-bottom:60px">
-        <div class="tournament-card">
-          <span class="tournament-status upcoming">ATP TOP 4</span>
-          <h3 class="tournament-name" style="font-size:18px">男子シングルス シード予想</h3>
-          <div class="tournament-info" style="margin-top:14px;line-height:2">
-            ① ヤニック・シナー <span style="opacity:0.5">🇮🇹</span><br>
-            ② カルロス・アルカラス <span style="opacity:0.5">🇪🇸</span><br>
-            ③ アレクサンダー・ズベレフ <span style="opacity:0.5">🇩🇪</span><br>
-            ④ ノバク・ジョコビッチ <span style="opacity:0.5">🇷🇸</span>
-          </div>
-        </div>
-        <div class="tournament-card">
-          <span class="tournament-status upcoming">WTA TOP 4</span>
-          <h3 class="tournament-name" style="font-size:18px">女子シングルス シード予想</h3>
-          <div class="tournament-info" style="margin-top:14px;line-height:2">
-            ① アリナ・サバレンカ <span style="opacity:0.5">🇧🇾</span><br>
-            ② エレナ・ルバキナ <span style="opacity:0.5">🇰🇿</span><br>
-            ③ ココ・ガウフ <span style="opacity:0.5">🇺🇸</span><br>
-            ④ イガ・シフィオンテク <span style="opacity:0.5">🇵🇱</span>
-          </div>
-        </div>
-        <div class="tournament-card">
-          <span class="tournament-status live">🇯🇵 JAPAN</span>
-          <h3 class="tournament-name" style="font-size:18px">日本人選手（本戦出場）</h3>
-          <div class="tournament-info" style="margin-top:14px;line-height:2">
-            <strong style="color:white">女子シングルス</strong><br>
-            ・大坂 なおみ<br>
-            ・内島 萌夏<br>
-            <br>
-            <strong style="color:white">ダブルス</strong><br>
-            青山 修子 / 穂積 絵莉 / 加藤 未唯 / 二宮 真琴
-          </div>
-        </div>
-        <div class="tournament-card">
-          <span class="tournament-status scheduled">INFO</span>
-          <h3 class="tournament-name" style="font-size:18px">注目ポイント</h3>
-          <div class="tournament-info" style="margin-top:14px;line-height:1.8">
-            • 唯一のクレーコート開催<br>
-            • シナーが全豪に続きグランドスラム制覇なるか<br>
-            • アルカラスの連覇に注目<br>
-            • サバレンカが全仏初制覇を狙う
-          </div>
-        </div>
-      </div>
-
-      <div style="font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:0.2em;color:var(--accent-bright);text-transform:uppercase;margin-bottom:20px">DOMESTIC 2026</div>
-      <div class="tournament-list">
-        <div class="tournament-card"><span class="tournament-status scheduled">SCHEDULED</span><h3 class="tournament-name">東レ パン パシフィック オープン</h3><div class="tournament-date">2026.09 予定</div><div class="tournament-info">有明テニスの森（東京）/ ハードコート（WTA）</div></div>
-        <div class="tournament-card"><span class="tournament-status scheduled">SCHEDULED</span><h3 class="tournament-name">楽天ジャパンオープン</h3><div class="tournament-date">2026.10 予定</div><div class="tournament-info">有明テニスの森（東京）/ ハードコート（ATP500）</div></div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== PREDICT ===== -->
-<div id="view-predict" class="view">
-  <div class="page-hero">
-    <div class="container">
-      <div class="page-hero-eyebrow">PREDICTIONS</div>
-      <h1 class="page-hero-title">勝敗予想</h1>
-      <p class="page-hero-desc">注目試合の勝敗をみんなで予想しよう。— 全仏オープン 2026</p>
-    </div>
-  </div>
-  <div class="page-body">
-    <div class="container-narrow">
-      <div id="matchList"></div>
-    </div>
-  </div>
-</div>
-
 <!-- ===== TRAINING ===== -->
 <div id="view-training" class="view">
   <div class="page-hero">
@@ -2714,23 +2588,6 @@ footer {
   <div class="page-body">
     <div class="container-narrow">
       <div id="ruleList"></div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== PROS ===== -->
-<div id="view-pros" class="view">
-  <div class="page-hero">
-    <div class="container">
-      <div class="page-hero-eyebrow">PRO PLAYERS</div>
-      <h1 class="page-hero-title">プロ選手 使用機材</h1>
-      <p class="page-hero-desc">トップ選手のラケット・ガット・シューズ情報をご紹介します。</p>
-    </div>
-  </div>
-  <div class="page-body">
-    <div class="container">
-      <div style="font-family:'DM Sans',sans-serif;font-size:11px;letter-spacing:0.2em;color:var(--accent);text-transform:uppercase;margin-bottom:24px">ATP TOP PLAYERS</div>
-      <div class="player-grid" id="proPlayerGrid"></div>
     </div>
   </div>
 </div>
@@ -2787,12 +2644,12 @@ footer {
         </ul>
       </div>
       <div class="footer-col">
-        <h4>EVENTS</h4>
+        <h4>PERSONAL</h4>
         <ul>
-          <li><a onclick="navigate('tournament')">大会情報</a></li>
-          <li><a onclick="navigate('predict')">勝敗予想</a></li>
+          <li><a onclick="navigateToMygear()">マイギア</a></li>
+          <li><a onclick="navigate('log')">記録</a></li>
+          <li><a onclick="navigate('stringer')">ストリンガー検索</a></li>
           <li><a onclick="navigate('training')">トレーニング</a></li>
-          <li><a onclick="navigate('pros')">プロ選手</a></li>
         </ul>
       </div>
       <div class="footer-col">
@@ -2963,7 +2820,6 @@ function navigate(view, skipPush) {
 function updateTodayDate() {
   const d = new Date();
   const dateStr = `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
-  ensureRankingsLoaded();
   const el = document.getElementById('topline-date');
   if (el) el.textContent = dateStr;
 }

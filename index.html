@@ -11,6 +11,7 @@
 <!-- Supabase JS v2 -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/js/supabase-auth.js" defer></script>
+<script src="/js/mygear.js" defer></script>
 <style>
 :root {
   --ink: #0d1117;
@@ -1802,6 +1803,270 @@ footer {
 }
 #auth-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
+
+/* ===== マイギア 詳細スタイル ===== */
+.mygear-section { margin: 32px 0; }
+.mygear-section-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-bottom: 12px; border-bottom: 1px solid var(--line);
+  margin-bottom: 16px;
+}
+.mygear-section-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 20px;
+  font-weight: 700;
+  display: flex; align-items: center; gap: 10px;
+}
+.mygear-section-title > span:first-child { font-size: 22px; }
+.mygear-section-count {
+  display: inline-block;
+  background: var(--silver);
+  color: var(--mute);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  padding: 2px 10px;
+  border-radius: 20px;
+  margin-left: 4px;
+  font-weight: 600;
+}
+.mygear-add-btn {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+  background: none;
+  border: 1.5px solid var(--accent);
+  border-radius: 6px;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.mygear-add-btn:hover { background: var(--accent); color: white; }
+.mygear-section-empty {
+  padding: 24px;
+  text-align: center;
+  color: var(--mute);
+  font-size: 13px;
+  background: var(--cream);
+  border-radius: 8px;
+}
+.mygear-list { display: flex; flex-direction: column; gap: 12px; }
+.mygear-card {
+  display: flex;
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 16px 20px;
+  gap: 16px;
+  transition: all 0.2s;
+}
+.mygear-card:hover { border-color: var(--line-strong); }
+.mygear-card.is-current {
+  border-color: var(--accent);
+  background: linear-gradient(to right, rgba(0,81,58,0.04), white 30%);
+}
+.mygear-card-main { flex: 1; min-width: 0; }
+.mygear-card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 4px; }
+.mygear-card-brand {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--mute);
+  text-transform: uppercase;
+}
+.mygear-current-badge {
+  background: var(--accent);
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  letter-spacing: 0.05em;
+}
+.mygear-card-model { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+.mygear-card-detail { font-size: 12px; color: var(--mute); }
+.mygear-card-note {
+  font-size: 12px;
+  color: var(--mute);
+  font-style: italic;
+  margin-top: 4px;
+  padding-top: 4px;
+  border-top: 1px dashed var(--line);
+}
+.mygear-card-warn {
+  margin-top: 8px;
+  padding: 6px 10px;
+  background: #fff0f0;
+  border: 1px solid #fcc;
+  color: #c0392b;
+  font-size: 12px;
+  border-radius: 6px;
+}
+.mygear-card-warn-soft {
+  margin-top: 8px;
+  padding: 6px 10px;
+  background: #fef7e6;
+  border: 1px solid #f9d99c;
+  color: #976200;
+  font-size: 12px;
+  border-radius: 6px;
+}
+.mygear-card-actions { display: flex; gap: 4px; align-items: flex-start; flex-shrink: 0; }
+.mygear-act-btn {
+  background: none;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  width: 32px; height: 32px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.mygear-act-btn:hover { border-color: var(--ink); background: var(--silver); }
+.mygear-act-danger:hover { border-color: var(--signal); background: #fff0f0; }
+
+/* ===== マイギア モーダル ===== */
+#mygear-modal {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(4px);
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+#mygear-modal.open { display: flex; }
+.mygear-modal-box {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  width: 100%;
+  max-width: 460px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.2);
+  position: relative;
+}
+.mygear-modal-close {
+  position: absolute; top: 16px; right: 18px;
+  font-size: 22px; line-height: 1;
+  cursor: pointer; opacity: 0.4;
+  border: none; background: none;
+}
+.mygear-modal-close:hover { opacity: 0.8; }
+.mygear-modal-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+.mygear-field { margin-bottom: 16px; }
+.mygear-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--mute);
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+.mygear-required { color: var(--signal); }
+.mygear-input {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s;
+  background: white;
+}
+.mygear-input:focus { border-color: var(--accent); }
+textarea.mygear-input { resize: vertical; min-height: 60px; }
+
+.mygear-cat-tabs { display: flex; gap: 4px; background: var(--silver); border-radius: 8px; padding: 4px; }
+.mygear-cat-tab {
+  flex: 1;
+  padding: 8px 4px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: var(--mute);
+  transition: all 0.2s;
+}
+.mygear-cat-tab.active { background: white; color: var(--ink); box-shadow: 0 1px 4px rgba(0,0,0,0.1); }
+.mygear-cat-tab:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.mygear-check {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px;
+  cursor: pointer;
+}
+.mygear-check input { width: 16px; height: 16px; }
+
+.mygear-modal-error {
+  background: #fff0f0; border: 1px solid #fcc;
+  color: #c0392b; border-radius: 8px;
+  padding: 8px 12px; font-size: 13px;
+  margin-bottom: 12px;
+  min-height: 16px;
+}
+.mygear-modal-error:empty { display: none; }
+.mygear-modal-actions { display: flex; gap: 8px; }
+.mygear-modal-actions .btn-primary, .mygear-modal-actions .btn-secondary { flex: 1; padding: 11px; }
+
+.mygear-cycle-presets { display: flex; gap: 8px; }
+.mygear-cycle-preset {
+  flex: 1;
+  padding: 10px 4px;
+  border: 1.5px solid var(--line);
+  background: white;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: all 0.15s;
+}
+.mygear-cycle-preset:hover { border-color: var(--ink); }
+.mygear-cycle-preset.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+.mygear-settings-bar {
+  display: flex; align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  background: var(--cream);
+  border: 1px dashed var(--line-strong);
+  border-radius: 10px;
+  margin-top: 32px;
+  font-size: 13px;
+  color: var(--mute);
+}
+.mygear-settings-icon { font-size: 16px; }
+.mygear-settings-bar strong { color: var(--ink); font-weight: 700; }
+.mygear-settings-btn {
+  margin-left: auto;
+  background: none;
+  border: 1.5px solid var(--ink);
+  border-radius: 6px;
+  padding: 5px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--ink);
+  transition: all 0.15s;
+}
+.mygear-settings-btn:hover { background: var(--ink); color: white; }
+
+@media (max-width: 768px) {
+  .mygear-modal-box { padding: 24px 18px; }
+  .mygear-card { flex-direction: column; gap: 12px; padding: 14px 16px; }
+  .mygear-card-actions { align-self: flex-end; }
+  .mygear-section-title { font-size: 17px; }
+}
+
 /* ===== マイギアページ ===== */
 .mygear-header { padding: 48px 0 32px; border-bottom: 1px solid var(--line); }
 .mygear-title { font-size: 28px; font-weight: 700; font-family: 'Noto Serif JP', serif; }
@@ -2705,6 +2970,10 @@ footer {
   </div>
 </div>
 
+
+
+<!-- ===== MYGEAR MODAL ===== -->
+<div id="mygear-modal" role="dialog" aria-modal="true"></div>
 
 <script>
 // ===== BRAND DATA =====

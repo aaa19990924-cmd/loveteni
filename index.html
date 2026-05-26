@@ -2756,9 +2756,7 @@ window.onload = function() {
   renderGripBrandGrid();
   renderGripBrandSidebar();
   initQuiz();
-  renderMatches();
   renderRules();
-  renderProPlayers();
   loadNews(); // ニュース読み込み
   updateTodayDate();
 
@@ -3869,8 +3867,10 @@ const MATCHES = [
 ];
 
 function renderMatches() {
+  const el = document.getElementById('matchList');
+  if (!el) return; // 予想ページ削除済みなら何もしない
   MATCHES.forEach(m => { if (!votes[m.id]) votes[m.id] = {p1: Math.floor(Math.random()*80)+20, p2: Math.floor(Math.random()*80)+20, voted: null}; });
-  document.getElementById('matchList').innerHTML = MATCHES.map(m => renderMatchCard(m)).join('');
+  el.innerHTML = MATCHES.map(m => renderMatchCard(m)).join('');
 }
 
 function renderMatchCard(m) {
@@ -3948,7 +3948,9 @@ const PRO_PLAYERS = [
 ];
 
 function renderProPlayers() {
-  document.getElementById('proPlayerGrid').innerHTML = PRO_PLAYERS.map(p => `
+  const el = document.getElementById('proPlayerGrid');
+  if (!el) return; // プロのギアページ削除済みなら何もしない
+  el.innerHTML = PRO_PLAYERS.map(p => `
     <div class="player-card">
       <div class="player-avatar">${p.name.charAt(0)}</div>
       <div class="player-card-name">${p.name}</div>

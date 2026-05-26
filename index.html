@@ -1777,6 +1777,45 @@ footer {
 .btn-google:hover { border-color: var(--ink); box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
 .btn-google-icon { width: 18px; height: 18px; }
 .login-note { font-size: 12px; color: var(--mute); margin-top: 14px; line-height: 1.6; }
+/* ===== Magic Link OTP ===== */
+.magic-sent-msg {
+  background: var(--cream);
+  border: 1px dashed var(--accent);
+  padding: 14px 16px;
+  border-radius: 8px;
+  margin-bottom: 18px;
+  font-size: 13px;
+  line-height: 1.6;
+  text-align: center;
+  color: var(--ink);
+}
+.magic-sent-msg strong { color: var(--accent); }
+.login-otp-input {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 22px !important;
+  text-align: center;
+  letter-spacing: 0.4em !important;
+  font-weight: 700 !important;
+  padding: 14px !important;
+}
+.magic-step-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 14px;
+}
+.magic-link-btn {
+  background: none;
+  border: none;
+  color: var(--mute);
+  font-size: 12px;
+  cursor: pointer;
+  padding: 4px 8px;
+  text-decoration: underline;
+  font-family: inherit;
+}
+.magic-link-btn:hover { color: var(--ink); }
+
 #login-error {
   background: #fff0f0; border: 1px solid #fcc;
   color: #c0392b; border-radius: 8px;
@@ -2177,13 +2216,40 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
       <button class="login-tab-btn" data-tab="password" onclick="switchLoginTab('password')">パスワード</button>
     </div>
     <div class="login-tab-content active" data-tab="magic">
-      <div class="login-label">メールアドレス</div>
-      <input class="login-input" id="magic-email" type="email" placeholder="you@example.com"
-        onkeydown="if(event.key==='Enter') ltSendMagicLink()">
-      <button class="btn-primary" id="magic-send-btn" onclick="ltSendMagicLink()" style="width:100%">
-        マジックリンクを送信
-      </button>
-      <p class="login-note">メールに届くリンクをクリックするだけでログインできます。<br>パスワード不要で安全です。</p>
+      <!-- ステップ1: メール入力 -->
+      <div id="magic-step-email">
+        <div class="login-label">メールアドレス</div>
+        <input class="login-input" id="magic-email" type="email" placeholder="you@example.com"
+          onkeydown="if(event.key==='Enter') ltSendMagicLink()">
+        <button class="btn-primary" id="magic-send-btn" onclick="ltSendMagicLink()" style="width:100%">
+          認証コードを送信
+        </button>
+        <p class="login-note">メールに届く<strong>6桁のコード</strong>または<strong>ログインリンク</strong>のどちらでもログインできます。<br>別の端末でメールを開いた場合は、6桁のコードを入力してください。</p>
+      </div>
+
+      <!-- ステップ2: コード入力 -->
+      <div id="magic-step-code" style="display:none">
+        <div class="magic-sent-msg">
+          ✉️ <strong id="magic-sent-email">—</strong> に<br>認証コードを送信しました
+        </div>
+        <div class="login-label">メールに届いた6桁のコード</div>
+        <input class="login-input login-otp-input" id="magic-code" type="text"
+          inputmode="numeric" pattern="[0-9]*" maxlength="6"
+          placeholder="例: 482917" autocomplete="one-time-code"
+          oninput="this.value=this.value.replace(/\D/g,'').slice(0,6); if(this.value.length===6) ltVerifyMagicCode();"
+          onkeydown="if(event.key==='Enter') ltVerifyMagicCode()">
+        <button class="btn-primary" id="magic-verify-btn" onclick="ltVerifyMagicCode()" style="width:100%">
+          ログイン
+        </button>
+        <div class="magic-step-footer">
+          <button class="magic-link-btn" onclick="ltMagicBackToEmail()">← 別のメールに送り直す</button>
+          <button class="magic-link-btn" onclick="ltSendMagicLink(true)">コードを再送信</button>
+        </div>
+        <p class="login-note" style="margin-top:14px">
+          💡 メールが届かない場合：迷惑メールフォルダもご確認ください。<br>
+          ※ 6桁のコードは1時間有効です。
+        </p>
+      </div>
     </div>
     <div class="login-tab-content" data-tab="password">
       <div class="login-label">メールアドレス</div>

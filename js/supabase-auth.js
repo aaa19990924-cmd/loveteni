@@ -6,8 +6,8 @@
 // ================================================================
 // ① 設定（Supabaseプロジェクト作成後に書き換えてください）
 // ================================================================
-const SUPABASE_URL     = 'https://mdrejtyrmjmhitebobhc.supabase.co';
-const SUPABASE_ANON_KEY = 'sb_publishable_F-5Z_51avlPcWYQK0nhb1g_1mUrsGxV';
+const SUPABASE_URL     = 'https://YOUR_PROJECT_REF.supabase.co';
+const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY';
 
 // ================================================================
 // クライアント初期化
@@ -208,8 +208,8 @@ async function ltSendMagicLink(isResend = false) {
 async function ltVerifyMagicCode() {
   clearLoginError();
   const code = document.getElementById('magic-code')?.value?.trim();
-  if (!code || code.length !== 6) {
-    showLoginError('6桁のコードを入力してください');
+  if (!code || (code.length !== 6 && code.length !== 8)) {
+    showLoginError('認証コード（6桁または8桁）を入力してください');
     return;
   }
   if (!ltMagicEmail) {

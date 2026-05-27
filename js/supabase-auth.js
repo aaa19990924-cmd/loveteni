@@ -6,8 +6,8 @@
 // ================================================================
 // ① 設定（Supabaseプロジェクト作成後に書き換えてください）
 // ================================================================
-const SUPABASE_URL     = 'https://YOUR_PROJECT_REF.supabase.co';
-const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY';
+const SUPABASE_URL     = 'https://mdrejtyrmjmhitebobhc.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kcmVqdHlybWptaGl0ZWJvYmhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2OTQwODYsImV4cCI6MjA5NTI3MDA4Nn0.iXKtPsCcCyMDYWDqDZPalSaF2vQGlfPwy3CslPodGaQ';
 
 // ================================================================
 // クライアント初期化

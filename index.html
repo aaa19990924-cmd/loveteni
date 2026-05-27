@@ -749,9 +749,9 @@ section {
 .series-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+  background: white;
 }
 .series-card {
   background: white;
@@ -759,6 +759,8 @@ section {
   cursor: pointer;
   transition: all 0.2s;
   position: relative;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
 }
 .series-card:hover { background: var(--cream); }
 .series-card:hover .series-arrow { transform: translateX(4px); color: var(--accent); }
@@ -3319,12 +3321,35 @@ function selectBrand(brand) {
 }
 
 function getRacketsBySeries(brand, series) {
+  // ブランド情報から「他のシリーズ名一覧」を取得（誤マッチ防止用）
+  const brandInfo = BRAND_INFO[brand];
+  const otherSeriesNames = brandInfo
+    ? brandInfo.series.map(s => s.name).filter(n => n !== series)
+    : [];
+
   return allRackets.filter(r => {
     if (r.brand !== brand) return false;
-    const sl = series.toLowerCase().replace(/[\s\-]/g,'');
-    const ml = (r.model||'').toLowerCase().replace(/[\s\-]/g,'');
-    const rl = (r.series||'').toLowerCase().replace(/[\s\-]/g,'');
-    return ml.includes(sl) || rl === sl || rl.includes(sl);
+
+    // ① series フィールドが付いていれば完全一致のみ採用（最も厳密）
+    if (r.series) {
+      return r.series === series;
+    }
+
+    // ② 互換: series フィールドが無い古いデータはモデル名で部分一致
+    const norm = (s) => (s || '').toLowerCase().replace(/[\s\-]/g, '');
+    const sl = norm(series);
+    const ml = norm(r.model);
+
+    if (!ml.includes(sl)) return false;
+
+    // ③ ただし、より具体的な他シリーズ名にも該当する場合は除外
+    //    (例: 「PHANTOM」検索で「PHANTOM GRAPHITE」を除外)
+    //    sl より長い別シリーズ名がモデルに含まれていればそっち優先
+    const moreSpecific = otherSeriesNames.some(other => {
+      const ol = norm(other);
+      return ol.length > sl.length && ol.includes(sl) && ml.includes(ol);
+    });
+    return !moreSpecific;
   });
 }
 
@@ -3721,14 +3746,21 @@ async function loadRakutenResults(r) {
       return;
     }
 
-    const first = data.items.find(i => i.largeImageUrl);
-    if (first) {
-      setCachedImg(cacheKey, first.largeImageUrl, first);
-      document.getElementById('detail-img-area').innerHTML = `<img src="${first.largeImageUrl}" alt="${r.model}" onerror="this.parentElement.innerHTML='<div class=empty-icon>🎾</div>'">`;
+    // ★ 表示前に「ラケット本体らしくない」商品を除外
+    const filteredItems = filterRacketItems(data.items, r);
+    const itemsToShow = filteredItems.length > 0 ? filteredItems : data.items;
+
+    // 詳細上部の画像は pickBestMatch で最も信頼できる1点を選ぶ
+    const bestForImage = r.janCode
+      ? (itemsToShow[0] || data.items[0])
+      : (pickBestMatch(r, itemsToShow) || itemsToShow[0] || data.items[0]);
+    if (bestForImage && bestForImage.largeImageUrl) {
+      setCachedImg(cacheKey, bestForImage.largeImageUrl, bestForImage);
+      document.getElementById('detail-img-area').innerHTML = `<img src="${bestForImage.largeImageUrl}" alt="${r.model}" onerror="this.parentElement.innerHTML='<div class=empty-icon>🎾</div>'">`;
     }
-    const hasProspo = data.items.some(i => i.isProSports);
+    const hasProspo = itemsToShow.some(i => i.isProSports);
     const headerLabel = hasProspo ? '🏪 PRO SPORTS優先表示' : '🏪 楽天市場';
-    c.innerHTML = `<div style="font-size:11px;color:var(--accent);margin-bottom:12px;font-family:'DM Sans',sans-serif;letter-spacing:0.1em">${headerLabel}</div><div class="rakuten-grid">${data.items.slice(0,8).map(item => `
+    c.innerHTML = `<div style="font-size:11px;color:var(--accent);margin-bottom:12px;font-family:'DM Sans',sans-serif;letter-spacing:0.1em">${headerLabel}</div><div class="rakuten-grid">${itemsToShow.slice(0,8).map(item => `
       <div class="rakuten-item">
         <div class="rakuten-item-img">${item.imageUrl ? `<img src="${item.largeImageUrl||item.imageUrl}" loading="lazy">` : '<div style="font-size:30px;opacity:0.15">🎾</div>'}</div>
         <div class="rakuten-item-info">
@@ -3739,6 +3771,57 @@ async function loadRakutenResults(r) {
         </div>
       </div>`).join('')}</div>`;
   } catch(e) { c.innerHTML = '<div class="loading">読み込みに失敗しました</div>'; }
+}
+
+// 楽天結果から「ラケット本体らしくない」商品を除外する
+function filterRacketItems(items, r) {
+  const modelKey = (r.model || '').toLowerCase().replace(/\s+/g, '');
+  const brandKey = (r.brand || '').toLowerCase();
+
+  return items.filter(item => {
+    const name = (item.name || '').toLowerCase();
+    const price = item.price || 0;
+
+    // 明らかに無関係な商品カテゴリは除外
+    if (/水着|スイム|swim|ボクサー|トランクス|ジョガー|アンダーウェア|下着/.test(name)) return false;
+    if (/シューズ|スニーカー|shoes|sneaker|靴/.test(name)) return false;
+    if (/ウェア|シャツ|シャツ|tシャツ|t-shirt|パンツ|短パン|スカート|skirt|ジャージ|ジャケット|jacket|パーカー|hoodie/.test(name)) return false;
+    if (/帽子|キャップ|ハット|ヘアバンド|リストバンド|サンバイザー/.test(name)) return false;
+    if (/タオル|towel|靴下|ソックス|socks|サポーター/.test(name)) return false;
+    if (/^バッグ|ラケットバッグ|バックパック|リュック|トートバッグ/.test(name)) return false;
+    if (/オーバーグリップ|over.?grip|リプレイスメントグリップ|replacement.?grip|グリップテープ/.test(name)) return false;
+    if (/振動止め|ダンパー|dampener|エンドキャップ|グロメット|バンパーガード|ステッカー/.test(name)) return false;
+    if (/ストリングのみ|ガットのみ|^ガット|^ストリング|張上げサービス|張替えサービス/.test(name)) return false;
+    if (/ボール$|テニスボール|練習球/.test(name)) return false;
+    if (/ジュニア|kids|キッズ|子供用|子ども用/.test(name)) {
+      // モデル名にjuniorが入ってない=ジュニア用は除外
+      if (!modelKey.includes('junior') && !modelKey.includes('jr')) return false;
+    }
+
+    // 価格でフィルタ：3,000円未満は本体ではない可能性大
+    if (price > 0 && price < 3000) return false;
+
+    // ブランド名は最低限含まれているべき（楽天検索が暴走したケースを排除）
+    if (brandKey && !name.includes(brandKey)) {
+      // 日本語表記の場合の救済（バボラ、ヘッド、ヨネックス、ダンロップ、プリンス、テクニファイバー、クナイスル、ダイアデム、ウィルソン）
+      const jpBrands = {
+        'wilson': 'ウィルソン|ウイルソン',
+        'babolat': 'バボラ',
+        'yonex': 'ヨネックス',
+        'head': 'ヘッド',
+        'dunlop': 'ダンロップ',
+        'prince': 'プリンス',
+        'tecnifibre': 'テクニファイバー',
+        'kneissl': 'クナイスル',
+        'diadem': 'ダイアデム'
+      };
+      const jp = jpBrands[brandKey];
+      if (jp && !new RegExp(jp).test(name)) return false;
+      if (!jp) return false;
+    }
+
+    return true;
+  });
 }
 
 function openRakuten(btn, brand, model) {

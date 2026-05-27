@@ -2224,7 +2224,7 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
         <button class="btn-primary" id="magic-send-btn" onclick="ltSendMagicLink()" style="width:100%">
           認証コードを送信
         </button>
-        <p class="login-note">メールに届く<strong>6桁のコード</strong>または<strong>ログインリンク</strong>のどちらでもログインできます。<br>別の端末でメールを開いた場合は、6桁のコードを入力してください。</p>
+        <p class="login-note">メールに届く<strong>認証コード</strong>または<strong>ログインリンク</strong>のどちらでもログインできます。<br>別の端末でメールを開いた場合は、コードを入力してください。</p>
       </div>
 
       <!-- ステップ2: コード入力 -->
@@ -2232,11 +2232,11 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
         <div class="magic-sent-msg">
           ✉️ <strong id="magic-sent-email">—</strong> に<br>認証コードを送信しました
         </div>
-        <div class="login-label">メールに届いた6桁のコード</div>
+        <div class="login-label">メールに届いた認証コード</div>
         <input class="login-input login-otp-input" id="magic-code" type="text"
-          inputmode="numeric" pattern="[0-9]*" maxlength="6"
-          placeholder="例: 482917" autocomplete="one-time-code"
-          oninput="this.value=this.value.replace(/\D/g,'').slice(0,6); if(this.value.length===6) ltVerifyMagicCode();"
+          inputmode="numeric" pattern="[0-9]*" maxlength="8"
+          placeholder="例: 48291723" autocomplete="one-time-code"
+          oninput="this.value=this.value.replace(/\D/g,'').slice(0,8); if(this.value.length===6 || this.value.length===8) ltVerifyMagicCode();"
           onkeydown="if(event.key==='Enter') ltVerifyMagicCode()">
         <button class="btn-primary" id="magic-verify-btn" onclick="ltVerifyMagicCode()" style="width:100%">
           ログイン
@@ -2247,7 +2247,7 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
         </div>
         <p class="login-note" style="margin-top:14px">
           💡 メールが届かない場合：迷惑メールフォルダもご確認ください。<br>
-          ※ 6桁のコードは1時間有効です。
+          ※ 認証コードは1時間有効です。
         </p>
       </div>
     </div>

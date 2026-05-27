@@ -126,6 +126,11 @@ function closeLoginModal() {
   document.body.style.overflow = '';
   clearLoginError();
   clearLoginSuccess();
+  // ステップをemail入力にリセット
+  const stepCode = document.getElementById('magic-step-code');
+  const stepEmail = document.getElementById('magic-step-email');
+  if (stepCode) stepCode.style.display = 'none';
+  if (stepEmail) stepEmail.style.display = 'block';
 }
 // モーダル背景クリックで閉じる
 document.addEventListener('click', (e) => {
@@ -151,29 +156,95 @@ function switchLoginTab(tab) {
 }
 
 // ================================================================
-// マジックリンク（パスワードレス）ログイン
+// マジックリンク（コード / リンク両対応）
 // ================================================================
-async function ltSendMagicLink() {
-  const email = document.getElementById('magic-email')?.value?.trim();
+let ltMagicEmail = null;
+
+async function ltSendMagicLink(isResend = false) {
+  clearLoginError();
+  clearLoginSuccess();
+
+  // 送り直しの場合は保存済みemailを、初回は入力欄から取得
+  const email = isResend
+    ? ltMagicEmail
+    : document.getElementById('magic-email')?.value?.trim();
+
   if (!email) { showLoginError('メールアドレスを入力してください'); return; }
 
-  const btn = document.getElementById('magic-send-btn');
-  btn.disabled = true;
-  btn.textContent = '送信中...';
+  const btn = isResend
+    ? null
+    : document.getElementById('magic-send-btn');
+  if (btn) { btn.disabled = true; btn.textContent = '送信中...'; }
 
   const { error } = await sb.auth.signInWithOtp({
     email,
-    options: { emailRedirectTo: window.location.origin }
+    options: {
+      emailRedirectTo: window.location.origin,
+      shouldCreateUser: true
+    }
+  });
+
+  if (btn) { btn.disabled = false; btn.textContent = '認証コードを送信'; }
+
+  if (error) {
+    showLoginError(errorToJa(error.message));
+    return;
+  }
+
+  ltMagicEmail = email;
+  // ステップ2に進む
+  document.getElementById('magic-step-email').style.display = 'none';
+  document.getElementById('magic-step-code').style.display = 'block';
+  document.getElementById('magic-sent-email').textContent = email;
+  const codeInput = document.getElementById('magic-code');
+  if (codeInput) { codeInput.value = ''; codeInput.focus(); }
+
+  if (isResend) {
+    showLoginSuccess('コードを再送信しました');
+    setTimeout(clearLoginSuccess, 2500);
+  }
+}
+
+async function ltVerifyMagicCode() {
+  clearLoginError();
+  const code = document.getElementById('magic-code')?.value?.trim();
+  if (!code || code.length !== 6) {
+    showLoginError('6桁のコードを入力してください');
+    return;
+  }
+  if (!ltMagicEmail) {
+    showLoginError('メールアドレスが特定できません。最初からやり直してください');
+    ltMagicBackToEmail();
+    return;
+  }
+
+  const btn = document.getElementById('magic-verify-btn');
+  btn.disabled = true;
+  btn.textContent = '認証中...';
+
+  const { error } = await sb.auth.verifyOtp({
+    email: ltMagicEmail,
+    token: code,
+    type: 'email'
   });
 
   btn.disabled = false;
-  btn.textContent = 'マジックリンクを送信';
+  btn.textContent = 'ログイン';
 
   if (error) {
-    showLoginError(error.message);
-  } else {
-    showLoginSuccess(`✅ ${email} に認証リンクを送りました。\nメールをご確認ください。`);
+    showLoginError(errorToJa(error.message) || 'コードが正しくありません。再度ご確認ください');
+    // コード入力欄を再フォーカス
+    const ci = document.getElementById('magic-code');
+    if (ci) { ci.select(); }
   }
+  // 成功時は onAuthStateChange('SIGNED_IN') で自動的にモーダルが閉じる
+}
+
+function ltMagicBackToEmail() {
+  document.getElementById('magic-step-code').style.display = 'none';
+  document.getElementById('magic-step-email').style.display = 'block';
+  clearLoginError();
+  clearLoginSuccess();
 }
 
 // ================================================================
@@ -325,6 +396,9 @@ function errorToJa(msg) {
     'Email not confirmed': 'メールアドレスが確認されていません。届いたメールをご確認ください',
     'User already registered': 'このメールアドレスはすでに登録されています',
     'Password should be at least 6 characters': 'パスワードは6文字以上にしてください',
+    'Token has expired or is invalid': 'コードの有効期限が切れています。再送信してください',
+    'Invalid token': 'コードが正しくありません',
+    'Email rate limit exceeded': 'メール送信回数が上限です。1時間後に再度お試しください',
   };
   return map[msg] || msg;
 }

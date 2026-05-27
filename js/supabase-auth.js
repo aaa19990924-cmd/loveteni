@@ -28,6 +28,10 @@ window.ltSupabase    = sb;
 // ================================================================
 // 認証状態の初期化（DOMContentLoaded 後に呼ぶ）
 // ================================================================
+// 「明示的なログイン/ログアウト操作」が走った時だけトーストを出すフラグ。
+// ページ表示時のセッション復元では何も出さない。
+let ltUserActionPending = null; // 'signin' | 'signout' | null
+
 async function initAuth() {
   // 既存セッションを復元
   const { data: { session } } = await sb.auth.getSession();
@@ -41,10 +45,17 @@ async function initAuth() {
 
     if (event === 'SIGNED_IN') {
       closeLoginModal();
-      showAuthToast('ログインしました 🎾');
+      // 明示的なログイン操作の直後だけトーストを出す（リロードや別タブ起動では出さない）
+      if (ltUserActionPending === 'signin') {
+        showAuthToast('ログインしました 🎾');
+      }
+      ltUserActionPending = null;
     }
     if (event === 'SIGNED_OUT') {
-      showAuthToast('ログアウトしました');
+      if (ltUserActionPending === 'signout') {
+        showAuthToast('ログアウトしました');
+      }
+      ltUserActionPending = null;
       // マイギアページ表示中ならホームへ
       if (document.getElementById('view-mygear')?.classList.contains('active')) {
         navigate('home');
@@ -222,6 +233,9 @@ async function ltVerifyMagicCode() {
   btn.disabled = true;
   btn.textContent = '認証中...';
 
+  // ユーザー操作によるログインを明示
+  ltUserActionPending = 'signin';
+
   const { error } = await sb.auth.verifyOtp({
     email: ltMagicEmail,
     token: code,
@@ -232,6 +246,7 @@ async function ltVerifyMagicCode() {
   btn.textContent = 'ログイン';
 
   if (error) {
+    ltUserActionPending = null; // 失敗したのでクリア
     showLoginError(errorToJa(error.message) || 'コードが正しくありません。再度ご確認ください');
     // コード入力欄を再フォーカス
     const ci = document.getElementById('magic-code');
@@ -259,12 +274,18 @@ async function ltSignInWithPassword() {
   btn.disabled = true;
   btn.textContent = 'ログイン中...';
 
+  // ユーザー操作によるログインを明示
+  ltUserActionPending = 'signin';
+
   const { error } = await sb.auth.signInWithPassword({ email, password });
 
   btn.disabled = false;
   btn.textContent = 'ログイン';
 
-  if (error) showLoginError(errorToJa(error.message));
+  if (error) {
+    ltUserActionPending = null;
+    showLoginError(errorToJa(error.message));
+  }
 }
 
 async function ltSignUpWithPassword() {
@@ -296,6 +317,7 @@ async function ltSignUpWithPassword() {
 // Google OAuth ログイン
 // ================================================================
 async function ltSignInWithGoogle() {
+  ltUserActionPending = 'signin';
   const { error } = await sb.auth.signInWithOAuth({
     provider: 'google',
     options: {
@@ -303,7 +325,10 @@ async function ltSignInWithGoogle() {
       queryParams: { prompt: 'select_account' }
     }
   });
-  if (error) showLoginError(error.message);
+  if (error) {
+    ltUserActionPending = null;
+    showLoginError(error.message);
+  }
 }
 
 // ================================================================
@@ -311,6 +336,7 @@ async function ltSignInWithGoogle() {
 // ================================================================
 async function ltSignOut() {
   closeAuthMenu();
+  ltUserActionPending = 'signout';
   await sb.auth.signOut();
 }
 

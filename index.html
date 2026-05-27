@@ -822,13 +822,20 @@ section {
 .racket-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 32px 24px;
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+  background: white;
 }
 .racket-card {
   cursor: pointer;
   transition: all 0.25s;
+  padding: 20px 16px 24px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: white;
 }
-.racket-card:hover { transform: translateY(-4px); }
+.racket-card:hover { background: var(--cream); }
+.racket-card:hover .racket-img { background: white; }
 .racket-img {
   width: 100%;
   aspect-ratio: 4/5;
@@ -840,7 +847,6 @@ section {
   margin-bottom: 14px;
   transition: background 0.25s;
 }
-.racket-card:hover .racket-img { background: var(--silver); }
 .racket-img img {
   width: 100%;
   height: 100%;
@@ -972,20 +978,6 @@ section {
   min-width: 180px;
   margin-bottom: 0;
 }
-.detail-cta-rakuten {
-  background: #BF0000;
-  color: white;
-}
-.detail-cta-rakuten:hover {
-  background: #8B0000;
-}
-.detail-cta-amazon {
-  background: #FF9900;
-  color: #111;
-}
-.detail-cta-amazon:hover {
-  background: #E88800;
-}
 .detail-cta-btn {
   display: block;
   width: 100%;
@@ -1000,6 +992,30 @@ section {
   transition: all 0.2s;
 }
 .detail-cta-btn:hover { background: var(--accent); }
+
+/* === Rakuten / Amazon CTA — .detail-cta-btn より下に置いて上書き === */
+.detail-cta-rakuten {
+  background: #BF0000 !important;
+  color: white !important;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+.detail-cta-rakuten:hover { background: #8B0000 !important; }
+
+.detail-cta-amazon {
+  background: #FF9900 !important;
+  color: #111 !important;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  border: 2px solid #FF9900;
+  box-shadow: 0 2px 8px rgba(255, 153, 0, 0.25);
+}
+.detail-cta-amazon:hover {
+  background: #E88800 !important;
+  border-color: #E88800;
+  box-shadow: 0 4px 14px rgba(255, 153, 0, 0.4);
+  transform: translateY(-1px);
+}
 
 /* ===== Rakuten results section ===== */
 .rakuten-section { background: var(--cream); padding: 56px; }
@@ -3031,23 +3047,23 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
 // ===== BRAND DATA =====
 const BRAND_INFO = {
   'Wilson': { desc: 'アメリカ・シカゴ発祥の世界最大のテニスブランド。フェデラー、マレー、セリーナ・ウィリアムズら多くのトップ選手が愛用。PRO STAFFはテニス史上最高峰の一本として知られる。', color: '#e74c3c', tagline: 'AMERICAN ICON',
-    series: [{name:'CLASH',desc:'しなやかで柔らかい打感'},{name:'BLADE',desc:'しなりとコントロールの代名詞'},{name:'SHIFT',desc:'スピン特化の新世代'},{name:'PRO STAFF',desc:'精密コントロールの最高峰'},{name:'ULTRA',desc:'パワーとスピンの融合'},{name:'RF',desc:'フェデラー監修モデル'}]},
+    series: [{name:'RF',desc:'フェデラー監修モデル'},{name:'BLADE',desc:'しなりとコントロールの代名詞'},{name:'CLASH',desc:'しなやかで柔らかい打感'},{name:'ULTRA',desc:'パワーとスピンの融合'},{name:'PRO STAFF',desc:'精密コントロールの最高峰'},{name:'SHIFT',desc:'スピン特化の新世代'}]},
   'Babolat': { desc: 'フランス・リヨン発祥、1875年創業の世界最古のテニスブランド。ナダル、アルカラスらが愛用するPure Aeroが世界的に人気を誇る。', color: '#27ae60', tagline: 'FRENCH HERITAGE',
-    series: [{name:'Pure Strike',desc:'コントロールと精度重視'},{name:'Pure Aero',desc:'スピン系の代名詞'},{name:'Pure Drive',desc:'パワーとスピンの黄金スペック'},{name:'Evo Aero',desc:'快適性重視の中級者向け'}]},
+    series: [{name:'Pure Aero',desc:'スピン系の代名詞・2026新作'},{name:'Pure Drive',desc:'パワーとスピンの黄金スペック'},{name:'Pure Strike',desc:'コントロールと精度重視'},{name:'Evo Aero',desc:'快適性重視の中級者向け'}]},
   'YONEX': { desc: '新潟県三条市発祥の日本代表スポーツブランド。大坂なおみ、西岡良仁らが使用。日本人の体型に合わせた設計で高い評価。', color: '#8e44ad', tagline: 'JAPANESE PRECISION',
-    series: [{name:'EZONE',desc:'広いスウィートエリア'},{name:'VCORE',desc:'スピン系の最高峰'},{name:'PERCEPT',desc:'しなりと振動吸収を両立'},{name:'ASTREL',desc:'軽量で扱いやすい'},{name:'MUSE',desc:'2026年新作'}]},
-  'HEAD': { desc: 'オーストリア発祥の世界トップブランド。ジョコビッチ、ズベレフらが使用。Speedシリーズはジョコビッチ愛用で世界的に有名。', color: '#2c3e50', tagline: 'AUSTRIAN TRADITION',
-    series: [{name:'Speed',desc:'ジョコビッチ使用モデル'},{name:'Gravity',desc:'バランス型'},{name:'Radical',desc:'コントロール性に優れた'},{name:'Extreme',desc:'スピン系上級者向け'},{name:'Prestige',desc:'コントロール最重視'},{name:'Boom',desc:'スピン＆パワー新シリーズ'}]},
+    series: [{name:'EZONE',desc:'広いスウィートエリア・大坂なおみ使用'},{name:'VCORE',desc:'スピン系の最高峰・2026新作'},{name:'PERCEPT',desc:'しなりと振動吸収を両立'},{name:'ASTREL',desc:'軽量で扱いやすい'}]},
+  'HEAD': { desc: 'オーストリア発祥の世界トップブランド。ジョコビッチ、シナーらが使用。Speedシリーズは2026年モデルでHy-Bor素材を搭載。', color: '#2c3e50', tagline: 'AUSTRIAN TRADITION',
+    series: [{name:'Speed',desc:'シナー使用・2026新作Hy-Bor搭載'},{name:'Boom',desc:'スピン＆パワー・2026新作'},{name:'Radical',desc:'コントロール性に優れた'},{name:'Gravity',desc:'バランス型'},{name:'Extreme',desc:'スピン系上級者向け'},{name:'Prestige',desc:'コントロール最重視'}]},
   'DUNLOP': { desc: 'イギリス発祥の老舗ブランド。プレースタイルに合わせた明確なシリーズ分けが特徴で、初心者から上級者まで幅広くカバー。', color: '#e67e22', tagline: 'BRITISH LEGACY',
-    series: [{name:'CX',desc:'コントロール重視'},{name:'SX',desc:'スピン重視'},{name:'FX',desc:'パワー重視'},{name:'LX',desc:'最大パワー志向'}]},
+    series: [{name:'FX',desc:'パワー重視・2026新作'},{name:'SX',desc:'スピン重視'},{name:'CX',desc:'コントロール重視'},{name:'LX',desc:'最大パワー志向'}]},
   'Tecnifibre': { desc: 'フランス発祥のブランド。TF40はコントロール系の最高峰として知られ、ツアープロからの信頼が厚い。', color: '#16a085', tagline: 'FRENCH ENGINEERING',
-    series: [{name:'TF40',desc:'コントロール最重視'},{name:'T-FIGHT',desc:'バランス系'},{name:'TF-X1',desc:'オールラウンド'},{name:'FIRE',desc:'2026年新作'},{name:'TEMPO',desc:'快適性重視'}]},
+    series: [{name:'T-FIGHT',desc:'バランス系'},{name:'TF40',desc:'コントロール最重視・メドベージェフ使用'},{name:'TF-X1',desc:'オールラウンド'},{name:'TEMPO',desc:'快適性重視・シフィオンテク使用'}]},
   'Prince': { desc: 'アメリカ発祥のブランド。O3（オースリー）テクノロジーなど革新的な技術で知られる。日本ではグローブライドが販売を担当。', color: '#2980b9', tagline: 'AMERICAN INNOVATION',
-    series: [{name:'PHANTOM GRAPHITE',desc:'伝説のグラファイト復活'},{name:'PHANTOM',desc:'究極のオールラウンド'},{name:'TOUR',desc:'競技向けスピード'},{name:'BEAST',desc:'攻撃型モデル'},{name:'EMBLEM',desc:'最強パワーシリーズ'}]},
+    series: [{name:'PHANTOM GRAPHITE',desc:'伝説のグラファイト復活'},{name:'PHANTOM',desc:'究極のオールラウンド'},{name:'TOUR',desc:'競技向けスピード・2026新作'},{name:'BEAST',desc:'攻撃型モデル'},{name:'EMBLEM',desc:'最強パワーシリーズ'}]},
   'Kneissl': { desc: 'オーストリア発祥の老舗ブランド。シンプルながら高品質なラケットが特徴。PRIME STARシリーズは個性的なラインアップ。', color: '#c0392b', tagline: 'AUSTRIAN HERITAGE',
     series: [{name:'PRIME STAR',desc:'高品質・シンプルデザイン'}]},
   'DIADEM': { desc: 'アメリカ発祥の新興ブランド。世界ランク上位のElina Svitolinaが契約選手。革新的な設計が特徴。', color: '#d35400', tagline: 'NEW WAVE',
-    series: [{name:'AXIS',desc:'スビトリナ使用'},{name:'ELEVATE',desc:'スピン＆コントロール'},{name:'NOVA',desc:'バランス型'},{name:'DREAMER',desc:'快適性重視'}]}
+    series: [{name:'AXIS',desc:'スビトリナ使用'},{name:'ELEVATE',desc:'スピン＆コントロール'},{name:'NOVA',desc:'バランス型'}]}
 };
 const BRAND_LIST = Object.keys(BRAND_INFO);
 
@@ -3321,35 +3337,14 @@ function selectBrand(brand) {
 }
 
 function getRacketsBySeries(brand, series) {
-  // ブランド情報から「他のシリーズ名一覧」を取得（誤マッチ防止用）
-  const brandInfo = BRAND_INFO[brand];
-  const otherSeriesNames = brandInfo
-    ? brandInfo.series.map(s => s.name).filter(n => n !== series)
-    : [];
-
+  // series フィールドが付いているデータは完全一致のみ採用（最も厳密）
+  // これにより PHANTOM 検索で PHANTOM GRAPHITE が混ざる問題を完全に解消
   return allRackets.filter(r => {
     if (r.brand !== brand) return false;
-
-    // ① series フィールドが付いていれば完全一致のみ採用（最も厳密）
-    if (r.series) {
-      return r.series === series;
-    }
-
-    // ② 互換: series フィールドが無い古いデータはモデル名で部分一致
+    if (r.series) return r.series === series;
+    // 互換: series 未付与の古いデータがあった場合のフォールバック（基本的にはここに来ない）
     const norm = (s) => (s || '').toLowerCase().replace(/[\s\-]/g, '');
-    const sl = norm(series);
-    const ml = norm(r.model);
-
-    if (!ml.includes(sl)) return false;
-
-    // ③ ただし、より具体的な他シリーズ名にも該当する場合は除外
-    //    (例: 「PHANTOM」検索で「PHANTOM GRAPHITE」を除外)
-    //    sl より長い別シリーズ名がモデルに含まれていればそっち優先
-    const moreSpecific = otherSeriesNames.some(other => {
-      const ol = norm(other);
-      return ol.length > sl.length && ol.includes(sl) && ml.includes(ol);
-    });
-    return !moreSpecific;
+    return norm(r.model).includes(norm(series));
   });
 }
 
@@ -3746,11 +3741,11 @@ async function loadRakutenResults(r) {
       return;
     }
 
-    // ★ 表示前に「ラケット本体らしくない」商品を除外
+    // ★ 表示前に「ラケット本体らしくない」商品を強力に除外
     const filteredItems = filterRacketItems(data.items, r);
     const itemsToShow = filteredItems.length > 0 ? filteredItems : data.items;
 
-    // 詳細上部の画像は pickBestMatch で最も信頼できる1点を選ぶ
+    // 詳細上部の画像は pickBestMatch を通して最良の1点を選ぶ
     const bestForImage = r.janCode
       ? (itemsToShow[0] || data.items[0])
       : (pickBestMatch(r, itemsToShow) || itemsToShow[0] || data.items[0]);
@@ -3773,52 +3768,50 @@ async function loadRakutenResults(r) {
   } catch(e) { c.innerHTML = '<div class="loading">読み込みに失敗しました</div>'; }
 }
 
-// 楽天結果から「ラケット本体らしくない」商品を除外する
+// 楽天結果から「ラケット本体らしくない」商品を除外
 function filterRacketItems(items, r) {
   const modelKey = (r.model || '').toLowerCase().replace(/\s+/g, '');
   const brandKey = (r.brand || '').toLowerCase();
+  const jpBrands = {
+    'wilson': /ウィルソン|ウイルソン|wilson/i,
+    'babolat': /バボラ|babolat/i,
+    'yonex': /ヨネックス|yonex/i,
+    'head': /ヘッド|head\s/i,
+    'dunlop': /ダンロップ|dunlop/i,
+    'prince': /プリンス|prince/i,
+    'tecnifibre': /テクニファイバー|tecnifibre/i,
+    'kneissl': /クナイスル|kneissl/i,
+    'diadem': /ダイアデム|diadem/i,
+  };
+  const brandRe = jpBrands[brandKey];
 
   return items.filter(item => {
     const name = (item.name || '').toLowerCase();
     const price = item.price || 0;
 
     // 明らかに無関係な商品カテゴリは除外
-    if (/水着|スイム|swim|ボクサー|トランクス|ジョガー|アンダーウェア|下着/.test(name)) return false;
+    if (/水着|スイム|swim|ボクサー|トランクス|アンダーウェア|下着|スパッツ/.test(name)) return false;
     if (/シューズ|スニーカー|shoes|sneaker|靴/.test(name)) return false;
-    if (/ウェア|シャツ|シャツ|tシャツ|t-shirt|パンツ|短パン|スカート|skirt|ジャージ|ジャケット|jacket|パーカー|hoodie/.test(name)) return false;
-    if (/帽子|キャップ|ハット|ヘアバンド|リストバンド|サンバイザー/.test(name)) return false;
+    if (/ウェア|tシャツ|t-shirt|ポロシャツ|パンツ|短パン|スカート|skirt|ジャージ|ジャケット|jacket|パーカー|hoodie/.test(name)) return false;
+    if (/帽子|キャップ|サンバイザー|ハット|ヘアバンド|リストバンド/.test(name)) return false;
     if (/タオル|towel|靴下|ソックス|socks|サポーター/.test(name)) return false;
-    if (/^バッグ|ラケットバッグ|バックパック|リュック|トートバッグ/.test(name)) return false;
+    if (/^バッグ|ラケットバッグ|バックパック|リュック|トートバッグ|ボストン/.test(name)) return false;
     if (/オーバーグリップ|over.?grip|リプレイスメントグリップ|replacement.?grip|グリップテープ/.test(name)) return false;
     if (/振動止め|ダンパー|dampener|エンドキャップ|グロメット|バンパーガード|ステッカー/.test(name)) return false;
-    if (/ストリングのみ|ガットのみ|^ガット|^ストリング|張上げサービス|張替えサービス/.test(name)) return false;
-    if (/ボール$|テニスボール|練習球/.test(name)) return false;
-    if (/ジュニア|kids|キッズ|子供用|子ども用/.test(name)) {
-      // モデル名にjuniorが入ってない=ジュニア用は除外
-      if (!modelKey.includes('junior') && !modelKey.includes('jr')) return false;
+    if (/ストリングのみ|ガットのみ|張上げサービス|張替えサービス|張替工賃/.test(name)) return false;
+    if (/^ガット|^ストリング/.test(name) && !/ラケット|racket|racquet/.test(name)) return false;
+    if (/^ボール|テニスボール|練習球/.test(name)) return false;
+
+    // ジュニア用ラケットは現行モデルがジュニア系でない限り除外
+    if (/ジュニア|kids|キッズ|子供用|子ども用|jr\b/i.test(name)) {
+      if (!/junior|jr/i.test(modelKey)) return false;
     }
 
     // 価格でフィルタ：3,000円未満は本体ではない可能性大
     if (price > 0 && price < 3000) return false;
 
-    // ブランド名は最低限含まれているべき（楽天検索が暴走したケースを排除）
-    if (brandKey && !name.includes(brandKey)) {
-      // 日本語表記の場合の救済（バボラ、ヘッド、ヨネックス、ダンロップ、プリンス、テクニファイバー、クナイスル、ダイアデム、ウィルソン）
-      const jpBrands = {
-        'wilson': 'ウィルソン|ウイルソン',
-        'babolat': 'バボラ',
-        'yonex': 'ヨネックス',
-        'head': 'ヘッド',
-        'dunlop': 'ダンロップ',
-        'prince': 'プリンス',
-        'tecnifibre': 'テクニファイバー',
-        'kneissl': 'クナイスル',
-        'diadem': 'ダイアデム'
-      };
-      const jp = jpBrands[brandKey];
-      if (jp && !new RegExp(jp).test(name)) return false;
-      if (!jp) return false;
-    }
+    // ブランド名チェック（楽天検索が暴走したケースを排除）
+    if (brandRe && !brandRe.test(name)) return false;
 
     return true;
   });

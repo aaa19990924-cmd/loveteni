@@ -1049,12 +1049,51 @@ section {
 .rakuten-item-name {
   font-size: 11px;
   margin-bottom: 6px;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
   line-height: 1.5;
-  min-height: 30px;
+  word-break: break-word;
+}
+.rakuten-item-point {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: #BF0000;
+  margin-bottom: 8px;
+}
+.offer-min {
+  display: inline-block;
+  margin-left: 6px;
+  padding: 1px 6px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+  background: #BF0000;
+  border-radius: 3px;
+  vertical-align: middle;
+}
+.offer-sort {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.offer-sort-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  padding: 5px 12px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--mute);
+  border-radius: 4px;
+  cursor: pointer;
+}
+.offer-sort-btn.on {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+.rakuten-note {
+  font-size: 10px;
+  color: var(--mute);
+  margin-bottom: 12px;
+  line-height: 1.5;
 }
 .rakuten-item-shop {
   font-size: 10px;
@@ -2502,7 +2541,7 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
           <div class="toolbar" style="margin-top:32px">
             <div class="toolbar-info"></div>
             <select class="sort-select" onchange="sortRackets(this.value)">
-              <option value="default">おすすめ順</option>
+              <option value="default">ーー</option>
               <option value="weight-asc">重量 軽い順</option>
               <option value="weight-desc">重量 重い順</option>
               <option value="headSize-asc">面積 小さい順</option>
@@ -3681,6 +3720,46 @@ function loadCardImg(r) {
   loadOneImage(r);
 }
 
+// ===== 楽天オファー表示（安い順/ポイント順・最安バッジ・ポイント還元額） =====
+let _rkOffers = { items: [], header: '🏪 楽天市場', container: null, sort: 'price-asc' };
+function offerPoint(it){ return Math.floor((it.price||0) * (it.pointRate||1) / 100); }
+function renderRkOffers(){
+  const st = _rkOffers;
+  if(!st.container) return;
+  let s = st.items.slice();
+  if(st.sort==='point-desc') s.sort((a,b)=> offerPoint(b)-offerPoint(a) || (a.price||0)-(b.price||0));
+  else s.sort((a,b)=> (a.price||0)-(b.price||0)); // 安い順（デフォルト）
+  const prices = s.map(i=>i.price||0).filter(p=>p>0);
+  const minPrice = prices.length ? Math.min(...prices) : 0;
+  const header = `<div style="font-size:11px;color:var(--accent);margin-bottom:12px;font-family:'DM Sans',sans-serif;letter-spacing:0.1em">${st.header}</div>`;
+  const toggle = `<div class="offer-sort">
+    <button class="offer-sort-btn ${st.sort!=='point-desc'?'on':''}" onclick="setRkSort('price-asc')">安い順</button>
+    <button class="offer-sort-btn ${st.sort==='point-desc'?'on':''}" onclick="setRkSort('point-desc')">ポイント順</button>
+  </div>`;
+  const note = `<div class="rakuten-note">※ポイントは店舗の基本付与分の目安です。スーパーSALEの買い回りやSPU等の上乗せは別途加算されます。</div>`;
+  const grid = s.slice(0,8).map(it=>{
+    const pt = offerPoint(it);
+    const badge = (it.price && it.price===minPrice) ? '<span class="offer-min">最安</span>' : '';
+    const img = it.imageUrl ? `<img src="${it.largeImageUrl||it.imageUrl}" loading="lazy">` : '<div style="font-size:30px;opacity:0.15">🎾</div>';
+    return `<div class="rakuten-item">
+      <div class="rakuten-item-img">${img}</div>
+      <div class="rakuten-item-info">
+        <div class="rakuten-item-name">${it.name}</div>
+        <div class="rakuten-item-shop">${it.shopName}</div>
+        <div class="rakuten-item-price">¥${(it.price||0).toLocaleString()}${badge}</div>
+        <div class="rakuten-item-point">ポイント +${pt.toLocaleString()}</div>
+        <a href="${it.itemUrl}" target="_blank" class="rakuten-item-btn">楽天で見る</a>
+      </div>
+    </div>`;
+  }).join('');
+  st.container.innerHTML = header + toggle + note + `<div class="rakuten-grid">${grid}</div>`;
+}
+function setRkSort(by){ _rkOffers.sort = by; renderRkOffers(); }
+function showRkOffers(container, items, headerLabel){
+  _rkOffers = { items: items||[], header: headerLabel||'🏪 楽天市場', container: container, sort: 'price-asc' };
+  renderRkOffers();
+}
+
 function sortRackets(by) {
   let s = [...filteredRackets];
   if (by==='weight-asc') s.sort((a,b)=>a.weight-b.weight);
@@ -3755,16 +3834,7 @@ async function loadRakutenResults(r) {
     }
     const hasProspo = itemsToShow.some(i => i.isProSports);
     const headerLabel = hasProspo ? '🏪 PRO SPORTS優先表示' : '🏪 楽天市場';
-    c.innerHTML = `<div style="font-size:11px;color:var(--accent);margin-bottom:12px;font-family:'DM Sans',sans-serif;letter-spacing:0.1em">${headerLabel}</div><div class="rakuten-grid">${itemsToShow.slice(0,8).map(item => `
-      <div class="rakuten-item">
-        <div class="rakuten-item-img">${item.imageUrl ? `<img src="${item.largeImageUrl||item.imageUrl}" loading="lazy">` : '<div style="font-size:30px;opacity:0.15">🎾</div>'}</div>
-        <div class="rakuten-item-info">
-          <div class="rakuten-item-name">${item.name}</div>
-          <div class="rakuten-item-shop">${item.shopName}</div>
-          <div class="rakuten-item-price">¥${item.price.toLocaleString()}</div>
-          <a href="${item.itemUrl}" target="_blank" class="rakuten-item-btn">楽天で見る</a>
-        </div>
-      </div>`).join('')}</div>`;
+    showRkOffers(c, itemsToShow, headerLabel);
   } catch(e) { c.innerHTML = '<div class="loading">読み込みに失敗しました</div>'; }
 }
 
@@ -4190,16 +4260,7 @@ async function loadRakutenResultsGeneric(item, resultsId, imgAreaId, suffix) {
     }
     const hasProspo = data.items.some(i => i.isProSports);
     const headerLabel = hasProspo ? '🏪 PRO SPORTS優先表示' : '🏪 楽天市場';
-    c.innerHTML = `<div style="font-size:11px;color:var(--accent);margin-bottom:12px;font-family:'DM Sans',sans-serif;letter-spacing:0.1em">${headerLabel}</div><div class="rakuten-grid">${data.items.slice(0,8).map(it => `
-      <div class="rakuten-item">
-        <div class="rakuten-item-img">${it.imageUrl ? `<img src="${it.largeImageUrl||it.imageUrl}" loading="lazy">` : '<div style="font-size:30px;opacity:0.15">🎾</div>'}</div>
-        <div class="rakuten-item-info">
-          <div class="rakuten-item-name">${it.name}</div>
-          <div class="rakuten-item-shop">${it.shopName}</div>
-          <div class="rakuten-item-price">¥${it.price.toLocaleString()}</div>
-          <a href="${it.itemUrl}" target="_blank" class="rakuten-item-btn">楽天で見る</a>
-        </div>
-      </div>`).join('')}</div>`;
+    showRkOffers(c, data.items, headerLabel);
   } catch(e) { c.innerHTML = '<div class="loading">読み込みに失敗しました</div>'; }
 }
 

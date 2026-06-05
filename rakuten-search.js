@@ -90,9 +90,12 @@ export async function onRequest(context) {
   }
 
   try {
-    // 品番は末尾のグリップサイズ表記(U1/U2等)を外した「コア品番」で楽天検索する
-    const janCore = janCode ? janCode.toUpperCase().replace(/[\s\-]/g, '').replace(/U\d*$/, '') : '';
-    const searchKey = janCode ? janCore : keyword;
+    // 品番の末尾「サイズ数字」だけ落とした検索用コア(例: WR173011U1 → WR173011U)で楽天検索
+    // 楽天の商品名には末尾Uの形(WR173011U)で載っていることが多いため
+    const janNorm = janCode ? janCode.toUpperCase().replace(/[\s\-]/g, '') : '';
+    const janSearch = janNorm.replace(/(U)\d+$/, '$1'); // 検索用: 末尾Uを残す
+    const janBare = janNorm.replace(/U\d*$/, '');        // 照合/キーワード除去用: Uなし
+    const searchKey = janCode ? janSearch : keyword;
     const result = await runSearch(searchKey);
     if (result.error) {
       return new Response(JSON.stringify({
@@ -113,8 +116,8 @@ export async function onRequest(context) {
       } else if (keyword) {
         // 品番(WR173011 / WR173011U1 等)をキーワードから除去 → 名前だけで検索
         fallbackKey = keyword
-          .replace(new RegExp(janCode.toUpperCase().replace(/[\s\-]/g, ''), 'ig'), '')
-          .replace(janCore ? new RegExp(janCore, 'ig') : /\b\B/, '')
+          .replace(new RegExp(janNorm, 'ig'), '')
+          .replace(janBare ? new RegExp(janBare, 'ig') : /\b\B/, '')
           .replace(/\s+/g, ' ').trim() || keyword;
         const fb = await runSearch(fallbackKey);
         if (!fb.error && fb.items.length) {

@@ -17,7 +17,27 @@ function janCodeMatches(janCode, itemName) {
   return normName.includes(normJan) || normName.includes(janCore);
 }
 
-// Cloudflare Pages Functionsのエクスポート形式
+// 楽天APIの1件をフロント用に整形（ポイント還元額を含む）
+function mapItem(i) {
+  const imageUrl = (i.mediumImageUrls && i.mediumImageUrls[0]) || '';
+  const price = i.itemPrice || 0;
+  const pointRate = i.pointRate || 1; // 店舗の基本ポイント倍率（キャンペーン上乗せは含まれない）
+  return {
+    name: i.itemName || '',
+    price: price,
+    pointRate: pointRate,
+    point: Math.floor(price * pointRate / 100), // 基本ポイント付与の目安（1%×倍率）
+    itemUrl: i.affiliateUrl || i.itemUrl || '',
+    shopName: i.shopName || '',
+    shopCode: i.shopCode || '',
+    imageUrl: imageUrl,
+    largeImageUrl: imageUrl.replace(/_ex=\d+x\d+/, '_ex=400x400') || imageUrl,
+    reviewCount: i.reviewCount || 0,
+    reviewAverage: i.reviewAverage || 0,
+    isProSports: (i.shopCode || '').toLowerCase() === 'prospo'
+  };
+}
+
 export async function onRequest(context) {
   const { request } = context;
   const url = new URL(request.url);
@@ -36,9 +56,9 @@ export async function onRequest(context) {
 
   const keyword = params.get('keyword') || 'テニスラケット';
   const janCode = params.get('janCode') || '';
-  const searchKey = janCode || keyword;
 
-  try {
+  // 指定キーで楽天検索を実行し、整形済みitems（またはerror）を返す
+  async function runSearch(searchKey) {
     const urlParams = new URLSearchParams({
       applicationId: APP_ID,
       accessKey: ACCESS_KEY,
@@ -49,7 +69,6 @@ export async function onRequest(context) {
       formatVersion: '2',
       imageFlag: '1'
     });
-
     const apiUrl = `${API_ENDPOINT}?${urlParams.toString()}`;
     const response = await fetch(apiUrl, {
       method: 'GET',
@@ -61,60 +80,47 @@ export async function onRequest(context) {
         'User-Agent': 'Mozilla/5.0 (Linux; Cloudflare Workers) LoveteniBot/1.0'
       }
     });
-
     const responseText = await response.text();
-
-    if (!response.ok) {
-      return new Response(JSON.stringify({
-        items: [], count: 0, searchKey,
-        error: `HTTP ${response.status}`,
-        errorDetail: responseText.substring(0, 300)
-      }), { status: 200, headers });
-    }
-
+    if (!response.ok) return { error: `HTTP ${response.status}`, detail: responseText.substring(0, 300), items: [] };
     let data;
     try { data = JSON.parse(responseText); }
-    catch(e) {
+    catch (e) { return { error: 'Invalid JSON', detail: responseText.substring(0, 300), items: [] }; }
+    if (data.error) return { error: data.error, detail: data.error_description || '', items: [] };
+    return { items: (data.Items || []).map(mapItem) };
+  }
+
+  try {
+    const searchKey = janCode || keyword;
+    const result = await runSearch(searchKey);
+    if (result.error) {
       return new Response(JSON.stringify({
-        items: [], count: 0, searchKey,
-        error: 'Invalid JSON',
-        errorDetail: responseText.substring(0, 300)
+        items: [], count: 0, searchKey, error: result.error, errorDetail: result.detail
       }), { status: 200, headers });
     }
 
-    if (data.error) {
-      return new Response(JSON.stringify({
-        items: [], count: 0, searchKey,
-        error: data.error,
-        errorDetail: data.error_description || ''
-      }), { status: 200, headers });
-    }
-
-    // 整形
-    let items = (data.Items || []).map(i => {
-      const imageUrl = (i.mediumImageUrls && i.mediumImageUrls[0]) || '';
-      return {
-        name: i.itemName || '',
-        price: i.itemPrice || 0,
-        itemUrl: i.affiliateUrl || i.itemUrl || '',
-        shopName: i.shopName || '',
-        shopCode: i.shopCode || '',
-        imageUrl: imageUrl,
-        largeImageUrl: imageUrl.replace(/_ex=\d+x\d+/, '_ex=400x400') || imageUrl,
-        reviewCount: i.reviewCount || 0,
-        reviewAverage: i.reviewAverage || 0,
-        isProSports: (i.shopCode || '').toLowerCase() === 'prospo'
-      };
-    });
-
+    let items = result.items;
     const rawCount = items.length;
+    let fallback = false;
 
-    // 品番指定があれば商品名一致フィルタ
+    // 品番指定があれば商品名一致でフィルタ。0件ならキーワード検索にフォールバック
     if (janCode) {
-      items = items.filter(item => janCodeMatches(janCode, item.name));
+      const filtered = items.filter(item => janCodeMatches(janCode, item.name));
+      if (filtered.length > 0) {
+        items = filtered;
+      } else if (keyword && keyword !== janCode) {
+        const fb = await runSearch(keyword);
+        if (!fb.error && fb.items.length) {
+          items = fb.items;
+          fallback = true;
+        } else {
+          items = [];
+        }
+      } else {
+        items = [];
+      }
     }
 
-    // prospo商品を先頭に並べる
+    // prospo商品を先頭に（フロント側で安い順/ポイント順に再ソートする保険）
     items.sort((a, b) => {
       if (a.isProSports && !b.isProSports) return -1;
       if (!a.isProSports && b.isProSports) return 1;
@@ -122,19 +128,12 @@ export async function onRequest(context) {
     });
 
     return new Response(JSON.stringify({
-      items,
-      count: items.length,
-      rawCount,
-      searchKey,
-      janCode,
-      filtered: !!janCode
+      items, count: items.length, rawCount, searchKey, janCode, filtered: !!janCode, fallback
     }), { status: 200, headers });
 
   } catch (error) {
     return new Response(JSON.stringify({
-      items: [], count: 0, searchKey,
-      error: 'exception',
-      errorDetail: error.message
+      items: [], count: 0, error: 'exception', errorDetail: error.message
     }), { status: 200, headers });
   }
 }

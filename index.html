@@ -3573,6 +3573,22 @@ function imgCacheKey(r) {
 }
 
 // シリーズ画像取得（一括検索→品番マッチ振り分け、超高速版）
+// ===== 楽天APIレート制限（429対策）：全リクエストを直列化し最小間隔で送信 =====
+let _rkQueue = Promise.resolve();
+let _rkLastTime = 0;
+const RK_MIN_GAP = 1100; // ms（無料APIの約1req/秒に合わせる）
+function rakutenFetch(url) {
+  const run = async () => {
+    const wait = _rkLastTime + RK_MIN_GAP - Date.now();
+    if (wait > 0) await new Promise(res => setTimeout(res, wait));
+    _rkLastTime = Date.now();
+    return fetch(url);
+  };
+  const p = _rkQueue.then(run, run);
+  _rkQueue = p.then(() => {}, () => {});
+  return p;
+}
+
 async function loadSeriesImages(brand, series, rackets, retry = 0) {
   // まずキャッシュ済みを即表示
   rackets.forEach(r => {
@@ -3591,7 +3607,7 @@ async function loadSeriesImages(brand, series, rackets, retry = 0) {
   if (!items) {
     try {
       const keyword = `${brand} ${series}`;
-      const res = await fetch(`/api/rakuten-search?keyword=${encodeURIComponent(keyword)}`);
+      const res = await rakutenFetch(`/api/rakuten-search?keyword=${encodeURIComponent(keyword)}`);
       if (res.status === 429 || res.status === 500) {
         if (retry < 3) setTimeout(() => loadSeriesImages(brand, series, rackets, retry + 1), 2000 + Math.random() * 1000);
         return;
@@ -3696,7 +3712,7 @@ async function loadOneImage(r, retry = 0) {
       url = `/api/rakuten-search?keyword=${encodeURIComponent(keyword)}`;
     }
 
-    const res = await fetch(url);
+    const res = await rakutenFetch(url);
     if (res.status === 429 || res.status === 500) {
       if (retry < 3) setTimeout(() => loadOneImage(r, retry + 1), 2000 + Math.random() * 1000);
       return;
@@ -3791,7 +3807,7 @@ function selectRacket(id) {
   if (!isHistoryNav) history.pushState({ view: 'detail', racketId: id }, '', `#detail/${id}`);
 }
 
-async function loadRakutenResults(r) {
+async function loadRakutenResults(r, retry = 0) {
   const c = document.getElementById('rakuten-results');
   const cacheKey = imgCacheKey(r);
   const kw = r.searchKeyword || `${r.brand} ${r.model}`;
@@ -3811,8 +3827,15 @@ async function loadRakutenResults(r) {
     } else {
       fetchUrl = `/api/rakuten-search?keyword=${encodeURIComponent(kw)}`;
     }
-    const res = await fetch(fetchUrl);
+    const res = await rakutenFetch(fetchUrl);
     const data = await res.json();
+
+    // レート制限(429)やサーバエラー(500)は少し待って自動リトライ
+    if (data.error && /429|500/.test(String(data.error)) && retry < 4) {
+      c.innerHTML = '<div class="loading"><span class="spin"></span>楽天が混雑中…再試行します</div>';
+      setTimeout(() => loadRakutenResults(r, retry + 1), 1500 + retry * 1000 + Math.random() * 600);
+      return;
+    }
 
     if (!data.items || !data.items.length) {
       const errMsg = data.error ? `（${data.error}）` : '';
@@ -4198,7 +4221,7 @@ async function loadItemImage(item, idPrefix, suffix) {
   if (cached) { updateItemImg(item, idPrefix, cached); return; }
   try {
     const kw = (item.searchKeyword || `${item.brand} ${item.model}`) + ' ' + suffix;
-    const res = await fetch(`/api/rakuten-search?keyword=${encodeURIComponent(kw)}`);
+    const res = await rakutenFetch(`/api/rakuten-search?keyword=${encodeURIComponent(kw)}`);
     const data = await res.json();
     if (data.items && data.items.length) {
       const first = data.items.find(i => i.largeImageUrl);
@@ -4246,7 +4269,7 @@ async function loadRakutenResultsGeneric(item, resultsId, imgAreaId, suffix) {
   const kw = (item.searchKeyword || `${item.brand} ${item.model}`) + ' ' + suffix;
   c.innerHTML = '<div class="loading"><span class="spin"></span>楽天を検索中...</div>';
   try {
-    const res = await fetch(`/api/rakuten-search?keyword=${encodeURIComponent(kw)}`);
+    const res = await rakutenFetch(`/api/rakuten-search?keyword=${encodeURIComponent(kw)}`);
     const data = await res.json();
     if (!data.items || !data.items.length) {
       const errMsg = data.error ? `（${data.error}）` : '';

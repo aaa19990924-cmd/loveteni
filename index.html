@@ -3445,7 +3445,7 @@ function renderRacketGrid(rackets) {
 }
 
 // ===== Image Cache (localStorage 7日) =====
-const IMG_CACHE_KEY = 'loveteni_img_cache_v8';
+const IMG_CACHE_KEY = 'loveteni_img_cache_v9';
 const SERIES_CACHE_KEY = 'loveteni_series_cache_v5';
 const IMG_CACHE_TTL = 7 * 24 * 60 * 60 * 1000;
 let imgCache = null;
@@ -3845,12 +3845,18 @@ async function loadRakutenResults(r, retry = 0) {
 
     // ★ 表示前に「ラケット本体らしくない」商品を強力に除外
     const filteredItems = filterRacketItems(data.items, r);
-    const itemsToShow = filteredItems.length > 0 ? filteredItems : data.items;
+    // フィルタで全部消えた = 水着/ヘルメット等の無関係商品しか無い場合は、
+    // 生データに戻さず「見つからない」表示にする（ジャンク表示・誤キャッシュ防止）
+    if (filteredItems.length === 0) {
+      c.innerHTML = '<div class="loading">楽天市場で該当商品が見つかりませんでした</div>';
+      return;
+    }
+    const itemsToShow = filteredItems;
 
     // 詳細上部の画像は pickBestMatch を通して最良の1点を選ぶ
     const bestForImage = r.janCode
-      ? (itemsToShow[0] || data.items[0])
-      : (pickBestMatch(r, itemsToShow) || itemsToShow[0] || data.items[0]);
+      ? itemsToShow[0]
+      : (pickBestMatch(r, itemsToShow) || itemsToShow[0]);
     if (bestForImage && bestForImage.largeImageUrl) {
       setCachedImg(cacheKey, bestForImage.largeImageUrl, bestForImage);
       document.getElementById('detail-img-area').innerHTML = `<img src="${bestForImage.largeImageUrl}" alt="${r.model}" onerror="this.parentElement.innerHTML='<div class=empty-icon>🎾</div>'">`;

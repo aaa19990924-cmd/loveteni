@@ -95,7 +95,29 @@ export async function onRequest(context) {
     const janNorm = janCode ? janCode.toUpperCase().replace(/[\s\-]/g, '') : '';
     const janSearch = janNorm.replace(/(U)\d+$/, '$1'); // 検索用: 末尾Uを残す
     const janBare = janNorm.replace(/U\d*$/, '');        // 照合/キーワード除去用: Uなし
-    const searchKey = janCode ? janSearch : keyword;
+
+    // 短い数字だけの品番(例: 101567=Babolat, 232006=HEAD)は、水着やヘルメット等の
+    // 無関係商品の品番と数字が衝突する。これらは「品番で直接検索」せず、品番を除いた
+    // ブランド名キーワードで検索してから品番で絞り込む(誤ヒット防止)。
+    // 英字入りの品番(WR173011U1, 7TJ256 等)や8桁以上のJAN/EANは固有性が高いので直接検索。
+    const isShortNumeric = /^\d{1,7}$/.test(janNorm);
+
+    // 品番を取り除いた検索用キーワード(例:"Babolat Pure Aero 98 2026 101567"→"Babolat Pure Aero 98 2026")
+    const keywordNoJan = (keyword || '')
+      .replace(new RegExp(janNorm, 'ig'), '')
+      .replace(janBare ? new RegExp(janBare, 'ig') : /\b\B/, '')
+      .replace(/\s+/g, ' ').trim() || keyword;
+
+    // 検索キー決定
+    let searchKey;
+    if (janCode && !isShortNumeric) {
+      searchKey = janSearch;     // 固有性の高い品番は直接検索が確実
+    } else if (janCode && isShortNumeric) {
+      searchKey = keywordNoJan;  // 短い数字品番はブランド名で検索
+    } else {
+      searchKey = keyword;
+    }
+
     const result = await runSearch(searchKey);
     if (result.error) {
       return new Response(JSON.stringify({
@@ -108,17 +130,13 @@ export async function onRequest(context) {
     let fallback = false;
     let fallbackKey = '';
 
-    // 品番指定があれば商品名一致でフィルタ。0件なら「品番を除いた名前」で再検索
-    if (janCode) {
+    if (janCode && !isShortNumeric) {
+      // 固有性の高い品番: 商品名一致でフィルタ。0件なら「品番を除いた名前」で再検索
       const filtered = items.filter(item => janCodeMatches(janCode, item.name));
       if (filtered.length > 0) {
         items = filtered;
       } else if (keyword) {
-        // 品番(WR173011 / WR173011U1 等)をキーワードから除去 → 名前だけで検索
-        fallbackKey = keyword
-          .replace(new RegExp(janNorm, 'ig'), '')
-          .replace(janBare ? new RegExp(janBare, 'ig') : /\b\B/, '')
-          .replace(/\s+/g, ' ').trim() || keyword;
+        fallbackKey = keywordNoJan;
         const fb = await runSearch(fallbackKey);
         if (!fb.error && fb.items.length) {
           items = fb.items;
@@ -129,7 +147,18 @@ export async function onRequest(context) {
       } else {
         items = [];
       }
+    } else if (janCode && isShortNumeric) {
+      // 短い数字品番: ブランド名検索の結果から品番一致を優先採用。
+      // 一致が無くてもブランド名検索の結果をそのまま使う(水着等の混入を防ぐため空にしない)
+      const filtered = items.filter(item => janCodeMatches(janCode, item.name));
+      if (filtered.length > 0) {
+        items = filtered;
+      } else {
+        fallback = true;       // 品番一致なし=ブランド名検索結果をそのまま使用
+        fallbackKey = searchKey;
+      }
     }
+    // janCodeなしはキーワード検索結果をそのまま使用
 
     // prospo商品を先頭に（フロント側で安い順/ポイント順に再ソートする保険）
     items.sort((a, b) => {

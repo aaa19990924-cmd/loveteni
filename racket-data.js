@@ -11,7 +11,7 @@ const RACKET_DATABASE = [
 
   // RF 01 (2024) - フェデラー監修
   { id: 'wilson-rf01-pro', brand: 'Wilson', series: 'RF', model: 'RF 01 Pro', janCode: 'WR151311U2', searchKeyword: 'Wilson RF01 Pro WR151311', weight: 320, headSize: 98, balance: 315, pattern: '16x19', beam: '22mm', year: 2024, players: ['フェデラー監修'], concept: 'フェデラー監修・SABRフレーム採用のプロモデル' },
-  { id: 'wilson-rf01', brand: 'Wilson', series: 'RF', model: 'RF 01', janCode: 'WR151411U2', searchKeyword: 'Wilson RF01 WR151411', weight: 300, headSize: 98, balance: 320, pattern: '16x19', beam: '22mm', year: 2024, players: ['フェデラー監修'], concept: 'フェデラー監修・スタンダード300g' },
+  { id: 'wilson-rf01', brand: 'Wilson', series: 'RF', model: 'RF 01', janCode: 'WR151411U2', searchKeyword: 'Wilson RF01 WR151411', weight: 300, headSize: 98, balance: 315, pattern: '16x19', beam: '22mm', year: 2024, players: ['フェデラー監修'], concept: 'フェデラー監修・スタンダード300g' },
   { id: 'wilson-rf01-future', brand: 'Wilson', series: 'RF', model: 'RF 01 Future', janCode: 'WR166811U1', searchKeyword: 'Wilson RF01 Future WR166811', weight: 280, headSize: 98, balance: 320, pattern: '16x19', beam: '22mm', year: 2024, players: ['フェデラー監修'], concept: 'フェデラー監修・軽量モデル' },
   { id: 'wilson-rf01-future-lite', brand: 'Wilson', series: 'RF', model: 'RF 01 Future Lite', janCode: 'WR175711U2', searchKeyword: 'Wilson RF01 Future Lite WR175711', weight: 260, headSize: 98, balance: 325, pattern: '16x19', beam: '22mm', year: 2024, players: ['フェデラー監修'], concept: 'フェデラー監修・最軽量モデル' },
 

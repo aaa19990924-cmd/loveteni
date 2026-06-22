@@ -21,12 +21,13 @@ function janCodeMatches(janCode, itemName) {
 function mapItem(i) {
   const imageUrl = (i.mediumImageUrls && i.mediumImageUrls[0]) || '';
   const price = i.itemPrice || 0;
-  const pointRate = i.pointRate || 1; // 店舗の基本ポイント倍率（キャンペーン上乗せは含まれない）
+  const pointRate = i.pointRate || 1;
   return {
     name: i.itemName || '',
     price: price,
     pointRate: pointRate,
-    point: Math.floor(price * pointRate / 100), // 基本ポイント付与の目安（1%×倍率）
+    pointRateEndTime: i.pointRateEndTime || '',
+    point: Math.floor(price * pointRate / 100),
     itemUrl: i.affiliateUrl || i.itemUrl || '',
     shopName: i.shopName || '',
     shopCode: i.shopCode || '',
@@ -47,7 +48,7 @@ export async function onRequest(context) {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Content-Type': 'application/json',
-    'Cache-Control': 'public, max-age=300'
+    'Cache-Control': 'public, max-age=60'
   };
 
   if (request.method === 'OPTIONS') {

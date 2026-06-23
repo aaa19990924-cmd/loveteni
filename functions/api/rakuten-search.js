@@ -18,10 +18,20 @@ function janCodeMatches(janCode, itemName) {
 }
 
 // 楽天APIの1件をフロント用に整形（ポイント還元額を含む）
+let _debugLogged = false;
 function mapItem(i) {
   const imageUrl = (i.mediumImageUrls && i.mediumImageUrls[0]) || '';
   const price = i.itemPrice || 0;
   const pointRate = i.pointRate || 1;
+  // 最初の1件だけログ出力（Cloudflare Workers ログで確認用）
+  if (!_debugLogged) {
+    _debugLogged = true;
+    console.log('[point-debug]', JSON.stringify({
+      itemPrice: i.itemPrice, pointRate: i.pointRate,
+      point: i.point, points: i.points, itemPoints: i.itemPoints,
+      pointRateEndTime: i.pointRateEndTime, shopPoint: i.shopPoint,
+    }));
+  }
   return {
     name: i.itemName || '',
     price: price,

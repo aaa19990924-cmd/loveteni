@@ -18,14 +18,11 @@ function janCodeMatches(janCode, itemName) {
 }
 
 // 楽天APIの1件をフロント用に整形（ポイント還元額を含む）
-let _debugLogged = false;
-function mapItem(i) {
+function mapItem(i, logThis = false) {
   const imageUrl = (i.mediumImageUrls && i.mediumImageUrls[0]) || '';
   const price = i.itemPrice || 0;
   const pointRate = i.pointRate || 1;
-  // 最初の1件だけログ出力（Cloudflare Workers ログで確認用）
-  if (!_debugLogged) {
-    _debugLogged = true;
+  if (logThis) {
     console.log('[point-debug]', JSON.stringify({
       itemPrice: i.itemPrice, pointRate: i.pointRate,
       point: i.point, points: i.points, itemPoints: i.itemPoints,
@@ -97,7 +94,7 @@ export async function onRequest(context) {
     try { data = JSON.parse(responseText); }
     catch (e) { return { error: 'Invalid JSON', detail: responseText.substring(0, 300), items: [] }; }
     if (data.error) return { error: data.error, detail: data.error_description || '', items: [] };
-    return { items: (data.Items || []).map(mapItem) };
+    return { items: (data.Items || []).map((item, idx) => mapItem(item, idx === 0)) };
   }
 
   try {

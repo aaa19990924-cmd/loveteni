@@ -1054,9 +1054,26 @@ section {
 }
 .rakuten-item-point {
   font-family: 'DM Sans', sans-serif;
-  font-size: 11px;
-  color: #BF0000;
   margin-bottom: 8px;
+  line-height: 1.3;
+}
+.rakuten-item-point-num {
+  font-size: 15px;
+  font-weight: 700;
+  color: #BF0000;
+  letter-spacing: -0.01em;
+}
+.rakuten-item-point-campaign {
+  display: inline-block;
+  margin-top: 3px;
+  font-size: 10px;
+  font-family: 'Noto Sans JP', sans-serif;
+  background: #fff0f0;
+  color: #BF0000;
+  border: 1px solid #f5c0c0;
+  border-radius: 3px;
+  padding: 1px 5px;
+  letter-spacing: 0;
 }
 .offer-min {
   display: inline-block;
@@ -3763,7 +3780,10 @@ function renderRkOffers(){
         <div class="rakuten-item-name">${it.name}</div>
         <div class="rakuten-item-shop">${it.shopName}</div>
         <div class="rakuten-item-price">¥${(it.price||0).toLocaleString()}${badge}</div>
-        <div class="rakuten-item-point">+${pt.toLocaleString()}pt〜</div>
+        <div class="rakuten-item-point">
+          <div class="rakuten-item-point-num">+${pt.toLocaleString()}pt〜</div>
+          <div class="rakuten-item-point-campaign">キャンペーンでさらに増量</div>
+        </div>
         <a href="${it.itemUrl}" target="_blank" class="rakuten-item-btn">楽天で見る</a>
       </div>
     </div>`;

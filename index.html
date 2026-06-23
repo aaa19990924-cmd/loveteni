@@ -3738,7 +3738,7 @@ function loadCardImg(r) {
 
 // ===== 楽天オファー表示（安い順/ポイント順・最安バッジ・ポイント還元額） =====
 let _rkOffers = { items: [], header: '🏪 楽天市場', container: null, sort: 'price-asc' };
-function offerPoint(it){ return Math.floor((it.price||0) * (it.pointRate||1) / 100); }
+function offerPoint(it){ return it.point || Math.floor((it.price||0) / 100); }
 function renderRkOffers(){
   const st = _rkOffers;
   if(!st.container) return;
@@ -3752,19 +3752,9 @@ function renderRkOffers(){
     <button class="offer-sort-btn ${st.sort!=='point-desc'?'on':''}" onclick="setRkSort('price-asc')">安い順</button>
     <button class="offer-sort-btn ${st.sort==='point-desc'?'on':''}" onclick="setRkSort('point-desc')">ポイント順</button>
   </div>`;
-  const note = `<div class="rakuten-note">※ポイントは楽天市場の現在の付与予定ポイント数です。SPU・買い回り等の上乗せは別途加算されます。</div>`;
+  const note = `<div class="rakuten-note">※ポイントは基本付与分（1%）の目安です。店舗キャンペーンやSPU等により実際はさらに多くなる場合があります。</div>`;
   const grid = s.slice(0,8).map(it=>{
     const pt = offerPoint(it);
-    const rate = it.pointRate || 1;
-    let rateLabel = '';
-    if (rate > 1) {
-      let endStr = '';
-      if (it.pointRateEndTime) {
-        const d = new Date(it.pointRateEndTime);
-        if (!isNaN(d)) endStr = ` 〜${d.getMonth()+1}/${d.getDate()}`;
-      }
-      rateLabel = ` <span style="font-size:10px;background:#BF0000;color:#fff;padding:1px 4px;border-radius:2px;vertical-align:middle">${rate}倍${endStr}</span>`;
-    }
     const badge = (it.price && it.price===minPrice) ? '<span class="offer-min">最安</span>' : '';
     const img = it.imageUrl ? `<img src="${it.largeImageUrl||it.imageUrl}" loading="lazy">` : '<div style="font-size:30px;opacity:0.15">🎾</div>';
     return `<div class="rakuten-item">
@@ -3773,7 +3763,7 @@ function renderRkOffers(){
         <div class="rakuten-item-name">${it.name}</div>
         <div class="rakuten-item-shop">${it.shopName}</div>
         <div class="rakuten-item-price">¥${(it.price||0).toLocaleString()}${badge}</div>
-        <div class="rakuten-item-point">+${pt.toLocaleString()}pt${rateLabel}</div>
+        <div class="rakuten-item-point">+${pt.toLocaleString()}pt〜</div>
         <a href="${it.itemUrl}" target="_blank" class="rakuten-item-btn">楽天で見る</a>
       </div>
     </div>`;

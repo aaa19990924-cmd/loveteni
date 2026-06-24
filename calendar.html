@@ -2,1110 +2,645 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>マイテニス手帳 | LOVETENI</title>
-<meta name="description" content="ガット張り替え・大会・練習・費用をまとめて記録できるテニスプレーヤーのための手帳アプリ">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;900&family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,900;1,9..40,700&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
-<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;900&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700;9..40,900&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
-body{
-  font-family:'Noto Sans JP','DM Sans',system-ui,sans-serif;
-  background:#080d14;color:#e2eaf3;
-  min-height:100vh;overscroll-behavior:none;
-  -webkit-font-smoothing:antialiased;
+html{-webkit-tap-highlight-color:transparent}
+body{font-family:'Noto Sans JP','DM Sans',system-ui,sans-serif;background:#080d14;color:#e2eaf3;min-height:100vh;-webkit-font-smoothing:antialiased}
+:root{
+  --bg:#080d14;--bg-deep:#040810;--surface:#0f1923;--surface2:#162030;--surface3:#1c2a3e;
+  --line:#1a2d42;--line2:#253d58;
+  --accent:#38bdf8;--accent-dim:rgba(56,189,248,.12);--accent-glow:rgba(56,189,248,.3);
+  --gut:#34d399;--gut-dim:rgba(52,211,153,.12);
+  --match:#fb923c;--match-dim:rgba(251,146,60,.12);
+  --plan:#60a5fa;--plan-dim:rgba(96,165,250,.12);
+  --practice:#c084fc;--practice-dim:rgba(192,132,252,.12);
+  --expense:#facc15;
+  --win:#34d399;--lose:#f87171;--draw:#94a3b8;
+  --text:#e2eaf3;--sub:#8fa8c8;--muted:#445f7a;
 }
-::-webkit-scrollbar{width:4px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:#2a3d56;border-radius:4px}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
 input,select,textarea{font-family:inherit}
-button{font-family:inherit}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:#253d58;border-radius:4px}
 
-/* hover ripple */
-.ripple-btn{position:relative;overflow:hidden}
-.ripple-btn::after{
-  content:'';position:absolute;inset:0;
-  background:rgba(255,255,255,0.06);
-  opacity:0;transition:opacity 0.2s;
-}
-.ripple-btn:hover::after{opacity:1}
-.ripple-btn:active::after{opacity:0.12}
+.tc-header{position:sticky;top:0;z-index:50;background:var(--bg-deep);border-bottom:1px solid var(--line);box-shadow:0 4px 24px rgba(0,0,0,.4)}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding:12px 16px}
+.back-link{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--muted);background:var(--surface2);border:1px solid var(--line);border-radius:8px;padding:6px 10px;letter-spacing:.06em;transition:color .2s,border-color .2s}
+.back-link:hover{color:var(--accent);border-color:rgba(56,189,248,.4)}
+.header-brand{margin-left:10px}
+.header-sub{font-size:9px;font-weight:700;letter-spacing:.18em;color:var(--muted)}
+.header-main{font-size:17px;font-weight:900;letter-spacing:-.02em}
+.header-left{display:flex;align-items:center}
+.month-nav{display:flex;align-items:center;gap:6px}
+.month-nav-btn{background:var(--surface2);border:1px solid var(--line);border-radius:8px;color:var(--sub);width:32px;height:32px;font-size:16px;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.month-nav-btn:hover{background:var(--surface3)}
+.month-label{font-size:13px;font-weight:700;min-width:72px;text-align:center;font-family:'DM Sans',sans-serif}
+.month-cost{font-size:11px;font-weight:700;color:var(--expense);text-align:right;font-family:'DM Sans',sans-serif}
 
-/* input focus glow */
-.tc-input:focus{
-  border-color:#38bdf8 !important;
-  box-shadow:0 0 0 3px rgba(56,189,248,0.12) !important;
-}
-.tc-select:focus{
-  border-color:#38bdf8 !important;
-  box-shadow:0 0 0 3px rgba(56,189,248,0.12) !important;
-}
+.tabs{display:flex;border-top:1px solid var(--line)}
+.tab{flex:1;padding:8px 4px;background:none;border:none;border-bottom:2px solid transparent;transition:border-color .2s;color:var(--muted)}
+.tab .ti{font-size:17px;line-height:1;display:block}
+.tab .tl{font-size:9px;font-weight:700;letter-spacing:.05em;margin-top:3px;display:block}
+.tab.active{border-bottom-color:var(--accent);color:var(--accent)}
 
-/* calendar cell hover */
-.cal-cell{transition:transform 0.12s,box-shadow 0.12s}
-.cal-cell:hover{transform:translateY(-1px)}
+.tc-main{max-width:680px;margin:0 auto;padding:16px 12px;padding-bottom:max(110px,calc(env(safe-area-inset-bottom)+110px))}
 
-/* tab underline transition */
-.tc-tab{transition:all 0.2s}
+.cal-day-headers{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:3px}
+.cal-dh{text-align:center;font-size:10px;font-weight:700;padding:4px 0;color:var(--muted)}
+.cal-dh.sun{color:#f87171}.cal-dh.sat{color:#60a5fa}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px}
+.cal-cell{background:var(--surface);border:1px solid var(--line);border-radius:11px;min-height:74px;padding:7px 5px;transition:transform .12s,box-shadow .12s}
+.cal-cell.empty{background:transparent;border-color:transparent}
+.cal-cell.hev{cursor:pointer}
+.cal-cell.hev:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.cal-cell.tod{border:2px solid var(--accent);box-shadow:0 0 14px var(--accent-glow)}
+.cal-num{font-size:11px;font-weight:500;margin-bottom:4px;font-family:'DM Sans',sans-serif}
+.cal-num.sun{color:#f87171}.cal-num.sat{color:#60a5fa}
+.cal-num-t{background:var(--accent);color:#fff;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;margin-bottom:5px;box-shadow:0 2px 8px var(--accent-glow);font-family:'DM Sans',sans-serif}
+.evb{display:block;font-size:9px;font-weight:700;border-radius:4px;padding:2px 5px;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:.01em}
+.evb.gut{background:var(--gut-dim);color:var(--gut);border:1px solid rgba(52,211,153,.2)}
+.evb.match{background:var(--match-dim);color:var(--match);border:1px solid rgba(251,146,60,.2)}
+.evb.plan{background:var(--plan-dim);color:var(--plan);border:1px solid rgba(96,165,250,.2)}
+.evb.practice{background:var(--practice-dim);color:var(--practice);border:1px solid rgba(192,132,252,.2)}
+.cal-more{font-size:9px;color:var(--muted)}
+.cal-legend{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:16px}
 
-/* fab actions slide in */
-@keyframes fabSlide{
-  from{opacity:0;transform:translateY(12px) scale(0.92)}
-  to{opacity:1;transform:translateY(0) scale(1)}
-}
-.fab-action{animation:fabSlide 0.18s ease both}
-.fab-action:nth-child(1){animation-delay:0.00s}
-.fab-action:nth-child(2){animation-delay:0.04s}
-.fab-action:nth-child(3){animation-delay:0.08s}
-.fab-action:nth-child(4){animation-delay:0.12s}
-.fab-action:nth-child(5){animation-delay:0.16s}
+.card{background:var(--bg-deep);border-radius:13px;padding:16px;margin-bottom:10px;border-left:3px solid var(--line)}
+.card.gut{border-left-color:var(--gut)}.card.match{border-left-color:var(--match)}.card.plan{border-left-color:var(--plan)}.card.practice{border-left-color:var(--practice)}
+.card-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.card-type{font-size:14px;font-weight:700}
+.card-type.gut{color:var(--gut)}.card-type.match{color:var(--match)}.card-type.plan{color:var(--plan)}.card-type.practice{color:var(--practice)}
+.card-meta{font-size:11px;color:var(--muted);margin-bottom:6px}
+.card-main{font-size:14px;font-weight:700;color:var(--text)}
+.card-sub{font-size:12px;color:var(--sub);margin-top:2px}
+.card-amount{font-size:13px;font-weight:700;color:var(--expense);margin-top:8px;font-family:'DM Sans',sans-serif}
+.card-date{font-size:11px;color:var(--muted);margin-bottom:5px;font-family:'DM Sans',sans-serif}
+.card-del{background:none;border:none;color:var(--muted);font-size:11px;margin-top:10px;padding:0;display:flex;align-items:center;gap:4px;transition:color .2s}
+.card-del:hover{color:var(--lose)}
+.match-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-top:1px solid var(--line)}
+.match-round{font-size:10px;color:var(--muted);min-width:64px}
+.match-opponent{font-size:13px;color:var(--text);flex:1}
+.match-score{font-size:12px;font-weight:700;color:var(--text);font-family:'DM Sans',sans-serif}
+.rp{font-size:10px;font-weight:800;border-radius:5px;padding:2px 8px;letter-spacing:.07em;font-family:'DM Sans',sans-serif}
+.rp.win{background:rgba(52,211,153,.12);color:var(--win)}
+.rp.lose{background:rgba(248,113,113,.1);color:var(--lose)}
+.rp.draw{background:rgba(148,163,184,.1);color:var(--draw)}
+.rbadge{background:var(--accent-dim);color:var(--accent);font-size:10px;font-weight:700;border-radius:6px;padding:2px 8px;border:1px solid rgba(56,189,248,.2);font-family:'DM Sans',sans-serif}
 
-/* modal slide up */
-@keyframes modalUp{
-  from{opacity:0;transform:translateY(40px)}
-  to{opacity:1;transform:translateY(0)}
-}
-.tc-modal-inner{animation:modalUp 0.22s cubic-bezier(0.34,1.14,0.64,1)}
+.filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.filter-btn{padding:6px 13px;border-radius:20px;border:none;font-size:11px;font-weight:700;background:var(--surface2);color:var(--sub);transition:all .15s}
+.filter-btn.active{background:var(--accent);color:#fff;box-shadow:0 2px 12px var(--accent-glow)}
 
-/* stat bar */
-.stat-bar-fill{transition:width 0.5s cubic-bezier(0.4,0,0.2,1)}
+.exp-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.exp-nav-btn{background:var(--surface2);border:1px solid var(--line);border-radius:10px;color:var(--sub);width:38px;height:38px;font-size:18px;display:flex;align-items:center;justify-content:center}
+.exp-total{font-size:32px;font-weight:900;color:var(--expense);letter-spacing:-.03em;font-variant-numeric:tabular-nums;font-family:'DM Sans',sans-serif;line-height:1}
+.exp-bar-section{background:var(--surface);border-radius:14px;padding:16px;margin-bottom:16px;border:1px solid var(--line)}
+.exp-bar-row{margin-bottom:11px}
+.exp-bar-head{display:flex;justify-content:space-between;margin-bottom:4px}
+.exp-bar-label{font-size:12px;color:var(--sub)}
+.exp-bar-val{font-size:12px;font-weight:700;font-family:'DM Sans',sans-serif}
+.exp-bar-track{height:5px;background:var(--surface2);border-radius:3px;overflow:hidden}
+.exp-bar-fill{height:100%;border-radius:3px;transition:width .5s}
+.exp-item{background:var(--surface);border-radius:11px;padding:12px 14px;margin-bottom:8px;border-left:3px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.exp-item-date{font-size:11px;color:var(--muted);margin-bottom:2px;font-family:'DM Sans',sans-serif}
+.exp-item-cat{font-size:13px;font-weight:600;color:var(--text)}
+.exp-item-memo{font-size:11px;color:var(--muted);margin-top:2px}
+.exp-del-btn{background:none;border:none;color:var(--muted);font-size:18px;padding:2px;transition:color .2s}
+.exp-del-btn:hover{color:var(--lose)}
 
-/* safe area */
-.pb-safe{padding-bottom:max(100px,calc(env(safe-area-inset-bottom) + 100px))}
+.rackets-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.rackets-count{font-size:13px;color:var(--sub)}
+.rackets-count strong{font-size:26px;font-weight:900;color:var(--text);font-family:'DM Sans',sans-serif;margin-right:4px}
+.add-racket-btn{padding:8px 18px;border:none;border-radius:10px;font-size:13px;font-weight:700;transition:all .2s}
+.racket-form-box{background:var(--bg-deep);border-radius:14px;padding:18px;margin-bottom:16px;border:1px solid var(--line)}
+.racket-card{background:var(--surface);border-radius:13px;padding:13px 15px;margin-bottom:9px;border:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.racket-num{background:var(--accent-dim);color:var(--accent);width:40px;height:40px;border-radius:10px;border:1px solid rgba(56,189,248,.2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;flex-shrink:0;font-family:'DM Sans',sans-serif;margin-right:13px}
+.racket-info{flex:1}
+.racket-name{font-weight:700;color:var(--text);font-size:14px}
+.racket-meta{font-size:11px;color:var(--muted);margin-top:3px}
+.racket-del-btn{background:none;border:none;font-size:20px;color:var(--muted);padding:4px 8px;transition:color .2s}
+.racket-del-btn:hover{color:var(--lose)}
+
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.stat-card{background:var(--surface);border-radius:15px;padding:17px;border:1px solid var(--line)}
+.stat-card.span2{grid-column:span 2}
+.stat-card-label{font-size:10px;font-weight:700;color:var(--muted);letter-spacing:.1em;margin-bottom:10px}
+.stat-card-val{font-size:30px;font-weight:900;letter-spacing:-.03em;line-height:1;font-family:'DM Sans',sans-serif;font-variant-numeric:tabular-nums}
+.stat-card-sub{font-size:11px;color:var(--muted);margin-top:5px}
+.latest-gut{background:var(--surface);border-radius:15px;padding:17px;border:1px solid rgba(52,211,153,.2)}
+.latest-gut-label{font-size:10px;font-weight:700;color:var(--gut);letter-spacing:.1em;margin-bottom:8px}
+
+.empty{text-align:center;padding:56px 0;color:var(--muted)}
+.empty-icon{font-size:44px;margin-bottom:12px}
+.empty-title{font-size:15px;font-weight:600;color:var(--sub);margin-bottom:4px}
+
+.divider{display:flex;align-items:center;gap:10px;margin:18px 0 14px}
+.divider-line{flex:1;height:1px;background:var(--line)}
+.divider-label{color:var(--muted);font-size:10px;font-weight:700;letter-spacing:.1em}
+
+.fab-wrap{position:fixed;bottom:24px;right:20px;z-index:100}
+.fab-actions{position:absolute;bottom:64px;right:0;display:none;flex-direction:column;gap:8px;align-items:flex-end}
+@keyframes fabIn{from{opacity:0;transform:translateY(10px) scale(.92)}to{opacity:1;transform:none}}
+.fab-action-btn{padding:10px 20px;border:none;border-radius:22px;font-size:13px;font-weight:800;white-space:nowrap;letter-spacing:.03em;animation:fabIn .18s ease both}
+.fab-btn{width:56px;height:56px;border-radius:50%;border:none;background:var(--accent);color:#fff;font-size:26px;box-shadow:0 4px 28px var(--accent-glow);transition:all .22s;display:flex;align-items:center;justify-content:center;font-weight:700}
+.fab-btn.open{background:var(--surface2);border:1px solid var(--line2);box-shadow:none;transform:rotate(45deg) scale(.9)}
+
+.modal-bg{position:fixed;inset:0;background:rgba(2,6,14,.88);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);z-index:200;display:flex;align-items:flex-end;justify-content:center}
+.modal-bg.hidden{display:none}
+@keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+.modal-sheet{background:var(--surface);border-radius:22px 22px 0 0;border:1px solid var(--line2);border-bottom:none;width:100%;max-width:640px;max-height:92dvh;overflow-y:auto;padding-bottom:max(32px,env(safe-area-inset-bottom));box-shadow:0 -32px 80px rgba(0,0,0,.7);animation:slideUp .22s cubic-bezier(.34,1.14,.64,1)}
+.modal-handle-wrap{display:flex;justify-content:center;padding:13px 0 0}
+.modal-handle{width:38px;height:4px;border-radius:2px;background:var(--line2)}
+.modal-hdr{display:flex;justify-content:space-between;align-items:center;padding:13px 22px 16px;border-bottom:1px solid var(--line)}
+.modal-title{font-size:18px;font-weight:800;letter-spacing:-.01em}
+.modal-close-btn{background:var(--surface2);border:1px solid var(--line2);color:var(--sub);width:34px;height:34px;border-radius:10px;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:color .15s}
+.modal-close-btn:hover{color:var(--text)}
+.modal-body-wrap{padding:20px 22px}
+
+.fg{margin-bottom:14px}
+.fl{font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--muted);margin-bottom:6px;text-transform:uppercase;display:block}
+.fi,.fs{width:100%;background:var(--surface2);border:1px solid var(--line2);border-radius:10px;color:var(--text);padding:11px 14px;font-size:14px;outline:none;transition:border-color .18s,box-shadow .18s;font-family:inherit;appearance:none;-webkit-appearance:none}
+.fi:focus,.fs:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(56,189,248,.12)}
+.fs{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238fa8c8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:calc(100% - 12px) center;padding-right:36px;cursor:pointer}
+.fpw{position:relative}.fpx{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px;pointer-events:none}.fpw .fi{padding-left:30px}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.gut-box{background:var(--bg-deep);border-radius:13px;padding:15px;border:1px solid rgba(52,211,153,.25);margin-bottom:13px}
+.gut-box.cross{border-color:rgba(96,165,250,.25)}
+.gut-box-lbl{font-size:11px;font-weight:700;letter-spacing:.08em;margin-bottom:12px;color:var(--gut)}
+.gut-box.cross .gut-box-lbl{color:var(--plan)}
+.ftoggle{display:flex;align-items:center;gap:12px;padding:12px 15px;background:var(--bg-deep);border-radius:12px;border:1px solid var(--line);cursor:pointer;margin-bottom:13px}
+.ftoggle input[type=checkbox]{width:18px;height:18px;accent-color:var(--gut);cursor:pointer;flex-shrink:0}
+.chip-row{display:flex;flex-wrap:wrap;gap:6px}
+.chip{padding:7px 13px;border-radius:20px;border:none;font-size:11px;font-weight:600;background:var(--surface2);color:var(--sub);transition:all .15s;cursor:pointer}
+.match-block{background:var(--bg-deep);border-radius:13px;padding:15px;margin-bottom:11px;border:1px solid var(--line)}
+.match-block-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.match-block-del{background:none;border:none;color:var(--muted);font-size:18px;line-height:1;transition:color .2s}
+.match-block-del:hover{color:var(--lose)}
+.result-row{display:flex;gap:8px;margin-bottom:12px}
+.result-btn{flex:1;padding:9px 0;border-radius:10px;border:none;font-size:12px;font-weight:700;transition:all .15s;cursor:pointer;background:var(--surface2);color:var(--muted)}
+.result-btn.win.sel{background:rgba(52,211,153,.12);color:var(--win);outline:2px solid var(--win)}
+.result-btn.lose.sel{background:rgba(248,113,113,.1);color:var(--lose);outline:2px solid var(--lose)}
+.result-btn.draw.sel{background:rgba(148,163,184,.1);color:var(--draw);outline:2px solid var(--draw)}
+.add-match-btn{width:100%;padding:11px;background:transparent;border:1.5px dashed var(--line2);border-radius:12px;color:var(--sub);font-size:13px;font-weight:600;margin-bottom:14px;transition:border-color .2s,color .2s}
+.add-match-btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn-row{display:flex;gap:10px;margin-top:10px}
+.btn-cancel{flex:1;padding:13px;background:var(--surface2);border:1px solid var(--line2);border-radius:12px;color:var(--sub);font-size:14px;font-weight:600}
+.btn-save{flex:2;padding:13px;border:none;border-radius:12px;font-size:14px;font-weight:800;letter-spacing:.02em}
+.exc-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:13px}
+.exc-btn{padding:10px 12px;border-radius:10px;border:none;font-size:12px;font-weight:600;text-align:left;transition:all .15s;cursor:pointer;background:var(--surface2);color:var(--sub)}
 </style>
 </head>
 <body>
-<div id="root"></div>
 
-<script type="text/babel">
-const { useState, useEffect, useRef, useCallback } = React;
+<header class="tc-header">
+  <div class="header-top">
+    <div class="header-left">
+      <a href="/" class="back-link">← <span>LOVETENI</span></a>
+      <div class="header-brand">
+        <div class="header-sub">TENNIS LOG</div>
+        <div class="header-main">マイテニス手帳</div>
+      </div>
+    </div>
+    <div id="headerRight"></div>
+  </div>
+  <div class="tabs" id="tabBar">
+    <button class="tab active" data-tab="calendar"><span class="ti">📅</span><span class="tl">カレンダー</span></button>
+    <button class="tab" data-tab="history"><span class="ti">📋</span><span class="tl">履歴</span></button>
+    <button class="tab" data-tab="expense"><span class="ti">💴</span><span class="tl">費用</span></button>
+    <button class="tab" data-tab="rackets"><span class="ti">🎾</span><span class="tl">ラケット</span></button>
+    <button class="tab" data-tab="stats"><span class="ti">📊</span><span class="tl">統計</span></button>
+  </div>
+</header>
 
-// ─── PALETTE ────────────────────────────────────────────────────────────────
-const T = {
-  bg:            "#080d14",
-  bgDeep:        "#040810",
-  surface:       "#0f1923",
-  surfaceRaised: "#162030",
-  surfaceHover:  "#1c2a3e",
-  line:          "#1a2d42",
-  lineStrong:    "#253d58",
-  // accents
-  accent:        "#38bdf8",
-  accentDim:     "rgba(56,189,248,0.12)",
-  accentGlow:    "rgba(56,189,248,0.28)",
-  green:         "#00513a",  // loveteni brand
-  // event types
-  gut:           "#34d399",
-  gutDim:        "rgba(52,211,153,0.12)",
-  gutGlow:       "rgba(52,211,153,0.3)",
-  match:         "#fb923c",
-  matchDim:      "rgba(251,146,60,0.12)",
-  matchGlow:     "rgba(251,146,60,0.3)",
-  plan:          "#60a5fa",
-  planDim:       "rgba(96,165,250,0.12)",
-  practice:      "#c084fc",
-  practiceDim:   "rgba(192,132,252,0.12)",
-  expense:       "#facc15",
-  expenseDim:    "rgba(250,204,21,0.12)",
-  // text
-  text:          "#e2eaf3",
-  textSub:       "#8fa8c8",
-  textMuted:     "#445f7a",
-  // results
-  win:           "#34d399",
-  winBg:         "rgba(52,211,153,0.12)",
-  lose:          "#f87171",
-  loseBg:        "rgba(248,113,113,0.1)",
-  draw:          "#94a3b8",
-  drawBg:        "rgba(148,163,184,0.1)",
-};
+<main class="tc-main" id="mainContent"><div style="display:flex;align-items:center;justify-content:center;min-height:40vh;color:var(--muted);font-size:13px;font-weight:500;letter-spacing:.06em">読み込み中...</div></main>
 
-// ─── DATA ───────────────────────────────────────────────────────────────────
-const RACKET_DATA = {
-  Wilson:     ["RF 01 Pro","RF 01","Blade 98 16x19 V10","Blade 98 18x20 V10","Blade 98S V10","Blade 98 16x19 V9","Clash 100 V3","Clash 100 Pro V3","Ultra 100 V5","Ultra Tour 98 V5","Pro Staff 97 V14","Shift 99 V2"],
-  Babolat:    ["Pure Aero 2026","Pure Aero 98 2026","Pure Drive 2025","Pure Drive 98 2025","Pure Strike 100 2025","Pure Strike 98 2025","Evo Aero 2026"],
-  YONEX:      ["EZONE 98 2025","EZONE 100 2025","EZONE 100L 2025","VCORE 98 2026","VCORE 100 2026","PERCEPT 97","ASTREL 100","ASTREL 105"],
-  HEAD:       ["Speed Pro 2026","Speed MP 2026","Speed Tour 2026","Boom Pro 2026","Boom MP 2026","Radical Pro 2025","Radical MP 2025","Gravity Pro 2025","Gravity MP 2025","Extreme MP 2024","Prestige Pro 2023","Prestige MP 2023"],
-  DUNLOP:     ["FX 500 Tour 2026","FX 500 2026","SX 300 Tour 2025","SX 300 2025","CX 200 Tour 2024","CX 200 2024","CX 400 Tour 2024","LX 800 Tour 2026"],
-  Prince:     ["PHANTOM GRAPHITE 97 2026","PHANTOM GRAPHITE 100 2026","PHANTOM 100 2025","TOUR 98 2026","TOUR 100 305g 2026","BEAST 100 2024","EMBLEM 110 2026"],
-  Tecnifibre: ["T-FIGHT 315 S 2025","T-FIGHT 305 S 2025","T-FIGHT 300 S 2025","TF40 305 16M v3","TF40 315 18M v3","TF-X1 v2 305","TEMPO 298 IGA"],
-  DIADEM:     ["AXIS 98","AXIS 100","ELEVATE 98 V3","ELEVATE TOUR 98 V3","NOVA V3 100"],
-  Kneissl:    ["PRIME STAR Black","PRIME STAR White"],
-  "手入力":   [],
-};
-const GUT_DATA = {
-  Luxilon:     ["ALU POWER 125","ALU POWER 130","ALU POWER ROUGH 125","ALU POWER SOFT 125","4G 125","4G SOFT 125","ELEMENT 125","M2 PRO 125","BIG BANGER ORIGINAL 130"],
-  Babolat:     ["RPM Blast 125","RPM Blast 130","RPM Blast 135","RPM Blast Rough 125","RPM Soft 125","VS Touch 130","VS Touch 135","Pro Hurricane Tour 125","Origin 125"],
-  Wilson:      ["NXT 16","NXT 17","Sensation 16","Revolve 17","Synthetic Gut 16","Champion's Choice Duo"],
-  YONEX:       ["POLYTOUR PRO 125","POLYTOUR PRO 130","POLYTOUR STRIKE 125","POLYTOUR REV 125","POLYTOUR AIR 125","REXIS 130"],
-  HEAD:        ["LYNX TOUR 125","LYNX TOUR 130","LYNX 125","HAWK TOUCH 125","VELOCITY 125","SONIC PRO 125"],
-  Tecnifibre:  ["RAZOR CODE 125","BLACK CODE 125","X-ONE BIPHASE 130","TRIAX 130","DURAMIX 130"],
-  Solinco:     ["HYPER-G 125","HYPER-G 130","HYPER-G SOFT 125","TOUR BITE 125","TOUR BITE SOFT 125","CONFIDENTIAL 125"],
-  Gosen:       ["OG-SHEEP MICRO 16L","OG-SHEEP MICRO 16","POLYLON COMFORT 125","EGG POWER 125","UMAMI TOUR 125"],
-  "手入力":    [],
-};
-const SURFACES  = ["ハードコート","クレーコート","砂入り人工芝","天然芝","カーペット","オムニ"];
-const CATEGORIES= ["シングルス","ダブルス","ミックスダブルス","団体戦"];
-const ROUNDS    = ["1回戦","2回戦","3回戦","4回戦","準々決勝","準決勝","決勝","コンソレ1回戦","コンソレ2回戦","コンソレ決勝"];
-const FOCUS_OPTIONS=["サーブ","リターン","ストローク","ボレー","スマッシュ","フットワーク","メンタル","総合"];
-const CONDITIONS=["絶好調 🔥","良い ✅","普通","やや悪い","悪い 😔"];
-const DAYS_JP   =["日","月","火","水","木","金","土"];
-const EXPENSE_CATS=[
-  {key:"gut",    label:"ガット代・工賃",icon:"🎾",color:T.gut},
-  {key:"entry",  label:"大会参加費",    icon:"🏆",color:T.match},
-  {key:"court",  label:"コート代",      icon:"🏟",color:T.accent},
-  {key:"lesson", label:"レッスン代",    icon:"📚",color:T.practice},
-  {key:"gear",   label:"用具・ラケット",icon:"🛒",color:"#fb923c"},
-  {key:"travel", label:"交通費",        icon:"🚃",color:"#94a3b8"},
-  {key:"other",  label:"その他",        icon:"💴",color:"#64748b"},
-];
+<div class="fab-wrap">
+  <div class="fab-actions" id="fabActions"></div>
+  <button class="fab-btn" id="fabBtn">＋</button>
+</div>
 
-// ─── UTILS ──────────────────────────────────────────────────────────────────
-const pad = n => String(n).padStart(2,"0");
-const toDateStr = (y,m,d) => `${y}-${pad(m+1)}-${pad(d)}`;
-const todayObj = new Date();
-const isToday = (y,m,d) => d===todayObj.getDate()&&m===todayObj.getMonth()&&y===todayObj.getFullYear();
+<div class="modal-bg hidden" id="modalBg">
+  <div class="modal-sheet">
+    <div class="modal-handle-wrap"><div class="modal-handle"></div></div>
+    <div class="modal-hdr">
+      <h2 class="modal-title" id="modalTitle"></h2>
+      <button class="modal-close-btn" id="modalCloseBtn">×</button>
+    </div>
+    <div class="modal-body-wrap" id="modalBody"></div>
+  </div>
+</div>
 
-function useLS(key, init) {
-  const [v, setV] = useState(() => {
-    try { return JSON.parse(localStorage.getItem(key)??'null')??init; } catch { return init; }
+<script>
+// ─── DATA ────────────────────────────────────────────────────────────────────
+var RACKET_DATA={Wilson:["RF 01 Pro","RF 01","Blade 98 16x19 V10","Blade 98 18x20 V10","Blade 98S V10","Clash 100 V3","Clash 100 Pro V3","Ultra 100 V5","Pro Staff 97 V14","Shift 99 V2"],Babolat:["Pure Aero 2026","Pure Aero 98 2026","Pure Drive 2025","Pure Drive 98 2025","Pure Strike 100 2025","Pure Strike 98 2025","Evo Aero 2026"],YONEX:["EZONE 98 2025","EZONE 100 2025","EZONE 100L 2025","VCORE 98 2026","VCORE 100 2026","PERCEPT 97","ASTREL 100","ASTREL 105"],HEAD:["Speed Pro 2026","Speed MP 2026","Speed Tour 2026","Boom Pro 2026","Boom MP 2026","Radical Pro 2025","Radical MP 2025","Gravity Pro 2025","Gravity MP 2025","Extreme MP 2024","Prestige Pro 2023"],DUNLOP:["FX 500 Tour 2026","FX 500 2026","SX 300 Tour 2025","SX 300 2025","CX 200 Tour 2024","CX 200 2024","LX 800 Tour 2026"],Prince:["PHANTOM GRAPHITE 97 2026","PHANTOM GRAPHITE 100 2026","TOUR 98 2026","TOUR 100 305g 2026","BEAST 100 2024","EMBLEM 110 2026"],Tecnifibre:["T-FIGHT 315 S 2025","T-FIGHT 305 S 2025","TF40 305 16M v3","TF40 315 18M v3","TF-X1 v2 305","TEMPO 298 IGA"],DIADEM:["AXIS 98","AXIS 100","ELEVATE 98 V3","ELEVATE TOUR 98 V3"],Kneissl:["PRIME STAR Black","PRIME STAR White"]};
+var GUT_DATA={Luxilon:["ALU POWER 125","ALU POWER 130","ALU POWER ROUGH 125","ALU POWER SOFT 125","4G 125","4G SOFT 125","ELEMENT 125","M2 PRO 125"],Babolat:["RPM Blast 125","RPM Blast 130","RPM Blast Rough 125","RPM Soft 125","VS Touch 130","VS Touch 135","Pro Hurricane Tour 125"],Wilson:["NXT 16","NXT 17","Sensation 16","Revolve 17"],YONEX:["POLYTOUR PRO 125","POLYTOUR PRO 130","POLYTOUR STRIKE 125","POLYTOUR REV 125","POLYTOUR AIR 125","REXIS 130"],HEAD:["LYNX TOUR 125","LYNX TOUR 130","LYNX 125","HAWK TOUCH 125","VELOCITY 125","SONIC PRO 125"],Tecnifibre:["RAZOR CODE 125","BLACK CODE 125","X-ONE BIPHASE 130","TRIAX 130","DURAMIX 130"],Solinco:["HYPER-G 125","HYPER-G 130","HYPER-G SOFT 125","TOUR BITE 125","TOUR BITE SOFT 125"],Gosen:["OG-SHEEP MICRO 16L","OG-SHEEP MICRO 16","POLYLON COMFORT 125","EGG POWER 125","UMAMI TOUR 125"]};
+var SURFACES=["ハードコート","クレーコート","砂入り人工芝","天然芝","カーペット","オムニ"];
+var CATEGORIES=["シングルス","ダブルス","ミックスダブルス","団体戦"];
+var ROUNDS=["1回戦","2回戦","3回戦","4回戦","準々決勝","準決勝","決勝","コンソレ1回戦","コンソレ2回戦","コンソレ決勝"];
+var FOCUS=["サーブ","リターン","ストローク","ボレー","スマッシュ","フットワーク","メンタル","総合"];
+var CONDITIONS=["絶好調 🔥","良い ✅","普通","やや悪い","悪い 😔"];
+var ECATS=[{key:"gut",label:"ガット代・工賃",icon:"🎾",color:"#34d399"},{key:"entry",label:"大会参加費",icon:"🏆",color:"#fb923c"},{key:"court",label:"コート代",icon:"🏟",color:"#38bdf8"},{key:"lesson",label:"レッスン代",icon:"📚",color:"#c084fc"},{key:"gear",label:"用具・ラケット",icon:"🛒",color:"#f97316"},{key:"travel",label:"交通費",icon:"🚃",color:"#94a3b8"},{key:"other",label:"その他",icon:"💴",color:"#64748b"}];
+var DAYS=["日","月","火","水","木","金","土"];
+var FAB_ACTIONS=[{label:"🎾 ガット",type:"gut",bg:"var(--gut)",col:"#021a0c"},{label:"📋 大会予定",type:"plan",bg:"var(--plan)",col:"#001525"},{label:"🏆 大会結果",type:"match",bg:"var(--match)",col:"#1a0800"},{label:"🎯 練習",type:"practice",bg:"var(--practice)",col:"#fff"},{label:"💴 費用メモ",type:"expense",bg:"var(--expense)",col:"#1a1000"}];
+
+// ─── STATE ───────────────────────────────────────────────────────────────────
+function ls(k,d){try{var v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+var S={events:ls('tc_v3_events',[]),rackets:ls('tc_v3_rackets',[]),expenses:ls('tc_v3_expenses',[]),tab:'calendar',cur:new Date(),fab:false,modal:null,hf:'all',expM:new Date(),showRF:false};
+function persist(){try{localStorage.setItem('tc_v3_events',JSON.stringify(S.events));localStorage.setItem('tc_v3_rackets',JSON.stringify(S.rackets));localStorage.setItem('tc_v3_expenses',JSON.stringify(S.expenses))}catch(e){}}
+
+// form state
+var F={};
+
+// ─── UTILS ───────────────────────────────────────────────────────────────────
+function pad(n){return String(n).padStart(2,'0')}
+function fmt(y,m,d){return y+'-'+pad(m+1)+'-'+pad(d)}
+var todayStr=(function(){var n=new Date();return fmt(n.getFullYear(),n.getMonth(),n.getDate())})();
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function commas(n){return Number(n||0).toLocaleString('ja-JP')}
+function gutLabel(ev,mk,mo,cu){var c=ev[cu];if(c)return c;var maker=ev[mk]||'',model=ev[mo]||'';if(maker&&maker!=='手入力'&&model)return maker+' '+model;if(maker&&maker!=='手入力')return maker;return ''}
+function gv(name){var el=document.querySelector('[name="'+name+'"]');return el?el.value:''}
+function getField(name){return gv(name)}
+
+// ─── HTML BUILDERS ───────────────────────────────────────────────────────────
+function fg(label,inner){return '<div class="fg"><label class="fl">'+esc(label)+'</label>'+inner+'</div>'}
+function fi(label,name,opts){opts=opts||{};return fg(label,'<input class="fi" type="'+(opts.type||'text')+'" name="'+esc(name)+'" placeholder="'+esc(opts.ph||'')+'" value="'+esc(opts.val||'')+'">')}
+function fs(label,name,optsHtml){return fg(label,'<select class="fs" name="'+esc(name)+'"><option value="">選択してください</option>'+optsHtml+'</select>')}
+function fp(label,name,val){return fg(label,'<div class="fpw"><span class="fpx">¥</span><input class="fi" type="number" name="'+esc(name)+'" placeholder="0" value="'+esc(val||'')+'"></div>')}
+function mkOpts(arr,cur){return arr.map(function(v){return '<option'+(v===cur?' selected':'')+'>'+esc(v)+'</option>'}).join('')}
+
+function gutSel(prefix){
+  var maker=F[prefix+'Maker']||'';
+  var model=F[prefix+'Model']||'';
+  var cross=prefix==='cross';
+  var lbl=cross?'横ガット（クロス）':'縦ガット（メイン）';
+  var modelSel=maker&&maker!=='手入力'?fs('モデル',prefix+'Model','<option value="">選択</option>'+mkOpts(GUT_DATA[maker]||[],model)):'';
+  return '<div class="gut-box'+(cross?' cross':'')+'"><div class="gut-box-lbl">'+lbl+'</div>'
+    +'<div class="fg2">'+fs('メーカー',prefix+'Maker','<option value="">選択</option>'+mkOpts(Object.keys(GUT_DATA),maker))
+    +(maker&&maker!=='手入力'?fs('モデル',prefix+'Model','<option value="">選択</option>'+mkOpts(GUT_DATA[maker]||[],model)):'<div></div>')
+    +'</div>'
+    +fi('手入力（未掲載モデル）',prefix+'Custom',{ph:'例: ALU Power Rough 125',val:F[prefix+'Custom']||''})
+    +fi('テンション (lbs)',prefix+'Tension',{type:'number',ph:'50',val:F[prefix+'Tension']||''})
+    +'</div>';
+}
+
+function matchBlockHTML(m,idx){
+  var dels=F.matches.length>1?'<button class="match-block-del" onclick="removeMatch('+idx+')">×</button>':'';
+  return '<div class="match-block" id="mb'+idx+'">'
+    +'<div class="match-block-head"><span style="font-size:12px;font-weight:700;color:var(--match)">'+(idx+1)+'試合目</span>'+dels+'</div>'
+    +fs('ラウンド','m'+idx+'round','<option value="">選択</option>'+mkOpts(ROUNDS,m.round))
+    +'<div class="fg2">'+fi('相手名','m'+idx+'opponent',{ph:'田中さん',val:m.opponent||''})+fi('スコア','m'+idx+'score',{ph:'6-4, 6-3',val:m.score||''})+'</div>'
+    +'<div class="result-row">'
+    +'<button class="result-btn win'+(m.result==='win'?' sel':'')+'" onclick="setRes('+idx+',\'win\')">WIN</button>'
+    +'<button class="result-btn lose'+(m.result==='lose'?' sel':'')+'" onclick="setRes('+idx+',\'lose\')">LOSE</button>'
+    +'<button class="result-btn draw'+(m.result==='draw'?' sel':'')+'" onclick="setRes('+idx+',\'draw\')">DRAW</button>'
+    +'</div>'
+    +fi('メモ','m'+idx+'memo',{ph:'気づきなど',val:m.memo||''})
+    +'</div>';
+}
+
+function gutFormHTML(){
+  var opts=S.rackets.map(function(r){return '<option value="'+r.id+'">'+esc('#'+r.number+' '+(r.maker!=='手入力'?r.maker+' ':'')+(r.model||r.custom||''))+'</option>'}).join('');
+  var hy=!!F.hybrid;
+  return fi('張り替え日','date',{type:'date',val:F.date||''})
+    +fg('使用ラケット','<select class="fs" name="racketId"><option value="">選択（任意）</option>'+opts+'</select>')
+    +'<label class="ftoggle"><input type="checkbox" name="hybrid" id="hybridCheck"'+(hy?' checked':'')+'><div><div style="font-size:14px;font-weight:600;color:var(--text)">ハイブリッド張り</div><div style="font-size:11px;color:var(--muted);margin-top:1px">縦・横で異なるガットを使用</div></div></label>'
+    +(hy?gutSel('main')+gutSel('cross'):gutSel('main'))
+    +fp('費用 (円)','amount',F.amount||'')
+    +fi('張り替え店・メモ','memo',{ph:'例: スポーツデポ高槻店',val:F.memo||''})
+    +'<div class="btn-row"><button class="btn-cancel" onclick="closeModal()">キャンセル</button><button class="btn-save" style="background:var(--gut);color:#021a0c;box-shadow:0 4px 16px rgba(52,211,153,.3)" onclick="submitGut()">保存する</button></div>';
+}
+
+function tournFormHTML(isPlan){
+  var sb=isPlan?'var(--plan)':'var(--match)';var sc=isPlan?'#001525':'#1a0800';
+  var mblocks=!isPlan?'<div id="matchList">'+F.matches.map(matchBlockHTML).join('')+'</div><button class="add-match-btn" onclick="addMatch()">＋ 試合を追加</button>':'';
+  return '<div class="fg2">'+fi('日付','date',{type:'date',val:F.date||''})+fi('大会名','name',{ph:'例: 高槻市民大会',val:F.name||''})+'</div>'
+    +'<div class="fg2">'+fs('サーフェス','surface','<option value="">選択</option>'+mkOpts(SURFACES,F.surface))+fs('カテゴリ','category','<option value="">選択</option>'+mkOpts(CATEGORIES,F.category))+'</div>'
+    +fi('会場','venue',{ph:'例: 高槻市立テニスコート',val:F.venue||''})
+    +fi('ペア名（ダブルス）','partner',{ph:'例: 山田さん',val:F.partner||''})
+    +(!isPlan?fi('大会結果','overallResult',{ph:'例: 優勝 / 準優勝 / 2回戦負け',val:F.overallResult||''}):'')
+    +(!isPlan?'<div class="divider"><div class="divider-line"></div><span class="divider-label">試合結果</span><div class="divider-line"></div></div>':'')
+    +mblocks
+    +fp('費用 (円)','amount',F.amount||'')
+    +fi('メモ','memo',{ph:'',val:F.memo||''})
+    +'<div class="btn-row"><button class="btn-cancel" onclick="closeModal()">キャンセル</button><button class="btn-save" style="background:'+sb+';color:'+sc+';box-shadow:0 4px 16px '+sb+'44" onclick="submitTourn('+isPlan+')">保存する</button></div>';
+}
+
+function practFormHTML(){
+  var fchips=FOCUS.map(function(o){var a=F.focus===o;return '<button class="chip'+(a?' active':'')+'" style="'+(a?'background:var(--practice);color:#fff':'')+'" onclick="toggleChip(\'focus\',\''+esc(o)+'\',this)">'+esc(o)+'</button>'}).join('');
+  var cchips=CONDITIONS.map(function(o){var a=F.cond===o;return '<button class="chip'+(a?' active':'')+'" style="'+(a?'background:var(--accent);color:#fff':'')+'" onclick="toggleChip(\'cond\',\''+esc(o)+'\',this)">'+esc(o)+'</button>'}).join('');
+  return '<div class="fg2">'+fi('日付','date',{type:'date',val:F.date||''})+fi('練習時間 (分)','duration',{type:'number',ph:'90',val:F.duration||''})+'</div>'
+    +'<div class="fg2">'+fi('練習相手','partner',{ph:'山田さん / スクール',val:F.partner||''})+fs('サーフェス','surface','<option value="">選択</option>'+mkOpts(SURFACES,F.surface))+'</div>'
+    +fg('フォーカス','<div class="chip-row">'+fchips+'</div>')
+    +fg('コンディション','<div class="chip-row">'+cchips+'</div>')
+    +fp('費用 (円)','amount',F.amount||'')
+    +fi('メモ','memo',{ph:'気づき・改善点',val:F.memo||''})
+    +'<div class="btn-row"><button class="btn-cancel" onclick="closeModal()">キャンセル</button><button class="btn-save" style="background:var(--practice);color:#fff;box-shadow:0 4px 16px rgba(192,132,252,.3)" onclick="submitPract()">保存する</button></div>';
+}
+
+function expFormHTML(){
+  var cat=F.expCat||'gut';
+  var btns=ECATS.map(function(c){var a=c.key===cat;return '<button class="exc-btn'+(a?' active':'')+'" style="'+(a?'background:'+c.color+'1a;color:'+c.color+';outline:2px solid '+c.color+'44':'')+'" onclick="selExpCat(\''+c.key+'\',\''+c.color+'\',this)">'+c.icon+' '+esc(c.label)+'</button>'}).join('');
+  return fi('日付','date',{type:'date',val:F.date||''})
+    +fg('カテゴリ','<div class="exc-grid">'+btns+'</div>')
+    +fp('金額 (円)','amount',F.amount||'')
+    +fi('メモ','memo',{ph:'例: スポーツデポ高槻',val:F.memo||''})
+    +'<div class="btn-row"><button class="btn-cancel" onclick="closeModal()">キャンセル</button><button class="btn-save" style="background:var(--expense);color:#1a1000;box-shadow:0 4px 16px rgba(250,204,21,.3)" onclick="submitExp()">保存する</button></div>';
+}
+
+function racketFormHTML(){
+  var maker=F.rMaker||'';
+  var modelSel=maker&&maker!=='手入力'?fs('モデル','rModel','<option value="">選択</option>'+mkOpts(RACKET_DATA[maker]||[],F.rModel||'')):'';
+  return fs('メーカー','rMaker','<option value="">選択してください</option>'+mkOpts(Object.keys(RACKET_DATA),maker))
+    +modelSel
+    +fi('手入力（未掲載モデル）','rCustom',{ph:'例: Pro Staff RF97',val:F.rCustom||''})
+    +'<div class="fg2">'+fi('グリップ','rGrip',{ph:'G2 / G3',val:F.rGrip||''})+fi('重量 (g)','rWeight',{type:'number',ph:'305',val:F.rWeight||''})+'</div>'
+    +fi('メモ','rMemo',{ph:'カスタマイズ内容など',val:F.rMemo||''})
+    +'<div class="btn-row"><button class="btn-cancel" onclick="closeRF()">キャンセル</button><button class="btn-save" style="background:var(--accent);color:#fff;box-shadow:0 4px 16px var(--accent-glow)" onclick="submitRacket()">登録する</button></div>';
+}
+
+// ─── EVENT CARD ───────────────────────────────────────────────────────────────
+function evCardHTML(ev,showDel){
+  var inner='';
+  var racket=S.rackets.filter(function(r){return String(r.id)===String(ev.racketId)})[0];
+  var rbadge=racket?'<span class="rbadge">#'+racket.number+'</span>':'';
+  if(ev.type==='gut'){
+    var mg=gutLabel(ev,'mainMaker','mainModel','mainCustom')||'—';
+    var cg=ev.hybrid?gutLabel(ev,'crossMaker','crossModel','crossCustom'):'';
+    var strInfo=ev.hybrid?
+      '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px"><div style="background:var(--surface);border-radius:9px;padding:10px 12px"><div style="font-size:9px;color:var(--gut);font-weight:700;margin-bottom:3px">縦 MAIN</div><div style="font-size:13px;font-weight:600">'+esc(mg)+'</div>'+(ev.mainTension?'<div style="font-size:11px;color:var(--muted)">'+ev.mainTension+' lbs</div>':'')+'</div><div style="background:var(--surface);border-radius:9px;padding:10px 12px"><div style="font-size:9px;color:var(--plan);font-weight:700;margin-bottom:3px">横 CROSS</div><div style="font-size:13px;font-weight:600">'+esc(cg||'—')+'</div>'+(ev.crossTension?'<div style="font-size:11px;color:var(--muted)">'+ev.crossTension+' lbs</div>':'')+'</div></div>':
+      '<div class="card-main">'+esc(mg)+(ev.mainTension?'<span style="color:var(--muted);font-size:12px;font-weight:400"> / '+ev.mainTension+' lbs</span>':'')+'</div>';
+    inner='<div class="card-head"><span style="font-size:18px">🎾</span><span class="card-type gut">ガット張り替え</span>'+rbadge+'</div>'+strInfo+(ev.memo?'<div class="card-sub">'+esc(ev.memo)+'</div>':'')+(ev.amount?'<div class="card-amount">¥'+commas(ev.amount)+'</div>':'');
+  } else if(ev.type==='match'||ev.type==='plan'){
+    var mrows=(ev.matches||[]).map(function(m){return '<div class="match-row"><span class="match-round">'+esc(m.round||'')+'</span><span class="match-opponent">vs '+esc(m.opponent||'—')+'</span>'+(m.score?'<span class="match-score">'+esc(m.score)+'</span>':'')+(m.result?'<span class="rp '+m.result+'">'+(m.result==='win'?'WIN':m.result==='lose'?'LOSE':'DRAW')+'</span>':'')+'</div>'}).join('');
+    inner='<div class="card-head"><span style="font-size:18px">'+(ev.type==='plan'?'📋':'🏆')+'</span><span class="card-type '+ev.type+'">'+esc(ev.name||'大会')+'</span>'+(ev.type==='plan'?'<span style="background:var(--plan-dim);color:var(--plan);font-size:9px;font-weight:700;border-radius:4px;padding:2px 7px">予定</span>':'')+'</div>'
+      +(ev.surface||ev.category||ev.venue?'<div class="card-meta">'+[ev.surface,ev.category,ev.venue].filter(Boolean).map(esc).join('  ·  ')+'</div>':'')
+      +(ev.partner?'<div class="card-sub">ペア: '+esc(ev.partner)+'</div>':'')
+      +(ev.overallResult?'<div style="background:var(--surface);border-radius:9px;padding:8px 13px;font-size:14px;font-weight:700;display:inline-block;margin-bottom:8px">'+esc(ev.overallResult)+'</div>':'')
+      +mrows+(ev.memo?'<div class="card-sub" style="margin-top:6px">'+esc(ev.memo)+'</div>':'')+(ev.amount?'<div class="card-amount">¥'+commas(ev.amount)+'</div>':'');
+  } else if(ev.type==='practice'){
+    inner='<div class="card-head"><span style="font-size:18px">🎯</span><span class="card-type practice">練習</span>'+(ev.duration?'<span style="font-size:11px;color:var(--muted);font-family:\'DM Sans\',sans-serif">'+ev.duration+'min</span>':'')+'</div>'
+      +'<div class="card-sub">'+[ev.partner,ev.surface,ev.focus?'['+ev.focus+']':''].filter(Boolean).map(esc).join('  ·  ')+'</div>'
+      +(ev.cond||ev.condition?'<div class="card-sub">'+esc(ev.cond||ev.condition||'')+'</div>':'')
+      +(ev.memo?'<div class="card-sub">'+esc(ev.memo)+'</div>':'')+(ev.amount?'<div class="card-amount">¥'+commas(ev.amount)+'</div>':'');
+  }
+  var del=showDel?'<button class="card-del" onclick="delEv(\''+ev.id+'\')">🗑 削除</button>':'';
+  return '<div class="card '+ev.type+'"><div class="card-date">'+esc(ev.date||'')+'</div>'+inner+del+'</div>';
+}
+
+// ─── VIEWS ───────────────────────────────────────────────────────────────────
+function calendarHTML(){
+  var y=S.cur.getFullYear(),m=S.cur.getMonth();
+  var firstDay=new Date(y,m,1).getDay();
+  var days=new Date(y,m+1,0).getDate();
+  var byDate={};
+  S.events.filter(function(e){return e.date&&e.date.indexOf(y+'-'+pad(m+1))===0}).forEach(function(e){(byDate[e.date]=byDate[e.date]||[]).push(e)});
+  var heads=DAYS.map(function(d,i){return '<div class="cal-dh'+(i===0?' sun':i===6?' sat':'')+'">'+d+'</div>'}).join('');
+  var cells='';
+  for(var i=0;i<firstDay;i++) cells+='<div class="cal-cell empty"></div>';
+  for(var d=1;d<=days;d++){
+    var ds=fmt(y,m,d);
+    var evs=byDate[ds]||[];
+    var dow=(firstDay+d-1)%7;
+    var tod=ds===todayStr;
+    var numEl=tod?'<div class="cal-num-t">'+d+'</div>':'<div class="cal-num'+(dow===0?' sun':dow===6?' sat':'')+'">'+d+'</div>';
+    var labels={gut:'🎾',match:'🏆',plan:'📋',practice:'🎯'};
+    var badges=evs.slice(0,3).map(function(ev){return '<span class="evb '+ev.type+'">'+labels[ev.type]+' '+esc({gut:'ガット',match:'大会',plan:'予定',practice:'練習'}[ev.type])+'</span>'}).join('');
+    if(evs.length>3) badges+='<span class="cal-more">+'+( evs.length-3)+'</span>';
+    cells+='<div class="cal-cell'+(tod?' tod':'')+(evs.length?' hev':'')+'"'+(evs.length?' data-date="'+ds+'"':'')+'>'+numEl+badges+'</div>';
+  }
+  var legend='<div class="cal-legend"><span class="evb gut">🎾 ガット</span><span class="evb match">🏆 大会結果</span><span class="evb plan">📋 大会予定</span><span class="evb practice">🎯 練習</span></div>';
+  return '<div class="cal-day-headers">'+heads+'</div><div class="cal-grid">'+cells+'</div>'+legend;
+}
+
+function historyHTML(){
+  var filters={all:'すべて',gut:'🎾 ガット',match:'🏆 大会結果',plan:'📋 大会予定',practice:'🎯 練習'};
+  var btns=Object.keys(filters).map(function(k){return '<button class="filter-btn'+(S.hf===k?' active':'')+'" onclick="setHF(\''+k+'\')">'+filters[k]+'</button>'}).join('');
+  var evs=S.events.filter(function(e){return S.hf==='all'||e.type===S.hf}).sort(function(a,b){return b.date.localeCompare(a.date)});
+  var cards=evs.length?evs.map(function(e){return evCardHTML(e,true)}).join(''):'<div class="empty"><div class="empty-icon">📋</div><div class="empty-title">記録がありません</div></div>';
+  return '<div class="filter-row">'+btns+'</div>'+cards;
+}
+
+function expenseHTML(){
+  var vy=S.expM.getFullYear(),vm=S.expM.getMonth();
+  var ms=vy+'-'+pad(vm+1);
+  var mEvs=S.expenses.filter(function(e){return e.date&&e.date.indexOf(ms)===0});
+  var total=mEvs.reduce(function(s,e){return s+(Number(e.amount)||0)},0);
+  var byCat=ECATS.map(function(c){return{key:c.key,label:c.label,icon:c.icon,color:c.color,total:mEvs.filter(function(e){return e.category===c.key}).reduce(function(s,e){return s+(Number(e.amount)||0)},0)}}).filter(function(c){return c.total>0});
+  var bars=byCat.length?'<div class="exp-bar-section"><div style="font-size:10px;font-weight:700;color:var(--muted);margin-bottom:12px;letter-spacing:.1em">カテゴリ別</div>'+byCat.map(function(c){return '<div class="exp-bar-row"><div class="exp-bar-head"><span class="exp-bar-label">'+c.icon+' '+esc(c.label)+'</span><span class="exp-bar-val" style="color:'+c.color+'">¥'+commas(c.total)+'</span></div><div class="exp-bar-track"><div class="exp-bar-fill" style="width:'+(total>0?Math.round(c.total/total*100):0)+'%;background:'+c.color+'"></div></div></div>'}).join('')+'</div>':'';
+  var sorted=mEvs.slice().sort(function(a,b){return b.date.localeCompare(a.date)});
+  var items=sorted.length?sorted.map(function(e){var cat=ECATS.filter(function(c){return c.key===e.category})[0]||ECATS[6];return '<div class="exp-item" style="border-left-color:'+cat.color+'"><div><div class="exp-item-date">'+esc(e.date)+'</div><div class="exp-item-cat">'+cat.icon+' '+esc(cat.label)+'</div>'+(e.memo?'<div class="exp-item-memo">'+esc(e.memo)+'</div>':'')+'</div><div style="display:flex;align-items:center;gap:10px"><span style="font-size:16px;font-weight:800;font-variant-numeric:tabular-nums;font-family:\'DM Sans\',sans-serif;color:var(--expense)">¥'+commas(e.amount)+'</span><button class="exp-del-btn" onclick="delExp(\''+e.id+'\')">🗑</button></div></div>'}).join(''):'<div class="empty"><div class="empty-icon">💴</div><div class="empty-title">この月の記録はありません</div></div>';
+  return '<div class="exp-header"><button class="exp-nav-btn" onclick="navExpM(-1)">‹</button><div style="text-align:center"><div style="font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.08em;margin-bottom:3px">'+vy+'年 '+(vm+1)+'月</div><div class="exp-total">¥'+commas(total)+'</div></div><button class="exp-nav-btn" onclick="navExpM(1)">›</button></div>'+bars+items;
+}
+
+function racketsHTML(){
+  var abtn=S.showRF?'<button class="add-racket-btn" style="background:var(--surface2);border:1px solid var(--line2);color:var(--sub)" onclick="toggleRF()">閉じる</button>':'<button class="add-racket-btn" style="background:var(--accent);color:#fff;box-shadow:0 2px 14px var(--accent-glow)" onclick="toggleRF()">＋ 追加</button>';
+  var form=S.showRF?'<div class="racket-form-box" id="rfbox">'+racketFormHTML()+'</div>':'';
+  var cards=S.rackets.length?S.rackets.map(function(r){return '<div class="racket-card"><div class="racket-num">#'+r.number+'</div><div class="racket-info"><div class="racket-name">'+esc((r.maker!=='手入力'?r.maker+' ':'')+(r.model||r.custom||'（名称未設定）'))+'</div><div class="racket-meta">'+[r.grip?'グリップ '+r.grip:'',r.weight?r.weight+'g':'',r.memo].filter(Boolean).map(esc).join('  ·  ')+'</div></div><button class="racket-del-btn" onclick="delRacket(\''+r.id+'\')">🗑</button></div>'}).join(''):'<div class="empty"><div class="empty-icon">🎾</div><div class="empty-title">ラケットが登録されていません</div><div style="font-size:12px;color:var(--muted)">上の「＋ 追加」から登録してください</div></div>';
+  return '<div class="rackets-header"><div class="rackets-count"><strong>'+S.rackets.length+'</strong>本登録中</div>'+abtn+'</div>'+form+cards;
+}
+
+function statsHTML(){
+  var gEvs=S.events.filter(function(e){return e.type==='gut'});
+  var mEvs=S.events.filter(function(e){return e.type==='match'});
+  var pEvs=S.events.filter(function(e){return e.type==='practice'});
+  var allM=mEvs.reduce(function(a,t){return a.concat(t.matches||[]);},[]);
+  var wins=allM.filter(function(m){return m.result==='win'}).length;
+  var loses=allM.filter(function(m){return m.result==='lose'}).length;
+  var tot=wins+loses;
+  var wr=tot>0?Math.round(wins/tot*100):null;
+  var totalMin=pEvs.reduce(function(s,e){return s+(Number(e.duration)||0)},0);
+  var n=new Date(),thisMsV=n.getFullYear()+'-'+pad(n.getMonth()+1);
+  var mExp=S.expenses.filter(function(e){return e.date&&e.date.indexOf(thisMsV)===0});
+  var mTotal=mExp.reduce(function(s,e){return s+(Number(e.amount)||0)},0);
+  var aTotal=S.expenses.reduce(function(s,e){return s+(Number(e.amount)||0)},0);
+  function sc(label,val,unit,sub,color){
+    var v=val!=null?'<span class="stat-card-val" style="color:'+(color||'var(--text)')+'">'+val+'</span>'+(unit?'<span style="font-size:14px;font-weight:600;color:var(--sub);margin-left:3px">'+unit+'</span>':''):'<span style="color:var(--muted);font-size:20px;font-weight:900">—</span>';
+    return '<div class="stat-card"><div class="stat-card-label">'+label+'</div>'+v+(sub?'<div class="stat-card-sub">'+sub+'</div>':'')+'</div>';
+  }
+  var dash=360*28*2*Math.PI/360;
+  var ring=tot>0?'<div class="stat-card span2"><div class="stat-card-label">WIN/LOSE</div><div style="display:flex;align-items:center;gap:18px"><svg width="72" height="72" viewBox="0 0 72 72"><circle cx="36" cy="36" r="28" fill="none" stroke="var(--surface2)" stroke-width="8"/><circle cx="36" cy="36" r="28" fill="none" stroke="var(--win)" stroke-width="8" stroke-dasharray="'+(wr/100*176)+' 176" stroke-dashoffset="44" stroke-linecap="round"/><text x="36" y="41" text-anchor="middle" font-size="14" font-weight="900" fill="var(--win)" font-family="\'DM Sans\',sans-serif">'+wr+'%</text></svg><div><div><strong style="font-size:16px;font-weight:700;color:var(--win);font-family:\'DM Sans\',sans-serif">'+wins+'勝</strong><strong style="font-size:16px;font-weight:700;color:var(--lose);margin-left:10px;font-family:\'DM Sans\',sans-serif">'+loses+'敗</strong></div><div style="font-size:12px;color:var(--muted);margin-top:4px">'+tot+'試合</div></div></div></div>':'';
+  var lg=gEvs.slice().sort(function(a,b){return b.date.localeCompare(a.date)})[0];
+  var lgCard=lg?'<div class="latest-gut"><div class="latest-gut-label">LATEST STRINGING</div><div style="font-size:11px;color:var(--muted);font-family:\'DM Sans\',sans-serif;margin-bottom:3px">'+esc(lg.date)+'</div><div style="font-size:15px;font-weight:700;color:var(--text)">'+esc(gutLabel(lg,'mainMaker','mainModel','mainCustom')||'—')+(lg.hybrid?'<span style="font-size:11px;color:var(--muted);font-weight:400"> / ハイブリッド</span>':'')+'</div>'+(lg.mainTension?'<div style="font-size:12px;color:var(--sub);margin-top:3px">'+lg.mainTension+' lbs</div>':'')+'</div>':'';
+  return '<div class="stat-grid">'
+    +ring
+    +sc('大会参加',mEvs.length,'回','','var(--match)')
+    +sc('練習時間',totalMin>=60?Math.floor(totalMin/60):totalMin||null,totalMin>=60?'h':'min',pEvs.length+'セッション','var(--practice)')
+    +sc('マイラケット',S.rackets.length,'本','','var(--accent)')
+    +sc('今月のテニス代',mTotal>0?'¥'+commas(mTotal):null,'',mExp.length+'件','var(--expense)')
+    +sc('累計テニス代',aTotal>0?'¥'+commas(aTotal):null,'','全'+S.expenses.length+'件','#fb923c')
+    +'</div>'+lgCard;
+}
+
+// ─── RENDER ──────────────────────────────────────────────────────────────────
+function render(){
+  var el=document.getElementById('mainContent');
+  if(S.tab==='calendar') el.innerHTML=calendarHTML();
+  else if(S.tab==='history') el.innerHTML=historyHTML();
+  else if(S.tab==='expense') el.innerHTML=expenseHTML();
+  else if(S.tab==='rackets') el.innerHTML=racketsHTML();
+  else el.innerHTML=statsHTML();
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.toggle('active',t.dataset.tab===S.tab)});
+  var hr=document.getElementById('headerRight');
+  if(S.tab==='calendar'){
+    var y=S.cur.getFullYear(),m=S.cur.getMonth();
+    var ms2=y+'-'+pad(m+1);
+    var cost=S.events.concat(S.expenses).filter(function(e){return e.date&&e.date.indexOf(ms2)===0&&e.amount}).reduce(function(s,e){return s+(Number(e.amount)||0)},0);
+    hr.innerHTML='<div><div class="month-nav"><button class="month-nav-btn" onclick="navM(-1)">‹</button><span class="month-label">'+y+'年'+(m+1)+'月</span><button class="month-nav-btn" onclick="navM(1)">›</button></div>'+(cost>0?'<div class="month-cost">¥'+commas(cost)+'</div>':'')+'</div>';
+  } else hr.innerHTML='';
+}
+
+// ─── MODAL ───────────────────────────────────────────────────────────────────
+var MTITLES={gut:'🎾 ガット張り替え',match:'🏆 大会結果',plan:'📋 大会予定',practice:'🎯 練習記録',expense:'💴 費用メモ'};
+function openModal(type){
+  S.modal=type;
+  F={matches:[{round:'',opponent:'',score:'',result:'',memo:''}],expCat:'gut'};
+  document.getElementById('modalTitle').textContent=MTITLES[type]||type;
+  renderModalBody();
+  document.getElementById('modalBg').classList.remove('hidden');
+}
+function openDayModal(ds){
+  var evs=S.events.filter(function(e){return e.date===ds});
+  if(!evs.length) return;
+  var d=new Date(ds);
+  document.getElementById('modalTitle').textContent=(d.getMonth()+1)+'月'+d.getDate()+'日';
+  document.getElementById('modalBody').innerHTML=evs.map(function(ev){return evCardHTML(ev,true)}).join('')
+    +'<div class="divider"><div class="divider-line"></div><span class="divider-label">記録を追加</span><div class="divider-line"></div></div>'
+    +'<div style="display:flex;gap:7px;flex-wrap:wrap">'
+    +FAB_ACTIONS.map(function(a){return '<button onclick="openModal(\''+a.type+'\')" style="padding:8px 14px;background:'+a.bg+';color:'+a.col+';border:none;border-radius:10px;font-size:11px;font-weight:700;cursor:pointer">＋'+a.label.replace(/^[^ ]+ /,'')+'</button>'}).join('')+'</div>';
+  S.modal='day';
+  document.getElementById('modalBg').classList.remove('hidden');
+}
+function renderModalBody(){
+  var el=document.getElementById('modalBody');
+  if(S.modal==='gut') el.innerHTML=gutFormHTML();
+  else if(S.modal==='match') el.innerHTML=tournFormHTML(false);
+  else if(S.modal==='plan') el.innerHTML=tournFormHTML(true);
+  else if(S.modal==='practice') el.innerHTML=practFormHTML();
+  else if(S.modal==='expense') el.innerHTML=expFormHTML();
+}
+function closeModal(){document.getElementById('modalBg').classList.add('hidden');S.modal=null;}
+
+// ─── FORM INTERACTIONS ────────────────────────────────────────────────────────
+function toggleChip(field,val,btn){
+  F[field]=F[field]===val?'':val;
+  btn.closest('.chip-row').querySelectorAll('.chip').forEach(function(c){
+    var active=c.textContent.trim()===val&&F[field]===val;
+    c.classList.toggle('active',active);
+    c.style.background=active?(field==='focus'?'var(--practice)':'var(--accent)'):'';
+    c.style.color=active?'#fff':'';
   });
-  useEffect(() => { try { localStorage.setItem(key, JSON.stringify(v)); } catch {} }, [key,v]);
-  return [v, setV];
+}
+function selExpCat(key,color,btn){
+  F.expCat=key;
+  btn.closest('.exc-grid').querySelectorAll('.exc-btn').forEach(function(b){
+    var active=b===btn;b.classList.toggle('active',active);
+    if(active){b.style.background=color+'1a';b.style.color=color;b.style.outline='2px solid '+color+'44';}
+    else{b.style.background='';b.style.color='';b.style.outline='';}
+  });
+}
+function setRes(idx,result){
+  F.matches[idx].result=result;
+  var block=document.getElementById('mb'+idx);
+  block.querySelectorAll('.result-btn').forEach(function(b){b.classList.toggle('sel',b.classList.contains(result))});
+}
+function syncMatches(){
+  F.matches.forEach(function(_,i){
+    F.matches[i].round=gv('m'+i+'round');
+    F.matches[i].opponent=gv('m'+i+'opponent');
+    F.matches[i].score=gv('m'+i+'score');
+    F.matches[i].memo=gv('m'+i+'memo');
+  });
+}
+function addMatch(){syncMatches();F.matches.push({round:'',opponent:'',score:'',result:'',memo:''});document.getElementById('matchList').innerHTML=F.matches.map(matchBlockHTML).join('');}
+function removeMatch(idx){syncMatches();F.matches.splice(idx,1);document.getElementById('matchList').innerHTML=F.matches.map(matchBlockHTML).join('');}
+
+// gut maker change → re-render modal body
+document.getElementById('modalBody').addEventListener('change',function(e){
+  var el=e.target;
+  if(el.name==='mainMaker'||el.name==='crossMaker'){
+    var prefix=el.name.replace('Maker','');
+    F[prefix+'Maker']=el.value;F[prefix+'Model']='';renderModalBody();
+  } else if(el.name==='hybrid'){
+    F.hybrid=el.checked;renderModalBody();
+  } else if(el.name==='rMaker'){
+    F.rMaker=el.value;F.rModel='';
+    var rfbox=document.getElementById('rfbox');if(rfbox)rfbox.innerHTML=racketFormHTML();
+  }
+});
+
+// ─── SUBMIT ───────────────────────────────────────────────────────────────────
+function submitGut(){
+  var date=gv('date');if(!date){alert('日付を入力してください');return;}
+  S.events.push({id:Date.now(),type:'gut',date:date,racketId:gv('racketId'),
+    hybrid:!!(document.getElementById('hybridCheck') && document.getElementById('hybridCheck').checked),
+    mainMaker:gv('mainMaker'),mainModel:gv('mainModel'),mainCustom:gv('mainCustom'),mainTension:gv('mainTension'),
+    crossMaker:gv('crossMaker'),crossModel:gv('crossModel'),crossCustom:gv('crossCustom'),crossTension:gv('crossTension'),
+    amount:gv('amount'),memo:gv('memo')});
+  persist();closeModal();render();
+}
+function submitTourn(isPlan){
+  var date=gv('date'),name=gv('name');if(!date||!name){alert('日付と大会名を入力してください');return;}
+  if(!isPlan)syncMatches();
+  S.events.push({id:Date.now(),type:isPlan?'plan':'match',date:date,name:name,
+    surface:gv('surface'),category:gv('category'),venue:gv('venue'),partner:gv('partner'),
+    overallResult:isPlan?'':gv('overallResult'),
+    matches:isPlan?[]:F.matches.map(function(m){return Object.assign({},m)}),
+    amount:gv('amount'),memo:gv('memo')});
+  persist();closeModal();render();
+}
+function submitPract(){
+  var date=gv('date');if(!date){alert('日付を入力してください');return;}
+  S.events.push({id:Date.now(),type:'practice',date:date,duration:gv('duration'),surface:gv('surface'),partner:gv('partner'),focus:F.focus||'',cond:F.cond||'',amount:gv('amount'),memo:gv('memo')});
+  persist();closeModal();render();
+}
+function submitExp(){
+  var date=gv('date'),amount=gv('amount');if(!date||!amount){alert('日付と金額を入力してください');return;}
+  S.expenses.push({id:Date.now(),type:'expense',date:date,category:F.expCat||'other',amount:amount,memo:gv('memo')});
+  persist();closeModal();render();
+}
+function toggleRF(){S.showRF=!S.showRF;F={};render();}
+function closeRF(){S.showRF=false;render();}
+function submitRacket(){
+  var maker=gv('rMaker');if(!maker){alert('メーカーを選択してください');return;}
+  S.rackets.push({id:Date.now(),number:S.rackets.length+1,maker:maker,model:gv('rModel'),custom:gv('rCustom'),grip:gv('rGrip'),weight:gv('rWeight'),memo:gv('rMemo')});
+  persist();S.showRF=false;render();
 }
 
-function gutDisplayName(ev, mk, mo, cu) {
-  const c = ev[cu]; if(c) return c;
-  const maker = ev[mk]||"", model = ev[mo]||"";
-  if(maker && maker!=="手入力" && model) return `${maker} ${model}`;
-  if(maker && maker!=="手入力") return maker;
-  return "";
+// ─── ACTIONS ─────────────────────────────────────────────────────────────────
+function delEv(id){if(!confirm('削除しますか？'))return;S.events=S.events.filter(function(e){return String(e.id)!==String(id)});persist();closeModal();render();}
+function delExp(id){if(!confirm('削除しますか？'))return;S.expenses=S.expenses.filter(function(e){return String(e.id)!==String(id)});persist();render();}
+function delRacket(id){if(!confirm('削除しますか？'))return;S.rackets=S.rackets.filter(function(r){return String(r.id)!==String(id)}).map(function(r,i){return Object.assign({},r,{number:i+1})});persist();render();}
+function navM(d){S.cur=new Date(S.cur.getFullYear(),S.cur.getMonth()+d,1);render();}
+function navExpM(d){S.expM=new Date(S.expM.getFullYear(),S.expM.getMonth()+d,1);render();}
+function setHF(f){S.hf=f;render();}
+
+// ─── FAB ─────────────────────────────────────────────────────────────────────
+function toggleFab(){
+  S.fab=!S.fab;
+  var wrap=document.getElementById('fabActions');
+  var btn=document.getElementById('fabBtn');
+  if(S.fab){
+    wrap.style.display='flex';
+    wrap.innerHTML=FAB_ACTIONS.map(function(a,i){return '<button class="fab-action-btn" style="background:'+a.bg+';color:'+a.col+';animation-delay:'+(i*0.04)+'s;box-shadow:0 4px 16px '+a.bg+'55" onclick="openModal(\''+a.type+'\');closeFab()">'+a.label+'</button>'}).join('');
+    btn.classList.add('open');
+  } else closeFab();
 }
+function closeFab(){S.fab=false;document.getElementById('fabActions').style.display='none';document.getElementById('fabBtn').classList.remove('open');}
 
-// ─── BASE STYLES ────────────────────────────────────────────────────────────
-const baseInput = {
-  width:"100%", background:T.surfaceRaised,
-  border:`1px solid ${T.lineStrong}`, borderRadius:10,
-  color:T.text, padding:"11px 14px", fontSize:14,
-  outline:"none", boxSizing:"border-box", transition:"border-color 0.18s, box-shadow 0.18s",
-  fontFamily:"inherit", appearance:"none", WebkitAppearance:"none",
-};
+// ─── TABS & MODAL ─────────────────────────────────────────────────────────────
+document.getElementById('tabBar').addEventListener('click',function(e){var t=e.target.closest('.tab');if(!t)return;S.tab=t.dataset.tab;S.showRF=false;render();});
+document.getElementById('mainContent').addEventListener('click',function(e){var c=e.target.closest('[data-date]');if(c)openDayModal(c.dataset.date);});
+document.getElementById('fabBtn').addEventListener('click',function(){toggleFab();});
+document.getElementById('modalCloseBtn').addEventListener('click',function(){closeModal();});
+document.getElementById('modalBg').addEventListener('click',function(e){if(e.target===e.currentTarget)closeModal();});
 
-// ─── MICRO COMPONENTS ───────────────────────────────────────────────────────
-const Label = ({children,color}) => (
-  <div style={{fontSize:10,fontWeight:700,letterSpacing:"0.1em",color:color||T.textMuted,marginBottom:6,textTransform:"uppercase"}}>
-    {children}
-  </div>
-);
-const Field = ({label,children}) => (
-  <div style={{marginBottom:14}}><Label>{label}</Label>{children}</div>
-);
-const Inp = ({label,...p}) => (
-  <Field label={label}>
-    <input {...p} className="tc-input" style={{...baseInput,...p.style}}/>
-  </Field>
-);
-const Sel = ({label,children,...p}) => (
-  <Field label={label}>
-    <select {...p} className="tc-select" style={{...baseInput,cursor:"pointer",backgroundImage:`url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238fa8c8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")`,backgroundRepeat:"no-repeat",backgroundPosition:"calc(100% - 12px) center",paddingRight:36,...p.style}}>
-      {children}
-    </select>
-  </Field>
-);
-
-function Badge({icon,label,type}) {
-  const cfg = {
-    gut:     {bg:T.gutDim,    color:T.gut,    border:"rgba(52,211,153,0.22)"},
-    match:   {bg:T.matchDim,  color:T.match,  border:"rgba(251,146,60,0.22)"},
-    plan:    {bg:T.planDim,   color:T.plan,   border:"rgba(96,165,250,0.22)"},
-    practice:{bg:T.practiceDim,color:T.practice,border:"rgba(192,132,252,0.22)"},
-  };
-  const c = cfg[type]||cfg.gut;
-  return (
-    <div style={{
-      background:c.bg, color:c.color, border:`1px solid ${c.border}`,
-      fontSize:9, fontWeight:700, borderRadius:5, padding:"2px 5px",
-      overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap",
-      letterSpacing:"0.02em", fontFamily:"'DM Sans',sans-serif",
-    }}>{icon} {label}</div>
-  );
-}
-
-function ResultPill({result}) {
-  if(!result) return null;
-  const cfg={win:{bg:T.winBg,color:T.win,label:"WIN"},lose:{bg:T.loseBg,color:T.lose,label:"LOSE"},draw:{bg:T.drawBg,color:T.draw,label:"DRAW"}};
-  const c=cfg[result]||cfg.draw;
-  return <span style={{background:c.bg,color:c.color,fontSize:10,fontWeight:800,borderRadius:6,padding:"2px 9px",letterSpacing:"0.08em",fontFamily:"'DM Sans',sans-serif"}}>{c.label}</span>;
-}
-
-const Divider = ({label}) => (
-  <div style={{display:"flex",alignItems:"center",gap:10,margin:"20px 0 16px"}}>
-    <div style={{flex:1,height:1,background:T.line}}/>
-    {label&&<span style={{color:T.textMuted,fontSize:10,fontWeight:700,letterSpacing:"0.1em"}}>{label}</span>}
-    <div style={{flex:1,height:1,background:T.line}}/>
-  </div>
-);
-
-// ─── MODAL ──────────────────────────────────────────────────────────────────
-function Modal({title,subtitle,onClose,children}) {
-  useEffect(()=>{
-    const prev = document.body.style.overflow;
-    document.body.style.overflow="hidden";
-    return ()=>{document.body.style.overflow=prev};
-  },[]);
-  return (
-    <div style={{
-      position:"fixed",inset:0,background:"rgba(2,6,14,0.88)",
-      display:"flex",alignItems:"flex-end",justifyContent:"center",zIndex:200,
-      backdropFilter:"blur(6px)",WebkitBackdropFilter:"blur(6px)",
-    }} onClick={e=>e.target===e.currentTarget&&onClose()}>
-      <div className="tc-modal-inner" style={{
-        background:T.surface,
-        borderRadius:"22px 22px 0 0",
-        border:`1px solid ${T.lineStrong}`,borderBottom:"none",
-        width:"100%", maxWidth:640,
-        maxHeight:"92dvh", overflowY:"auto",
-        boxShadow:"0 -32px 80px rgba(0,0,0,0.7), 0 -1px 0 rgba(56,189,248,0.08)",
-        paddingBottom:"max(32px,env(safe-area-inset-bottom))",
-      }}>
-        <div style={{display:"flex",justifyContent:"center",padding:"14px 0 0"}}>
-          <div style={{width:38,height:4,borderRadius:2,background:T.lineStrong}}/>
-        </div>
-        <div style={{padding:"14px 24px 18px",borderBottom:`1px solid ${T.line}`}}>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
-            <div>
-              <h2 style={{margin:0,fontSize:18,fontWeight:800,color:T.text,letterSpacing:"-0.01em"}}>{title}</h2>
-              {subtitle&&<div style={{fontSize:12,color:T.textMuted,marginTop:3}}>{subtitle}</div>}
-            </div>
-            <button onClick={onClose} className="ripple-btn" style={{
-              background:T.surfaceRaised,border:`1px solid ${T.lineStrong}`,color:T.textSub,
-              width:34,height:34,borderRadius:10,cursor:"pointer",fontSize:18,
-              display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,
-            }}>×</button>
-          </div>
-        </div>
-        <div style={{padding:"22px 24px"}}>{children}</div>
-      </div>
-    </div>
-  );
-}
-
-// ─── GUT SELECTOR ───────────────────────────────────────────────────────────
-function GutSelector({label,color,makerK,modelK,customK,f,setF}) {
-  const maker = f[makerK]||"";
-  const models = maker&&maker!=="手入力"?GUT_DATA[maker]||[]:[];
-  return (
-    <div style={{background:T.bgDeep,borderRadius:14,padding:16,border:`1px solid ${(color||T.gut)}33`,marginBottom:14}}>
-      <div style={{fontSize:11,fontWeight:700,color:color||T.gut,marginBottom:12,letterSpacing:"0.08em"}}>{label}</div>
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
-        <Sel label="メーカー" value={maker} onChange={e=>setF(p=>({...p,[makerK]:e.target.value,[modelK]:"",[customK]:""}))} >
-          <option value="">選択</option>
-          {Object.keys(GUT_DATA).map(m=><option key={m}>{m}</option>)}
-        </Sel>
-        {maker&&maker!=="手入力"&&(
-          <Sel label="モデル" value={f[modelK]||""} onChange={e=>setF(p=>({...p,[modelK]:e.target.value}))}>
-            <option value="">選択</option>
-            {models.map(m=><option key={m}>{m}</option>)}
-          </Sel>
-        )}
-      </div>
-      <Inp label="手入力（未掲載モデル）" placeholder="例: ALU Power Rough 125" value={f[customK]||""} onChange={e=>setF(p=>({...p,[customK]:e.target.value}))}/>
-    </div>
-  );
-}
-
-const SaveBtn = ({onClick,color,textColor,children}) => (
-  <button onClick={onClick} className="ripple-btn" style={{
-    flex:2,padding:"13px",background:color,border:"none",borderRadius:12,
-    color:textColor||"#fff",fontSize:14,fontWeight:800,cursor:"pointer",
-    letterSpacing:"0.02em",boxShadow:`0 4px 20px ${color}44`,
-  }}>{children}</button>
-);
-const CancelBtn = ({onClick}) => (
-  <button onClick={onClick} className="ripple-btn" style={{
-    flex:1,padding:"13px",background:T.surfaceRaised,border:`1px solid ${T.lineStrong}`,
-    borderRadius:12,color:T.textSub,fontSize:14,fontWeight:600,cursor:"pointer",
-  }}>キャンセル</button>
-);
-
-// ─── GUT FORM ───────────────────────────────────────────────────────────────
-function GutForm({onSave,onClose,rackets}) {
-  const [f,setF]=useState({date:"",racketId:"",hybrid:false,mainMaker:"",mainModel:"",mainCustom:"",mainTension:"",crossMaker:"",crossModel:"",crossCustom:"",crossTension:"",amount:"",memo:""});
-  const save=()=>{if(!f.date)return alert("日付を入力してください");onSave({...f,type:"gut",id:Date.now()});};
-  return (<>
-    <Inp label="張り替え日" type="date" value={f.date} onChange={e=>setF(p=>({...p,date:e.target.value}))}/>
-    <Field label="使用ラケット">
-      <select value={f.racketId} onChange={e=>setF(p=>({...p,racketId:e.target.value}))} className="tc-select" style={baseInput}>
-        <option value="">選択（マイラケットから）</option>
-        {rackets.map(r=><option key={r.id} value={r.id}>#{r.number} {r.maker!=="手入力"?r.maker:""} {r.model||r.custom||""}</option>)}
-      </select>
-      {rackets.length===0&&<div style={{fontSize:11,color:T.textMuted,marginTop:6}}>※ マイラケットタブで先に登録してください</div>}
-    </Field>
-    <label style={{display:"flex",alignItems:"center",gap:12,cursor:"pointer",marginBottom:18,padding:"12px 16px",background:T.bgDeep,borderRadius:12,border:`1px solid ${T.line}`}}>
-      <input type="checkbox" checked={f.hybrid} onChange={e=>setF(p=>({...p,hybrid:e.target.checked}))} style={{width:18,height:18,accentColor:T.gut,cursor:"pointer"}}/>
-      <div>
-        <div style={{fontSize:14,fontWeight:600,color:T.text}}>ハイブリッド張り</div>
-        <div style={{fontSize:11,color:T.textMuted,marginTop:1}}>縦・横で異なるガットを使用</div>
-      </div>
-    </label>
-    {f.hybrid?(<>
-      <GutSelector label="縦ガット（メイン）" color={T.gut} makerK="mainMaker" modelK="mainModel" customK="mainCustom" f={f} setF={setF}/>
-      <Inp label="縦テンション (lbs)" type="number" placeholder="50" value={f.mainTension} onChange={e=>setF(p=>({...p,mainTension:e.target.value}))}/>
-      <GutSelector label="横ガット（クロス）" color={T.plan} makerK="crossMaker" modelK="crossModel" customK="crossCustom" f={f} setF={setF}/>
-      <Inp label="横テンション (lbs)" type="number" placeholder="48" value={f.crossTension} onChange={e=>setF(p=>({...p,crossTension:e.target.value}))}/>
-    </>):(<>
-      <GutSelector label="ガット" color={T.gut} makerK="mainMaker" modelK="mainModel" customK="mainCustom" f={f} setF={setF}/>
-      <Inp label="テンション (lbs)" type="number" placeholder="50" value={f.mainTension} onChange={e=>setF(p=>({...p,mainTension:e.target.value}))}/>
-    </>)}
-    <Field label="費用 (円)">
-      <div style={{position:"relative"}}>
-        <span style={{position:"absolute",left:14,top:"50%",transform:"translateY(-50%)",color:T.textMuted,fontSize:14,pointerEvents:"none"}}>¥</span>
-        <input type="number" placeholder="3500" value={f.amount} onChange={e=>setF(p=>({...p,amount:e.target.value}))} className="tc-input" style={{...baseInput,paddingLeft:30}}/>
-      </div>
-    </Field>
-    <Inp label="張り替え店・メモ" placeholder="例: スポーツデポ高槻店" value={f.memo} onChange={e=>setF(p=>({...p,memo:e.target.value}))}/>
-    <div style={{display:"flex",gap:10,marginTop:10}}>
-      <CancelBtn onClick={onClose}/>
-      <SaveBtn onClick={save} color={T.gut} textColor="#021a0c">保存する</SaveBtn>
-    </div>
-  </>);
-}
-
-// ─── TOURNAMENT FORM ────────────────────────────────────────────────────────
-function TournamentForm({onSave,onClose,isPlan}) {
-  const mk=()=>({round:"",opponent:"",score:"",result:"",memo:""});
-  const [f,setF]=useState({date:"",name:"",surface:"",category:"",venue:"",partner:"",overallResult:"",amount:"",memo:"",matches:[mk()]});
-  const setMatch=(i,k,v)=>setF(p=>({...p,matches:p.matches.map((m,idx)=>idx===i?{...m,[k]:v}:m)}));
-  const save=()=>{if(!f.date||!f.name)return alert("日付と大会名を入力してください");onSave({...f,type:isPlan?"plan":"match",id:Date.now()});};
-  const accent=isPlan?T.plan:T.match;
-  return (<>
-    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
-      <Inp label="日付" type="date" value={f.date} onChange={e=>setF(p=>({...p,date:e.target.value}))}/>
-      <Inp label="大会名" placeholder="例: 高槻市民大会" value={f.name} onChange={e=>setF(p=>({...p,name:e.target.value}))}/>
-    </div>
-    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
-      <Sel label="サーフェス" value={f.surface} onChange={e=>setF(p=>({...p,surface:e.target.value}))}>
-        <option value="">選択</option>{SURFACES.map(s=><option key={s}>{s}</option>)}
-      </Sel>
-      <Sel label="カテゴリ" value={f.category} onChange={e=>setF(p=>({...p,category:e.target.value}))}>
-        <option value="">選択</option>{CATEGORIES.map(s=><option key={s}>{s}</option>)}
-      </Sel>
-    </div>
-    <Inp label="会場" placeholder="例: 高槻市立テニスコート" value={f.venue} onChange={e=>setF(p=>({...p,venue:e.target.value}))}/>
-    <Inp label="ペア名（ダブルス）" placeholder="例: 山田さん" value={f.partner} onChange={e=>setF(p=>({...p,partner:e.target.value}))}/>
-    {!isPlan&&(<>
-      <Inp label="大会結果" placeholder="例: 優勝 / 準優勝 / 2回戦負け" value={f.overallResult} onChange={e=>setF(p=>({...p,overallResult:e.target.value}))}/>
-      <Divider label="試合結果"/>
-      {f.matches.map((m,i)=>(
-        <div key={i} style={{background:T.bgDeep,borderRadius:14,padding:16,marginBottom:12,border:`1px solid ${T.line}`}}>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
-            <span style={{fontSize:12,fontWeight:700,color:accent,letterSpacing:"0.04em"}}>{i+1}試合目</span>
-            {f.matches.length>1&&<button onClick={()=>setF(p=>({...p,matches:p.matches.filter((_,idx)=>idx!==i)}))} style={{background:"none",border:"none",color:T.textMuted,cursor:"pointer",fontSize:18,lineHeight:1}}>×</button>}
-          </div>
-          <Sel label="ラウンド" value={m.round} onChange={e=>setMatch(i,"round",e.target.value)}>
-            <option value="">選択</option>{ROUNDS.map(r=><option key={r}>{r}</option>)}
-          </Sel>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
-            <Inp label="相手名" placeholder="田中さん" value={m.opponent} onChange={e=>setMatch(i,"opponent",e.target.value)}/>
-            <Inp label="スコア" placeholder="6-4, 6-3" value={m.score} onChange={e=>setMatch(i,"score",e.target.value)}/>
-          </div>
-          <div style={{display:"flex",gap:8,marginBottom:10}}>
-            {["win","lose","draw"].map(r=>(
-              <button key={r} onClick={()=>setMatch(i,"result",r)} className="ripple-btn" style={{
-                flex:1,padding:"9px 0",borderRadius:10,border:"none",cursor:"pointer",fontSize:12,fontWeight:700,
-                background:m.result===r?(r==="win"?T.winBg:r==="lose"?T.loseBg:T.drawBg):T.surfaceRaised,
-                color:m.result===r?(r==="win"?T.win:r==="lose"?T.lose:T.draw):T.textMuted,
-                outline:m.result===r?`2px solid ${r==="win"?T.win:r==="lose"?T.lose:T.draw}`:"none",
-                transition:"all 0.15s",
-              }}>{r==="win"?"WIN":r==="lose"?"LOSE":"DRAW"}</button>
-            ))}
-          </div>
-          <Inp label="メモ" placeholder="サーブ好調など" value={m.memo} onChange={e=>setMatch(i,"memo",e.target.value)}/>
-        </div>
-      ))}
-      <button onClick={()=>setF(p=>({...p,matches:[...p.matches,mk()]}))} className="ripple-btn" style={{
-        width:"100%",padding:"11px",background:"transparent",border:`1.5px dashed ${T.lineStrong}`,
-        borderRadius:12,color:T.textSub,fontSize:13,fontWeight:600,cursor:"pointer",marginBottom:16,
-      }}>＋ 試合を追加</button>
-    </>)}
-    <Field label="費用 (円)">
-      <div style={{position:"relative"}}>
-        <span style={{position:"absolute",left:14,top:"50%",transform:"translateY(-50%)",color:T.textMuted,fontSize:14,pointerEvents:"none"}}>¥</span>
-        <input type="number" placeholder="3000" value={f.amount} onChange={e=>setF(p=>({...p,amount:e.target.value}))} className="tc-input" style={{...baseInput,paddingLeft:30}}/>
-      </div>
-    </Field>
-    <Inp label="メモ" placeholder="" value={f.memo} onChange={e=>setF(p=>({...p,memo:e.target.value}))}/>
-    <div style={{display:"flex",gap:10,marginTop:10}}>
-      <CancelBtn onClick={onClose}/>
-      <SaveBtn onClick={save} color={accent} textColor={isPlan?"#001525":"#1a0800"}>保存する</SaveBtn>
-    </div>
-  </>);
-}
-
-// ─── PRACTICE FORM ──────────────────────────────────────────────────────────
-function PracticeForm({onSave,onClose}) {
-  const [f,setF]=useState({date:"",duration:"",partner:"",surface:"",focus:"",condition:"",amount:"",memo:""});
-  const save=()=>{if(!f.date)return alert("日付を入力してください");onSave({...f,type:"practice",id:Date.now()});};
-  const ChipBtn=({val,active,color,children,onClick})=>(
-    <button onClick={onClick} className="ripple-btn" style={{
-      padding:"7px 13px",borderRadius:20,border:"none",cursor:"pointer",fontSize:11,fontWeight:600,
-      background:active?(color||T.practice):T.surfaceRaised,
-      color:active?"#fff":T.textSub,
-      outline:active?`2px solid ${(color||T.practice)}55`:"none",
-      transition:"all 0.15s",
-    }}>{children}</button>
-  );
-  return (<>
-    <Inp label="日付" type="date" value={f.date} onChange={e=>setF(p=>({...p,date:e.target.value}))}/>
-    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
-      <Inp label="練習時間 (分)" type="number" placeholder="90" value={f.duration} onChange={e=>setF(p=>({...p,duration:e.target.value}))}/>
-      <Sel label="サーフェス" value={f.surface} onChange={e=>setF(p=>({...p,surface:e.target.value}))}>
-        <option value="">選択</option>{SURFACES.map(s=><option key={s}>{s}</option>)}
-      </Sel>
-    </div>
-    <Inp label="練習相手" placeholder="山田さん / スクール" value={f.partner} onChange={e=>setF(p=>({...p,partner:e.target.value}))}/>
-    <Field label="フォーカス">
-      <div style={{display:"flex",flexWrap:"wrap",gap:6}}>
-        {FOCUS_OPTIONS.map(o=><ChipBtn key={o} active={f.focus===o} color={T.practice} onClick={()=>setF(p=>({...p,focus:p.focus===o?"":o}))}>{o}</ChipBtn>)}
-      </div>
-    </Field>
-    <Field label="コンディション">
-      <div style={{display:"flex",flexWrap:"wrap",gap:6}}>
-        {CONDITIONS.map(o=><ChipBtn key={o} active={f.condition===o} color={T.accent} onClick={()=>setF(p=>({...p,condition:p.condition===o?"":o}))}>{o}</ChipBtn>)}
-      </div>
-    </Field>
-    <Field label="費用 (円)">
-      <div style={{position:"relative"}}>
-        <span style={{position:"absolute",left:14,top:"50%",transform:"translateY(-50%)",color:T.textMuted,fontSize:14,pointerEvents:"none"}}>¥</span>
-        <input type="number" placeholder="2000" value={f.amount} onChange={e=>setF(p=>({...p,amount:e.target.value}))} className="tc-input" style={{...baseInput,paddingLeft:30}}/>
-      </div>
-    </Field>
-    <Inp label="メモ" placeholder="気づき・改善点" value={f.memo} onChange={e=>setF(p=>({...p,memo:e.target.value}))}/>
-    <div style={{display:"flex",gap:10,marginTop:10}}>
-      <CancelBtn onClick={onClose}/>
-      <SaveBtn onClick={save} color={T.practice} textColor="#fff">保存する</SaveBtn>
-    </div>
-  </>);
-}
-
-// ─── EXPENSE FORM ───────────────────────────────────────────────────────────
-function ExpenseForm({onSave,onClose}) {
-  const [f,setF]=useState({date:"",category:"gut",amount:"",memo:""});
-  const save=()=>{if(!f.date||!f.amount)return alert("日付と金額を入力してください");onSave({...f,type:"expense",id:Date.now()});};
-  return (<>
-    <Inp label="日付" type="date" value={f.date} onChange={e=>setF(p=>({...p,date:e.target.value}))}/>
-    <Field label="カテゴリ">
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:7}}>
-        {EXPENSE_CATS.map(c=>(
-          <button key={c.key} onClick={()=>setF(p=>({...p,category:c.key}))} className="ripple-btn" style={{
-            padding:"10px 12px",borderRadius:10,border:"none",cursor:"pointer",fontSize:12,fontWeight:600,textAlign:"left",
-            background:f.category===c.key?`${c.color}1a`:T.surfaceRaised,
-            color:f.category===c.key?c.color:T.textSub,
-            outline:f.category===c.key?`2px solid ${c.color}44`:"none",
-            transition:"all 0.15s",
-          }}>{c.icon} {c.label}</button>
-        ))}
-      </div>
-    </Field>
-    <Field label="金額 (円)">
-      <div style={{position:"relative"}}>
-        <span style={{position:"absolute",left:14,top:"50%",transform:"translateY(-50%)",color:T.textMuted,fontSize:14,pointerEvents:"none"}}>¥</span>
-        <input type="number" placeholder="3000" value={f.amount} onChange={e=>setF(p=>({...p,amount:e.target.value}))} className="tc-input" style={{...baseInput,paddingLeft:30}}/>
-      </div>
-    </Field>
-    <Inp label="メモ" placeholder="例: スポーツデポ高槻、張り替え工賃込み" value={f.memo} onChange={e=>setF(p=>({...p,memo:e.target.value}))}/>
-    <div style={{display:"flex",gap:10,marginTop:10}}>
-      <CancelBtn onClick={onClose}/>
-      <SaveBtn onClick={save} color={T.expense} textColor="#1a1000">保存する</SaveBtn>
-    </div>
-  </>);
-}
-
-// ─── RACKET MANAGER ─────────────────────────────────────────────────────────
-function RacketManager({rackets,setRackets}) {
-  const [showForm,setShowForm]=useState(false);
-  const [f,setF]=useState({maker:"",model:"",custom:"",grip:"",weight:"",memo:""});
-  const models=f.maker&&f.maker!=="手入力"?RACKET_DATA[f.maker]||[]:[];
-  const save=()=>{
-    if(!f.maker)return alert("メーカーを選択してください");
-    setRackets(p=>[...p,{...f,id:Date.now(),number:p.length+1}]);
-    setShowForm(false);setF({maker:"",model:"",custom:"",grip:"",weight:"",memo:""});
-  };
-  const del=id=>{if(!confirm("削除しますか？"))return;setRackets(p=>p.filter(r=>r.id!==id).map((r,i)=>({...r,number:i+1})));};
-  return (
-    <div>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:20}}>
-        <div style={{color:T.textSub}}>
-          <span style={{color:T.text,fontWeight:900,fontSize:24,fontFamily:"'DM Sans',sans-serif"}}>{rackets.length}</span>
-          <span style={{fontSize:13,marginLeft:4}}>本登録中</span>
-        </div>
-        <button onClick={()=>setShowForm(!showForm)} className="ripple-btn" style={{
-          padding:"8px 18px",background:showForm?T.surfaceRaised:T.accent,
-          border:`1px solid ${showForm?T.lineStrong:T.accent}`,borderRadius:10,
-          color:showForm?T.textSub:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",transition:"all 0.2s",
-        }}>{showForm?"閉じる":"＋ 追加"}</button>
-      </div>
-      {showForm&&(
-        <div style={{background:T.bgDeep,borderRadius:16,padding:20,marginBottom:20,border:`1px solid ${T.line}`}}>
-          <Sel label="メーカー" value={f.maker} onChange={e=>setF(p=>({...p,maker:e.target.value,model:""}))}>
-            <option value="">選択してください</option>
-            {Object.keys(RACKET_DATA).map(m=><option key={m}>{m}</option>)}
-          </Sel>
-          {f.maker&&f.maker!=="手入力"&&(
-            <Sel label="モデル" value={f.model} onChange={e=>setF(p=>({...p,model:e.target.value}))}>
-              <option value="">選択してください</option>
-              {models.map(m=><option key={m}>{m}</option>)}
-            </Sel>
-          )}
-          <Inp label="手入力（未掲載モデル）" placeholder="例: Pro Staff RF97" value={f.custom} onChange={e=>setF(p=>({...p,custom:e.target.value}))}/>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
-            <Inp label="グリップ" placeholder="G2 / G3" value={f.grip} onChange={e=>setF(p=>({...p,grip:e.target.value}))}/>
-            <Inp label="重量 (g)" type="number" placeholder="305" value={f.weight} onChange={e=>setF(p=>({...p,weight:e.target.value}))}/>
-          </div>
-          <Inp label="メモ" placeholder="カスタマイズ内容など" value={f.memo} onChange={e=>setF(p=>({...p,memo:e.target.value}))}/>
-          <div style={{display:"flex",gap:10}}>
-            <CancelBtn onClick={()=>setShowForm(false)}/>
-            <SaveBtn onClick={save} color={T.accent} textColor="#fff">登録</SaveBtn>
-          </div>
-        </div>
-      )}
-      {rackets.length===0&&!showForm&&(
-        <div style={{textAlign:"center",padding:"60px 0",color:T.textMuted}}>
-          <div style={{fontSize:48,marginBottom:14,filter:"grayscale(0.3)"}}>🎾</div>
-          <div style={{fontSize:15,fontWeight:600,color:T.textSub,marginBottom:4}}>ラケットが登録されていません</div>
-          <div style={{fontSize:12}}>上の「＋ 追加」から登録してください</div>
-        </div>
-      )}
-      <div style={{display:"flex",flexDirection:"column",gap:10}}>
-        {rackets.map(r=>(
-          <div key={r.id} style={{
-            background:T.surface,borderRadius:14,padding:"14px 16px",
-            border:`1px solid ${T.line}`,
-            display:"flex",justifyContent:"space-between",alignItems:"center",
-            transition:"border-color 0.2s",
-          }}>
-            <div style={{display:"flex",alignItems:"center",gap:14}}>
-              <div style={{
-                background:T.accentDim,color:T.accent,
-                fontSize:13,fontWeight:800,borderRadius:10,
-                width:40,height:40,display:"flex",alignItems:"center",justifyContent:"center",
-                border:`1px solid ${T.accent}33`,flexShrink:0,fontFamily:"'DM Sans',sans-serif",
-              }}>#{r.number}</div>
-              <div>
-                <div style={{fontWeight:700,color:T.text,fontSize:14}}>{r.maker!=="手入力"?r.maker:""} {r.model||r.custom||"（名称未設定）"}</div>
-                <div style={{fontSize:11,color:T.textMuted,marginTop:3}}>
-                  {r.grip&&`グリップ ${r.grip}`}{r.grip&&r.weight&&"  ·  "}
-                  {r.weight&&`${r.weight}g`}{(r.grip||r.weight)&&r.memo&&"  ·  "}{r.memo}
-                </div>
-              </div>
-            </div>
-            <button onClick={()=>del(r.id)} style={{background:"none",border:"none",color:T.textMuted,cursor:"pointer",fontSize:20,padding:"4px 8px",lineHeight:1,transition:"color 0.2s"}}
-              onMouseEnter={e=>e.target.style.color=T.lose} onMouseLeave={e=>e.target.style.color=T.textMuted}>🗑</button>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ─── EVENT CARD ─────────────────────────────────────────────────────────────
-function EventCard({ev,rackets,onDelete}) {
-  const racket=rackets.find(r=>String(r.id)===String(ev.racketId));
-  const typeColor={gut:T.gut,match:T.match,plan:T.plan,practice:T.practice};
-  const c=typeColor[ev.type]||T.accent;
-  return (
-    <div style={{background:T.bgDeep,borderRadius:14,padding:18,borderLeft:`3px solid ${c}`,
-      boxShadow:`inset 0 0 0 1px ${T.line}`}}>
-      {ev.type==="gut"&&(<>
-        <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:10}}>
-          <span style={{fontSize:18}}>🎾</span>
-          <span style={{fontWeight:700,color:T.gut,fontSize:14}}>ガット張り替え</span>
-          {racket&&<span style={{background:T.accentDim,color:T.accent,fontSize:10,fontWeight:700,borderRadius:6,padding:"2px 8px",fontFamily:"'DM Sans',sans-serif"}}>#{racket.number}</span>}
-        </div>
-        {ev.hybrid?(
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
-            {[["縦 MAIN",T.gut,"mainMaker","mainModel","mainCustom","mainTension"],["横 CROSS",T.plan,"crossMaker","crossModel","crossCustom","crossTension"]].map(([lbl,clr,mk,mo,cu,ten])=>(
-              <div key={lbl} style={{background:T.surface,borderRadius:10,padding:"10px 12px"}}>
-                <div style={{fontSize:9,color:clr,fontWeight:700,marginBottom:4,letterSpacing:"0.08em"}}>{lbl}</div>
-                <div style={{fontSize:13,color:T.text,fontWeight:600}}>{gutDisplayName(ev,mk,mo,cu)||"—"}</div>
-                {ev[ten]&&<div style={{fontSize:11,color:T.textMuted,marginTop:2}}>{ev[ten]} lbs</div>}
-              </div>
-            ))}
-          </div>
-        ):(
-          <div style={{fontSize:14,color:T.text,fontWeight:600}}>
-            {gutDisplayName(ev,"mainMaker","mainModel","mainCustom")||"—"}
-            {ev.mainTension&&<span style={{color:T.textMuted,fontSize:12,fontWeight:400}}> / {ev.mainTension} lbs</span>}
-          </div>
-        )}
-        {ev.memo&&<div style={{fontSize:11,color:T.textMuted,marginTop:8}}>{ev.memo}</div>}
-        {ev.amount&&<div style={{fontSize:13,fontWeight:700,color:T.expense,marginTop:8,fontFamily:"'DM Sans',sans-serif"}}>¥{Number(ev.amount).toLocaleString()}</div>}
-      </>)}
-
-      {(ev.type==="match"||ev.type==="plan")&&(<>
-        <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
-          <span style={{fontSize:18}}>{ev.type==="plan"?"📋":"🏆"}</span>
-          <span style={{fontWeight:700,color:c,fontSize:15}}>{ev.name}</span>
-          {ev.type==="plan"&&<span style={{background:T.planDim,color:T.plan,fontSize:9,fontWeight:700,borderRadius:5,padding:"2px 7px"}}>予定</span>}
-        </div>
-        <div style={{fontSize:11,color:T.textMuted,marginBottom:6,letterSpacing:"0.01em"}}>
-          {[ev.surface,ev.category,ev.venue].filter(Boolean).join("  ·  ")}
-        </div>
-        {ev.partner&&<div style={{fontSize:12,color:T.textSub,marginBottom:8}}>ペア: {ev.partner}</div>}
-        {ev.overallResult&&(
-          <div style={{background:T.surfaceRaised,borderRadius:10,padding:"8px 14px",fontSize:14,fontWeight:700,color:T.text,marginBottom:10,display:"inline-block"}}>
-            {ev.overallResult}
-          </div>
-        )}
-        {ev.type==="match"&&ev.matches?.map((m,i)=>(
-          <div key={i} style={{display:"flex",alignItems:"center",gap:8,padding:"8px 0",borderTop:`1px solid ${T.line}`}}>
-            <span style={{fontSize:10,color:T.textMuted,minWidth:64,letterSpacing:"0.02em"}}>{m.round||`${i+1}試合目`}</span>
-            <span style={{fontSize:13,color:T.text,flex:1}}>vs {m.opponent||"—"}</span>
-            {m.score&&<span style={{fontSize:12,fontWeight:700,color:T.text,fontFamily:"'DM Sans',sans-serif"}}>{m.score}</span>}
-            <ResultPill result={m.result}/>
-          </div>
-        ))}
-        {ev.memo&&<div style={{fontSize:11,color:T.textMuted,marginTop:8}}>{ev.memo}</div>}
-        {ev.amount&&<div style={{fontSize:13,fontWeight:700,color:T.expense,marginTop:8,fontFamily:"'DM Sans',sans-serif"}}>¥{Number(ev.amount).toLocaleString()}</div>}
-      </>)}
-
-      {ev.type==="practice"&&(<>
-        <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
-          <span style={{fontSize:18}}>🎯</span>
-          <span style={{fontWeight:700,color:T.practice,fontSize:14}}>練習</span>
-          {ev.duration&&<span style={{fontSize:11,color:T.textMuted,fontFamily:"'DM Sans',sans-serif"}}>{ev.duration}min</span>}
-        </div>
-        <div style={{fontSize:12,color:T.textSub}}>{[ev.partner,ev.surface,ev.focus&&`[${ev.focus}]`].filter(Boolean).join("  ·  ")}</div>
-        {ev.condition&&<div style={{fontSize:11,color:T.textMuted,marginTop:4}}>{ev.condition}</div>}
-        {ev.memo&&<div style={{fontSize:11,color:T.textMuted,marginTop:4}}>{ev.memo}</div>}
-        {ev.amount&&<div style={{fontSize:13,fontWeight:700,color:T.expense,marginTop:8,fontFamily:"'DM Sans',sans-serif"}}>¥{Number(ev.amount).toLocaleString()}</div>}
-      </>)}
-
-      {onDelete&&(
-        <button onClick={()=>onDelete(ev.id)} style={{background:"none",border:"none",color:T.textMuted,cursor:"pointer",fontSize:11,marginTop:12,padding:0,display:"flex",alignItems:"center",gap:4,transition:"color 0.2s"}}
-          onMouseEnter={e=>e.currentTarget.style.color=T.lose} onMouseLeave={e=>e.currentTarget.style.color=T.textMuted}>
-          🗑 削除
-        </button>
-      )}
-    </div>
-  );
-}
-
-// ─── EXPENSE VIEW ────────────────────────────────────────────────────────────
-function ExpenseView({expenses,onDelete}) {
-  const now=new Date();
-  const [vy,setVy]=useState(now.getFullYear());
-  const [vm,setVm]=useState(now.getMonth());
-  const ms=`${vy}-${pad(vm+1)}`;
-  const mEvs=expenses.filter(e=>e.date.startsWith(ms));
-  const total=mEvs.reduce((s,e)=>s+(Number(e.amount)||0),0);
-  const byCategory=EXPENSE_CATS.map(c=>({...c,total:mEvs.filter(e=>e.category===c.key).reduce((s,e)=>s+(Number(e.amount)||0),0)})).filter(c=>c.total>0);
-  const sorted=[...mEvs].sort((a,b)=>b.date.localeCompare(a.date));
-  const nav=(delta)=>{const d=new Date(vy,vm+delta,1);setVy(d.getFullYear());setVm(d.getMonth());};
-  return (
-    <div>
-      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:22}}>
-        <button onClick={()=>nav(-1)} className="ripple-btn" style={{background:T.surfaceRaised,border:`1px solid ${T.line}`,borderRadius:10,color:T.textSub,width:38,height:38,cursor:"pointer",fontSize:18,display:"flex",alignItems:"center",justifyContent:"center"}}>‹</button>
-        <div style={{textAlign:"center"}}>
-          <div style={{fontSize:12,fontWeight:700,color:T.textMuted,letterSpacing:"0.08em",marginBottom:2}}>{vy}年 {vm+1}月</div>
-          <div style={{fontSize:30,fontWeight:900,color:T.expense,letterSpacing:"-0.03em",fontVariantNumeric:"tabular-nums",fontFamily:"'DM Sans',sans-serif",lineHeight:1}}>
-            ¥{total.toLocaleString()}
-          </div>
-        </div>
-        <button onClick={()=>nav(1)} className="ripple-btn" style={{background:T.surfaceRaised,border:`1px solid ${T.line}`,borderRadius:10,color:T.textSub,width:38,height:38,cursor:"pointer",fontSize:18,display:"flex",alignItems:"center",justifyContent:"center"}}>›</button>
-      </div>
-      {byCategory.length>0&&(
-        <div style={{background:T.surface,borderRadius:16,padding:18,marginBottom:18,border:`1px solid ${T.line}`}}>
-          <div style={{fontSize:10,fontWeight:700,color:T.textMuted,marginBottom:14,letterSpacing:"0.1em"}}>カテゴリ別</div>
-          {byCategory.map(c=>(
-            <div key={c.key} style={{marginBottom:12}}>
-              <div style={{display:"flex",justifyContent:"space-between",marginBottom:5}}>
-                <span style={{fontSize:12,color:T.textSub}}>{c.icon} {c.label}</span>
-                <span style={{fontSize:12,fontWeight:700,color:c.color,fontFamily:"'DM Sans',sans-serif"}}>¥{c.total.toLocaleString()}</span>
-              </div>
-              <div style={{height:5,background:T.surfaceRaised,borderRadius:3}}>
-                <div className="stat-bar-fill" style={{height:"100%",borderRadius:3,background:c.color,width:`${total>0?Math.round(c.total/total*100):0}%`,boxShadow:`0 0 8px ${c.color}66`}}/>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-      {sorted.length===0?(
-        <div style={{textAlign:"center",padding:"48px 0",color:T.textMuted}}>
-          <div style={{fontSize:40,marginBottom:10,filter:"grayscale(0.3)"}}>💴</div>
-          <div style={{fontSize:14}}>この月の記録はありません</div>
-        </div>
-      ):(
-        <div style={{display:"flex",flexDirection:"column",gap:8}}>
-          {sorted.map(ev=>{
-            const cat=EXPENSE_CATS.find(c=>c.key===ev.category)||EXPENSE_CATS[6];
-            return (
-              <div key={ev.id} style={{background:T.surface,borderRadius:12,padding:"13px 16px",border:`1px solid ${T.line}`,borderLeft:`3px solid ${cat.color}`,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-                <div>
-                  <div style={{fontSize:11,color:T.textMuted,marginBottom:2,fontFamily:"'DM Sans',sans-serif"}}>{ev.date}</div>
-                  <div style={{fontSize:13,fontWeight:600,color:T.text}}>{cat.icon} {cat.label}</div>
-                  {ev.memo&&<div style={{fontSize:11,color:T.textMuted,marginTop:2}}>{ev.memo}</div>}
-                </div>
-                <div style={{display:"flex",alignItems:"center",gap:12}}>
-                  <span style={{fontSize:16,fontWeight:800,color:T.expense,fontVariantNumeric:"tabular-nums",fontFamily:"'DM Sans',sans-serif"}}>¥{Number(ev.amount).toLocaleString()}</span>
-                  <button onClick={()=>onDelete(ev.id)} style={{background:"none",border:"none",color:T.textMuted,cursor:"pointer",fontSize:18,padding:"4px"}}
-                    onMouseEnter={e=>e.target.style.color=T.lose} onMouseLeave={e=>e.target.style.color=T.textMuted}>🗑</button>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ─── HISTORY ────────────────────────────────────────────────────────────────
-function HistoryView({events,rackets,onDelete}) {
-  const [filter,setFilter]=useState("all");
-  const filters=[["all","すべて"],["gut","🎾 ガット"],["match","🏆 大会結果"],["plan","📋 大会予定"],["practice","🎯 練習"]];
-  const filtered=events.filter(e=>filter==="all"||e.type===filter).sort((a,b)=>b.date.localeCompare(a.date));
-  return (
-    <div>
-      <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:18}}>
-        {filters.map(([k,l])=>(
-          <button key={k} onClick={()=>setFilter(k)} className="ripple-btn" style={{
-            padding:"6px 13px",borderRadius:20,border:"none",cursor:"pointer",
-            fontSize:11,fontWeight:700,transition:"all 0.15s",
-            background:filter===k?T.accent:T.surfaceRaised,
-            color:filter===k?"#fff":T.textSub,
-            boxShadow:filter===k?`0 2px 12px ${T.accentGlow}`:"none",
-          }}>{l}</button>
-        ))}
-      </div>
-      {filtered.length===0?(
-        <div style={{textAlign:"center",padding:"60px 0",color:T.textMuted}}>
-          <div style={{fontSize:40,marginBottom:10,filter:"grayscale(0.3)"}}>📋</div>
-          <div style={{fontSize:14}}>記録がありません</div>
-        </div>
-      ):(
-        <div style={{display:"flex",flexDirection:"column",gap:10}}>
-          {filtered.map(ev=>(
-            <div key={ev.id}>
-              <div style={{fontSize:11,color:T.textMuted,marginBottom:6,paddingLeft:4,fontFamily:"'DM Sans',sans-serif"}}>{ev.date}</div>
-              <EventCard ev={ev} rackets={rackets} onDelete={onDelete}/>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ─── STATS ──────────────────────────────────────────────────────────────────
-function StatsView({events,rackets,expenses}) {
-  const gutEvs=events.filter(e=>e.type==="gut");
-  const matchEvs=events.filter(e=>e.type==="match");
-  const practiceEvs=events.filter(e=>e.type==="practice");
-  const allMatches=matchEvs.flatMap(t=>t.matches||[]);
-  const wins=allMatches.filter(m=>m.result==="win").length;
-  const loses=allMatches.filter(m=>m.result==="lose").length;
-  const total=wins+loses;
-  const winRate=total>0?Math.round(wins/total*100):null;
-  const totalMin=practiceEvs.reduce((s,e)=>s+(Number(e.duration)||0),0);
-  const latestGut=[...gutEvs].sort((a,b)=>b.date.localeCompare(a.date))[0];
-  const now=new Date();
-  const thisMs=`${now.getFullYear()}-${pad(now.getMonth()+1)}`;
-  const mExp=expenses.filter(e=>e.date.startsWith(thisMs));
-  const mTotal=mExp.reduce((s,e)=>s+(Number(e.amount)||0),0);
-  const allTotal=expenses.reduce((s,e)=>s+(Number(e.amount)||0),0);
-
-  const StatCard=({label,value,unit,sub,color,accent})=>(
-    <div style={{background:T.surface,borderRadius:16,padding:18,border:`1px solid ${T.line}`,position:"relative",overflow:"hidden"}}>
-      {accent&&<div style={{position:"absolute",top:0,right:0,width:60,height:60,borderRadius:"0 0 0 60px",background:`${accent}18`}}/>}
-      <div style={{fontSize:10,fontWeight:700,color:T.textMuted,marginBottom:10,letterSpacing:"0.1em"}}>{label}</div>
-      <div style={{fontSize:30,fontWeight:900,color:color||T.text,letterSpacing:"-0.03em",lineHeight:1,fontFamily:"'DM Sans',sans-serif",fontVariantNumeric:"tabular-nums"}}>
-        {value!=null?<>{value}{unit&&<span style={{fontSize:14,fontWeight:600,color:T.textSub,marginLeft:3}}>{unit}</span>}</>:<span style={{color:T.textMuted,fontSize:20}}>—</span>}
-      </div>
-      {sub&&<div style={{fontSize:11,color:T.textMuted,marginTop:6}}>{sub}</div>}
-    </div>
-  );
-
-  // Win/Lose ring
-  const ring = total>0 ? (
-    <div style={{background:T.surface,borderRadius:16,padding:18,border:`1px solid ${T.line}`,gridColumn:"span 2"}}>
-      <div style={{fontSize:10,fontWeight:700,color:T.textMuted,marginBottom:14,letterSpacing:"0.1em"}}>勝敗内訳</div>
-      <div style={{display:"flex",alignItems:"center",gap:20}}>
-        <div style={{position:"relative",width:72,height:72,flexShrink:0}}>
-          <svg width="72" height="72" viewBox="0 0 72 72">
-            <circle cx="36" cy="36" r="28" fill="none" stroke={T.surfaceRaised} strokeWidth="8"/>
-            <circle cx="36" cy="36" r="28" fill="none" stroke={T.win} strokeWidth="8"
-              strokeDasharray={`${winRate/100*176} 176`} strokeDashoffset="44" strokeLinecap="round"/>
-          </svg>
-          <div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,fontWeight:900,color:T.win,fontFamily:"'DM Sans',sans-serif"}}>{winRate}%</div>
-        </div>
-        <div>
-          <div style={{display:"flex",gap:12,marginBottom:4}}>
-            <span style={{color:T.win,fontWeight:700,fontSize:16,fontFamily:"'DM Sans',sans-serif"}}>{wins}勝</span>
-            <span style={{color:T.lose,fontWeight:700,fontSize:16,fontFamily:"'DM Sans',sans-serif"}}>{loses}敗</span>
-          </div>
-          <div style={{fontSize:12,color:T.textMuted}}>{total}試合</div>
-        </div>
-      </div>
-    </div>
-  ) : null;
-
-  return (
-    <div>
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
-        {ring}
-        <StatCard label="大会参加" value={matchEvs.length} unit="回" color={T.match} accent={T.match}/>
-        <StatCard label="練習時間" value={totalMin>=60?Math.floor(totalMin/60):totalMin||null} unit={totalMin>=60?"h":"min"} sub={`${practiceEvs.length}セッション`} color={T.practice} accent={T.practice}/>
-        <StatCard label="マイラケット" value={rackets.length} unit="本" color={T.accent} accent={T.accent}/>
-        <StatCard label="今月のテニス代" value={mTotal>0?`¥${mTotal.toLocaleString()}`:null} sub={`${mExp.length}件`} color={T.expense} accent={T.expense}/>
-        <StatCard label="累計テニス代" value={allTotal>0?`¥${allTotal.toLocaleString()}`:null} sub={`全${expenses.length}件`} color="#fb923c" accent="#fb923c"/>
-      </div>
-      {latestGut&&(
-        <div style={{background:T.surface,borderRadius:16,padding:18,border:`1px solid ${T.gut}33`,boxShadow:`0 0 0 1px ${T.gut}15`}}>
-          <div style={{fontSize:10,fontWeight:700,color:T.gut,marginBottom:10,letterSpacing:"0.1em"}}>LATEST STRINGING</div>
-          <div style={{fontWeight:700,color:T.textMuted,fontSize:11,fontFamily:"'DM Sans',sans-serif",marginBottom:4}}>{latestGut.date}</div>
-          <div style={{fontSize:15,color:T.text,fontWeight:700}}>
-            {gutDisplayName(latestGut,"mainMaker","mainModel","mainCustom")||"—"}
-            {latestGut.hybrid&&<span style={{fontSize:11,color:T.textMuted,fontWeight:400}}> / ハイブリッド</span>}
-          </div>
-          {latestGut.mainTension&&<div style={{fontSize:12,color:T.textSub,marginTop:4}}>{latestGut.mainTension} lbs</div>}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ─── APP ────────────────────────────────────────────────────────────────────
-function App() {
-  const [events,setEvents]=useLS("tc_v3_events",[]);
-  const [rackets,setRackets]=useLS("tc_v3_rackets",[]);
-  const [expenses,setExpenses]=useLS("tc_v3_expenses",[]);
-  const [cur,setCur]=useState(new Date());
-  const [modal,setModal]=useState(null);
-  const [tab,setTab]=useState("calendar");
-  const [dayModal,setDayModal]=useState(null);
-  const [fabOpen,setFabOpen]=useState(false);
-
-  const y=cur.getFullYear(), m=cur.getMonth();
-  const firstDay=new Date(y,m,1).getDay();
-  const daysInM=new Date(y,m+1,0).getDate();
-  const cells=[...Array(firstDay).fill(null),...Array.from({length:daysInM},(_,i)=>i+1)];
-  const eventsOn=d=>events.filter(e=>e.date===toDateStr(y,m,d));
-  const addEvent=ev=>{setEvents(p=>[...p,ev]);setModal(null);setFabOpen(false);};
-  const delEvent=id=>{setEvents(p=>p.filter(e=>e.id!==id));setDayModal(p=>p?{...p,events:p.events.filter(e=>e.id!==id)}:null);};
-  const addExpense=ev=>{setExpenses(p=>[...p,ev]);setModal(null);setFabOpen(false);};
-  const delExpense=id=>setExpenses(p=>p.filter(e=>e.id!==id));
-
-  const evBadge=ev=>{
-    const cfg={
-      gut:{icon:"🎾",label:gutDisplayName(ev,"mainMaker","mainModel","mainCustom")||"ガット",type:"gut"},
-      match:{icon:"🏆",label:ev.name||"大会",type:"match"},
-      plan:{icon:"📋",label:ev.name||"大会予定",type:"plan"},
-      practice:{icon:"🎯",label:ev.partner||"練習",type:"practice"},
-    };
-    return cfg[ev.type]||cfg.practice;
-  };
-
-  const TABS=[
-    {k:"calendar",icon:"📅",label:"カレンダー"},
-    {k:"history", icon:"📋",label:"履歴"},
-    {k:"expense", icon:"💴",label:"費用"},
-    {k:"rackets", icon:"🎾",label:"ラケット"},
-    {k:"stats",   icon:"📊",label:"統計"},
-  ];
-  const FAB_ACTIONS=[
-    {label:"ガット",     color:T.gut,     textColor:"#021a0c", modal:"gut"},
-    {label:"大会予定",   color:T.plan,    textColor:"#001525", modal:"plan"},
-    {label:"大会結果",   color:T.match,   textColor:"#1a0800", modal:"match"},
-    {label:"練習",       color:T.practice,textColor:"#fff",    modal:"practice"},
-    {label:"費用メモ",   color:T.expense, textColor:"#1a1000", modal:"expense"},
-  ];
-
-  // month cost summary for header
-  const headerMonthCost=(()=>{
-    const ms=`${y}-${pad(m+1)}`;
-    return [...events,...expenses].filter(e=>e.date&&e.date.startsWith(ms)&&e.amount).reduce((s,e)=>s+(Number(e.amount)||0),0);
-  })();
-
-  return (
-    <div style={{minHeight:"100dvh",background:T.bg,color:T.text,fontFamily:"'Noto Sans JP','DM Sans',system-ui,sans-serif"}}>
-
-      {/* HEADER */}
-      <div style={{
-        background:T.bgDeep,
-        borderBottom:`1px solid ${T.line}`,
-        padding:"0 16px",
-        position:"sticky",top:0,zIndex:50,
-        boxShadow:"0 4px 24px rgba(0,0,0,0.4)",
-      }}>
-        <div style={{maxWidth:680,margin:"0 auto"}}>
-          {/* top bar */}
-          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"14px 0 12px"}}>
-            <div style={{display:"flex",alignItems:"center",gap:10}}>
-              <a href="/" style={{display:"flex",alignItems:"center",gap:6,color:T.textMuted,fontSize:12,fontWeight:600,textDecoration:"none",padding:"6px 10px 6px 6px",background:T.surfaceRaised,borderRadius:8,border:`1px solid ${T.line}`,transition:"all 0.2s"}}
-                onMouseEnter={e=>{e.currentTarget.style.color=T.accent;e.currentTarget.style.borderColor=T.accent+"44"}}
-                onMouseLeave={e=>{e.currentTarget.style.color=T.textMuted;e.currentTarget.style.borderColor=T.line}}>
-                ← <span style={{letterSpacing:"0.06em",fontSize:10}}>LOVETENI</span>
-              </a>
-              <div>
-                <div style={{fontSize:9,letterSpacing:"0.18em",color:T.textMuted,fontWeight:700,lineHeight:1}}>TENNIS LOG</div>
-                <div style={{fontSize:17,fontWeight:900,color:T.text,letterSpacing:"-0.02em",lineHeight:1.2}}>マイテニス手帳</div>
-              </div>
-            </div>
-
-            {tab==="calendar"&&(
-              <div style={{display:"flex",flexDirection:"column",alignItems:"flex-end",gap:4}}>
-                <div style={{display:"flex",alignItems:"center",gap:8}}>
-                  <button onClick={()=>setCur(new Date(y,m-1,1))} className="ripple-btn" style={{background:T.surfaceRaised,border:`1px solid ${T.line}`,borderRadius:8,color:T.textSub,width:32,height:32,cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}>‹</button>
-                  <span style={{fontSize:13,fontWeight:700,minWidth:72,textAlign:"center",color:T.text,fontFamily:"'DM Sans',sans-serif"}}>{y}年{m+1}月</span>
-                  <button onClick={()=>setCur(new Date(y,m+1,1))} className="ripple-btn" style={{background:T.surfaceRaised,border:`1px solid ${T.line}`,borderRadius:8,color:T.textSub,width:32,height:32,cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}>›</button>
-                </div>
-                {headerMonthCost>0&&<div style={{fontSize:11,fontWeight:700,color:T.expense,letterSpacing:"0.02em",fontFamily:"'DM Sans',sans-serif"}}>¥{headerMonthCost.toLocaleString()}</div>}
-              </div>
-            )}
-          </div>
-
-          {/* TABS */}
-          <div style={{display:"flex",gap:0,marginTop:2}}>
-            {TABS.map(({k,icon,label})=>(
-              <button key={k} onClick={()=>setTab(k)} className="tc-tab" style={{
-                flex:1,padding:"9px 4px",border:"none",background:"transparent",cursor:"pointer",
-                borderBottom:`2px solid ${tab===k?T.accent:"transparent"}`,
-                transition:"border-color 0.2s",
-              }}>
-                <div style={{fontSize:17,lineHeight:1}}>{icon}</div>
-                <div style={{fontSize:9,color:tab===k?T.accent:T.textMuted,fontWeight:700,marginTop:3,letterSpacing:"0.05em"}}>{label}</div>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* CONTENT */}
-      <div style={{maxWidth:680,margin:"0 auto",padding:"18px 12px 120px"}}>
-
-        {/* CALENDAR */}
-        {tab==="calendar"&&(<>
-          {/* day headers */}
-          <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:3,marginBottom:3}}>
-            {DAYS_JP.map((d,i)=>(
-              <div key={d} style={{textAlign:"center",fontSize:10,fontWeight:700,padding:"4px 0",
-                color:i===0?"#f87171":i===6?"#60a5fa":T.textMuted}}>
-                {d}
-              </div>
-            ))}
-          </div>
-          {/* cells */}
-          <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:3}}>
-            {cells.map((d,i)=>{
-              const dayEvs=d?eventsOn(d):[];
-              const dow=i%7;
-              const today=isToday(y,m,d);
-              const hasEvs=d&&dayEvs.length>0;
-              return (
-                <div key={i} className={hasEvs?"cal-cell":""} onClick={()=>hasEvs&&setDayModal({d,events:dayEvs})} style={{
-                  background:d?T.surface:"transparent",
-                  border:today?`2px solid ${T.accent}`:`1px solid ${T.line}`,
-                  borderRadius:12,minHeight:76,padding:"7px 5px",
-                  cursor:hasEvs?"pointer":"default",
-                  boxShadow:today?`0 0 14px ${T.accentGlow}`:hasEvs?"0 2px 8px rgba(0,0,0,0.2)":undefined,
-                }}>
-                  {d&&(<>
-                    <div style={today?{
-                      background:T.accent,color:"#fff",
-                      width:22,height:22,borderRadius:"50%",
-                      display:"flex",alignItems:"center",justifyContent:"center",
-                      fontSize:11,fontWeight:900,marginBottom:5,fontFamily:"'DM Sans',sans-serif",
-                      boxShadow:`0 2px 8px ${T.accentGlow}`,
-                    }:{
-                      fontSize:11,fontWeight:500,marginBottom:4,
-                      color:dow===0?"#f87171":dow===6?"#60a5fa":T.text,
-                      fontFamily:"'DM Sans',sans-serif",
-                    }}>{d}</div>
-                    <div style={{display:"flex",flexDirection:"column",gap:2}}>
-                      {dayEvs.slice(0,3).map(ev=>{const b=evBadge(ev);return <Badge key={ev.id} icon={b.icon} label={b.label} type={b.type}/>;})}
-                      {dayEvs.length>3&&<div style={{fontSize:9,color:T.textMuted}}>+{dayEvs.length-3}</div>}
-                    </div>
-                  </>)}
-                </div>
-              );
-            })}
-          </div>
-          {/* legend */}
-          <div style={{display:"flex",gap:8,marginTop:16,flexWrap:"wrap",justifyContent:"center"}}>
-            {[["🎾","ガット","gut"],["🏆","大会結果","match"],["📋","大会予定","plan"],["🎯","練習","practice"]].map(([icon,label,type])=>(
-              <Badge key={type} icon={icon} label={label} type={type}/>
-            ))}
-          </div>
-        </>)}
-
-        {tab==="history" &&<HistoryView events={events} rackets={rackets} onDelete={delEvent}/>}
-        {tab==="expense" &&<ExpenseView expenses={expenses} onDelete={delExpense}/>}
-        {tab==="rackets" &&<RacketManager rackets={rackets} setRackets={setRackets}/>}
-        {tab==="stats"   &&<StatsView events={events} rackets={rackets} expenses={expenses}/>}
-      </div>
-
-      {/* FAB */}
-      <div style={{position:"fixed",bottom:24,right:20,zIndex:100}}>
-        {fabOpen&&(
-          <div style={{position:"absolute",bottom:64,right:0,display:"flex",flexDirection:"column",gap:8,alignItems:"flex-end"}}>
-            {FAB_ACTIONS.map((a,idx)=>(
-              <button key={a.modal} onClick={()=>{setModal(a.modal);setFabOpen(false);}} className="fab-action ripple-btn" style={{
-                background:a.color,color:a.textColor,
-                border:"none",borderRadius:22,cursor:"pointer",
-                padding:"10px 20px",fontSize:13,fontWeight:800,
-                boxShadow:`0 4px 20px ${a.color}55`,
-                whiteSpace:"nowrap",letterSpacing:"0.03em",
-              }}>{a.label}</button>
-            ))}
-          </div>
-        )}
-        <button onClick={()=>setFabOpen(p=>!p)} className="ripple-btn" style={{
-          width:56,height:56,borderRadius:"50%",border:"none",cursor:"pointer",
-          background:fabOpen?T.surfaceRaised:T.accent,
-          color:"#fff",fontSize:26,fontWeight:700,
-          boxShadow:fabOpen?"none":`0 4px 28px ${T.accentGlow}`,
-          transition:"all 0.22s cubic-bezier(0.34,1.14,0.64,1)",
-          display:"flex",alignItems:"center",justifyContent:"center",
-          transform:fabOpen?"rotate(45deg) scale(0.9)":"rotate(0deg) scale(1)",
-          border:fabOpen?`1px solid ${T.lineStrong}`:"none",
-        }}>＋</button>
-      </div>
-
-      {/* MODALS */}
-      {modal==="expense" &&<Modal title="💴 費用メモ" onClose={()=>setModal(null)}><ExpenseForm onSave={addExpense} onClose={()=>setModal(null)}/></Modal>}
-      {modal==="gut"     &&<Modal title="🎾 ガット張り替え" onClose={()=>setModal(null)}><GutForm onSave={addEvent} onClose={()=>setModal(null)} rackets={rackets}/></Modal>}
-      {modal==="match"   &&<Modal title="🏆 大会結果" onClose={()=>setModal(null)}><TournamentForm onSave={addEvent} onClose={()=>setModal(null)} isPlan={false}/></Modal>}
-      {modal==="plan"    &&<Modal title="📋 大会予定" onClose={()=>setModal(null)}><TournamentForm onSave={addEvent} onClose={()=>setModal(null)} isPlan={true}/></Modal>}
-      {modal==="practice"&&<Modal title="🎯 練習記録" onClose={()=>setModal(null)}><PracticeForm onSave={addEvent} onClose={()=>setModal(null)}/></Modal>}
-
-      {dayModal&&dayModal.events.length>0&&(
-        <Modal title={`${m+1}月${dayModal.d}日`} onClose={()=>setDayModal(null)}>
-          <div style={{display:"flex",flexDirection:"column",gap:12}}>
-            {dayModal.events.map(ev=><EventCard key={ev.id} ev={ev} rackets={rackets} onDelete={delEvent}/>)}
-            <Divider label="記録を追加"/>
-            <div style={{display:"flex",gap:7,flexWrap:"wrap"}}>
-              {FAB_ACTIONS.map(a=>(
-                <button key={a.modal} onClick={()=>{setModal(a.modal);setDayModal(null);}} className="ripple-btn" style={{
-                  padding:"8px 14px",background:a.color,color:a.textColor,border:"none",
-                  borderRadius:10,fontSize:11,fontWeight:700,cursor:"pointer",
-                  boxShadow:`0 2px 10px ${a.color}44`,
-                }}>＋{a.label}</button>
-              ))}
-            </div>
-          </div>
-        </Modal>
-      )}
-    </div>
-  );
-}
-
-ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+try{render();}catch(e){document.getElementById('mainContent').innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:40vh;gap:12px;color:var(--muted);text-align:center"><div style="font-size:36px">⚠️</div><div style="font-size:14px;font-weight:600;color:var(--sub)">読み込みに失敗しました</div><div style="font-size:12px">ページを再読み込みしてください</div></div>';}
 </script>
 </body>
 </html>

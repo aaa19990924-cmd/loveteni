@@ -2805,23 +2805,8 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
 
 <!-- ===== LOG (記録) プレースホルダー ===== -->
 <div id="view-log" class="view">
-  <div class="page-hero">
-    <div class="container">
-      <div class="page-hero-eyebrow">LOG</div>
-      <h1 class="page-hero-title">記録</h1>
-      <p class="page-hero-desc">練習、試合、スコア。コートの一日を、データとして残す。</p>
-    </div>
-  </div>
-  <div class="page-body">
-    <div class="container" style="text-align:center;padding:80px 20px">
-      <div style="font-size:48px;margin-bottom:16px">📔</div>
-      <h2 style="font-family:'Noto Serif JP',serif;font-size:24px;margin-bottom:12px">近日公開</h2>
-      <p style="color:var(--mute);font-size:14px;line-height:1.7;max-width:480px;margin:0 auto">
-        練習・試合の記録、対戦相手、スコア、自由メモ。<br>
-        ログインユーザー限定で、上達のプロセスを蓄積できる機能を準備中です。
-      </p>
-      <button class="btn btn-primary" style="margin-top:28px" onclick="navigateToMygear()">マイギアへ →</button>
-    </div>
+  <div id="tennis-calendar-root" style="min-height:100vh">
+    <div style="text-align:center;padding:80px 20px;color:var(--mute);font-size:14px">読み込み中…</div>
   </div>
 </div>
 
@@ -3206,6 +3191,29 @@ function navigate(view, skipPush) {
   // ブラウザ履歴に追加（戻る/進む対応）
   if (!skipPush && !isHistoryNav) {
     history.pushState({ view }, '', '#' + view);
+  }
+  if (view === 'log') loadTennisCalendar();
+}
+
+let _tcLoaded = false;
+async function loadTennisCalendar() {
+  if (_tcLoaded) return;
+  const loadScript = src => new Promise((res, rej) => {
+    const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = rej; document.head.appendChild(s);
+  });
+  try {
+    await loadScript('https://unpkg.com/react@18/umd/react.production.min.js');
+    await loadScript('https://unpkg.com/react-dom@18/umd/react-dom.production.min.js');
+    await loadScript('https://unpkg.com/@babel/standalone/babel.min.js');
+    const code = await (await fetch('tennis-calendar.jsx')).text();
+    const js = Babel.transform(code, { presets: ['react'] }).code;
+    // eslint-disable-next-line no-eval
+    (0, eval)(js);
+    _tcLoaded = true;
+  } catch(e) {
+    console.error('Tennis calendar load error:', e);
+    const root = document.getElementById('tennis-calendar-root');
+    if (root) root.innerHTML = '<div style="text-align:center;padding:80px 20px;color:var(--mute);font-size:14px">読み込みエラーが発生しました</div>';
   }
 }
 

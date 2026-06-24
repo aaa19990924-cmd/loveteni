@@ -75,9 +75,12 @@ const STRING_DATABASE = [
   { id: 'wilson-champions-choice-duo', brand: 'Wilson', model: "Champion's Choice Duo", type: 'ハイブリッド', gauge: '1.25/1.30mm', length: '12.2m', color: 'シルバー/ナチュラル', year: 2024, concept: 'ALU POWER+ナチュラルのハイブリッド、フェデラー仕様', searchKeyword: "Wilson Champion's Choice", players: ['フェデラー'] },
 
   // ========== YONEX ==========
-  { id: 'yonex-polytour-pro-125', brand: 'YONEX', model: 'POLYTOUR PRO 125', type: 'ポリエステル', gauge: '1.25mm', length: '12m', color: 'グラファイト', year: 2024, concept: 'バランスの取れたツアーポリ', searchKeyword: 'ヨネックス POLYTOUR PRO 125' },
+  { id: 'yonex-polytour-pro-125', brand: 'YONEX', model: 'POLYTOUR PRO 125', type: 'ポリエステル', gauge: '1.25mm', length: '12m', color: 'グラファイト', year: 2024, concept: 'バランスの取れたツアーポリ', searchKeyword: 'ヨネックス POLYTOUR PRO 125 グラファイト' },
+  { id: 'yonex-polytour-pro-125-yellow', brand: 'YONEX', model: 'POLYTOUR PRO 125 フラッシュイエロー', type: 'ポリエステル', gauge: '1.25mm', length: '12m', color: 'フラッシュイエロー', year: 2024, concept: 'POLYTOUR PROの鮮やかな黄カラー', searchKeyword: 'ヨネックス POLYTOUR PRO 125 フラッシュイエロー' },
+  { id: 'yonex-polytour-pro-120', brand: 'YONEX', model: 'POLYTOUR PRO 120', type: 'ポリエステル', gauge: '1.20mm', length: '12m', color: 'グラファイト', year: 2024, concept: '細め1.20mm・よりシャープな打球感のPOLYTOUR PRO', searchKeyword: 'ヨネックス POLYTOUR PRO 120' },
   { id: 'yonex-polytour-pro-130', brand: 'YONEX', model: 'POLYTOUR PRO 130', type: 'ポリエステル', gauge: '1.30mm', length: '12m', color: 'グラファイト', year: 2024, concept: '太めPOLYTOUR PROで耐久性アップ', searchKeyword: 'ヨネックス POLYTOUR PRO 130' },
-  { id: 'yonex-polytour-strike-125', brand: 'YONEX', model: 'POLYTOUR STRIKE 125', type: 'ポリエステル', gauge: '1.25mm', length: '12m', color: 'コバルトブルー', year: 2025, concept: 'パワー重視のPOLYTOUR', searchKeyword: 'ヨネックス POLYTOUR STRIKE' },
+  { id: 'yonex-polytour-strike-125', brand: 'YONEX', model: 'POLYTOUR STRIKE 125', type: 'ポリエステル', gauge: '1.25mm', length: '12m', color: 'コバルトブルー', year: 2025, concept: 'パワー重視のPOLYTOUR', searchKeyword: 'ヨネックス POLYTOUR STRIKE 125' },
+  { id: 'yonex-polytour-strike-125-silver', brand: 'YONEX', model: 'POLYTOUR STRIKE 125 シルバー', type: 'ポリエステル', gauge: '1.25mm', length: '12m', color: 'シルバー', year: 2025, concept: 'POLYTOUR STRIKEのシルバーカラー', searchKeyword: 'ヨネックス POLYTOUR STRIKE 125 シルバー' },
   { id: 'yonex-polytour-rev-125', brand: 'YONEX', model: 'POLYTOUR REV 125', type: 'ポリエステル', gauge: '1.25mm', length: '12m', color: 'ブライトイエロー', year: 2024, concept: 'スピン特化、五角形断面', searchKeyword: 'ヨネックス POLYTOUR REV' },
   { id: 'yonex-polytour-air-125', brand: 'YONEX', model: 'POLYTOUR AIR 125', type: 'ポリエステル', gauge: '1.25mm', length: '12m', color: 'ホワイト', year: 2024, concept: '柔らかい打感のポリ', searchKeyword: 'ヨネックス POLYTOUR AIR 125' },
   { id: 'yonex-polytour-air-125-orange', brand: 'YONEX', model: 'POLYTOUR AIR 125 オレンジ', type: 'ポリエステル', gauge: '1.25mm', length: '12m', color: 'オレンジ', year: 2024, concept: 'POLYTOUR AIRのオレンジカラー', searchKeyword: 'ヨネックス POLYTOUR AIR オレンジ' },

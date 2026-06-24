@@ -6,7 +6,9 @@ const ACCESS_KEY = 'pk_IgvEkDTYVvSiaBtknnPRI49moxxWNTumxumFqtFtvMz';
 const AFFILIATE_ID = '5025c3cb.15c5bf2c.5025c3cc.9bf454b7';
 const API_ENDPOINT = 'https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20220601';
 
-// 品番が商品名に含まれているか判定
+// エッジキャッシュTTL（秒）: 同じ検索は1時間はCloudflareのCDNから返す
+const EDGE_CACHE_TTL = 3600;
+
 function janCodeMatches(janCode, itemName) {
   if (!janCode || !itemName) return false;
   const normalize = (s) => s.toUpperCase().replace(/[\s\-]/g, '');
@@ -17,14 +19,13 @@ function janCodeMatches(janCode, itemName) {
   return normName.includes(normJan) || normName.includes(janCore);
 }
 
-// 楽天APIの1件をフロント用に整形
 function mapItem(i) {
   const imageUrl = (i.mediumImageUrls && i.mediumImageUrls[0]) || '';
   const price = i.itemPrice || 0;
   return {
     name: i.itemName || '',
     price: price,
-    point: Math.floor(price / 100), // 基本1%（API はキャンペーン倍率を返さない）
+    point: Math.floor(price / 100),
     itemUrl: i.affiliateUrl || i.itemUrl || '',
     shopName: i.shopName || '',
     shopCode: i.shopCode || '',
@@ -41,21 +42,38 @@ export async function onRequest(context) {
   const url = new URL(request.url);
   const params = url.searchParams;
 
-  const headers = {
+  const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type',
-    'Content-Type': 'application/json',
-    'Cache-Control': 'public, max-age=300'
   };
 
   if (request.method === 'OPTIONS') {
-    return new Response('', { status: 200, headers });
+    return new Response('', { status: 200, headers: corsHeaders });
   }
+
+  const responseHeaders = {
+    ...corsHeaders,
+    'Content-Type': 'application/json',
+    'Cache-Control': `public, max-age=${EDGE_CACHE_TTL}`,
+  };
+
+  // ── Cloudflare エッジキャッシュ ──────────────────────────────────────────
+  // 同じURLへのリクエストはCDNからキャッシュを返す（Rakuten API呼び出し不要）
+  const cache = caches.default;
+  const cacheKey = request.url;
+  try {
+    const cached = await cache.match(cacheKey);
+    if (cached) {
+      // キャッシュヒット：そのまま返す（CORSヘッダーを付け直す）
+      const body = await cached.text();
+      return new Response(body, { status: 200, headers: responseHeaders });
+    }
+  } catch (_) {}
+  // ────────────────────────────────────────────────────────────────────────
 
   const keyword = params.get('keyword') || 'テニスラケット';
   const janCode = params.get('janCode') || '';
 
-  // 指定キーで楽天検索を実行し、整形済みitems（またはerror）を返す
   async function runSearch(searchKey) {
     const urlParams = new URLSearchParams({
       applicationId: APP_ID,
@@ -89,36 +107,31 @@ export async function onRequest(context) {
 
   try {
     const janNorm = janCode ? janCode.toUpperCase().replace(/[\s\-]/g, '') : '';
-    const janSearch = janNorm.replace(/(U)\d+$/, '$1'); // 検索用: 末尾Uを残す
-    const janBare = janNorm.replace(/U\d*$/, '');        // 照合/キーワード除去用: Uなし
+    const janSearch = janNorm.replace(/(U)\d+$/, '$1');
+    const janBare = janNorm.replace(/U\d*$/, '');
 
-    // 短い数字だけの品番(例: 101567=Babolat, 232006=HEAD)は、水着やヘルメット等の
-    // 無関係商品の品番と数字が衝突する。これらは「品番で直接検索」せず、品番を除いた
-    // ブランド名キーワードで検索してから品番で絞り込む(誤ヒット防止)。
-    // 英字入りの品番(WR173011U1, 7TJ256 等)や8桁以上のJAN/EANは固有性が高いので直接検索。
     const isShortNumeric = /^\d{1,7}$/.test(janNorm);
 
-    // 品番を取り除いた検索用キーワード(例:"Babolat Pure Aero 98 2026 101567"→"Babolat Pure Aero 98 2026")
     const keywordNoJan = (keyword || '')
       .replace(new RegExp(janNorm, 'ig'), '')
       .replace(janBare ? new RegExp(janBare, 'ig') : /\b\B/, '')
       .replace(/\s+/g, ' ').trim() || keyword;
 
-    // 検索キー決定
     let searchKey;
     if (janCode && !isShortNumeric) {
-      searchKey = janSearch;     // 固有性の高い品番は直接検索が確実
+      searchKey = janSearch;
     } else if (janCode && isShortNumeric) {
-      searchKey = keywordNoJan;  // 短い数字品番はブランド名で検索
+      searchKey = keywordNoJan;
     } else {
       searchKey = keyword;
     }
 
     const result = await runSearch(searchKey);
     if (result.error) {
+      // エラーはキャッシュしない（短いTTLでブラウザに返す）
       return new Response(JSON.stringify({
         items: [], count: 0, searchKey, error: result.error, errorDetail: result.detail
-      }), { status: 200, headers });
+      }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=60' } });
     }
 
     let items = result.items;
@@ -127,7 +140,6 @@ export async function onRequest(context) {
     let fallbackKey = '';
 
     if (janCode && !isShortNumeric) {
-      // 固有性の高い品番: 商品名一致でフィルタ。0件なら「品番を除いた名前」で再検索
       const filtered = items.filter(item => janCodeMatches(janCode, item.name));
       if (filtered.length > 0) {
         items = filtered;
@@ -144,32 +156,34 @@ export async function onRequest(context) {
         items = [];
       }
     } else if (janCode && isShortNumeric) {
-      // 短い数字品番: ブランド名検索の結果から品番一致を優先採用。
-      // 一致が無くてもブランド名検索の結果をそのまま使う(水着等の混入を防ぐため空にしない)
       const filtered = items.filter(item => janCodeMatches(janCode, item.name));
       if (filtered.length > 0) {
         items = filtered;
       } else {
-        fallback = true;       // 品番一致なし=ブランド名検索結果をそのまま使用
+        fallback = true;
         fallbackKey = searchKey;
       }
     }
-    // janCodeなしはキーワード検索結果をそのまま使用
 
-    // prospo商品を先頭に（フロント側で安い順/ポイント順に再ソートする保険）
     items.sort((a, b) => {
       if (a.isProSports && !b.isProSports) return -1;
       if (!a.isProSports && b.isProSports) return 1;
       return 0;
     });
 
-    return new Response(JSON.stringify({
+    const responseBody = JSON.stringify({
       items, count: items.length, rawCount, searchKey, janCode, filtered: !!janCode, fallback
-    }), { status: 200, headers });
+    });
+
+    // 成功レスポンスをエッジキャッシュに保存
+    const responseToCache = new Response(responseBody, { status: 200, headers: responseHeaders });
+    context.waitUntil(cache.put(cacheKey, responseToCache.clone()));
+
+    return new Response(responseBody, { status: 200, headers: responseHeaders });
 
   } catch (error) {
     return new Response(JSON.stringify({
       items: [], count: 0, error: 'exception', errorDetail: error.message
-    }), { status: 200, headers });
+    }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } });
   }
 }

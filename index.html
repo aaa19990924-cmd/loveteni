@@ -1136,6 +1136,39 @@ section {
   transition: background 0.2s;
 }
 .rakuten-item-btn:hover { background: #9b0000; }
+.amazon-compare-row {
+  margin-top: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.amazon-compare-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: #FF9900;
+  color: #111;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 4px;
+  letter-spacing: 0.04em;
+  transition: background 0.2s;
+  text-decoration: none;
+}
+.amazon-compare-btn:hover { background: #e68a00; }
+.amazon-compare-icon {
+  font-family: 'DM Sans', Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 900;
+  font-style: italic;
+  color: #111;
+}
+.amazon-compare-note {
+  font-size: 10px;
+  color: var(--mute);
+}
 .loading { padding: 40px; text-align: center; color: var(--mute); font-size: 13px; }
 .spin {
   display: inline-block;
@@ -3573,7 +3606,7 @@ function imgCacheKey(r) {
 // ===== 楽天APIレート制限（429対策）：全リクエストを直列化し最小間隔で送信 =====
 let _rkQueue = Promise.resolve();
 let _rkLastTime = 0;
-const RK_MIN_GAP = 1100; // ms（無料APIの約1req/秒に合わせる）
+const RK_MIN_GAP = 1500; // ms（無料APIのレート制限に余裕を持たせる）
 function rakutenFetch(url) {
   const run = async () => {
     const wait = _rkLastTime + RK_MIN_GAP - Date.now();
@@ -3734,7 +3767,7 @@ function loadCardImg(r) {
 }
 
 // ===== 楽天オファー表示（安い順/ポイント順・最安バッジ・ポイント還元額） =====
-let _rkOffers = { items: [], header: '🏪 楽天市場', container: null, sort: 'price-asc' };
+let _rkOffers = { items: [], header: '🏪 楽天市場', container: null, sort: 'price-asc', amazonKeyword: '' };
 function offerPoint(it){ return it.point || Math.floor((it.price||0) / 100); }
 function renderRkOffers(){
   const st = _rkOffers;
@@ -3768,11 +3801,14 @@ function renderRkOffers(){
       </div>
     </div>`;
   }).join('');
-  st.container.innerHTML = header + toggle + note + `<div class="rakuten-grid">${grid}</div>`;
+  const amazonBtn = st.amazonKeyword
+    ? `<div class="amazon-compare-row"><a href="https://www.amazon.co.jp/s?k=${encodeURIComponent(st.amazonKeyword)}&tag=loveteni-22" target="_blank" class="amazon-compare-btn"><span class="amazon-compare-icon">a</span>Amazonでも比較する</a><span class="amazon-compare-note">※Amazonの価格は別途確認してください</span></div>`
+    : '';
+  st.container.innerHTML = header + toggle + note + `<div class="rakuten-grid">${grid}</div>` + amazonBtn;
 }
 function setRkSort(by){ _rkOffers.sort = by; renderRkOffers(); }
-function showRkOffers(container, items, headerLabel){
-  _rkOffers = { items: items||[], header: headerLabel||'🏪 楽天市場', container: container, sort: 'price-asc' };
+function showRkOffers(container, items, headerLabel, amazonKeyword){
+  _rkOffers = { items: items||[], header: headerLabel||'🏪 楽天市場', container: container, sort: 'price-asc', amazonKeyword: amazonKeyword||'' };
   renderRkOffers();
 }
 
@@ -3863,7 +3899,8 @@ async function loadRakutenResults(r, retry = 0) {
     }
     const hasProspo = itemsToShow.some(i => i.isProSports);
     const headerLabel = hasProspo ? '🏪 PRO SPORTS優先表示' : '🏪 楽天市場';
-    showRkOffers(c, itemsToShow, headerLabel);
+    const amazonKw = (r.searchKeyword || `${r.brand} ${r.model}`) + ' テニスラケット';
+    showRkOffers(c, itemsToShow, headerLabel, amazonKw);
   } catch(e) { c.innerHTML = '<div class="loading">読み込みに失敗しました</div>'; }
 }
 
@@ -4289,7 +4326,7 @@ async function loadRakutenResultsGeneric(item, resultsId, imgAreaId, suffix) {
     }
     const hasProspo = data.items.some(i => i.isProSports);
     const headerLabel = hasProspo ? '🏪 PRO SPORTS優先表示' : '🏪 楽天市場';
-    showRkOffers(c, data.items, headerLabel);
+    showRkOffers(c, data.items, headerLabel, kw);
   } catch(e) { c.innerHTML = '<div class="loading">読み込みに失敗しました</div>'; }
 }
 

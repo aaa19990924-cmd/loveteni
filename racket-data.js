@@ -2,7 +2,7 @@
 // 2026/05/27更新版 - 各ブランドの最新ラインナップを反映
 // 情報源: ウインザーラケット、各ブランド公式サイト、テニスクラシック等
 
-const BRANDS = ['Wilson', 'Babolat', 'YONEX', 'HEAD', 'DUNLOP', 'Prince', 'Tecnifibre', 'Kneissl', 'DIADEM'];
+const BRANDS = ['Wilson', 'Babolat', 'YONEX', 'HEAD', 'DUNLOP', 'Prince', 'Tecnifibre', 'Kneissl', 'DIADEM', 'Snauwaert', 'Lacoste'];
 
 const RACKET_DATABASE = [
   // ============================================================
@@ -258,6 +258,84 @@ const RACKET_DATABASE = [
   { id: 'diadem-nova-v3-100', brand: 'DIADEM', series: 'NOVA', model: 'NOVA V3 100', searchKeyword: 'DIADEM NOVA V3 100 TAA010', weight: 300, headSize: 100, balance: 320, pattern: '16x19', beam: '23-26-22mm', year: 2024, players: [], concept: 'パワーとオールラウンド性能' },
   { id: 'diadem-nova-v3-team', brand: 'DIADEM', series: 'NOVA', model: 'NOVA V3 TEAM', searchKeyword: 'DIADEM NOVA V3 Team TAA011', weight: 285, headSize: 100, balance: 325, pattern: '16x19', beam: '23-26-22mm', year: 2024, players: [], concept: '軽量NOVA' },
   { id: 'diadem-nova-v3-plus', brand: 'DIADEM', series: 'NOVA', model: 'NOVA V3 PLUS', searchKeyword: 'DIADEM NOVA V3 Plus TAA012', weight: 295, headSize: 100, balance: 325, pattern: '16x19', beam: '23-26-22mm', year: 2024, players: [], concept: 'ロングボディNOVA' },
+  { id: 'diadem-nova-v3-tour', brand: 'DIADEM', series: 'NOVA', model: 'NOVA V3 TOUR', searchKeyword: 'DIADEM NOVA V3 Tour', weight: 310, headSize: 100, balance: 310, pattern: '16x19', beam: '24mm', year: 2024, players: [], concept: '重量系パワーNOVA' },
+  { id: 'diadem-nova-v3-lite', brand: 'DIADEM', series: 'NOVA', model: 'NOVA V3 LITE', searchKeyword: 'DIADEM NOVA V3 Lite', weight: 265, headSize: 100, balance: 335, pattern: '16x19', beam: '24mm', year: 2024, players: [], concept: '超軽量入門向けNOVA' },
+  { id: 'diadem-dreamer-105', brand: 'DIADEM', series: 'DREAMER', model: 'DREAMER 105', searchKeyword: 'DIADEM DREAMER 105', weight: 270, headSize: 105, balance: 335, pattern: '16x19', beam: '26mm', year: 2025, players: [], concept: '105インチデカラケ・楽々パワー系' },
+  { id: 'diadem-dreamer-110', brand: 'DIADEM', series: 'DREAMER', model: 'DREAMER 110', searchKeyword: 'DIADEM DREAMER 110', weight: 255, headSize: 110, balance: 345, pattern: '16x19', beam: '28mm', year: 2025, players: [], concept: '110インチ最強パワーシリーズ' },
+  { id: 'diadem-axis-98-svitolina', brand: 'DIADEM', series: 'AXIS', model: 'AXIS 98 SVITOLINA', searchKeyword: 'DIADEM AXIS 98 Svitolina', weight: 305, headSize: 98, balance: 315, pattern: '16x20', beam: '22mm', year: 2025, players: ['スビトリナ'], concept: 'スビトリナ監修98インチ限定モデル' },
+
+  // ============================================================
+  // ========== Snauwaert ========== (ウインザー取扱・ベルギー名門)
+  // ============================================================
+  { id: 'snauwaert-vitas-115', brand: 'Snauwaert', series: 'VITAS', model: 'VITAS 115', searchKeyword: 'Snauwaert Vitas 115', weight: 265, headSize: 115, balance: 345, pattern: '16x19', beam: '28mm', year: 2024, players: [], concept: '115インチ超大型フェイス・究極のパワーサポート' },
+  { id: 'snauwaert-hi-ten-98-torneo', brand: 'Snauwaert', series: 'HI-TEN', model: 'HI-TEN 98 TORNEO', searchKeyword: 'Snauwaert Hi-Ten 98 Torneo', weight: 310, headSize: 98, balance: 315, pattern: '16x19', beam: '22mm', year: 2024, players: [], concept: 'コントロール志向98インチ競技モデル' },
+  { id: 'snauwaert-hi-ten-98r', brand: 'Snauwaert', series: 'HI-TEN', model: 'HI-TEN 98R', searchKeyword: 'Snauwaert Hi-Ten 98R', weight: 300, headSize: 98, balance: 320, pattern: '16x19', beam: '22mm', year: 2024, players: [], concept: '98インチバランス重視モデル' },
+  { id: 'snauwaert-hi-ten-98l', brand: 'Snauwaert', series: 'HI-TEN', model: 'HI-TEN 98L', searchKeyword: 'Snauwaert Hi-Ten 98L', weight: 285, headSize: 98, balance: 325, pattern: '16x19', beam: '22mm', year: 2024, players: [], concept: '軽量98インチ' },
+  { id: 'snauwaert-hi-ten-100r', brand: 'Snauwaert', series: 'HI-TEN', model: 'HI-TEN 100R', searchKeyword: 'Snauwaert Hi-Ten 100R', weight: 300, headSize: 100, balance: 320, pattern: '16x19', beam: '23mm', year: 2024, players: [], concept: '100インチオールラウンド' },
+  { id: 'snauwaert-vitas-100r-ff', brand: 'Snauwaert', series: 'VITAS', model: 'VITAS 100R FF', searchKeyword: 'Snauwaert Vitas 100R FF', weight: 290, headSize: 100, balance: 325, pattern: '16x19', beam: '25mm', year: 2024, players: [], concept: 'フレックスフレーム搭載100インチ' },
+  { id: 'snauwaert-vitas-100l-ff', brand: 'Snauwaert', series: 'VITAS', model: 'VITAS 100L FF', searchKeyword: 'Snauwaert Vitas 100L FF', weight: 275, headSize: 100, balance: 330, pattern: '16x19', beam: '25mm', year: 2024, players: [], concept: '軽量フレックスフレーム100インチ' },
+
+  // ============================================================
+  // ========== Lacoste ========== (ウインザー取扱・仏高級ブランド)
+  // ============================================================
+  { id: 'lacoste-l23', brand: 'Lacoste', series: 'L.23', model: 'L.23', searchKeyword: 'Lacoste L23 テニスラケット', weight: 305, headSize: 98, balance: 315, pattern: '16x19', beam: '22mm', year: 2023, players: [], concept: 'ラコステ正規品・フレンチエレガンス×高性能' },
+  { id: 'lacoste-l23-light', brand: 'Lacoste', series: 'L.23', model: 'L.23 LIGHT', searchKeyword: 'Lacoste L23 Light テニスラケット', weight: 285, headSize: 100, balance: 325, pattern: '16x19', beam: '23mm', year: 2023, players: [], concept: '軽量版L.23・扱いやすさ重視' },
+
+  // ============================================================
+  // ========== YONEX 追加モデル ==========
+  // ============================================================
+  // MUSE 2025 (新シリーズ)
+  { id: 'yonex-muse-98-2025', brand: 'YONEX', series: 'MUSE', model: 'MUSE 98 2025', searchKeyword: 'ヨネックス MUSE 98 2025', weight: 305, headSize: 98, balance: 315, pattern: '16x19', beam: '22mm', year: 2025, players: [], concept: '2025新シリーズ・MUSE 98インチ。しなりとパワーの融合' },
+  { id: 'yonex-muse-100-2025', brand: 'YONEX', series: 'MUSE', model: 'MUSE 100 2025', searchKeyword: 'ヨネックス MUSE 100 2025', weight: 300, headSize: 100, balance: 320, pattern: '16x19', beam: '23mm', year: 2025, players: [], concept: 'MUSE黄金スペック' },
+  { id: 'yonex-muse-100l-2025', brand: 'YONEX', series: 'MUSE', model: 'MUSE 100L 2025', searchKeyword: 'ヨネックス MUSE 100L 2025', weight: 280, headSize: 100, balance: 325, pattern: '16x19', beam: '23mm', year: 2025, players: [], concept: '軽量MUSE' },
+  { id: 'yonex-muse-100sl-2025', brand: 'YONEX', series: 'MUSE', model: 'MUSE 100SL 2025', searchKeyword: 'ヨネックス MUSE 100SL 2025', weight: 265, headSize: 100, balance: 330, pattern: '16x19', beam: '24mm', year: 2025, players: [], concept: 'スーパーライトMUSE' },
+  { id: 'yonex-muse-107-2025', brand: 'YONEX', series: 'MUSE', model: 'MUSE 107 2025', searchKeyword: 'ヨネックス MUSE 107 2025', weight: 270, headSize: 107, balance: 335, pattern: '16x19', beam: '26mm', year: 2025, players: [], concept: 'デカラケMUSE' },
+  // VCORE追加
+  { id: 'yonex-vcore-100d-2026', brand: 'YONEX', series: 'VCORE', model: 'VCORE 100D 2026', searchKeyword: 'ヨネックス VCORE 100D 2026', weight: 310, headSize: 100, balance: 315, pattern: '16x19', beam: '23mm', year: 2026, players: [], concept: '重量版VCORE・パワーヒッター向け' },
+  { id: 'yonex-vcore-98l-2026', brand: 'YONEX', series: 'VCORE', model: 'VCORE 98L 2026', searchKeyword: 'ヨネックス VCORE 98L 2026', weight: 285, headSize: 98, balance: 325, pattern: '16x19', beam: '21mm', year: 2026, players: [], concept: '軽量VCORE 98' },
+  { id: 'yonex-vcore-102-2026', brand: 'YONEX', series: 'VCORE', model: 'VCORE 102 2026', searchKeyword: 'ヨネックス VCORE 102 2026', weight: 285, headSize: 102, balance: 325, pattern: '16x19', beam: '23mm', year: 2026, players: [], concept: '102インチVCORE' },
+  // PERCEPT追加
+  { id: 'yonex-percept-100d-2023', brand: 'YONEX', series: 'PERCEPT', model: 'PERCEPT 100D 2023', searchKeyword: 'ヨネックス PERCEPT 100D', weight: 310, headSize: 100, balance: 310, pattern: '16x19', beam: '21mm', year: 2023, players: [], concept: '重量版PERCEPT・操作性重視' },
+  { id: 'yonex-percept-97d-2023', brand: 'YONEX', series: 'PERCEPT', model: 'PERCEPT 97D 2023', searchKeyword: 'ヨネックス PERCEPT 97D', weight: 320, headSize: 97, balance: 305, pattern: '18x20', beam: '21mm', year: 2023, players: [], concept: '97インチ密パターン競技モデル' },
+  { id: 'yonex-percept-104-2023', brand: 'YONEX', series: 'PERCEPT', model: 'PERCEPT 104 2023', searchKeyword: 'ヨネックス PERCEPT 104', weight: 270, headSize: 104, balance: 330, pattern: '16x19', beam: '23mm', year: 2023, players: [], concept: '104インチ扱いやすいパーセプト' },
+  { id: 'yonex-percept-100l-2023', brand: 'YONEX', series: 'PERCEPT', model: 'PERCEPT 100L 2023', searchKeyword: 'ヨネックス PERCEPT 100L', weight: 280, headSize: 100, balance: 325, pattern: '16x19', beam: '21mm', year: 2023, players: [], concept: '軽量PERCEPT' },
+
+  // ============================================================
+  // ========== HEAD 追加モデル ==========
+  // ============================================================
+  { id: 'head-squared-2026', brand: 'HEAD', series: 'SQUARED', model: 'SQUARED 2026', janCode: '232616', searchKeyword: 'HEAD SQUARED 2026', weight: 300, headSize: 100, balance: 320, pattern: '16x19', beam: '24mm', year: 2026, players: [], concept: '2026新シリーズ・スクエアフレーム採用・パワーとスピン' },
+  { id: 'head-boom-alternate-mp-2026', brand: 'HEAD', series: 'Boom', model: 'Boom MP ALTERNATE 2026', janCode: '232256', searchKeyword: 'HEAD Boom MP Alternate 2026', weight: 295, headSize: 100, balance: 315, pattern: '16x19', beam: '24mm', year: 2026, players: [], concept: 'Boomの別カラーリングモデル' },
+  { id: 'head-instinct-mp-2023', brand: 'HEAD', series: 'Instinct', model: 'Instinct MP 2023', janCode: '235323', searchKeyword: 'HEAD Instinct MP 2023', weight: 300, headSize: 100, balance: 320, pattern: '16x19', beam: '25mm', year: 2023, players: [], concept: 'マリア・シャラポワ愛用シリーズ' },
+
+  // ============================================================
+  // ========== Prince 追加モデル ==========
+  // ============================================================
+  // X SERIES 2025 (ウインザー特別取扱)
+  { id: 'prince-x-100-tour-2025', brand: 'Prince', series: 'X', model: 'X 100 TOUR 2025', searchKeyword: 'プリンス X 100 Tour テニスラケット', weight: 315, headSize: 100, balance: 305, pattern: '16x18', beam: '20mm', year: 2025, players: [], concept: '最薄ビーム20mm・極限コントロールを追求したXシリーズ最高峰' },
+  { id: 'prince-x-98-tour-2025', brand: 'Prince', series: 'X', model: 'X 98 TOUR 2025', searchKeyword: 'プリンス X 98 Tour テニスラケット', weight: 315, headSize: 98, balance: 305, pattern: '16x18', beam: '20mm', year: 2025, players: [], concept: '98インチ最薄フレームX TOUR' },
+  { id: 'prince-x-100-2025', brand: 'Prince', series: 'X', model: 'X 100 2025', searchKeyword: 'プリンス X 100 テニスラケット', weight: 305, headSize: 100, balance: 315, pattern: '16x18', beam: '20mm', year: 2025, players: [], concept: '100インチXシリーズスタンダード' },
+  { id: 'prince-x-105-290-2025', brand: 'Prince', series: 'X', model: 'X 105 290g 2025', searchKeyword: 'プリンス X 105 290g テニスラケット', weight: 290, headSize: 105, balance: 325, pattern: '16x19', beam: '22mm', year: 2025, players: [], concept: '105インチ扱いやすいX' },
+  { id: 'prince-x-105-270-2025', brand: 'Prince', series: 'X', model: 'X 105 270g 2025', searchKeyword: 'プリンス X 105 270g テニスラケット', weight: 270, headSize: 105, balance: 335, pattern: '16x19', beam: '24mm', year: 2025, players: [], concept: '軽量105インチX' },
+  { id: 'prince-x-115-2025', brand: 'Prince', series: 'X', model: 'X 115 2025', searchKeyword: 'プリンス X 115 テニスラケット', weight: 236, headSize: 115, balance: 345, pattern: '16x19', beam: '28mm', year: 2025, players: [], concept: '115インチ超軽量デカラケ' },
+  // TOUR O3
+  { id: 'prince-tour-o3-100-305-2026', brand: 'Prince', series: 'TOUR', model: 'TOUR O3 100 305g 2026', janCode: '7tj253', searchKeyword: 'プリンス Tour O3 100 305g 7tj253', weight: 305, headSize: 100, balance: 315, pattern: '16x18', beam: '22-23-20mm', year: 2026, players: [], concept: 'O3ポート搭載ツアー・打球感向上' },
+  { id: 'prince-tour-o3-100-290-2026', brand: 'Prince', series: 'TOUR', model: 'TOUR O3 100 290g 2026', janCode: '7tj254', searchKeyword: 'プリンス Tour O3 100 290g 7tj254', weight: 290, headSize: 100, balance: 325, pattern: '16x19', beam: '22-23-20mm', year: 2026, players: [], concept: '軽量O3ツアー' },
+  // Phantom Graphite 97
+  { id: 'prince-phantom-graphite-97-300-2026', brand: 'Prince', series: 'PHANTOM GRAPHITE', model: 'PHANTOM GRAPHITE 97 300g 2026', janCode: '7tj248', searchKeyword: 'プリンス Phantom Graphite 97 300g 7tj248', weight: 300, headSize: 97, balance: 315, pattern: '16x19', beam: '20mm', year: 2026, players: [], concept: '97インチ伝説グラファイト軽量版' },
+  // Phantom Graphite 100XS
+  { id: 'prince-phantom-graphite-100xs-300-2026', brand: 'Prince', series: 'PHANTOM GRAPHITE', model: 'PHANTOM GRAPHITE 100XS 300g 2026', searchKeyword: 'プリンス Phantom Graphite 100XS 300g', weight: 300, headSize: 100, balance: 315, pattern: '16x18', beam: '20mm', year: 2026, players: [], concept: '100インチXSスペックグラファイト' },
+  { id: 'prince-phantom-graphite-100xs-285-2026', brand: 'Prince', series: 'PHANTOM GRAPHITE', model: 'PHANTOM GRAPHITE 100XS 285g 2026', searchKeyword: 'プリンス Phantom Graphite 100XS 285g', weight: 285, headSize: 100, balance: 320, pattern: '16x18', beam: '20mm', year: 2026, players: [], concept: '軽量100XS グラファイト' },
+  // Sierra O3
+  { id: 'prince-sierra-o3-2025', brand: 'Prince', series: 'SIERRA', model: 'SIERRA O3 2025', searchKeyword: 'プリンス Sierra O3 テニスラケット', weight: 265, headSize: 107, balance: 335, pattern: '16x19', beam: '26mm', year: 2025, players: [], concept: 'O3搭載・女性・シニア向けパワーラケット' },
+
+  // ============================================================
+  // ========== DUNLOP 追加モデル ==========
+  // ============================================================
+  { id: 'dunlop-lx800-2024', brand: 'DUNLOP', series: 'LX', model: 'LX 800 2024', searchKeyword: 'DUNLOP LX800 2024', weight: 275, headSize: 110, balance: 330, pattern: '16x19', beam: '25mm', year: 2024, players: [], concept: 'パワーとコンフォートのLX系黄金スペック' },
+  { id: 'dunlop-fx500-lite-2026', brand: 'DUNLOP', series: 'FX', model: 'FX 500 Lite 2026', searchKeyword: 'DUNLOP FX500 Lite 2026', weight: 270, headSize: 100, balance: 330, pattern: '16x19', beam: '23-26-23mm', year: 2026, players: [], concept: '軽量FX・初中級者向け' },
+  { id: 'dunlop-cx200-os-2024', brand: 'DUNLOP', series: 'CX', model: 'CX 200 OS 2024', searchKeyword: 'DUNLOP CX200 OS 2024', weight: 290, headSize: 102, balance: 325, pattern: '16x19', beam: '22mm', year: 2024, players: [], concept: 'オーバーサイズCX・コントロール系大き目フェイス' },
+  { id: 'dunlop-cx400-2024', brand: 'DUNLOP', series: 'CX', model: 'CX 400 2024', searchKeyword: 'DUNLOP CX400 2024', weight: 285, headSize: 104, balance: 320, pattern: '16x19', beam: '24mm', year: 2024, players: [], concept: '104インチ扱いやすいコントロール系' },
+  { id: 'dunlop-sx300-lite-2025', brand: 'DUNLOP', series: 'SX', model: 'SX 300 Lite 2025', searchKeyword: 'DUNLOP SX300 Lite 2025', weight: 265, headSize: 100, balance: 335, pattern: '16x19', beam: '23-26-23mm', year: 2025, players: [], concept: '超軽量スピン系SX' },
 ];
 
 // ヘルパー関数

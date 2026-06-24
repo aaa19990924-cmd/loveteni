@@ -1,5 +1,5 @@
 // テニスガット（ストリング）データベース
-const STRING_BRANDS = ['Luxilon', 'Babolat', 'Wilson', 'YONEX', 'HEAD', 'Tecnifibre', 'Solinco', 'Gosen'];
+const STRING_BRANDS = ['Luxilon', 'Babolat', 'Wilson', 'YONEX', 'HEAD', 'Tecnifibre', 'Solinco', 'Gosen', 'Dunlop', 'Toalson', 'Prince', 'Diadem'];
 
 const STRING_BRAND_INFO = {
   'Luxilon': { desc: 'ベルギー発祥、ポリエステルガットの王者。ATPツアーで最も使用されているガットブランドで、Wilsonの傘下。ALU POWERは世界中のプロが愛用する定番。', color: '#1a1a1a', tagline: 'POLY KING',
@@ -17,7 +17,15 @@ const STRING_BRAND_INFO = {
   'Solinco': { desc: 'アメリカ発祥の新興ブランド。HYPER-Gはシフィオンテクが使用し、独特の五角形断面でスピンが圧倒的にかかると人気。', color: '#d35400', tagline: 'NEW WAVE POLY',
     series: [{name:'HYPER-G',desc:'シフィオンテク使用'},{name:'HYPER-G SOFT',desc:'柔らかい打感のHYPER-G'},{name:'TOUR BITE',desc:'スピン特化'},{name:'TOUR BITE SOFT',desc:'柔らかいTOUR BITE'},{name:'CONFIDENTIAL',desc:'コントロール志向'}]},
   'Gosen': { desc: '滋賀県発祥の国産ガットメーカー。OG-SHEEPシリーズは安価で耐久性が高く、学生プレーヤーから絶大な支持を受ける。', color: '#c0392b', tagline: 'JAPAN VALUE',
-    series: [{name:'OG-SHEEP MICRO',desc:'学生定番のナイロン'},{name:'POLYLON',desc:'コスパ重視ポリ'},{name:'EGG POWER',desc:'高反発ポリ'},{name:'UMAMI',desc:'プレミアムポリ'}]}
+    series: [{name:'OG-SHEEP MICRO',desc:'学生定番のナイロン'},{name:'POLYLON',desc:'コスパ重視ポリ'},{name:'EGG POWER',desc:'高反発ポリ'},{name:'UMAMI',desc:'プレミアムポリ'}]},
+  'Dunlop': { desc: 'イギリス発祥の老舗スポーツブランド。ICONICシリーズはコスパに優れ、日本の一般プレーヤーに人気。オールラウンド性能が光る。', color: '#e67e22', tagline: 'BRITISH HERITAGE',
+    series: [{name:'ICONIC ALL',desc:'オールラウンド定番ポリ'},{name:'ICONIC SPIN',desc:'スピン特化五角断面'},{name:'ICONIC TOUR',desc:'ツアー向けコントロール'},{name:'ICONIC COMFORT',desc:'コンフォートマルチ'}]},
+  'Toalson': { desc: '日本の老舗ガットメーカー・トアルソン。TOUGH BLADEはコスパ最強の国産ポリとして学生から競技者まで幅広い層に支持される。', color: '#2980b9', tagline: 'JAPAN CRAFT',
+    series: [{name:'TOUGH BLADE',desc:'コスパ最強の国産ポリ'},{name:'ASTERISM',desc:'五角断面スピン系'},{name:'ASTERISM SOFT',desc:'ソフト系アスタリズム'},{name:'POLY TOUR SPIN',desc:'スピン特化'}]},
+  'Prince': { desc: 'アメリカ発祥の老舗ラケットブランド。ガットラインもBEAST XPやPhantom Touchが独自の存在感を放ち、Prince愛用者に特に人気。', color: '#7f8c8d', tagline: 'CLASSIC AMERICAN',
+    series: [{name:'BEAST XP',desc:'BEASTラケット向け爆発力ポリ'},{name:'PHANTOM TOUCH',desc:'マルチフィラメント定番'},{name:'PREMIER CONTROL',desc:'コントロール重視ポリ'}]},
+  'Diadem': { desc: '新興ブランドDIADEMのガットライン。SOLSTICE POWERはDIADEMのフラッグシップで、パワーとスピンを高次元で両立する注目株。', color: '#1abc9c', tagline: 'RISING STAR',
+    series: [{name:'SOLSTICE POWER',desc:'フラッグシップパワー系'},{name:'SOLSTICE SPIN',desc:'六角断面スピン特化'},{name:'EVOLUTION',desc:'オールラウンド入門'}]}
 };
 
 const STRING_DATABASE = [
@@ -97,7 +105,31 @@ const STRING_DATABASE = [
   { id: 'gosen-og-sheep-micro-130', brand: 'Gosen', model: 'OG-SHEEP MICRO 16', type: 'ナイロン', gauge: '1.30mm', length: '12.2m', color: 'ナチュラル', year: 2023, concept: '太めOG-SHEEPで耐久性アップ', searchKeyword: 'ゴーセン OG-SHEEP MICRO 16' },
   { id: 'gosen-polylon-comfort-125', brand: 'Gosen', model: 'POLYLON COMFORT 125', type: 'ポリエステル', gauge: '1.25mm', length: '12.2m', color: 'ブラック', year: 2024, concept: 'コスパに優れた柔らかポリ', searchKeyword: 'ゴーセン POLYLON COMFORT' },
   { id: 'gosen-egg-power-125', brand: 'Gosen', model: 'EGG POWER 125', type: 'ポリエステル', gauge: '1.25mm', length: '12.2m', color: 'イエロー', year: 2023, concept: '楕円断面で高反発、パワー系ポリ', searchKeyword: 'ゴーセン EGG POWER' },
-  { id: 'gosen-umami-tour-125', brand: 'Gosen', model: 'UMAMI TOUR 125', type: 'ポリエステル', gauge: '1.25mm', length: '12.2m', color: 'ホワイト', year: 2024, concept: '日本らしい繊細な打感のプレミアムポリ', searchKeyword: 'ゴーセン UMAMI TOUR' }
+  { id: 'gosen-umami-tour-125', brand: 'Gosen', model: 'UMAMI TOUR 125', type: 'ポリエステル', gauge: '1.25mm', length: '12.2m', color: 'ホワイト', year: 2024, concept: '日本らしい繊細な打感のプレミアムポリ', searchKeyword: 'ゴーセン UMAMI TOUR' },
+
+  // ========== Dunlop ==========
+  { id: 'dunlop-iconic-all-125', brand: 'Dunlop', model: 'ICONIC ALL 125', type: 'ポリエステル', gauge: '1.25mm', length: '12m', color: 'ブラック', year: 2024, concept: 'オールラウンドポリ・コントロールと耐久性のバランス', searchKeyword: 'ダンロップ ICONIC ALL 125' },
+  { id: 'dunlop-iconic-spin-125', brand: 'Dunlop', model: 'ICONIC SPIN 125', type: 'ポリエステル', gauge: '1.25mm', length: '12m', color: 'イエロー', year: 2024, concept: 'スピン特化型・五角形断面採用', searchKeyword: 'ダンロップ ICONIC SPIN 125' },
+  { id: 'dunlop-iconic-tour-125', brand: 'Dunlop', model: 'ICONIC TOUR 125', type: 'ポリエステル', gauge: '1.25mm', length: '12m', color: 'レッド', year: 2024, concept: 'ツアープレーヤー向けコントロール系ポリ', searchKeyword: 'ダンロップ ICONIC TOUR 125' },
+  { id: 'dunlop-iconic-comfort-130', brand: 'Dunlop', model: 'ICONIC COMFORT 130', type: 'マルチフィラメント', gauge: '1.30mm', length: '12m', color: 'ナチュラル', year: 2024, concept: '柔らかい打感のマルチフィラメント・腕への負担軽減', searchKeyword: 'ダンロップ ICONIC COMFORT 130' },
+
+  // ========== Toalson ==========
+  { id: 'toalson-toughblade-125', brand: 'Toalson', model: 'TOUGH BLADE 125', type: 'ポリエステル', gauge: '1.25mm', length: '12m', color: 'ナチュラル', year: 2024, concept: '日本製コスパ最強ポリ・学生・一般プレーヤーに大人気', searchKeyword: 'トアルソン TOUGH BLADE 125' },
+  { id: 'toalson-toughblade-130', brand: 'Toalson', model: 'TOUGH BLADE 130', type: 'ポリエステル', gauge: '1.30mm', length: '12m', color: 'ナチュラル', year: 2024, concept: '太めタフブレードで耐久性重視', searchKeyword: 'トアルソン TOUGH BLADE 130' },
+  { id: 'toalson-asterism-125', brand: 'Toalson', model: 'ASTERISM 125', type: 'ポリエステル', gauge: '1.25mm', length: '12m', color: 'ブルー', year: 2024, concept: '五角形断面でスピン&コントロール両立の高性能ポリ', searchKeyword: 'トアルソン ASTERISM 125' },
+  { id: 'toalson-asterism-soft-125', brand: 'Toalson', model: 'ASTERISM SOFT 125', type: 'ポリエステル', gauge: '1.25mm', length: '12m', color: 'ピンク', year: 2024, concept: 'ソフト版アスタリズム・腕への負担を軽減', searchKeyword: 'トアルソン ASTERISM SOFT 125' },
+  { id: 'toalson-poly-tour-spin-125', brand: 'Toalson', model: 'POLY TOUR SPIN 125', type: 'ポリエステル', gauge: '1.25mm', length: '12m', color: 'オレンジ', year: 2024, concept: 'スピン特化ポリ・中厚ラケット向け', searchKeyword: 'トアルソン ポリツアー スピン 125' },
+
+  // ========== Prince ==========
+  { id: 'prince-beast-xp-125', brand: 'Prince', model: 'BEAST XP 125', type: 'ポリエステル', gauge: '1.25mm', length: '12m', color: 'ブラック', year: 2024, concept: 'BEASTラケット専用開発・スピンとパワーの爆発力', searchKeyword: 'プリンス BEAST XP 125' },
+  { id: 'prince-beast-xp-130', brand: 'Prince', model: 'BEAST XP 130', type: 'ポリエステル', gauge: '1.30mm', length: '12m', color: 'ブラック', year: 2024, concept: '太めBEAST XP・耐久性重視', searchKeyword: 'プリンス BEAST XP 130' },
+  { id: 'prince-phantom-touch-130', brand: 'Prince', model: 'PHANTOM TOUCH 130', type: 'マルチフィラメント', gauge: '1.30mm', length: '12m', color: 'ナチュラル', year: 2024, concept: '柔らかい打感のマルチ・ナチュラルガット代替として人気', searchKeyword: 'プリンス PHANTOM TOUCH 130' },
+  { id: 'prince-premier-control-125', brand: 'Prince', model: 'PREMIER CONTROL 125', type: 'ポリエステル', gauge: '1.25mm', length: '12m', color: 'ホワイト', year: 2024, concept: 'コントロール重視ポリ・ナイロンに近い打感', searchKeyword: 'プリンス PREMIER CONTROL 125' },
+
+  // ========== Diadem ==========
+  { id: 'diadem-solstice-power-125', brand: 'Diadem', model: 'SOLSTICE POWER 125', type: 'ポリエステル', gauge: '1.25mm', length: '12m', color: 'ブルー', year: 2024, concept: 'DIADEMのフラッグシップポリ・パワーとスピンの融合', searchKeyword: 'Diadem SOLSTICE POWER 125' },
+  { id: 'diadem-solstice-spin-125', brand: 'Diadem', model: 'SOLSTICE SPIN 125', type: 'ポリエステル', gauge: '1.25mm', length: '12m', color: 'グリーン', year: 2024, concept: 'スピン特化・六角形断面採用のDIADEM', searchKeyword: 'Diadem SOLSTICE SPIN 125' },
+  { id: 'diadem-evolution-125', brand: 'Diadem', model: 'EVOLUTION 125', type: 'ポリエステル', gauge: '1.25mm', length: '12m', color: 'レッド', year: 2024, concept: 'オールラウンド型・初めてのポリに最適', searchKeyword: 'Diadem EVOLUTION 125' }
 ];
 
 // ヘルパー関数

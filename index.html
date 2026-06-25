@@ -3837,6 +3837,7 @@ function selectRacket(id) {
     ['重量', r.weight, 'g'], ['フェイス', r.headSize, 'in²'],
     ['バランス', r.balance, 'mm'], ['パターン', r.pattern, ''],
     r.beam ? ['ビーム厚', r.beam, ''] : null,
+    r.swingWeight ? ['スウィングウェイト', r.swingWeight, ''] : null,
     r.year ? ['発売年', r.year, ''] : null
   ].filter(Boolean).map(([l,v,u]) => `<div class="detail-spec-item"><div class="detail-spec-label">${l}</div><div class="detail-spec-value">${v}<span class="detail-spec-unit">${u}</span></div></div>`).join('');
   document.getElementById('detail-img-area').innerHTML = '<div class="empty-icon">🎾</div>';

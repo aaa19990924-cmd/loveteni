@@ -392,10 +392,8 @@ section {
 .service-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--line);
   border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
+  border-left: 1px solid var(--line);
 }
 .service-card {
   background: white;
@@ -406,6 +404,8 @@ section {
   display: flex;
   flex-direction: column;
   min-height: 240px;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
 }
 .service-card:hover {
   background: var(--cream);
@@ -515,9 +515,8 @@ section {
 .brand-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--line);
-  border: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
 }
 .brand-card {
   background: white;
@@ -526,6 +525,8 @@ section {
   transition: all 0.25s;
   position: relative;
   text-align: left;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
 }
 .brand-card:hover {
   background: var(--ink);
@@ -588,16 +589,16 @@ section {
 .tournament-list {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 1px;
-  background: rgba(255,255,255,0.1);
   border-top: 1px solid rgba(255,255,255,0.15);
-  border-bottom: 1px solid rgba(255,255,255,0.15);
+  border-left: 1px solid rgba(255,255,255,0.15);
 }
 .tournament-card {
   background: var(--ink);
   padding: 36px 28px;
   cursor: pointer;
   transition: all 0.25s;
+  border-right: 1px solid rgba(255,255,255,0.15);
+  border-bottom: 1px solid rgba(255,255,255,0.15);
 }
 .tournament-card:hover { background: var(--ink-soft); }
 .tournament-status {

@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>テニス動画 | LOVETENI ラブテニ</title>
+<meta name="description" content="日本人選手の海外ツアーハイライトや大会映像をまとめたテニス動画ページ。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;900&family=Noto+Serif+JP:wght@400;500;700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="/videos-data.js"></script>
+<style>
+:root {
+  --ink: #0d1117;
+  --ink-soft: #1c2128;
+  --paper: #ffffff;
+  --cream: #fafaf7;
+  --silver: #f2f2ee;
+  --line: #e2e2dc;
+  --line-strong: #c9c9c1;
+  --mute: #6b6b65;
+  --mute-soft: #9c9c93;
+  --accent: #00513a;
+  --accent-bright: #008156;
+  --accent-dim: rgba(0,81,58,0.08);
+  --gold: #b8956a;
+  --signal: #d9534f;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: 0.01em;
+}
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+::selection { background: var(--accent); color: white; }
+
+/* ===== HEADER ===== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: saturate(180%) blur(10px);
+  -webkit-backdrop-filter: saturate(180%) blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.header-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 32px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.logo-mark {
+  width: 32px;
+  height: 32px;
+  background: var(--ink);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 900;
+  font-size: 17px;
+  font-style: italic;
+}
+.logo-text {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--ink);
+}
+.logo-text em { font-style: italic; color: var(--accent); }
+.gnav {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+  align-items: center;
+}
+.gnav-item {
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 14px;
+  color: var(--ink);
+  border-radius: 4px;
+  transition: color 0.15s;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.gnav-item:hover { color: var(--accent); }
+.gnav-item.active { color: var(--accent); font-weight: 600; }
+
+/* ===== PAGE HERO ===== */
+.page-hero {
+  background: var(--ink);
+  color: white;
+  padding: 56px 32px 48px;
+  text-align: center;
+}
+.page-hero-eyebrow {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--gold);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.page-hero-eyebrow::before,
+.page-hero-eyebrow::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 1px;
+  background: var(--gold);
+  opacity: 0.6;
+}
+.page-hero-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-bottom: 12px;
+}
+.page-hero-sub {
+  font-size: 14px;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 0.04em;
+}
+
+/* ===== MAIN CONTENT ===== */
+.container {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+.content-wrap {
+  padding: 48px 0 80px;
+}
+
+/* ===== FILTER BAR ===== */
+.filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 36px;
+  flex-wrap: wrap;
+}
+.filter-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--mute);
+  text-transform: uppercase;
+  margin-right: 4px;
+}
+.filter-btn {
+  padding: 7px 18px;
+  border-radius: 2px;
+  border: 1px solid var(--line-strong);
+  font-size: 12px;
+  font-weight: 600;
+  background: transparent;
+  color: var(--mute);
+  transition: all 0.15s;
+  letter-spacing: 0.04em;
+  font-family: 'DM Sans', sans-serif;
+}
+.filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+.filter-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+.video-count {
+  margin-left: auto;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: var(--mute);
+  letter-spacing: 0.06em;
+}
+.video-count strong {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-right: 3px;
+}
+
+/* ===== VIDEO GRID ===== */
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 28px;
+}
+
+/* ===== VIDEO CARD ===== */
+.video-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.video-card:hover {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+  transform: translateY(-2px);
+}
+
+/* YouTube embed wrapper — 16:9 aspect ratio */
+.video-thumb {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  background: var(--ink-soft);
+  overflow: hidden;
+}
+.video-thumb iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* カード本文 */
+.video-body {
+  padding: 20px 20px 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.video-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.video-tag {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 2px;
+  background: var(--accent-dim);
+  color: var(--accent);
+  border: 1px solid rgba(0,81,58,0.15);
+}
+.video-player {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--mute);
+  letter-spacing: 0.06em;
+}
+.video-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+.video-desc {
+  font-size: 13px;
+  color: var(--mute);
+  line-height: 1.7;
+  flex: 1;
+}
+.video-footer {
+  padding: 14px 20px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--line);
+  margin-top: 16px;
+}
+.video-tournament {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  color: var(--mute-soft);
+  letter-spacing: 0.04em;
+}
+.video-yt-link {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.06em;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: color 0.15s;
+}
+.video-yt-link:hover { color: var(--accent-bright); }
+.video-yt-link::before {
+  content: '▶';
+  font-size: 9px;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+  text-align: center;
+  padding: 80px 0;
+}
+.empty-state-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--mute);
+  margin-bottom: 6px;
+}
+.empty-state-sub {
+  font-size: 13px;
+  color: var(--mute-soft);
+}
+
+/* ===== ADD GUIDE ===== */
+.add-guide {
+  margin-top: 60px;
+  background: var(--cream);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  padding: 24px 28px;
+}
+.add-guide-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.add-guide-body {
+  font-size: 13px;
+  color: var(--mute);
+  line-height: 1.8;
+}
+.add-guide-body code {
+  font-family: 'DM Sans', monospace;
+  background: var(--silver);
+  border: 1px solid var(--line-strong);
+  padding: 1px 6px;
+  border-radius: 3px;
+  font-size: 12px;
+  color: var(--ink);
+}
+
+/* ===== FOOTER ===== */
+.site-footer {
+  border-top: 1px solid var(--line);
+  padding: 32px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--mute);
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: 0.06em;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .header-inner { padding: 0 20px; height: 60px; gap: 16px; }
+  .gnav { display: none; }
+  .page-hero { padding: 40px 20px 32px; }
+  .page-hero-title { font-size: 26px; }
+  .container { padding: 0 20px; }
+  .content-wrap { padding: 32px 0 60px; }
+  .video-grid { grid-template-columns: 1fr; gap: 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/" class="logo">
+      <div class="logo-mark">L</div>
+      <div class="logo-text">LOVE<em>TENI</em></div>
+    </a>
+    <nav class="gnav">
+      <a href="/" class="gnav-item">ラケット</a>
+      <a href="/" class="gnav-item">ガット</a>
+      <a href="/" class="gnav-item">診断</a>
+      <a href="/calendar.html" class="gnav-item">手帳</a>
+      <a href="/videos.html" class="gnav-item active">動画</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ===== PAGE HERO ===== -->
+<section class="page-hero">
+  <div class="page-hero-eyebrow">TENNIS VIDEOS</div>
+  <h1 class="page-hero-title">テニス動画</h1>
+  <p class="page-hero-sub">日本人選手の海外ツアーハイライト・大会映像</p>
+</section>
+
+<!-- ===== MAIN ===== -->
+<main>
+  <div class="container">
+    <div class="content-wrap">
+
+      <!-- フィルターバー -->
+      <div class="filter-bar" id="filterBar">
+        <span class="filter-label">FILTER</span>
+        <button class="filter-btn active" data-tag="all" onclick="filterVideos('all', this)">すべて</button>
+        <button class="filter-btn" data-tag="ハイライト" onclick="filterVideos('ハイライト', this)">ハイライト</button>
+        <button class="filter-btn" data-tag="試合" onclick="filterVideos('試合', this)">試合</button>
+        <button class="filter-btn" data-tag="練習" onclick="filterVideos('練習', this)">練習</button>
+        <button class="filter-btn" data-tag="インタビュー" onclick="filterVideos('インタビュー', this)">インタビュー</button>
+        <div class="video-count" id="videoCount"><strong>0</strong>本</div>
+      </div>
+
+      <!-- 動画グリッド -->
+      <div class="video-grid" id="videoGrid"></div>
+
+      <!-- 追加ガイド -->
+      <div class="add-guide">
+        <div class="add-guide-title">動画を追加するには</div>
+        <div class="add-guide-body">
+          <code>videos-data.js</code> に以下の形式でオブジェクトを1つ追加するだけで動画カードが増えます。<br>
+          YouTubeの動画URLの <code>v=</code> 以降の文字列（11文字）を <code>youtubeId</code> に指定してください。<br>
+          例）<code>https://www.youtube.com/watch?v=<strong>AbCdEfGhIjK</strong></code> → <code>youtubeId: 'AbCdEfGhIjK'</code>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+  &copy; 2024 LOVETENI — <a href="/" style="color:var(--accent)">トップへ戻る</a>
+</footer>
+
+<script>
+let currentTag = 'all';
+
+function renderVideos(tag) {
+  const videos = typeof getVideosByTag === 'function' ? getVideosByTag(tag) : [];
+  const grid = document.getElementById('videoGrid');
+  const count = document.getElementById('videoCount');
+
+  count.innerHTML = '<strong>' + videos.length + '</strong>本';
+
+  if (!videos.length) {
+    grid.innerHTML = '<div class="empty-state"><div class="empty-state-title">動画が見つかりません</div><div class="empty-state-sub">別のタグを選択してください</div></div>';
+    return;
+  }
+
+  grid.innerHTML = videos.map(function(v) {
+    var ytUrl = 'https://www.youtube.com/watch?v=' + v.youtubeId;
+    var embedUrl = 'https://www.youtube-nocookie.com/embed/' + v.youtubeId + '?rel=0&modestbranding=1';
+    return '<div class="video-card">'
+      + '<div class="video-thumb">'
+      + '<iframe src="' + embedUrl + '" title="' + escHtml(v.title) + '" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>'
+      + '</div>'
+      + '<div class="video-body">'
+      + '<div class="video-meta-row">'
+      + '<span class="video-tag">' + escHtml(v.tag) + '</span>'
+      + '<span class="video-player">' + escHtml(v.player) + '</span>'
+      + '</div>'
+      + '<div class="video-title">' + escHtml(v.title) + '</div>'
+      + '<div class="video-desc">' + escHtml(v.description) + '</div>'
+      + '</div>'
+      + '<div class="video-footer">'
+      + '<span class="video-tournament">' + escHtml(v.tournament) + '</span>'
+      + '<a href="' + ytUrl + '" target="_blank" rel="noopener noreferrer" class="video-yt-link">YouTubeで見る</a>'
+      + '</div>'
+      + '</div>';
+  }).join('');
+}
+
+function filterVideos(tag, btn) {
+  currentTag = tag;
+  document.querySelectorAll('.filter-btn').forEach(function(b) {
+    b.classList.toggle('active', b === btn);
+  });
+  renderVideos(tag);
+}
+
+function escHtml(str) {
+  return String(str || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// 初期描画
+renderVideos('all');
+</script>
+</body>
+</html>

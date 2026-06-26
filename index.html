@@ -1033,6 +1033,8 @@ section {
 .rakuten-item {
   background: white;
   transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
 }
 .rakuten-item:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.06); }
 .rakuten-item-img {
@@ -1045,7 +1047,7 @@ section {
   background: var(--cream);
 }
 .rakuten-item-img img { width: 100%; height: 100%; object-fit: contain; }
-.rakuten-item-info { padding: 12px; }
+.rakuten-item-info { padding: 12px; flex: 1; display: flex; flex-direction: column; }
 .rakuten-item-name {
   font-size: 11px;
   margin-bottom: 6px;
@@ -1134,6 +1136,7 @@ section {
   text-align: center;
   letter-spacing: 0.06em;
   transition: background 0.2s;
+  margin-top: auto;
 }
 .rakuten-item-btn:hover { background: #9b0000; }
 .amazon-compare-row {
@@ -2300,6 +2303,7 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
       <span class="gnav-item" onclick="navigate('rules')" data-page="rules">ルール</span>
       <span class="gnav-item" onclick="navigateToMygear()" data-page="mygear">マイギア</span>
       <a href="/calendar.html" class="gnav-item" style="text-decoration:none;color:inherit;">手帳</a>
+      <a href="/videos.html" class="gnav-item" style="text-decoration:none;color:inherit;">動画</a>
     </nav>
     <div class="header-search">
       <span class="header-search-icon">🔍</span>

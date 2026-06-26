@@ -38,6 +38,9 @@ body {
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   letter-spacing: 0.01em;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 ::selection { background: var(--accent); color: white; }
 button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
@@ -1017,6 +1020,29 @@ section {
   transform: translateY(-1px);
 }
 
+/* ===== Gauge variant buttons (string detail) ===== */
+.gauge-variants-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 12px 0 16px;
+}
+.gauge-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 6px 18px;
+  border: 2px solid var(--line-strong);
+  border-radius: 2px;
+  background: white;
+  color: var(--mute);
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.04em;
+}
+.gauge-btn:hover { border-color: var(--accent); color: var(--accent); }
+.gauge-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
 /* ===== String filter bar ===== */
 .str-filter-wrap {
   background: var(--cream);
@@ -1732,7 +1758,8 @@ footer {
 
 /* ===== Views ===== */
 .view { display: none; }
-.view.active { display: block; }
+.view.active { display: block; flex: 1 0 auto; }
+footer { flex-shrink: 0; }
 
 
 /* ===== Rankings ===== */
@@ -2855,6 +2882,7 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
         <div>
           <div class="detail-brand" id="string-detail-brand"></div>
           <h1 class="detail-model" id="string-detail-model"></h1>
+          <div id="string-gauge-variants" class="gauge-variants-row" style="display:none"></div>
           <p class="detail-concept" id="string-detail-concept"></p>
           <div class="detail-specs-grid" id="string-detail-specs"></div>
           <div class="detail-cta-row">
@@ -3375,6 +3403,9 @@ function navigate(view, skipPush) {
   const active = document.querySelector(`.gnav-item[data-page="${view}"]`);
   if (active) active.classList.add('active');
   window.scrollTo(0, 0);
+
+  // ガットトップに戻ったときはフィルターをすべてリセット
+  if (view === 'strings') resetStringFilters();
 
   // ブラウザ履歴に追加（戻る/進む対応）
   if (!skipPush && !isHistoryNav) {
@@ -4237,6 +4268,20 @@ function ensureRankingsLoaded() {
 // ===== STRINGS フィルター =====
 const strFilter = { brand: 'all', type: 'all', form: 'all', gauge: 'all' };
 
+function resetStringFilters() {
+  strFilter.brand = 'all'; strFilter.type = 'all';
+  strFilter.form = 'all'; strFilter.gauge = 'all';
+  // ボタンのアクティブ状態をリセット
+  ['type','form','gauge'].forEach(key => {
+    document.querySelectorAll(`.str-fbtn[data-sf="${key}"]`).forEach(b => {
+      b.classList.toggle('active', b.dataset.val === 'all');
+    });
+  });
+  const sel = document.getElementById('sfBrand');
+  if (sel) sel.value = 'all';
+  renderStringsFiltered();
+}
+
 function initStringFilterBrandSelect() {
   const sel = document.getElementById('sfBrand');
   if (!sel || sel.options.length > 1) return;
@@ -4258,38 +4303,26 @@ function onStrFilterChange() {
   renderStringsFiltered();
 }
 
+// タイプフィルターは「ブランド内絞り込み」に使う。
+// ブランド/形態/ゲージが選択されたときだけ全商品リストモードに切り替える。
 function renderStringsFiltered() {
-  const isDefault = strFilter.brand === 'all' && strFilter.type === 'all'
-    && strFilter.form === 'all' && strFilter.gauge === 'all';
+  const isListMode = strFilter.brand !== 'all'
+    || strFilter.form !== 'all' || strFilter.gauge !== 'all';
 
   const brandWrap = document.getElementById('stringBrandGridWrap');
   const resultWrap = document.getElementById('strFilterResultsWrap');
   const countEl = document.getElementById('strFilterCount');
-  if (brandWrap) brandWrap.style.display = isDefault ? '' : 'none';
-  if (resultWrap) resultWrap.style.display = isDefault ? 'none' : '';
-  if (countEl) countEl.style.display = isDefault ? 'none' : '';
-  if (isDefault) return;
+  if (brandWrap) brandWrap.style.display = isListMode ? 'none' : '';
+  if (resultWrap) resultWrap.style.display = isListMode ? '' : 'none';
+  if (countEl) countEl.style.display = isListMode ? '' : 'none';
+  if (!isListMode) return;
 
-  const filtered = allStrings.filter(s => {
-    if (strFilter.brand !== 'all' && s.brand !== strFilter.brand) return false;
-    if (strFilter.type !== 'all' && s.type !== strFilter.type) return false;
-    if (strFilter.form !== 'all') {
-      if (strFilter.form === 'single' && s.form === 'roll') return false;
-      if (strFilter.form === 'roll' && s.form === 'single') return false;
-    }
-    if (strFilter.gauge !== 'all') {
-      const gn = s.gaugeNum || 0;
-      if (strFilter.gauge === 'thin' && gn > 1.20) return false;
-      if (strFilter.gauge === '125' && gn !== 1.25) return false;
-      if (strFilter.gauge === '127128' && (gn < 1.27 || gn > 1.285)) return false;
-      if (strFilter.gauge === 'thick' && gn < 1.30) return false;
-    }
-    return true;
-  });
+  const filtered = applyStrFilter(allStrings);
 
   if (countEl) countEl.innerHTML = `<strong>${filtered.length}</strong>件`;
   const titleEl = document.getElementById('strFilterResultsTitle');
-  if (titleEl) titleEl.textContent = filtered.length + ' MODELS FOUND';
+  const typeLabel = strFilter.type !== 'all' ? ` — ${strFilter.type}` : '';
+  if (titleEl) titleEl.textContent = filtered.length + ' MODELS FOUND' + typeLabel;
 
   const grid = document.getElementById('strFilterGrid');
   if (!grid) return;
@@ -4315,6 +4348,31 @@ function renderStringsFiltered() {
     </div>`;
   }).join('');
   filtered.forEach((s, i) => setTimeout(() => loadItemImage(s, 'csi-f', 'テニスガット'), i * 250));
+}
+
+// 全フィルターを適用して結果を返す共通関数
+function applyStrFilter(list) {
+  return list.filter(s => {
+    if (strFilter.brand !== 'all' && s.brand !== strFilter.brand) return false;
+    if (strFilter.type !== 'all' && s.type !== strFilter.type) return false;
+    if (strFilter.form !== 'all') {
+      if (strFilter.form === 'single' && s.form === 'roll') return false;
+      if (strFilter.form === 'roll' && s.form === 'single') return false;
+    }
+    if (strFilter.gauge !== 'all') {
+      const gn = s.gaugeNum || 0;
+      if (strFilter.gauge === 'thin' && gn > 1.20) return false;
+      if (strFilter.gauge === '125' && gn !== 1.25) return false;
+      if (strFilter.gauge === '127128' && (gn < 1.27 || gn > 1.285)) return false;
+      if (strFilter.gauge === 'thick' && gn < 1.30) return false;
+    }
+    return true;
+  });
+}
+
+// ゲージ表記をモデル名から除去して基本名を返す
+function getModelBaseName(model) {
+  return model.replace(/\s+1[1-3]\d\b/g, '').replace(/\s{2,}/g, ' ').trim();
 }
 
 // ===== STRINGS (ガット) =====
@@ -4356,12 +4414,18 @@ function selectStringBrand(brand) {
   document.getElementById('string-brand-desc').textContent = info.desc;
   document.getElementById('crumb-string-brand').innerHTML = `<span onclick="navigate('strings')">STRINGS</span><span class="sep">/</span><span class="current">${brand}</span>`;
   document.getElementById('stringSeriesGrid').innerHTML = info.series.map(s => {
-    const cnt = getStringsBySeries(brand, s.name).length;
+    const allInSeries = getStringsBySeries(brand, s.name);
+    const filtered = strFilter.type === 'all' ? allInSeries : allInSeries.filter(x => x.type === strFilter.type);
+    const cnt = filtered.length;
+    const total = allInSeries.length;
+    const cntLabel = cnt > 0
+      ? (strFilter.type !== 'all' && cnt < total ? `${cnt}/${total} MODELS` : `${cnt} MODELS`)
+      : '';
     return `<div class="series-card" onclick="selectStringSeries('${brand}','${s.name.replace(/'/g,"\\'")}')">
       <div class="series-name">${s.name}</div>
       <div class="series-desc">${s.desc}</div>
       <div class="series-bottom">
-        ${cnt > 0 ? `<div class="series-count">${cnt} MODELS</div>` : '<div></div>'}
+        ${cntLabel ? `<div class="series-count">${cntLabel}</div>` : '<div></div>'}
         <div class="series-arrow">→</div>
       </div>
     </div>`;
@@ -4386,13 +4450,25 @@ function selectStringSeries(brand, series) {
   if (!isHistoryNav) history.pushState({ view: 'string-series', brand, series }, '', `#string-series/${brand}/${series}`);
 }
 
-function renderStringGrid(strings) {
+function renderStringGrid(allInSeries) {
   const grid = document.getElementById('stringProductGrid');
   if (!grid) return;
+  // タイプフィルターが設定されていれば絞り込む（形態/ゲージはシリーズ内では使わない）
+  const strings = strFilter.type === 'all'
+    ? allInSeries
+    : allInSeries.filter(s => s.type === strFilter.type);
+
   if (!strings.length) {
-    grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🎾</div><div class="empty-text">モデルデータ準備中です</div></div>`;
+    const msg = strFilter.type !== 'all'
+      ? `「${strFilter.type}」に該当するガットがこのシリーズにありません`
+      : 'モデルデータ準備中です';
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🎾</div><div class="empty-text">${msg}</div></div>`;
     return;
   }
+  // シリーズカウント更新
+  const cntEl = document.getElementById('string-series-count');
+  if (cntEl) cntEl.textContent = `${strings.length} モデル${strFilter.type !== 'all' ? ' ('+strFilter.type+'で絞り込み中)' : ''}`;
+
   grid.innerHTML = strings.map(s => `
     <div class="racket-card" onclick="selectString('${s.id}')">
       <div class="racket-img" id="csi-${s.id}"><div class="ph">🎾</div></div>
@@ -4408,7 +4484,6 @@ function renderStringGrid(strings) {
         <button class="rakuten-btn" onclick="event.stopPropagation();openRakutenString('${s.brand}','${s.model.replace(/'/g,"\\'")}')">楽天で価格チェック →</button>
       </div>
     </div>`).join('');
-  // 画像を順次取得（250ms間隔）
   strings.forEach((s, i) => setTimeout(() => loadItemImage(s, 'csi', 'テニスガット'), i * 250));
 }
 
@@ -4421,8 +4496,28 @@ function selectString(id) {
   document.getElementById('back-to-string-series').onclick = () => selectStringSeries(currentStringBrand, currentStringSeries);
   document.getElementById('crumb-string-detail').innerHTML = `<span onclick="navigate('strings')">STRINGS</span><span class="sep">/</span><span onclick="selectStringBrand('${currentStringBrand}')">${currentStringBrand}</span><span class="sep">/</span><span onclick="selectStringSeries('${currentStringBrand}','${(currentStringSeries||'').replace(/'/g,"\\'")}')">${currentStringSeries}</span><span class="sep">/</span><span class="current">${s.model}</span>`;
   document.getElementById('string-detail-brand').textContent = s.brand;
-  document.getElementById('string-detail-model').textContent = s.model;
+  // ゲージ数値をタイトルから除去して表示
+  document.getElementById('string-detail-model').textContent = getModelBaseName(s.model);
   document.getElementById('string-detail-concept').textContent = s.concept || '';
+
+  // ゲージバリアント検索（同ブランド・同ベース名のモデルを探す）
+  const baseName = getModelBaseName(s.model);
+  const siblings = allStrings.filter(x => x.brand === s.brand && getModelBaseName(x.model) === baseName);
+  const uniqueGauges = [...new Set(siblings.map(x => x.gaugeNum).filter(Boolean))].sort((a, b) => a - b);
+  const gaugeWrap = document.getElementById('string-gauge-variants');
+  if (gaugeWrap) {
+    if (uniqueGauges.length > 1) {
+      gaugeWrap.style.display = '';
+      gaugeWrap.innerHTML = uniqueGauges.map(g => {
+        const isActive = Math.abs(g - (s.gaugeNum || 0)) < 0.005;
+        const sibling = siblings.find(x => Math.abs((x.gaugeNum || 0) - g) < 0.005);
+        const sid = sibling ? sibling.id : '';
+        return `<button class="gauge-btn${isActive ? ' active' : ''}" onclick="selectString('${sid}')">${g.toFixed(2)}mm</button>`;
+      }).join('');
+    } else {
+      gaugeWrap.style.display = 'none';
+    }
+  }
 
   const formLabel = s.form === 'single' ? '単品のみ' : s.form === 'roll' ? 'ロールのみ' : '単品・ロール';
   document.getElementById('string-detail-specs').innerHTML = [

@@ -1017,6 +1017,114 @@ section {
   transform: translateY(-1px);
 }
 
+/* ===== String filter bar ===== */
+.str-filter-wrap {
+  background: var(--cream);
+  border-bottom: 1px solid var(--line);
+  padding: 20px 0;
+  margin-bottom: 40px;
+}
+.str-filter-inner { display: flex; flex-direction: column; gap: 10px; }
+.str-filter-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.str-filter-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  color: var(--mute);
+  text-transform: uppercase;
+  min-width: 52px;
+  flex-shrink: 0;
+}
+.str-filter-select {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 28px 5px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 2px;
+  background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E") no-repeat right 8px center;
+  -webkit-appearance: none;
+  appearance: none;
+  color: var(--ink);
+  cursor: pointer;
+}
+.str-filter-select:focus { outline: none; border-color: var(--accent); }
+.str-fbtn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: 2px;
+  background: white;
+  color: var(--mute);
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.03em;
+}
+.str-fbtn:hover { border-color: var(--accent); color: var(--accent); }
+.str-fbtn.active { background: var(--accent); color: white; border-color: var(--accent); }
+.str-filter-count {
+  margin-left: auto;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  color: var(--mute);
+  white-space: nowrap;
+}
+.str-filter-count strong { font-size: 18px; font-weight: 700; color: var(--ink); margin-right: 2px; }
+.str-filter-results-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--mute);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+/* ===== Rakuten roll/single mode tabs ===== */
+.rk-mode-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 20px;
+  border: 1px solid var(--line-strong);
+  width: fit-content;
+}
+.rk-mode-tab {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 20px;
+  border: none;
+  background: white;
+  color: var(--mute);
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  transition: all 0.15s;
+  border-right: 1px solid var(--line-strong);
+}
+.rk-mode-tab:last-child { border-right: none; }
+.rk-mode-tab.active { background: var(--accent); color: white; }
+.rk-mode-tab:hover:not(.active) { background: var(--silver); }
+
+/* ロールボタン（outline） */
+.detail-cta-rakuten-roll {
+  background: white !important;
+  color: #BF0000 !important;
+  border: 2px solid #BF0000 !important;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+.detail-cta-rakuten-roll:hover {
+  background: #BF0000 !important;
+  color: white !important;
+}
+
 /* ===== Rakuten results section ===== */
 .rakuten-section { background: var(--cream); padding: 56px; }
 .rakuten-section-title {
@@ -2643,12 +2751,50 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
     <div class="container">
       <div class="page-hero-eyebrow">STRINGS DATABASE</div>
       <h1 class="page-hero-title">ガットを探す</h1>
-      <p class="page-hero-desc">8ブランド・50種類以上のテニスストリングを掲載しています。</p>
+      <p class="page-hero-desc">11ブランド・120種類以上のテニスストリングを掲載しています。</p>
+    </div>
+  </div>
+  <div class="str-filter-wrap">
+    <div class="container">
+      <div class="str-filter-inner">
+        <div class="str-filter-row">
+          <span class="str-filter-label">ブランド</span>
+          <select class="str-filter-select" id="sfBrand" onchange="onStrFilterChange()">
+            <option value="all">すべて</option>
+          </select>
+          <span class="str-filter-label" style="margin-left:8px">タイプ</span>
+          <button class="str-fbtn active" data-sf="type" data-val="all" onclick="onStrFbtn(this,'type','all')">すべて</button>
+          <button class="str-fbtn" data-sf="type" data-val="ポリエステル" onclick="onStrFbtn(this,'type','ポリエステル')">ポリ</button>
+          <button class="str-fbtn" data-sf="type" data-val="ナイロン" onclick="onStrFbtn(this,'type','ナイロン')">ナイロン</button>
+          <button class="str-fbtn" data-sf="type" data-val="マルチフィラメント" onclick="onStrFbtn(this,'type','マルチフィラメント')">マルチ</button>
+          <button class="str-fbtn" data-sf="type" data-val="ナチュラル" onclick="onStrFbtn(this,'type','ナチュラル')">ナチュラル</button>
+          <button class="str-fbtn" data-sf="type" data-val="ハイブリッド" onclick="onStrFbtn(this,'type','ハイブリッド')">ハイブリッド</button>
+        </div>
+        <div class="str-filter-row">
+          <span class="str-filter-label">形態</span>
+          <button class="str-fbtn active" data-sf="form" data-val="all" onclick="onStrFbtn(this,'form','all')">すべて</button>
+          <button class="str-fbtn" data-sf="form" data-val="single" onclick="onStrFbtn(this,'form','single')">単品</button>
+          <button class="str-fbtn" data-sf="form" data-val="roll" onclick="onStrFbtn(this,'form','roll')">ロール</button>
+          <span class="str-filter-label" style="margin-left:8px">ゲージ</span>
+          <button class="str-fbtn active" data-sf="gauge" data-val="all" onclick="onStrFbtn(this,'gauge','all')">すべて</button>
+          <button class="str-fbtn" data-sf="gauge" data-val="thin" onclick="onStrFbtn(this,'gauge','thin')">1.20以下</button>
+          <button class="str-fbtn" data-sf="gauge" data-val="125" onclick="onStrFbtn(this,'gauge','125')">1.25</button>
+          <button class="str-fbtn" data-sf="gauge" data-val="127128" onclick="onStrFbtn(this,'gauge','127128')">1.27〜1.28</button>
+          <button class="str-fbtn" data-sf="gauge" data-val="thick" onclick="onStrFbtn(this,'gauge','thick')">1.30以上</button>
+          <div class="str-filter-count" id="strFilterCount" style="display:none"><strong>0</strong>件</div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="page-body">
     <div class="container">
-      <div class="brand-grid" id="stringBrandGrid"></div>
+      <div id="strFilterResultsWrap" style="display:none">
+        <div class="str-filter-results-title" id="strFilterResultsTitle">FILTERED RESULTS</div>
+        <div class="racket-grid" id="strFilterGrid"></div>
+      </div>
+      <div id="stringBrandGridWrap">
+        <div class="brand-grid" id="stringBrandGrid"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -2712,13 +2858,20 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
           <p class="detail-concept" id="string-detail-concept"></p>
           <div class="detail-specs-grid" id="string-detail-specs"></div>
           <div class="detail-cta-row">
-            <button class="detail-cta-btn detail-cta-rakuten" id="string-detail-rakuten-btn">楽天で探す →</button>
+            <button class="detail-cta-btn detail-cta-rakuten" id="string-detail-rakuten-btn">単品を楽天で見る →</button>
+            <button class="detail-cta-btn detail-cta-rakuten-roll" id="string-detail-rakuten-roll-btn" style="display:none">ロールを楽天で見る →</button>
             <button class="detail-cta-btn detail-cta-amazon" id="string-detail-amazon-btn">Amazonで探す →</button>
           </div>
         </div>
       </div>
       <div class="rakuten-section">
         <div class="rakuten-section-title">楽天での販売価格</div>
+        <div id="string-rk-mode-wrap" style="display:none">
+          <div class="rk-mode-tabs">
+            <button class="rk-mode-tab active" id="string-rk-tab-single" onclick="loadStringRakutenMode('single')">単品 12m</button>
+            <button class="rk-mode-tab" id="string-rk-tab-roll" onclick="loadStringRakutenMode('roll')">ロール 200m</button>
+          </div>
+        </div>
         <div id="string-rakuten-results"><div class="loading"><span class="spin"></span>楽天を検索中...</div></div>
       </div>
     </div>
@@ -4081,6 +4234,89 @@ function ensureRankingsLoaded() {
 }
 
 
+// ===== STRINGS フィルター =====
+const strFilter = { brand: 'all', type: 'all', form: 'all', gauge: 'all' };
+
+function initStringFilterBrandSelect() {
+  const sel = document.getElementById('sfBrand');
+  if (!sel || sel.options.length > 1) return;
+  STRING_BRANDS.forEach(b => {
+    const o = document.createElement('option');
+    o.value = b; o.textContent = b;
+    sel.appendChild(o);
+  });
+}
+
+function onStrFbtn(btn, key, val) {
+  strFilter[key] = val;
+  document.querySelectorAll(`.str-fbtn[data-sf="${key}"]`).forEach(b => b.classList.toggle('active', b === btn));
+  renderStringsFiltered();
+}
+
+function onStrFilterChange() {
+  strFilter.brand = document.getElementById('sfBrand').value;
+  renderStringsFiltered();
+}
+
+function renderStringsFiltered() {
+  const isDefault = strFilter.brand === 'all' && strFilter.type === 'all'
+    && strFilter.form === 'all' && strFilter.gauge === 'all';
+
+  const brandWrap = document.getElementById('stringBrandGridWrap');
+  const resultWrap = document.getElementById('strFilterResultsWrap');
+  const countEl = document.getElementById('strFilterCount');
+  if (brandWrap) brandWrap.style.display = isDefault ? '' : 'none';
+  if (resultWrap) resultWrap.style.display = isDefault ? 'none' : '';
+  if (countEl) countEl.style.display = isDefault ? 'none' : '';
+  if (isDefault) return;
+
+  const filtered = allStrings.filter(s => {
+    if (strFilter.brand !== 'all' && s.brand !== strFilter.brand) return false;
+    if (strFilter.type !== 'all' && s.type !== strFilter.type) return false;
+    if (strFilter.form !== 'all') {
+      if (strFilter.form === 'single' && s.form === 'roll') return false;
+      if (strFilter.form === 'roll' && s.form === 'single') return false;
+    }
+    if (strFilter.gauge !== 'all') {
+      const gn = s.gaugeNum || 0;
+      if (strFilter.gauge === 'thin' && gn > 1.20) return false;
+      if (strFilter.gauge === '125' && gn !== 1.25) return false;
+      if (strFilter.gauge === '127128' && (gn < 1.27 || gn > 1.285)) return false;
+      if (strFilter.gauge === 'thick' && gn < 1.30) return false;
+    }
+    return true;
+  });
+
+  if (countEl) countEl.innerHTML = `<strong>${filtered.length}</strong>件`;
+  const titleEl = document.getElementById('strFilterResultsTitle');
+  if (titleEl) titleEl.textContent = filtered.length + ' MODELS FOUND';
+
+  const grid = document.getElementById('strFilterGrid');
+  if (!grid) return;
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🎾</div><div class="empty-text">条件に合うガットが見つかりません</div></div>`;
+    return;
+  }
+  grid.innerHTML = filtered.map(s => {
+    const formLabel = s.form === 'single' ? '単品' : s.form === 'roll' ? 'ロール' : '単品/ロール';
+    return `<div class="racket-card" onclick="selectString('${s.id}')">
+      <div class="racket-img" id="csi-f-${s.id}"><div class="ph">🎾</div></div>
+      <div class="racket-info">
+        <div class="racket-brand-text">${s.brand}</div>
+        <div class="racket-model">${s.model}</div>
+        <div class="racket-specs">
+          <div>種類 <strong>${s.type}</strong></div>
+          <div>ゲージ <strong>${s.gauge}</strong></div>
+          <div>形態 <strong>${formLabel}</strong></div>
+          <div>カラー <strong>${(s.color||'-').split('/')[0]}</strong></div>
+        </div>
+        <button class="rakuten-btn" onclick="event.stopPropagation();openRakutenString('${s.brand}','${s.model.replace(/'/g,"\\'")}')">楽天で価格チェック →</button>
+      </div>
+    </div>`;
+  }).join('');
+  filtered.forEach((s, i) => setTimeout(() => loadItemImage(s, 'csi-f', 'テニスガット'), i * 250));
+}
+
 // ===== STRINGS (ガット) =====
 function renderStringBrandGrid() {
   const html = STRING_BRANDS.map((brand, i) => {
@@ -4096,6 +4332,7 @@ function renderStringBrandGrid() {
   }).join('');
   const el = document.getElementById('stringBrandGrid');
   if (el) el.innerHTML = html;
+  initStringFilterBrandSelect();
 }
 
 function renderStringBrandSidebar() {
@@ -4175,26 +4412,60 @@ function renderStringGrid(strings) {
   strings.forEach((s, i) => setTimeout(() => loadItemImage(s, 'csi', 'テニスガット'), i * 250));
 }
 
+let _currentString = null;
+
 function selectString(id) {
   const s = allStrings.find(x => x.id === id);
   if (!s) return;
+  _currentString = s;
   document.getElementById('back-to-string-series').onclick = () => selectStringSeries(currentStringBrand, currentStringSeries);
   document.getElementById('crumb-string-detail').innerHTML = `<span onclick="navigate('strings')">STRINGS</span><span class="sep">/</span><span onclick="selectStringBrand('${currentStringBrand}')">${currentStringBrand}</span><span class="sep">/</span><span onclick="selectStringSeries('${currentStringBrand}','${(currentStringSeries||'').replace(/'/g,"\\'")}')">${currentStringSeries}</span><span class="sep">/</span><span class="current">${s.model}</span>`;
   document.getElementById('string-detail-brand').textContent = s.brand;
   document.getElementById('string-detail-model').textContent = s.model;
   document.getElementById('string-detail-concept').textContent = s.concept || '';
+
+  const formLabel = s.form === 'single' ? '単品のみ' : s.form === 'roll' ? 'ロールのみ' : '単品・ロール';
   document.getElementById('string-detail-specs').innerHTML = [
     ['種類', s.type, ''], ['ゲージ', s.gauge, ''],
     ['長さ', s.length || '-', ''], ['カラー', s.color || '-', ''],
+    ['販売形態', formLabel, ''],
     s.year ? ['発売年', s.year, ''] : null,
     s.players && s.players.length ? ['使用選手', s.players.join('・'), ''] : null
   ].filter(Boolean).map(([l,v,u]) => `<div class="detail-spec-item"><div class="detail-spec-label">${l}</div><div class="detail-spec-value">${v}<span class="detail-spec-unit">${u}</span></div></div>`).join('');
+
   document.getElementById('string-detail-img-area').innerHTML = '<div class="empty-icon">🎾</div>';
+
+  // 単品/ロールボタン制御
+  const rollBtn = document.getElementById('string-detail-rakuten-roll-btn');
+  const hasRoll = s.form === 'both' || s.form === 'roll';
+  rollBtn.style.display = hasRoll ? '' : 'none';
   document.getElementById('string-detail-rakuten-btn').onclick = () => openRakutenString(s.brand, s.model);
+  rollBtn.onclick = () => openRakutenStringRoll(s.brand, s.model, s.searchKeyword);
   document.getElementById('string-detail-amazon-btn').onclick = () => openAmazonString(s.brand, s.model);
-  loadRakutenResultsGeneric(s, 'string-rakuten-results', 'string-detail-img-area', 'テニスガット');
+
+  // モードタブ表示制御
+  const modeWrap = document.getElementById('string-rk-mode-wrap');
+  if (modeWrap) modeWrap.style.display = hasRoll ? '' : 'none';
+
+  loadStringRakutenMode('single');
   navigate('string-detail', true);
   if (!isHistoryNav) history.pushState({ view: 'string-detail', stringId: id }, '', `#string-detail/${id}`);
+}
+
+function loadStringRakutenMode(mode) {
+  const s = _currentString;
+  if (!s) return;
+  const singleTab = document.getElementById('string-rk-tab-single');
+  const rollTab = document.getElementById('string-rk-tab-roll');
+  if (singleTab) singleTab.classList.toggle('active', mode === 'single');
+  if (rollTab) rollTab.classList.toggle('active', mode === 'roll');
+  const kw = (s.searchKeyword || `${s.brand} ${s.model}`) + (mode === 'roll' ? ' ロール' : ' テニスガット');
+  loadRakutenResultsGeneric({ ...s, searchKeyword: kw.replace(' テニスガット', '') }, 'string-rakuten-results', 'string-detail-img-area', mode === 'roll' ? 'ロール' : 'テニスガット');
+}
+
+function openRakutenStringRoll(brand, model, keyword) {
+  const kw = (keyword || `${brand} ${model}`) + ' ロール';
+  window.open(`https://search.rakuten.co.jp/search/mall/${encodeURIComponent(kw)}/`, '_blank');
 }
 
 // ===== GRIPS (グリップ) =====

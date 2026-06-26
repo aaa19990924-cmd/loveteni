@@ -394,6 +394,8 @@ section {
   grid-template-columns: repeat(3, 1fr);
   border-top: 1px solid var(--line);
   border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
 }
 .service-card {
   background: white;
@@ -517,6 +519,8 @@ section {
   grid-template-columns: repeat(3, 1fr);
   border-top: 1px solid var(--line);
   border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
 }
 .brand-card {
   background: white;
@@ -591,6 +595,8 @@ section {
   grid-template-columns: repeat(2, 1fr);
   border-top: 1px solid rgba(255,255,255,0.15);
   border-left: 1px solid rgba(255,255,255,0.15);
+  border-right: 1px solid rgba(255,255,255,0.15);
+  border-bottom: 1px solid rgba(255,255,255,0.15);
 }
 .tournament-card {
   background: var(--ink);
@@ -755,6 +761,8 @@ section {
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   border-top: 1px solid var(--line);
   border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
   background: white;
 }
 .series-card {
@@ -828,6 +836,8 @@ section {
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   border-top: 1px solid var(--line);
   border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
   background: white;
 }
 .racket-card {
@@ -1467,6 +1477,151 @@ section {
   color: var(--mute);
   letter-spacing: 0.04em;
 }
+
+/* ===== Column Page Redesign ===== */
+.col-filter-bar { background: var(--cream); border-bottom: 1px solid var(--line); margin-bottom: 48px; }
+.col-tabs { display: flex; overflow-x: auto; }
+.col-tab {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 14px 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--mute);
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.col-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.col-tab:hover { color: var(--ink); }
+.col-featured {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border: 1px solid var(--line);
+  margin-bottom: 56px;
+  cursor: pointer;
+  transition: box-shadow 0.25s;
+}
+.col-featured:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.07); }
+.col-featured-img {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 72px;
+  min-height: 280px;
+}
+.col-featured-body {
+  padding: 48px 44px;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+}
+.col-featured-tag { display: flex; align-items: center; gap: 10px; }
+.col-featured-badge {
+  background: var(--accent);
+  color: white;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+}
+.col-featured-eyebrow {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.col-featured-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.55;
+}
+.col-featured-desc { font-size: 13px; color: var(--mute); line-height: 1.85; }
+.col-featured-meta { font-family: 'DM Sans', sans-serif; font-size: 11px; color: var(--mute); }
+.col-section-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--mute);
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.col-section-label::before {
+  content: '';
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+.knowledge-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 56px;
+}
+.knowledge-card {
+  padding: 32px 28px 36px 32px;
+  background: var(--cream);
+  cursor: pointer;
+  transition: background 0.2s;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  position: relative;
+}
+.knowledge-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px;
+  height: 100%;
+  background: var(--line-strong);
+  transition: background 0.2s;
+}
+.knowledge-card:hover { background: white; }
+.knowledge-card:hover::before { background: var(--accent); }
+.knowledge-num {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 40px;
+  font-weight: 700;
+  color: var(--line);
+  line-height: 1;
+  margin-bottom: 20px;
+  transition: color 0.2s;
+}
+.knowledge-card:hover .knowledge-num { color: var(--accent); }
+.knowledge-cat {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+.knowledge-title { font-size: 14px; font-weight: 700; line-height: 1.6; margin-bottom: 10px; }
+.knowledge-desc { font-size: 12px; color: var(--mute); line-height: 1.8; }
+.col-article-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-bottom: 56px; }
 
 /* ===== Match / Predict ===== */
 .match-card {
@@ -2371,6 +2526,9 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
 @media (max-width: 1024px) {
   .stats-bar-inner { grid-template-columns: repeat(2, 1fr); }
   .service-grid, .brand-grid, .column-grid, .video-grid { grid-template-columns: repeat(2, 1fr); }
+  .knowledge-grid { grid-template-columns: repeat(2, 1fr); }
+  .col-featured { grid-template-columns: 1fr; }
+  .col-article-grid { grid-template-columns: repeat(2, 1fr); }
   .player-grid { grid-template-columns: repeat(3, 1fr); }
   .tournament-list { grid-template-columns: 1fr; }
   .detail-layout { grid-template-columns: 1fr; gap: 32px; }
@@ -2391,6 +2549,9 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
   section { padding: 60px 0; }
   .hero { padding: 60px 0 80px; }
   .service-grid, .brand-grid, .column-grid, .video-grid { grid-template-columns: 1fr; }
+  .knowledge-grid { grid-template-columns: 1fr; }
+  .col-featured-body { padding: 28px 24px; }
+  .col-article-grid { grid-template-columns: 1fr; gap: 24px; }
   .player-grid { grid-template-columns: repeat(2, 1fr); }
   .news-item { grid-template-columns: 1fr; gap: 6px; padding: 18px 0; }
   .news-arrow { display: none; }
@@ -3066,18 +3227,43 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
     <div class="container">
       <div class="page-hero-eyebrow">COLUMN</div>
       <h1 class="page-hero-title">コラム</h1>
-      <p class="page-hero-desc">テニスのお役立ち情報・機材レビュー・上達のコツをお届けします。</p>
+      <p class="page-hero-desc">用品の選び方からテニスの科学まで。上達に役立つ情報をお届けします。</p>
     </div>
   </div>
+
+  <!-- カテゴリータブ -->
+  <div class="col-filter-bar">
+    <div class="container">
+      <div class="col-tabs">
+        <button class="col-tab active" onclick="onColTabClick(this)">すべて</button>
+        <button class="col-tab" onclick="onColTabClick(this)">用品選び</button>
+        <button class="col-tab" onclick="onColTabClick(this)">テニス知識</button>
+        <button class="col-tab" onclick="onColTabClick(this)">技術・上達</button>
+        <button class="col-tab" onclick="onColTabClick(this)">プロ情報</button>
+      </div>
+    </div>
+  </div>
+
   <div class="page-body">
     <div class="container">
-      <div class="column-grid">
-        <div class="column-card">
-          <div class="column-thumb" style="background:linear-gradient(135deg,#1a4d2e,#008156);color:#d4f558">📊</div>
-          <div class="column-cat">RACKET</div>
-          <h3 class="column-title">2026年最新ラケット完全ガイド — 初心者から上級者まで</h3>
-          <div class="column-meta">2026.05.15 · 読了5分</div>
+
+      <!-- フィーチャー記事 -->
+      <div class="col-featured">
+        <div class="col-featured-img" style="background:linear-gradient(135deg,#1a4d2e,#008156);color:#d4f558">📊</div>
+        <div class="col-featured-body">
+          <div class="col-featured-tag">
+            <span class="col-featured-badge">FEATURED</span>
+            <span class="col-featured-eyebrow">RACKET</span>
+          </div>
+          <h2 class="col-featured-title">2026年最新ラケット完全ガイド — 初心者から上級者まで</h2>
+          <p class="col-featured-desc">どのラケットを選べばいい？重さ・フェイスサイズ・バランスの三角関係を徹底解説。プレースタイル別おすすめ10選付き。</p>
+          <div class="col-featured-meta">2026.05.15 · 読了5分</div>
         </div>
+      </div>
+
+      <!-- 用品選び -->
+      <div class="col-section-label">用品選び · GEAR GUIDE</div>
+      <div class="col-article-grid">
         <div class="column-card">
           <div class="column-thumb" style="background:linear-gradient(135deg,#c2603a,#8e3d1c);color:white">🪢</div>
           <div class="column-cat">STRING</div>
@@ -3085,16 +3271,68 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
           <div class="column-meta">2026.05.10 · 読了7分</div>
         </div>
         <div class="column-card">
+          <div class="column-thumb" style="background:linear-gradient(135deg,#2c3e50,#4a6280);color:white">✊</div>
+          <div class="column-cat">GRIP</div>
+          <h3 class="column-title">グリップテープの選び方 — 厚み・素材・巻き方の完全ガイド</h3>
+          <div class="column-meta">2026.05.01 · 読了4分</div>
+        </div>
+        <div class="column-card">
+          <div class="column-thumb" style="background:linear-gradient(135deg,#b8956a,#8c6d49);color:white">👟</div>
+          <div class="column-cat">SHOES</div>
+          <h3 class="column-title">コートサーフェス別シューズ選び — オムニ・ハード・クレー</h3>
+          <div class="column-meta">2026.04.22 · 読了5分</div>
+        </div>
+      </div>
+
+      <!-- テニス知識 -->
+      <div class="col-section-label">テニス知識 · TENNIS SCIENCE</div>
+      <div class="knowledge-grid">
+        <div class="knowledge-card">
+          <div class="knowledge-num">01</div>
+          <div class="knowledge-cat">ガット素材</div>
+          <h3 class="knowledge-title">ガット素材の科学 — ポリ・ナイロン・ナチュラルの違い</h3>
+          <p class="knowledge-desc">なぜ素材によって打感が変わるのか？分子構造レベルから紐解くガット素材の秘密。</p>
+        </div>
+        <div class="knowledge-card">
+          <div class="knowledge-num">02</div>
+          <div class="knowledge-cat">テンション</div>
+          <h3 class="knowledge-title">テンション科学 — 数値1の違いが生む劇的な変化</h3>
+          <p class="knowledge-desc">テンションが高い・低いと何が変わるのか。スウィートスポット・スナップバック効果の正体。</p>
+        </div>
+        <div class="knowledge-card">
+          <div class="knowledge-num">03</div>
+          <div class="knowledge-cat">ストリングパターン</div>
+          <h3 class="knowledge-title">16×19 vs 18×20 — パターンの違いを徹底解説</h3>
+          <p class="knowledge-desc">縦横の本数が変わるとスピン量・コントロール・耐久性はどう変化するのか。</p>
+        </div>
+        <div class="knowledge-card">
+          <div class="knowledge-num">04</div>
+          <div class="knowledge-cat">プロのセッティング</div>
+          <h3 class="knowledge-title">プロのストリング設定 — 意外すぎる実態</h3>
+          <p class="knowledge-desc">ATP・WTAのプロが実際に使っているテンション設定は？市販品とどう違うのか。</p>
+        </div>
+        <div class="knowledge-card">
+          <div class="knowledge-num">05</div>
+          <div class="knowledge-cat">切断の科学</div>
+          <h3 class="knowledge-title">ガットが切れるメカニズム — 素材・打ち方・管理の影響</h3>
+          <p class="knowledge-desc">なぜガットは切れるのか。ノッチング発生のしくみと、長持ちさせる保管・使用術。</p>
+        </div>
+        <div class="knowledge-card">
+          <div class="knowledge-num">06</div>
+          <div class="knowledge-cat">意外な常識</div>
+          <h3 class="knowledge-title">知っているようで知らないテニスの豆知識10選</h3>
+          <p class="knowledge-desc">「テンションは使うたびに下がる」「天然ガットは雨に弱い」など、意外と知らないテニスの常識。</p>
+        </div>
+      </div>
+
+      <!-- 技術・上達 -->
+      <div class="col-section-label">技術・上達 · TECHNIQUE</div>
+      <div class="col-article-grid">
+        <div class="column-card">
           <div class="column-thumb" style="background:linear-gradient(135deg,#0d1117,#1c2128);color:#d4f558">🎯</div>
           <div class="column-cat">TECHNIQUE</div>
           <h3 class="column-title">スピンサーブをマスターする3つのコツ</h3>
           <div class="column-meta">2026.05.05 · 読了4分</div>
-        </div>
-        <div class="column-card">
-          <div class="column-thumb" style="background:linear-gradient(135deg,#b8956a,#8c6d49);color:white">💪</div>
-          <div class="column-cat">PHYSICAL</div>
-          <h3 class="column-title">テニスプレーヤーに必要な体幹トレーニング入門</h3>
-          <div class="column-meta">2026.04.28 · 読了6分</div>
         </div>
         <div class="column-card">
           <div class="column-thumb" style="background:linear-gradient(135deg,#f2f2ee,#d8d6d0);color:#0d1117">🏃</div>
@@ -3109,6 +3347,7 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
           <div class="column-meta">2026.04.15 · 読了8分</div>
         </div>
       </div>
+
     </div>
   </div>
 </div>
@@ -4265,6 +4504,12 @@ function ensureRankingsLoaded() {
   loadRankings();
 }
 
+
+// ===== COLUMN タブ =====
+function onColTabClick(btn) {
+  document.querySelectorAll('.col-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+}
 
 // ===== STRINGS フィルター =====
 const strFilter = { brand: 'all', type: 'all', form: 'all', gauge: 'all' };

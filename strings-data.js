@@ -1,5 +1,5 @@
 // テニスガット（ストリング）データベース
-const STRING_BRANDS = ['Luxilon', 'Babolat', 'Wilson', 'YONEX', 'HEAD', 'Tecnifibre', 'Solinco', 'Gosen', 'Toalson', 'Prince', 'Dunlop'];
+const STRING_BRANDS = ['Luxilon', 'Babolat', 'Wilson', 'YONEX', 'HEAD', 'Tecnifibre', 'Solinco', 'Gosen', 'Toalson', 'Prince', 'Dunlop', 'Polyfibre', 'Diadem'];
 
 const STRING_BRAND_INFO = {
   'Luxilon': { desc: 'ベルギー発祥、ポリエステルガットの王者。ATPツアーで最も使用されているガットブランドで、Wilsonの傘下。ALU POWERは世界中のプロが愛用する定番。', color: '#1a1a1a', tagline: 'POLY KING',
@@ -10,20 +10,24 @@ const STRING_BRAND_INFO = {
     series: [{name:'NXT',desc:'マルチフィラメントの定番'},{name:'Sensation',desc:'柔らかい打感のナイロン'},{name:'Revolve',desc:'スピン系ポリ'},{name:'Synthetic Gut',desc:'リーズナブルなナイロン'},{name:"Champion's Choice",desc:'プロ仕様ハイブリッド'}]},
   'YONEX': { desc: '日本を代表するテニスブランド。POLYTOURシリーズは世界中で高い評価。日本人に最適化された設計と高い耐久性が魅力。', color: '#8e44ad', tagline: 'JAPANESE PRECISION',
     series: [{name:'POLYTOUR PRO',desc:'バランス型ポリ'},{name:'POLYTOUR STRIKE',desc:'パワー系ポリ'},{name:'POLYTOUR SPIN',desc:'スナップバック特化・2024-25新作'},{name:'POLYTOUR FIRE',desc:'超細ゲージ・鋭い球離れ'},{name:'POLYTOUR REV',desc:'スピン特化五角断面'},{name:'POLYTOUR AIR',desc:'柔らかいポリ'},{name:'AEROBITE',desc:'ハイブリッドセット'},{name:'REXIS',desc:'プレミアムマルチ'}]},
-  'HEAD': { desc: 'オーストリア発祥の老舗ブランド。LYNXシリーズはジョコビッチ仕様。HAWKは扱いやすさで初・中級者に人気。', color: '#2c3e50', tagline: 'AUSTRIAN TRADITION',
-    series: [{name:'LYNX TOUR',desc:'ジョコビッチ仕様'},{name:'LYNX',desc:'スピン系ポリの定番'},{name:'HAWK TOUCH',desc:'柔らかい打感のポリ'},{name:'VELOCITY',desc:'マルチフィラメント'},{name:'SONIC PRO',desc:'コントロール系ポリ'}]},
+  'HEAD': { desc: 'オーストリア発祥の老舗ブランド。LYNXシリーズはジョコビッチ仕様。HAWK TOUCHは初・中級者に人気。LYNX TOUCHは振動吸収タイプの新展開。', color: '#2c3e50', tagline: 'AUSTRIAN TRADITION',
+    series: [{name:'LYNX TOUR',desc:'ジョコビッチ仕様'},{name:'LYNX',desc:'スピン系ポリの定番'},{name:'LYNX TOUCH',desc:'振動吸収コーティングのLYNX'},{name:'HAWK TOUCH',desc:'柔らかい打感のポリ'},{name:'HAWK POWER',desc:'パワー重視のHAWK'},{name:'VELOCITY',desc:'マルチフィラメント'},{name:'SONIC PRO',desc:'コントロール系ポリ'}]},
   'Tecnifibre': { desc: 'フランス発祥のガットメーカー。マルチフィラメント技術に強みを持ち、X-ONE BIPHASEは世界最高峰のマルチとして知られる。', color: '#16a085', tagline: 'STRING SPECIALIST',
     series: [{name:'RAZOR CODE',desc:'コントロール系ポリ'},{name:'BLACK CODE',desc:'スピン特化ポリ'},{name:'X-ONE BIPHASE',desc:'最高峰のマルチ'},{name:'TRIAX',desc:'コンフォート系マルチ'},{name:'DURAMIX',desc:'耐久性重視ナイロン'}]},
-  'Solinco': { desc: 'アメリカ発祥の新興ブランド。HYPER-Gはシフィオンテクが使用し、独特の五角形断面でスピンが圧倒的にかかると人気。', color: '#d35400', tagline: 'NEW WAVE POLY',
-    series: [{name:'HYPER-G',desc:'シフィオンテク使用'},{name:'HYPER-G SOFT',desc:'柔らかい打感のHYPER-G'},{name:'TOUR BITE',desc:'スピン特化'},{name:'TOUR BITE SOFT',desc:'柔らかいTOUR BITE'},{name:'CONFIDENTIAL',desc:'コントロール志向'}]},
+  'Solinco': { desc: 'アメリカ発祥の新興ブランド。HYPER-Gはシフィオンテクが使用し、独特の五角形断面でスピンが圧倒的にかかると人気。MACH TENも注目の新モデル。', color: '#d35400', tagline: 'NEW WAVE POLY',
+    series: [{name:'HYPER-G',desc:'シフィオンテク使用・五角断面'},{name:'HYPER-G SOFT',desc:'柔らかい打感のHYPER-G'},{name:'HYPER-G ROUND',desc:'丸断面で滑らかなHYPER-G'},{name:'TOUR BITE',desc:'スピン特化'},{name:'MACH TEN',desc:'高速スナップバック新モデル'},{name:'CONFIDENTIAL',desc:'コントロール志向'}]},
   'Gosen': { desc: '滋賀県発祥の国産ガットメーカー。OG-SHEEPシリーズは安価で耐久性が高く、学生プレーヤーから絶大な支持を受ける。', color: '#c0392b', tagline: 'JAPAN VALUE',
     series: [{name:'OG-SHEEP MICRO',desc:'学生定番のナイロン'},{name:'POLYLON',desc:'コスパ重視ポリ'},{name:'EGG POWER',desc:'高反発ポリ'},{name:'UMAMI',desc:'プレミアムポリ'}]},
-  'Dunlop': { desc: 'イギリス発祥の老舗スポーツブランド。ICONICシリーズはコスパに優れ、日本の一般プレーヤーに人気。オールラウンド性能が光る。', color: '#e67e22', tagline: 'BRITISH HERITAGE',
-    series: [{name:'ICONIC ALL',desc:'オールラウンド定番ポリ'},{name:'ICONIC SPIN',desc:'スピン特化五角断面'},{name:'ICONIC TOUR',desc:'ツアー向けコントロール'},{name:'ICONIC COMFORT',desc:'コンフォートマルチ'}]},
-  'Toalson': { desc: '日本の老舗ガットメーカー・トアルソン。TOUGH BLADEはコスパ最強の国産ポリとして学生から競技者まで幅広い層に支持される。', color: '#2980b9', tagline: 'JAPAN CRAFT',
-    series: [{name:'TOUGH BLADE',desc:'コスパ最強の国産ポリ'},{name:'ASTERISM',desc:'五角断面スピン系'},{name:'ASTERISM SOFT',desc:'ソフト系アスタリズム'},{name:'POLY TOUR SPIN',desc:'スピン特化'}]},
-  'Prince': { desc: 'アメリカ発祥の老舗ラケットブランド。ガットラインもBEAST XPやPhantom Touchが独自の存在感を放ち、Prince愛用者に特に人気。', color: '#7f8c8d', tagline: 'CLASSIC AMERICAN',
-    series: [{name:'BEAST XP',desc:'BEASTラケット向け爆発力ポリ'},{name:'PHANTOM TOUCH',desc:'マルチフィラメント定番'},{name:'PREMIER CONTROL',desc:'コントロール重視ポリ'}]},
+  'Dunlop': { desc: 'イギリス発祥の老舗スポーツブランド。ICONICシリーズはコスパに優れ、日本の一般プレーヤーに人気。2024年からEXPLOSIVEシリーズも展開。', color: '#e67e22', tagline: 'BRITISH HERITAGE',
+    series: [{name:'ICONIC ALL',desc:'オールラウンド定番ポリ'},{name:'ICONIC SPIN',desc:'スピン特化五角断面'},{name:'ICONIC TOUR',desc:'ツアー向けコントロール'},{name:'ICONIC TOUCH',desc:'コンフォートマルチ'},{name:'EXPLOSIVE',desc:'新シリーズ・Bite/Speed/Tour/Turbo展開'}]},
+  'Toalson': { desc: '日本の老舗ガットメーカー・トアルソン。TOUGH BLADEはコスパ最強の国産ポリ、BIOLOGICはプレミアムマルチ、RENKON DEVIL SPINは蓮根断面の個性派ポリ。', color: '#2980b9', tagline: 'JAPAN CRAFT',
+    series: [{name:'TOUGH BLADE',desc:'コスパ最強の国産ポリ'},{name:'ASTERISTA',desc:'スタンダードポリ'},{name:'ASTERISTA ARMORED',desc:'耐久コーティング強化版'},{name:'BIOLOGIC XX',desc:'国産プレミアムマルチ'},{name:'BIOLOGIC LIVE WIRE',desc:'フラッグシップマルチ'},{name:'RENKON DEVIL SPIN',desc:'蓮根断面スピン特化'}]},
+  'Prince': { desc: 'アメリカ発祥の老舗ラケットブランド。LIGHTNINGからHARRIER、PHANTOMまで多彩なラインナップ。BEAST XPはBEASTラケットとの相性が抜群。', color: '#7f8c8d', tagline: 'CLASSIC AMERICAN',
+    series: [{name:'LIGHTNING XX',desc:'高弾力モノフィラメント'},{name:'LIGHTNING XP',desc:'プレミアムマルチ'},{name:'HARRIER POWER',desc:'パワー&コンフォートマルチ'},{name:'HARRIER RESPONSE',desc:'反発重視の細めマルチ'},{name:'EMBLEM CONTROL',desc:'コントロール向けポリ'},{name:'EMBLEM SOFT',desc:'柔らかい打感のマルチ'},{name:'PHANTOM TOUCH',desc:'マルチフィラメント定番'},{name:'PHANTOM SPIN',desc:'スピン特化ポリ'},{name:'TOUR XX SPIN',desc:'コスパスピンポリ'},{name:'BEAST XP',desc:'BEASTラケット向け爆発力ポリ'}]},
+  'Polyfibre': { desc: 'ベルギー発祥のポリエステルガット専門ブランド。BLACK VENOMは欧州ツアーで高い人気を誇り、パワーと食いつきを兼ね備える。TCSはソフトな打感で幅広い層に対応。', color: '#1a1a2e', tagline: 'EUROPEAN POLY',
+    series: [{name:'BLACK VENOM',desc:'パワーと食いつきの欧州人気ポリ'},{name:'BLACK VENOM ROUGH',desc:'表面加工でスピンをさらに強化'},{name:'TCS',desc:'柔らかい打感のコポリ'},{name:'TCS ROUGH',desc:'スピン特化のTCSバリエーション'}]},
+  'Diadem': { desc: 'アメリカ発祥の新興ガットブランド。SOLSTICEはスピンとコントロールを高次元で両立し、競技者の間で急速に人気拡大中。DARK MATTERは異形断面の注目モデル。', color: '#2d1b4e', tagline: 'NEW AMERICAN POLY',
+    series: [{name:'SOLSTICE',desc:'フラッグシップ・スピン&コントロール'},{name:'SOLSTICE POWER',desc:'パワー特化バリエーション'},{name:'EVOLUTION',desc:'バランス型スタンダードポリ'},{name:'DARK MATTER',desc:'異形断面のスピン特化'}]},
 };
 
 // form: 'single'=単品のみ, 'roll'=ロールのみ, 'both'=単品・ロール両方
@@ -153,6 +157,100 @@ const STRING_DATABASE = [
   { id: 'prince-beast-xp-130', brand: 'Prince', model: 'BEAST XP 130', type: 'ポリエステル', gauge: '1.30mm', gaugeNum: 1.30, length: '12m', color: 'ブラック', year: 2024, form: 'both', concept: '太めBEAST XP・耐久性重視', searchKeyword: 'プリンス BEAST XP 130' },
   { id: 'prince-phantom-touch-130', brand: 'Prince', model: 'PHANTOM TOUCH 130', type: 'マルチフィラメント', gauge: '1.30mm', gaugeNum: 1.30, length: '12m', color: 'ナチュラル', year: 2024, form: 'both', concept: '柔らかい打感のマルチ・ナチュラルガット代替として人気', searchKeyword: 'プリンス PHANTOM TOUCH 130' },
   { id: 'prince-premier-control-125', brand: 'Prince', model: 'PREMIER CONTROL 125', type: 'ポリエステル', gauge: '1.25mm', gaugeNum: 1.25, length: '12m', color: 'ホワイト', year: 2024, form: 'both', concept: 'コントロール重視ポリ・ナイロンに近い打感', searchKeyword: 'プリンス PREMIER CONTROL 125' },
+
+  // ========== Luxilon (追加モデル) ==========
+  { id: 'luxilon-alu-power-110', brand: 'Luxilon', model: 'ALU POWER 110', type: 'ポリエステル', gauge: '1.10mm', gaugeNum: 1.10, length: '12.2m', color: 'シルバー', year: 2024, form: 'both', concept: '超細1.10mm・最大スナップバックと鋭い打感', searchKeyword: 'Luxilon ALU POWER 110' },
+  { id: 'luxilon-alu-power-vibe-125', brand: 'Luxilon', model: 'ALU POWER VIBE 125', type: 'ポリエステル', gauge: '1.25mm', gaugeNum: 1.25, length: '12.2m', color: 'シルバー', year: 2024, form: 'both', concept: '振動吸収コーティングで腕への負担を軽減したALU POWER', searchKeyword: 'Luxilon ALU POWER VIBE 125' },
+  { id: 'luxilon-alu-power-black-125', brand: 'Luxilon', model: 'ALU POWER BLACK 125', type: 'ポリエステル', gauge: '1.25mm', gaugeNum: 1.25, length: '12.2m', color: 'ブラック', year: 2024, form: 'both', concept: 'ALU POWERのブラックカラー・ステルス仕上げ', searchKeyword: 'Luxilon ALU POWER ブラック 125' },
+  { id: 'luxilon-4g-black-125', brand: 'Luxilon', model: '4G BLACK 125', type: 'ポリエステル', gauge: '1.25mm', gaugeNum: 1.25, length: '12.2m', color: 'ブラック', year: 2023, form: 'both', concept: '4Gのブラックカラー・テンション維持性能を継承', searchKeyword: 'Luxilon 4G BLACK 125' },
+  { id: 'luxilon-element-black-128', brand: 'Luxilon', model: 'ELEMENT BLACK 128', type: 'ポリエステル', gauge: '1.28mm', gaugeNum: 1.28, length: '12.2m', color: 'ブラック', year: 2024, form: 'both', concept: '独自1.28mm・マイルドなELEMENTのブラック版', searchKeyword: 'Luxilon ELEMENT BLACK 128' },
+  { id: 'luxilon-eco-power-125', brand: 'Luxilon', model: 'ECO POWER 125', type: 'ポリエステル', gauge: '1.25mm', gaugeNum: 1.25, length: '12.2m', color: 'シルバー', year: 2024, form: 'both', concept: 'リサイクル素材使用のサステナブルポリ・コスパ重視', searchKeyword: 'Luxilon ECO POWER 125' },
+  { id: 'luxilon-natural-gut-125', brand: 'Luxilon', model: 'NATURAL GUT 125', type: 'ナチュラル', gauge: '1.25mm', gaugeNum: 1.25, length: '12.2m', color: 'ナチュラル', year: 2024, form: 'single', concept: 'Luxilonブランドの高品質ナチュラルガット', searchKeyword: 'Luxilon ナチュラルガット 125' },
+
+  // ========== Babolat (追加モデル) ==========
+  { id: 'babolat-syn-gut-125', brand: 'Babolat', model: 'Syn-Gut 125', type: 'ナイロン', gauge: '1.25mm', gaugeNum: 1.25, length: '12m', color: 'ナチュラル', year: 2023, form: 'both', concept: '入門向け定番ナイロン・コスパNo.1', searchKeyword: 'Babolat Syn-Gut シンガット 125' },
+  { id: 'babolat-excel-125', brand: 'Babolat', model: 'Excel 125', type: 'マルチフィラメント', gauge: '1.25mm', gaugeNum: 1.25, length: '12m', color: 'ナチュラル', year: 2024, form: 'both', concept: '柔らかく包み込む打感の人気マルチフィラメント', searchKeyword: 'Babolat Excel エクセル 125' },
+  { id: 'babolat-excel-red-125', brand: 'Babolat', model: 'Excel Red 125', type: 'マルチフィラメント', gauge: '1.25mm', gaugeNum: 1.25, length: '12m', color: 'レッド', year: 2024, form: 'both', concept: 'Excelのレッドカラーバリエーション・目を引く赤', searchKeyword: 'Babolat Excel Red 125' },
+  { id: 'babolat-addiction-plus-125', brand: 'Babolat', model: 'Addiction Plus 125', type: 'マルチフィラメント', gauge: '1.25mm', gaugeNum: 1.25, length: '12m', color: 'ナチュラル', year: 2024, form: 'both', concept: 'ソフト打感のエントリーマルチ・腕に優しい設計', searchKeyword: 'Babolat Addiction Plus アディクション 125' },
+  { id: 'babolat-touch-tonic-130', brand: 'Babolat', model: 'Touch Tonic 130', type: 'ナチュラル', gauge: '1.30mm', gaugeNum: 1.30, length: '12m', color: 'ナチュラル', year: 2024, form: 'single', concept: 'VS Touchより手頃なナチュラルガット・試合向け', searchKeyword: 'Babolat Touch Tonic タッチトニック 130' },
+  { id: 'babolat-rpm-rough-125', brand: 'Babolat', model: 'RPM Rough 125', type: 'ポリエステル', gauge: '1.25mm', gaugeNum: 1.25, length: '12m', color: 'ダークグレー', year: 2024, form: 'both', concept: 'ざらつき加工でスピンを最大化した新RPMシリーズ', searchKeyword: 'Babolat RPM Rough 125' },
+  { id: 'babolat-rpm-hurricane-120', brand: 'Babolat', model: 'RPM Hurricane 120', type: 'ポリエステル', gauge: '1.20mm', gaugeNum: 1.20, length: '12m', color: 'ブラック', year: 2024, form: 'both', concept: 'コントロール志向の1.20mm細ゲージポリ', searchKeyword: 'Babolat RPM Hurricane 120' },
+
+  // ========== Wilson (追加モデル) ==========
+  { id: 'wilson-repel-124', brand: 'Wilson', model: 'Repel 124', type: 'ポリエステル', gauge: '1.24mm', gaugeNum: 1.24, length: '12.2m', color: 'ブラック', year: 2024, form: 'both', concept: 'Wilsonのスピン重視コポリ・角断面でボールを噛む', searchKeyword: 'Wilson Repel 124' },
+  { id: 'wilson-nxt-soft-16', brand: 'Wilson', model: 'NXT Soft 16', type: 'マルチフィラメント', gauge: '1.30mm', gaugeNum: 1.30, length: '12.2m', color: 'ナチュラル', year: 2023, form: 'both', concept: 'NXTの超ソフトバージョン・最高のコンフォート感', searchKeyword: 'Wilson NXT Soft 16' },
+  { id: 'wilson-nxt-power-16', brand: 'Wilson', model: 'NXT Power 16', type: 'マルチフィラメント', gauge: '1.30mm', gaugeNum: 1.30, length: '12.2m', color: 'ナチュラル', year: 2023, form: 'both', concept: 'パワーを強化したNXT・高反発マルチ', searchKeyword: 'Wilson NXT Power 16' },
+  { id: 'wilson-natural-gut-16', brand: 'Wilson', model: 'Natural Gut 16', type: 'ナチュラル', gauge: '1.30mm', gaugeNum: 1.30, length: '12.2m', color: 'ナチュラル', year: 2024, form: 'single', concept: 'Wilsonの本格ナチュラルガット・最高の反発と打感', searchKeyword: 'Wilson ナチュラルガット Natural Gut 16' },
+  { id: 'wilson-reaction-16', brand: 'Wilson', model: 'Reaction 16', type: 'ナイロン', gauge: '1.30mm', gaugeNum: 1.30, length: '12.2m', color: 'ナチュラル', year: 2023, form: 'both', concept: 'コスパ重視の定番ナイロン・耐久性と反発のバランス', searchKeyword: 'Wilson Reaction 16' },
+  { id: 'wilson-hybrid-duo-power', brand: 'Wilson', model: 'Hybrid Duo Power', type: 'ハイブリッド', gauge: '1.25/1.30mm', gaugeNum: 1.25, length: '12.2m', color: 'シルバー/ナチュラル', year: 2024, form: 'single', concept: 'パワー重視のハイブリッドセット', searchKeyword: 'Wilson Hybrid Duo Power ハイブリッド' },
+  { id: 'wilson-hybrid-duo-feel', brand: 'Wilson', model: 'Hybrid Duo Feel', type: 'ハイブリッド', gauge: '1.25/1.30mm', gaugeNum: 1.25, length: '12.2m', color: 'ナチュラル', year: 2024, form: 'single', concept: 'フィール重視のハイブリッドセット', searchKeyword: 'Wilson Hybrid Duo Feel ハイブリッド' },
+
+  // ========== HEAD (追加モデル) ==========
+  { id: 'head-synthetic-gut-jp-130', brand: 'HEAD', model: 'Synthetic Gut JP 130', type: 'ナイロン', gauge: '1.30mm', gaugeNum: 1.30, length: '12m', color: 'ホワイト', year: 2023, form: 'both', concept: '入門者向けスタンダードナイロン・日本市場向け', searchKeyword: 'HEAD シンセティックガット Synthetic Gut JP 130' },
+  { id: 'head-lynx-touch-125', brand: 'HEAD', model: 'LYNX TOUCH 125', type: 'ポリエステル', gauge: '1.25mm', gaugeNum: 1.25, length: '12m', color: 'アンスラサイト', year: 2024, form: 'both', concept: '振動吸収コーティングで肘に優しいLYNX', searchKeyword: 'HEAD LYNX TOUCH 125' },
+  { id: 'head-hawk-power-125', brand: 'HEAD', model: 'HAWK POWER 125', type: 'ポリエステル', gauge: '1.25mm', gaugeNum: 1.25, length: '12m', color: 'ペトロール', year: 2024, form: 'both', concept: 'パワー重視のHAWKバリエーション・青緑カラー', searchKeyword: 'HEAD HAWK POWER 125' },
+
+  // ========== Tecnifibre (追加モデル) ==========
+  { id: 'tecnifibre-razor-soft-120', brand: 'Tecnifibre', model: 'RAZOR SOFT 120', type: 'ポリエステル', gauge: '1.20mm', gaugeNum: 1.20, length: '12m', color: 'ホワイト', year: 2024, form: 'both', concept: '柔らかくマイルドな打感・腕に優しい1.20mmポリ', searchKeyword: 'テクニファイバー RAZOR SOFT 120' },
+  { id: 'tecnifibre-razor-spin-125', brand: 'Tecnifibre', model: 'RAZOR SPIN 125', type: 'ポリエステル', gauge: '1.25mm', gaugeNum: 1.25, length: '12m', color: 'ブラック', year: 2024, form: 'both', concept: 'スピン特化の最新RAZORシリーズ・独自断面採用', searchKeyword: 'テクニファイバー RAZOR SPIN 125' },
+  { id: 'tecnifibre-ice-code-120', brand: 'Tecnifibre', model: 'ICE CODE 120', type: 'ポリエステル', gauge: '1.20mm', gaugeNum: 1.20, length: '12m', color: 'ホワイト', year: 2023, form: 'both', concept: 'コスパ重視エントリーポリ・白く清潔感のある外観', searchKeyword: 'テクニファイバー ICE CODE 120' },
+  { id: 'tecnifibre-red-code-125', brand: 'Tecnifibre', model: 'RED CODE 125', type: 'ポリエステル', gauge: '1.25mm', gaugeNum: 1.25, length: '12m', color: 'レッド', year: 2024, form: 'both', concept: '五角断面スピン特化のRED CODE・鮮やかな赤', searchKeyword: 'テクニファイバー RED CODE 125' },
+  { id: 'tecnifibre-tgv-130', brand: 'Tecnifibre', model: 'TGV 130', type: 'マルチフィラメント', gauge: '1.30mm', gaugeNum: 1.30, length: '12m', color: 'ナチュラル', year: 2023, form: 'both', concept: 'X-ONE BIPHASEより手頃なプレミアムマルチ', searchKeyword: 'テクニファイバー TGV 130' },
+  { id: 'tecnifibre-nrg2-130', brand: 'Tecnifibre', model: 'NRG2 130', type: 'マルチフィラメント', gauge: '1.30mm', gaugeNum: 1.30, length: '12m', color: 'ナチュラル', year: 2023, form: 'both', concept: '柔らかく反発性の高いスタンダードマルチ', searchKeyword: 'テクニファイバー NRG2 130' },
+  { id: 'tecnifibre-xr3-125', brand: 'Tecnifibre', model: 'XR3 125', type: 'マルチフィラメント', gauge: '1.25mm', gaugeNum: 1.25, length: '12m', color: 'ナチュラル', year: 2024, form: 'both', concept: '細めゲージのプレミアムマルチ・シャープな打感', searchKeyword: 'テクニファイバー XR3 125' },
+  { id: 'tecnifibre-multifeel-125', brand: 'Tecnifibre', model: 'MULTIFEEL 125', type: 'マルチフィラメント', gauge: '1.25mm', gaugeNum: 1.25, length: '12m', color: 'ナチュラル', year: 2024, form: 'both', concept: 'エントリー向けコスパマルチ・柔らかな打感', searchKeyword: 'テクニファイバー マルチフィール MULTIFEEL 125' },
+
+  // ========== Solinco (追加モデル) ==========
+  { id: 'solinco-hyper-g-round-120', brand: 'Solinco', model: 'HYPER-G ROUND 120', type: 'ポリエステル', gauge: '1.20mm', gaugeNum: 1.20, length: '12.2m', color: 'グリーン', year: 2024, form: 'both', concept: '丸断面HYPER-G・滑らかな打感でコントロール向上', searchKeyword: 'Solinco HYPER-G ROUND 120' },
+  { id: 'solinco-mach-ten-120', brand: 'Solinco', model: 'MACH TEN 120', type: 'ポリエステル', gauge: '1.20mm', gaugeNum: 1.20, length: '12.2m', color: 'ホワイト', year: 2024, form: 'both', concept: '高速スナップバック・パワーとスピンを両立する注目新作', searchKeyword: 'Solinco MACH TEN 120' },
+  { id: 'solinco-confidential-soft-120', brand: 'Solinco', model: 'CONFIDENTIAL SOFT 120', type: 'ポリエステル', gauge: '1.20mm', gaugeNum: 1.20, length: '12.2m', color: 'ブラック', year: 2024, form: 'both', concept: 'CONFIDENTIALの柔らかいバージョン・1.20mm細ゲージ', searchKeyword: 'Solinco CONFIDENTIAL SOFT 120' },
+
+  // ========== Gosen (追加モデル) ==========
+  { id: 'gosen-g-tour1-125', brand: 'Gosen', model: 'G-TOUR 1 125', type: 'ポリエステル', gauge: '1.25mm', gaugeNum: 1.25, length: '12.2m', color: 'ブラック', year: 2024, form: 'both', concept: 'GosenツアーポリNo.1・硬めでコントロール性能高い', searchKeyword: 'ゴーセン G-TOUR 1 125' },
+  { id: 'gosen-g-tour2-125', brand: 'Gosen', model: 'G-TOUR 2 125', type: 'ポリエステル', gauge: '1.25mm', gaugeNum: 1.25, length: '12.2m', color: 'メタリックブルー', year: 2024, form: 'both', concept: 'スピン特化ツアーポリ・メタリックブルーが目印', searchKeyword: 'ゴーセン G-TOUR 2 125' },
+  { id: 'gosen-g-tour3-125', brand: 'Gosen', model: 'G-TOUR 3 125', type: 'ポリエステル', gauge: '1.25mm', gaugeNum: 1.25, length: '12.2m', color: 'ブラック', year: 2024, form: 'both', concept: 'エントリーツアーポリ・柔らかくコントロール重視', searchKeyword: 'ゴーセン G-TOUR 3 125' },
+  { id: 'gosen-g-spin3-124', brand: 'Gosen', model: 'G-SPIN 3 124', type: 'ポリエステル', gauge: '1.24mm', gaugeNum: 1.24, length: '12.2m', color: 'クリムゾンレッド', year: 2024, form: 'both', concept: '17ゲージスピン特化ポリ・鮮やかな赤が特徴', searchKeyword: 'ゴーセン G-SPIN 3 124' },
+  { id: 'gosen-umishima-ak-pro-130', brand: 'Gosen', model: 'UMISHIMA AK PRO 130', type: 'マルチフィラメント', gauge: '1.30mm', gaugeNum: 1.30, length: '12.2m', color: 'ナチュラル', year: 2024, form: 'both', concept: '高品質マルチフィラメント・プレミアム感のある打感', searchKeyword: 'ゴーセン 海島 UMISHIMA AK PRO 130' },
+  { id: 'gosen-tech-gut-130', brand: 'Gosen', model: 'TECH GUT 130', type: 'マルチフィラメント', gauge: '1.30mm', gaugeNum: 1.30, length: '12.2m', color: 'ナチュラル', year: 2024, form: 'both', concept: 'ナチュラルガットに近い打感のマルチ・弾力豊か', searchKeyword: 'ゴーセン テックガット TECH GUT 130' },
+
+  // ========== Dunlop (追加モデル) ==========
+  { id: 'dunlop-explosive-bite-125', brand: 'Dunlop', model: 'EXPLOSIVE BITE 125', type: 'ポリエステル', gauge: '1.25mm', gaugeNum: 1.25, length: '12m', color: 'イエロー', year: 2024, form: 'both', concept: '食いつき重視・スピン量を最大化する角断面ポリ', searchKeyword: 'ダンロップ EXPLOSIVE BITE 125' },
+  { id: 'dunlop-explosive-speed-125', brand: 'Dunlop', model: 'EXPLOSIVE SPEED 125', type: 'ポリエステル', gauge: '1.25mm', gaugeNum: 1.25, length: '12m', color: 'ブルー', year: 2024, form: 'both', concept: 'ボールスピード重視・弾きの良い高反発ポリ', searchKeyword: 'ダンロップ EXPLOSIVE SPEED 125' },
+  { id: 'dunlop-explosive-tour-125', brand: 'Dunlop', model: 'EXPLOSIVE TOUR 125', type: 'ポリエステル', gauge: '1.25mm', gaugeNum: 1.25, length: '12m', color: 'ブラック', year: 2024, form: 'both', concept: 'ツアー向けコントロール&耐久性・プロ品質', searchKeyword: 'ダンロップ EXPLOSIVE TOUR 125' },
+  { id: 'dunlop-explosive-turbo-125', brand: 'Dunlop', model: 'EXPLOSIVE TURBO 125', type: 'ポリエステル', gauge: '1.25mm', gaugeNum: 1.25, length: '12m', color: 'オレンジ', year: 2024, form: 'both', concept: 'パワー重視・EXPLOSIVEシリーズのオレンジカラー', searchKeyword: 'ダンロップ EXPLOSIVE TURBO 125' },
+  { id: 'dunlop-iconic-touch-125', brand: 'Dunlop', model: 'ICONIC TOUCH 125', type: 'マルチフィラメント', gauge: '1.25mm', gaugeNum: 1.25, length: '12m', color: 'ナチュラル', year: 2024, form: 'both', concept: 'ICONICシリーズのマルチフィラメント・柔らかい打感', searchKeyword: 'ダンロップ ICONIC TOUCH 125' },
+
+  // ========== Toalson (追加モデル) ==========
+  { id: 'toalson-biologic-xx-123', brand: 'Toalson', model: 'BIOLOGIC XX 123', type: 'マルチフィラメント', gauge: '1.23mm', gaugeNum: 1.23, length: '12m', color: 'ナチュラル', year: 2024, form: 'both', concept: '国産プレミアムマルチ・ナチュラルに迫る打感', searchKeyword: 'トアルソン バイオロジック XX 123' },
+  { id: 'toalson-biologic-livewire-125', brand: 'Toalson', model: 'BIOLOGIC LIVE WIRE 125', type: 'マルチフィラメント', gauge: '1.25mm', gaugeNum: 1.25, length: '12m', color: 'ナチュラル', year: 2024, form: 'single', concept: 'Toalsonフラッグシップマルチ・最高の弾力と打感', searchKeyword: 'トアルソン バイオロジック ライブワイヤー 125' },
+  { id: 'toalson-renkon-devil-spin-125', brand: 'Toalson', model: 'RENKON DEVIL SPIN 125', type: 'ポリエステル', gauge: '1.25mm', gaugeNum: 1.25, length: '12m', color: 'イエロー', year: 2024, form: 'both', concept: '蓮根断面の異形ポリ・国内最高クラスのスピン性能', searchKeyword: 'トアルソン れんこん デビルスピン RENKON 125' },
+  { id: 'toalson-asterista-125', brand: 'Toalson', model: 'ASTERISTA 125', type: 'ポリエステル', gauge: '1.25mm', gaugeNum: 1.25, length: '12m', color: 'パールオレンジ', year: 2024, form: 'both', concept: 'コスパ重視のスタンダードポリ・スピンとコントロール', searchKeyword: 'トアルソン アスタリスタ ASTERISTA 125' },
+  { id: 'toalson-asterista-armored-125', brand: 'Toalson', model: 'ASTERISTA ARMORED 125', type: 'ポリエステル', gauge: '1.25mm', gaugeNum: 1.25, length: '12m', color: 'イエロー', year: 2024, form: 'both', concept: '耐久性を強化したアスタリスタ・特殊アーマードコーティング', searchKeyword: 'トアルソン アスタリスタ アーマード ARMORED 125' },
+  { id: 'toalson-gold-react-130', brand: 'Toalson', model: 'GOLD REACT 130', type: 'ナイロン', gauge: '1.30mm', gaugeNum: 1.30, length: '12m', color: 'ゴールド', year: 2024, form: 'both', concept: '高反発モノフィラメント・パワーと耐久性を両立', searchKeyword: 'トアルソン ゴールドリアクト GOLD REACT 130' },
+
+  // ========== Prince (追加モデル) ==========
+  { id: 'prince-lightning-xx-130', brand: 'Prince', model: 'LIGHTNING XX 130', type: 'ナイロン', gauge: '1.30mm', gaugeNum: 1.30, length: '12m', color: 'クリア', year: 2023, form: 'both', concept: '高弾力モノフィラメント・反発とパワーを重視', searchKeyword: 'プリンス LIGHTNING XX 130' },
+  { id: 'prince-lightning-xp-130', brand: 'Prince', model: 'LIGHTNING XP 130', type: 'マルチフィラメント', gauge: '1.30mm', gaugeNum: 1.30, length: '12m', color: 'ナチュラル', year: 2024, form: 'both', concept: '柔らかい打感のプレミアムマルチ・LIGHTNING上位版', searchKeyword: 'プリンス LIGHTNING XP 130' },
+  { id: 'prince-harrier-power-130', brand: 'Prince', model: 'HARRIER POWER 130', type: 'マルチフィラメント', gauge: '1.30mm', gaugeNum: 1.30, length: '12m', color: 'ナチュラル', year: 2024, form: 'both', concept: 'パワーとコンフォートを両立したプレミアムマルチ', searchKeyword: 'プリンス HARRIER POWER 130' },
+  { id: 'prince-harrier-response-124', brand: 'Prince', model: 'HARRIER RESPONSE 124', type: 'マルチフィラメント', gauge: '1.24mm', gaugeNum: 1.24, length: '12m', color: 'クリアホワイト', year: 2024, form: 'both', concept: '反発性重視の細めマルチ・コントロールプレーヤー向け', searchKeyword: 'プリンス HARRIER RESPONSE 124' },
+  { id: 'prince-emblem-control-130', brand: 'Prince', model: 'EMBLEM CONTROL 130', type: 'ポリエステル', gauge: '1.30mm', gaugeNum: 1.30, length: '12m', color: 'ブラック', year: 2024, form: 'both', concept: 'コントロール志向のスタンダードポリ・安定した打球感', searchKeyword: 'プリンス EMBLEM CONTROL 130' },
+  { id: 'prince-emblem-soft-130', brand: 'Prince', model: 'EMBLEM SOFT 130', type: 'マルチフィラメント', gauge: '1.30mm', gaugeNum: 1.30, length: '12m', color: 'ナチュラル', year: 2024, form: 'both', concept: 'ソフト打感の中級マルチ・腕への負担軽減', searchKeyword: 'プリンス EMBLEM SOFT 130' },
+  { id: 'prince-phantom-pro-130', brand: 'Prince', model: 'PHANTOM PRO 130', type: 'ポリエステル', gauge: '1.30mm', gaugeNum: 1.30, length: '12m', color: 'グラファイト', year: 2024, form: 'both', concept: 'PHANTOMシリーズのポリ版・コントロール重視のダーク系', searchKeyword: 'プリンス PHANTOM PRO 130' },
+  { id: 'prince-phantom-spin-130', brand: 'Prince', model: 'PHANTOM SPIN 130', type: 'ポリエステル', gauge: '1.30mm', gaugeNum: 1.30, length: '12m', color: 'ブラック', year: 2024, form: 'both', concept: 'スピン特化のPHANTOMポリエステル', searchKeyword: 'プリンス PHANTOM SPIN 130' },
+  { id: 'prince-tour-xx-spin-130', brand: 'Prince', model: 'TOUR XX SPIN 130', type: 'ポリエステル', gauge: '1.30mm', gaugeNum: 1.30, length: '12m', color: 'ブラック', year: 2023, form: 'both', concept: 'コスパに優れたスピン向けポリ・入門から使えるPrince', searchKeyword: 'プリンス TOUR XX SPIN 130' },
+
+  // ========== Polyfibre (新ブランド) ==========
+  { id: 'polyfibre-black-venom-125', brand: 'Polyfibre', model: 'BLACK VENOM 125', type: 'ポリエステル', gauge: '1.25mm', gaugeNum: 1.25, length: '12m', color: 'ブラック', year: 2024, form: 'both', concept: '欧州で高い人気・パワーと食いつきを兼ね備えたポリ', searchKeyword: 'Polyfibre ポリファイバー BLACK VENOM 125' },
+  { id: 'polyfibre-black-venom-130', brand: 'Polyfibre', model: 'BLACK VENOM 130', type: 'ポリエステル', gauge: '1.30mm', gaugeNum: 1.30, length: '12m', color: 'ブラック', year: 2024, form: 'both', concept: '太め1.30mmで耐久性とパワーをさらに強化', searchKeyword: 'Polyfibre ポリファイバー BLACK VENOM 130' },
+  { id: 'polyfibre-black-venom-rough-125', brand: 'Polyfibre', model: 'BLACK VENOM ROUGH 125', type: 'ポリエステル', gauge: '1.25mm', gaugeNum: 1.25, length: '12m', color: 'ブラック', year: 2024, form: 'both', concept: '表面加工でスピン量をさらに向上させたBLACK VENOM', searchKeyword: 'Polyfibre BLACK VENOM ROUGH 125' },
+  { id: 'polyfibre-tcs-125', brand: 'Polyfibre', model: 'TCS 125', type: 'ポリエステル', gauge: '1.25mm', gaugeNum: 1.25, length: '12m', color: 'ナチュラル', year: 2024, form: 'both', concept: '柔らかい打感のコポリ・Polyfibreのスタンダードモデル', searchKeyword: 'Polyfibre TCS 125' },
+  { id: 'polyfibre-tcs-rough-125', brand: 'Polyfibre', model: 'TCS ROUGH 125', type: 'ポリエステル', gauge: '1.25mm', gaugeNum: 1.25, length: '12m', color: 'ナチュラル', year: 2024, form: 'both', concept: '表面加工でスピンを追加したTCS・万能コポリ', searchKeyword: 'Polyfibre TCS ROUGH 125' },
+
+  // ========== Diadem (新ブランド) ==========
+  { id: 'diadem-solstice-black-120', brand: 'Diadem', model: 'SOLSTICE BLACK 120', type: 'ポリエステル', gauge: '1.20mm', gaugeNum: 1.20, length: '12m', color: 'ブラック', year: 2024, form: 'both', concept: '米国新興ブランドのフラッグシップ・スピン&コントロール', searchKeyword: 'Diadem ダイアデム SOLSTICE BLACK 120' },
+  { id: 'diadem-solstice-power-120', brand: 'Diadem', model: 'SOLSTICE POWER 120', type: 'ポリエステル', gauge: '1.20mm', gaugeNum: 1.20, length: '12m', color: 'ティール', year: 2024, form: 'both', concept: 'パワー特化のSOLSTICEバリエーション・ターコイズカラー', searchKeyword: 'Diadem SOLSTICE POWER 120' },
+  { id: 'diadem-evolution-125', brand: 'Diadem', model: 'EVOLUTION 125', type: 'ポリエステル', gauge: '1.25mm', gaugeNum: 1.25, length: '12m', color: 'ナチュラル', year: 2024, form: 'both', concept: 'バランス型スタンダードポリ・オールラウンドプレーヤー向け', searchKeyword: 'Diadem EVOLUTION 125' },
+  { id: 'diadem-dark-matter-125', brand: 'Diadem', model: 'DARK MATTER 125', type: 'ポリエステル', gauge: '1.25mm', gaugeNum: 1.25, length: '12m', color: 'ブラック', year: 2024, form: 'both', concept: '多角断面で最高スピン性能を追求した異形ポリ', searchKeyword: 'Diadem DARK MATTER 125' },
 
 ];
 

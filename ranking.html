@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人気投票ランキング | LOVETENI ラブテニ</title>
+<meta name="description" content="テニスプレーヤーが選ぶ人気ラケット・ガット・用品ランキング。みんなの一票でリアルな人気が分かる。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;900&family=Noto+Serif+JP:wght@400;500;700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<style>
+:root {
+  --ink: #0d1117;
+  --ink-soft: #1c2128;
+  --paper: #ffffff;
+  --cream: #fafaf7;
+  --silver: #f2f2ee;
+  --line: #e2e2dc;
+  --line-strong: #c9c9c1;
+  --mute: #6b6b65;
+  --mute-soft: #9c9c93;
+  --accent: #00513a;
+  --accent-bright: #008156;
+  --accent-dim: rgba(0,81,58,0.08);
+  --gold: #b8956a;
+  --signal: #d9534f;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: 0.01em;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+::selection { background: var(--accent); color: white; }
+
+/* ===== HEADER ===== */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: saturate(180%) blur(10px);
+  -webkit-backdrop-filter: saturate(180%) blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.header-inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 72px;
+  display: flex;
+  align-items: center;
+  gap: 40px;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+.logo-mark {
+  width: 32px;
+  height: 32px;
+  background: var(--ink);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Noto Serif JP', serif;
+  font-weight: 900;
+  font-size: 17px;
+  font-style: italic;
+}
+.logo-text {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--ink);
+}
+.logo-text em { font-style: italic; color: var(--accent); }
+.gnav {
+  display: flex;
+  gap: 4px;
+  margin-left: auto;
+  align-items: center;
+}
+.gnav-item {
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 14px;
+  color: var(--ink);
+  border-radius: 4px;
+  transition: color 0.15s;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.gnav-item:hover { color: var(--accent); }
+.gnav-item.active { color: var(--accent); font-weight: 600; }
+
+/* ===== PAGE HERO ===== */
+.page-hero {
+  background: var(--ink);
+  color: white;
+  padding: 56px 32px 48px;
+  text-align: center;
+}
+.page-hero-eyebrow {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  color: var(--gold);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.page-hero-eyebrow::before,
+.page-hero-eyebrow::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 1px;
+  background: var(--gold);
+  opacity: 0.6;
+}
+.page-hero-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 36px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  margin-bottom: 12px;
+}
+.page-hero-sub {
+  font-size: 14px;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 0.04em;
+}
+
+/* ===== CONTAINER ===== */
+.container {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.content-wrap {
+  padding: 48px 0 80px;
+  flex: 1 0 auto;
+}
+
+/* ===== CATEGORY TABS ===== */
+.cat-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 48px;
+  overflow-x: auto;
+}
+.cat-tab {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 14px 20px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  color: var(--mute);
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.cat-tab:hover { color: var(--ink); }
+.cat-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ===== AUTH NOTICE ===== */
+.auth-notice {
+  background: var(--cream);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--gold);
+  padding: 16px 20px;
+  margin-bottom: 36px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--mute);
+}
+.auth-notice a { color: var(--accent); font-weight: 600; }
+.auth-notice-icon { font-size: 18px; flex-shrink: 0; }
+
+/* ===== VOTE BANNER ===== */
+.vote-banner {
+  background: var(--accent-dim);
+  border: 1px solid var(--accent);
+  border-radius: 2px;
+  padding: 20px 24px;
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.vote-banner-text { font-size: 14px; }
+.vote-banner-text strong { color: var(--accent); }
+.vote-banner-sub { font-size: 12px; color: var(--mute); margin-top: 4px; }
+.vote-status { font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: var(--accent); }
+.vote-status.voted { color: var(--gold); }
+
+/* ===== RANKING LIST ===== */
+.ranking-section { margin-bottom: 56px; }
+.ranking-section-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--mute);
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 0;
+}
+.ranking-list { border: 1px solid var(--line); border-top: none; background: white; }
+.rank-item {
+  display: flex;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--line);
+  gap: 20px;
+  transition: background 0.15s;
+  cursor: pointer;
+}
+.rank-item:last-child { border-bottom: none; }
+.rank-item:hover { background: var(--cream); }
+.rank-num {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--line-strong);
+  min-width: 40px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.rank-item:nth-child(1) .rank-num { color: #b8956a; }
+.rank-item:nth-child(2) .rank-num { color: #8c8c8c; }
+.rank-item:nth-child(3) .rank-num { color: #a0774e; }
+.rank-info { flex: 1; min-width: 0; }
+.rank-brand { font-size: 10px; letter-spacing: 0.15em; color: var(--mute); text-transform: uppercase; margin-bottom: 2px; }
+.rank-name { font-family: 'Noto Serif JP', serif; font-size: 18px; font-weight: 700; }
+.rank-bar-wrap { flex: 1; min-width: 120px; }
+.rank-bar-bg { background: var(--silver); border-radius: 2px; height: 6px; overflow: hidden; }
+.rank-bar-fill { background: var(--accent); height: 100%; border-radius: 2px; transition: width 0.6s ease; }
+.rank-votes { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 700; color: var(--mute); min-width: 60px; text-align: right; white-space: nowrap; }
+.rank-votes span { font-size: 20px; color: var(--ink); }
+.vote-btn {
+  padding: 8px 18px;
+  background: var(--accent);
+  color: white;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  border-radius: 2px;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  min-width: 72px;
+  text-align: center;
+}
+.vote-btn:hover { background: #003d2b; }
+.vote-btn.voted-item { background: var(--cream); color: var(--gold); border: 1px solid var(--gold); }
+.vote-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ===== VOTE SELECTOR (modal) ===== */
+.vote-select-area {
+  background: var(--cream);
+  border: 1px solid var(--line);
+  padding: 32px;
+  margin-bottom: 48px;
+  display: none;
+}
+.vote-select-area.open { display: block; }
+.vote-select-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.vote-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+}
+.vote-option-btn {
+  padding: 14px 16px;
+  background: white;
+  border: 1px solid var(--line-strong);
+  text-align: left;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.15s;
+  line-height: 1.4;
+}
+.vote-option-btn:hover { border-color: var(--accent); color: var(--accent); }
+.vote-option-btn.selected { background: var(--accent); color: white; border-color: var(--accent); }
+.vote-option-brand { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.7; display: block; margin-bottom: 2px; }
+.vote-confirm-row { margin-top: 20px; display: flex; gap: 12px; align-items: center; }
+.vote-confirm-btn {
+  background: var(--accent);
+  color: white;
+  padding: 12px 32px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+.vote-confirm-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.vote-cancel-btn { font-size: 13px; color: var(--mute); padding: 12px 16px; }
+.vote-cancel-btn:hover { color: var(--ink); }
+.vote-msg { font-size: 12px; color: var(--mute); margin-left: auto; }
+
+/* ===== LOADING ===== */
+.loading-state {
+  text-align: center;
+  padding: 60px 0;
+  font-size: 14px;
+  color: var(--mute);
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: 0.06em;
+}
+.spin {
+  display: inline-block;
+  width: 18px; height: 18px;
+  border: 2px solid var(--line-strong);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ===== FOOTER ===== */
+.site-footer {
+  border-top: 1px solid var(--line);
+  padding: 32px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--mute);
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: 0.06em;
+  flex-shrink: 0;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .header-inner { padding: 0 20px; height: 60px; gap: 16px; }
+  .gnav { display: none; }
+  .page-hero { padding: 40px 20px 32px; }
+  .page-hero-title { font-size: 26px; }
+  .container { padding: 0 20px; }
+  .content-wrap { padding: 32px 0 60px; }
+  .rank-item { padding: 16px 16px; gap: 12px; }
+  .rank-bar-wrap { display: none; }
+  .vote-options { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/" class="logo">
+      <div class="logo-mark">L</div>
+      <div class="logo-text">LOVE<em>TENI</em></div>
+    </a>
+    <nav class="gnav">
+      <a href="/" class="gnav-item">ラケット</a>
+      <a href="/" class="gnav-item">ガット</a>
+      <a href="/" class="gnav-item">グリップ</a>
+      <a href="/" class="gnav-item">診断</a>
+      <a href="/" class="gnav-item">ルール</a>
+      <a href="/" class="gnav-item">マイギア</a>
+      <a href="/calendar.html" class="gnav-item">手帳</a>
+      <a href="/videos.html" class="gnav-item">動画</a>
+      <a href="/ranking.html" class="gnav-item active">ランキング</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ===== PAGE HERO ===== -->
+<section class="page-hero">
+  <div class="page-hero-eyebrow">COMMUNITY RANKING</div>
+  <h1 class="page-hero-title">人気投票ランキング</h1>
+  <p class="page-hero-sub">テニスプレーヤーが選ぶ、リアルな人気ランキング</p>
+</section>
+
+<!-- ===== MAIN ===== -->
+<main style="flex:1 0 auto">
+  <div class="container">
+    <div class="content-wrap">
+
+      <!-- カテゴリータブ -->
+      <div class="cat-tabs" id="catTabs">
+        <button class="cat-tab active" onclick="switchCat('rackets', this)">ラケット</button>
+        <button class="cat-tab" onclick="switchCat('strings', this)">ガット</button>
+        <button class="cat-tab" onclick="switchCat('balls', this)">ボール</button>
+        <button class="cat-tab" onclick="switchCat('bags', this)">バッグ</button>
+      </div>
+
+      <!-- 認証・投票ステータスバナー -->
+      <div id="authNotice" class="auth-notice" style="display:none">
+        <span class="auth-notice-icon">🔒</span>
+        <span>投票するには<a href="/">ログイン</a>が必要です。閲覧は誰でも可能です。</span>
+      </div>
+      <div id="voteBanner" class="vote-banner" style="display:none">
+        <div>
+          <div class="vote-banner-text">このカテゴリーに <strong>1票</strong> 投票できます</div>
+          <div class="vote-banner-sub">カテゴリーごとに1人1票。投票は変更できません。</div>
+        </div>
+        <div class="vote-status" id="voteStatus">まだ投票していません</div>
+      </div>
+
+      <!-- 投票選択エリア -->
+      <div class="vote-select-area" id="voteSelectArea">
+        <div class="vote-select-title">どれに投票しますか？</div>
+        <div class="vote-options" id="voteOptions"></div>
+        <div class="vote-confirm-row">
+          <button class="vote-confirm-btn" id="voteConfirmBtn" disabled onclick="submitVote()">投票する</button>
+          <button class="vote-cancel-btn" onclick="closeVoteSelect()">キャンセル</button>
+          <span class="vote-msg" id="voteMsg"></span>
+        </div>
+      </div>
+
+      <!-- ランキング表示エリア -->
+      <div id="rankingArea">
+        <div class="loading-state"><span class="spin"></span>読み込み中...</div>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="site-footer">
+  &copy; 2024 LOVETENI — <a href="/" style="color:var(--accent)">トップへ戻る</a>
+</footer>
+
+<script>
+// ===== Supabase 初期化 =====
+const SUPABASE_URL = 'https://mdrejtyrmjmhitebobhc.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kcmVqdHlybWptaGl0ZWJvYmhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2OTQwODYsImV4cCI6MjA5NTI3MDA4Nn0.iXKtPsCcCyMDYWDqDZPalSaF2vQGlfPwy3CslPodGaQ';
+const { createClient } = window.supabase;
+const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ===== 投票候補データ =====
+const VOTE_ITEMS = {
+  rackets: [
+    { id: 'wilson-blade-v10', brand: 'Wilson', name: 'Blade V10' },
+    { id: 'wilson-pro-staff-97', brand: 'Wilson', name: 'Pro Staff 97' },
+    { id: 'wilson-ultra-tour', brand: 'Wilson', name: 'Ultra Tour' },
+    { id: 'babolat-pure-aero', brand: 'Babolat', name: 'Pure Aero' },
+    { id: 'babolat-pure-drive', brand: 'Babolat', name: 'Pure Drive' },
+    { id: 'babolat-pure-strike', brand: 'Babolat', name: 'Pure Strike' },
+    { id: 'head-speed-mp', brand: 'HEAD', name: 'Speed MP' },
+    { id: 'head-prestige-mp', brand: 'HEAD', name: 'Prestige MP' },
+    { id: 'head-radical-mp', brand: 'HEAD', name: 'Radical MP' },
+    { id: 'yonex-vcore-98', brand: 'YONEX', name: 'VCORE 98' },
+    { id: 'yonex-ezone-98', brand: 'YONEX', name: 'EZONE 98' },
+    { id: 'yonex-percept-97', brand: 'YONEX', name: 'PERCEPT 97' },
+    { id: 'dunlop-cx200', brand: 'Dunlop', name: 'CX 200' },
+    { id: 'dunlop-fx500', brand: 'Dunlop', name: 'FX 500' },
+    { id: 'tecnifibre-tfight', brand: 'Tecnifibre', name: 'TFight 315' },
+    { id: 'prince-beast', brand: 'Prince', name: 'Beast 100' },
+  ],
+  strings: [
+    { id: 'luxilon-alu-power', brand: 'Luxilon', name: 'ALU Power' },
+    { id: 'luxilon-4g', brand: 'Luxilon', name: '4G' },
+    { id: 'babolat-rpm-blast', brand: 'Babolat', name: 'RPM Blast' },
+    { id: 'babolat-vs-touch', brand: 'Babolat', name: 'VS Touch' },
+    { id: 'head-hawk', brand: 'HEAD', name: 'Hawk' },
+    { id: 'yonex-poly-tour-pro', brand: 'YONEX', name: 'Poly Tour Pro' },
+    { id: 'yonex-poly-tour-spin', brand: 'YONEX', name: 'Poly Tour Spin' },
+    { id: 'tecnifibre-multifeel', brand: 'Tecnifibre', name: 'Multifeel' },
+    { id: 'wilson-nxt', brand: 'Wilson', name: 'NXT' },
+    { id: 'signum-poly-plasma', brand: 'Signum Pro', name: 'Poly Plasma' },
+    { id: 'solinco-tour-bite', brand: 'Solinco', name: 'Tour Bite' },
+    { id: 'kirschbaum-max-power', brand: 'Kirschbaum', name: 'Max Power' },
+  ],
+  balls: [
+    { id: 'wilson-us-open', brand: 'Wilson', name: 'US OPEN' },
+    { id: 'dunlop-fort', brand: 'Dunlop', name: 'Fort' },
+    { id: 'babolat-gold', brand: 'Babolat', name: 'Gold' },
+    { id: 'head-atp', brand: 'HEAD', name: 'ATP' },
+    { id: 'yonex-ball', brand: 'YONEX', name: 'テニスボール' },
+    { id: 'tecnifibre-tf-x1', brand: 'Tecnifibre', name: 'TF-X1' },
+  ],
+  bags: [
+    { id: 'wilson-super-tour', brand: 'Wilson', name: 'Super Tour Bag' },
+    { id: 'babolat-pure-aero-rh12', brand: 'Babolat', name: 'Pure Aero RH12' },
+    { id: 'head-tour-team', brand: 'HEAD', name: 'Tour Team' },
+    { id: 'yonex-bag2312', brand: 'YONEX', name: 'BAG2312' },
+  ],
+};
+
+// ===== 状態 =====
+let currentCat = 'rackets';
+let currentUser = null;
+let userVotes = {};        // { category: item_id }
+let rankingData = {};      // { category: [{ item_id, item_name, count }] }
+let pendingVoteItem = null;
+
+// ===== 初期化 =====
+async function init() {
+  const { data: { user } } = await sb.auth.getUser();
+  currentUser = user;
+
+  if (currentUser) {
+    const { data: votes } = await sb.from('votes').select('category, item_id').eq('user_id', currentUser.id);
+    if (votes) votes.forEach(v => { userVotes[v.category] = v.item_id; });
+  }
+
+  await loadRanking('rackets');
+  renderUI();
+}
+
+// ===== ランキングデータ取得 =====
+async function loadRanking(cat) {
+  if (rankingData[cat]) return;
+  const { data, error } = await sb.from('votes').select('item_id, item_name').eq('category', cat);
+  if (error) { rankingData[cat] = []; return; }
+
+  const counts = {};
+  (data || []).forEach(v => {
+    if (!counts[v.item_id]) counts[v.item_id] = { item_id: v.item_id, item_name: v.item_name, count: 0 };
+    counts[v.item_id].count++;
+  });
+
+  const items = VOTE_ITEMS[cat] || [];
+  const merged = items.map(it => ({
+    item_id: it.id,
+    item_name: it.name,
+    brand: it.brand,
+    count: counts[it.id] ? counts[it.id].count : 0,
+  }));
+  merged.sort((a, b) => b.count - a.count);
+  rankingData[cat] = merged;
+}
+
+// ===== カテゴリー切替 =====
+async function switchCat(cat, btn) {
+  document.querySelectorAll('.cat-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  currentCat = cat;
+  closeVoteSelect();
+  document.getElementById('rankingArea').innerHTML = '<div class="loading-state"><span class="spin"></span>読み込み中...</div>';
+  await loadRanking(cat);
+  renderUI();
+}
+
+// ===== UI描画 =====
+function renderUI() {
+  renderAuthBanner();
+  renderRanking();
+}
+
+function renderAuthBanner() {
+  const authNotice = document.getElementById('authNotice');
+  const voteBanner = document.getElementById('voteBanner');
+  const voteStatus = document.getElementById('voteStatus');
+
+  if (!currentUser) {
+    authNotice.style.display = '';
+    voteBanner.style.display = 'none';
+    return;
+  }
+  authNotice.style.display = 'none';
+  voteBanner.style.display = '';
+
+  const myVote = userVotes[currentCat];
+  if (myVote) {
+    const item = (VOTE_ITEMS[currentCat] || []).find(i => i.id === myVote);
+    voteStatus.textContent = '投票済: ' + (item ? item.name : myVote);
+    voteStatus.className = 'vote-status voted';
+  } else {
+    voteStatus.textContent = 'まだ投票していません';
+    voteStatus.className = 'vote-status';
+  }
+}
+
+function renderRanking() {
+  const area = document.getElementById('rankingArea');
+  const items = rankingData[currentCat] || [];
+  const totalVotes = items.reduce((s, i) => s + i.count, 0);
+  const maxCount = items.length ? items[0].count : 1;
+  const myVote = userVotes[currentCat];
+
+  if (!items.length) {
+    area.innerHTML = '<div class="loading-state">まだ投票がありません。最初の一票を投じましょう！</div>';
+    return;
+  }
+
+  const catLabel = { rackets: 'ラケット', strings: 'ガット', balls: 'ボール', bags: 'バッグ' };
+  area.innerHTML = `
+    <div class="ranking-section">
+      <div class="ranking-section-title">${catLabel[currentCat] || currentCat} RANKING — 総投票数 ${totalVotes}票</div>
+      <div class="ranking-list">
+        ${items.map((item, i) => {
+          const pct = maxCount > 0 ? Math.round((item.count / maxCount) * 100) : 0;
+          const isMyVote = myVote === item.item_id;
+          const canVote = currentUser && !myVote;
+          const btnLabel = isMyVote ? '投票済' : (canVote ? '投票' : (currentUser ? '投票済' : '要ログイン'));
+          const btnClass = isMyVote ? 'vote-btn voted-item' : 'vote-btn';
+          const btnDisabled = !canVote || isMyVote ? 'disabled' : '';
+          const onClickAttr = (canVote && !isMyVote) ? `onclick="openVoteSelect('${escHtml(item.item_id)}', '${escHtml(item.item_name)}')"` : '';
+          return `<div class="rank-item" ${onClickAttr}>
+            <div class="rank-num">${i + 1}</div>
+            <div class="rank-info">
+              <div class="rank-brand">${escHtml(item.brand)}</div>
+              <div class="rank-name">${escHtml(item.item_name)}</div>
+            </div>
+            <div class="rank-bar-wrap">
+              <div class="rank-bar-bg"><div class="rank-bar-fill" style="width:${pct}%"></div></div>
+            </div>
+            <div class="rank-votes"><span>${item.count}</span>票</div>
+            <button class="${btnClass}" ${btnDisabled} ${onClickAttr}>${btnLabel}</button>
+          </div>`;
+        }).join('')}
+      </div>
+    </div>
+  `;
+}
+
+// ===== 投票選択 =====
+function openVoteSelect(itemId, itemName) {
+  if (!currentUser) return;
+  if (userVotes[currentCat]) return;
+
+  pendingVoteItem = null;
+  const area = document.getElementById('voteSelectArea');
+  const options = document.getElementById('voteOptions');
+  const confirmBtn = document.getElementById('voteConfirmBtn');
+  const msg = document.getElementById('voteMsg');
+
+  area.classList.add('open');
+  area.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  confirmBtn.disabled = true;
+  msg.textContent = '';
+
+  const items = VOTE_ITEMS[currentCat] || [];
+  options.innerHTML = items.map(it => `
+    <button class="vote-option-btn${it.id === itemId ? ' selected' : ''}" onclick="selectVoteOption(this, '${escHtml(it.id)}', '${escHtml(it.name)}')">
+      <span class="vote-option-brand">${escHtml(it.brand)}</span>
+      ${escHtml(it.name)}
+    </button>
+  `).join('');
+
+  if (itemId) {
+    pendingVoteItem = { id: itemId, name: itemName };
+    confirmBtn.disabled = false;
+  }
+}
+
+function selectVoteOption(btn, id, name) {
+  document.querySelectorAll('.vote-option-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  pendingVoteItem = { id, name };
+  document.getElementById('voteConfirmBtn').disabled = false;
+}
+
+function closeVoteSelect() {
+  document.getElementById('voteSelectArea').classList.remove('open');
+  pendingVoteItem = null;
+}
+
+async function submitVote() {
+  if (!pendingVoteItem || !currentUser) return;
+  const confirmBtn = document.getElementById('voteConfirmBtn');
+  const msg = document.getElementById('voteMsg');
+  confirmBtn.disabled = true;
+  msg.textContent = '送信中...';
+
+  const { error } = await sb.from('votes').insert({
+    user_id: currentUser.id,
+    category: currentCat,
+    item_id: pendingVoteItem.id,
+    item_name: pendingVoteItem.name,
+  });
+
+  if (error) {
+    if (error.code === '23505') {
+      msg.textContent = '既にこのカテゴリーに投票済みです';
+    } else {
+      msg.textContent = 'エラーが発生しました: ' + error.message;
+    }
+    confirmBtn.disabled = false;
+    return;
+  }
+
+  userVotes[currentCat] = pendingVoteItem.id;
+  rankingData[currentCat] = null;
+  closeVoteSelect();
+  document.getElementById('rankingArea').innerHTML = '<div class="loading-state"><span class="spin"></span>集計中...</div>';
+  await loadRanking(currentCat);
+  renderUI();
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
+
+init();
+</script>
+</body>
+</html>

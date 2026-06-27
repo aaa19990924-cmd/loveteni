@@ -434,8 +434,8 @@ section {
   margin-bottom: 24px;
 }
 .service-icon {
-  font-size: 28px;
   margin-bottom: 14px;
+  line-height: 1;
 }
 .service-sub {
   font-family: 'DM Sans', sans-serif;
@@ -1115,6 +1115,96 @@ section {
   white-space: nowrap;
 }
 .str-filter-count strong { font-size: 18px; font-weight: 700; color: var(--ink); margin-right: 2px; }
+.str-filter-search { display: flex; justify-content: flex-start; padding-top: 4px; }
+.str-search-btn {
+  background: var(--accent);
+  color: white;
+  padding: 11px 40px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: .08em;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+  text-transform: uppercase;
+}
+.str-search-btn:hover { background: #003d2b; }
+/* ===== Accessories ===== */
+.acc-cat-tabs { display: flex; gap: 0; border-bottom: 1px solid var(--line); margin-bottom: 40px; overflow-x: auto; }
+.acc-cat-tab {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 12px 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--mute);
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.acc-cat-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.acc-cat-tab:hover { color: var(--ink); }
+.acc-section-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--mute);
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.acc-section-label::before { content: ''; display: block; width: 18px; height: 2px; background: var(--accent); flex-shrink: 0; }
+.acc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  border-top: 1px solid var(--line);
+  border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 48px;
+  background: white;
+}
+.acc-card {
+  background: white;
+  padding: 28px 24px 32px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-right: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  position: relative;
+}
+.acc-card:hover { background: var(--cream); }
+.acc-card:hover .acc-arrow { transform: translateX(4px); color: var(--accent); }
+.acc-card-brand {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--mute);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.acc-card-model {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+.acc-card-desc { font-size: 12px; color: var(--mute); line-height: 1.7; margin-bottom: 16px; }
+.acc-arrow { font-family: 'DM Sans'; font-size: 16px; color: var(--mute); transition: all 0.2s; }
+/* Accessories detail */
+.acc-detail-wrap { max-width: 960px; }
+
 .str-filter-results-title {
   font-family: 'DM Sans', sans-serif;
   font-size: 11px;
@@ -2593,6 +2683,7 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
       <span class="gnav-item active" onclick="navigate('rackets')" data-page="rackets">ラケット</span>
       <span class="gnav-item" onclick="navigate('strings')" data-page="strings">ガット</span>
       <span class="gnav-item" onclick="navigate('grips')" data-page="grips">グリップ</span>
+      <span class="gnav-item" onclick="navigate('accessories')" data-page="accessories">用品</span>
       <span class="gnav-item" onclick="navigate('diagnosis')" data-page="diagnosis">診断</span>
       <span class="gnav-item" onclick="navigate('column')" data-page="column">コラム</span>
       <span class="gnav-item" onclick="navigate('news')" data-page="news">最新情報</span>
@@ -2601,6 +2692,7 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
       <span class="gnav-item" onclick="navigateToMygear()" data-page="mygear">マイギア</span>
       <a href="/calendar.html" class="gnav-item" style="text-decoration:none;color:inherit;">手帳</a>
       <a href="/videos.html" class="gnav-item" style="text-decoration:none;color:inherit;">動画</a>
+      <a href="/ranking.html" class="gnav-item" style="text-decoration:none;color:inherit;">ランキング</a>
     </nav>
     <div class="header-search">
       <span class="header-search-icon">🔍</span>
@@ -2706,21 +2798,21 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
         <!-- 知る -->
         <div class="service-card" onclick="navigate('rackets')">
           <div class="service-num">01</div>
-          <div class="service-icon">🎾</div>
+          <div class="service-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#00513a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="14" cy="12" rx="10" ry="11"/><line x1="4" y1="12" x2="24" y2="12"/><line x1="14" y1="1" x2="14" y2="23"/><line x1="7" y1="5" x2="21" y2="19"/><line x1="21" y1="5" x2="7" y2="19"/><path d="M14 23 L19 31" stroke-width="2.4"/></svg></div>
           <div class="service-sub">RACKETS</div>
           <div class="service-title">ラケット</div>
           <div class="service-desc">主要9ブランドの最新モデルを一望。スペック・特徴・価格まで、選び抜くための情報がここに。</div>
         </div>
         <div class="service-card" onclick="navigate('strings')">
           <div class="service-num">02</div>
-          <div class="service-icon">🧵</div>
+          <div class="service-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#00513a" stroke-width="1.8" stroke-linecap="round"><circle cx="16" cy="16" r="12"/><circle cx="16" cy="16" r="5"/><line x1="16" y1="4" x2="16" y2="11"/><line x1="16" y1="21" x2="16" y2="28"/><line x1="4" y1="16" x2="11" y2="16"/><line x1="21" y1="16" x2="28" y2="16"/></svg></div>
           <div class="service-sub">STRINGS</div>
           <div class="service-title">ガット</div>
           <div class="service-desc">打感、耐久性、反発。ポリエステルからナチュラルまで、ストリングのすべて。</div>
         </div>
         <div class="service-card" onclick="navigate('grips')">
           <div class="service-num">03</div>
-          <div class="service-icon">✊</div>
+          <div class="service-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#00513a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="11" y="5" width="10" height="22" rx="2"/><line x1="11" y1="10" x2="21" y2="10"/><line x1="11" y1="14" x2="21" y2="14"/><line x1="11" y1="18" x2="21" y2="18"/><line x1="11" y1="22" x2="21" y2="22"/></svg></div>
           <div class="service-sub">GRIPS</div>
           <div class="service-title">グリップ</div>
           <div class="service-desc">ウェット、ドライ、レザー。手と道具をつなぐ、最後のピース。</div>
@@ -2729,30 +2821,30 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
         <!-- 診る -->
         <div class="service-card" onclick="navigate('diagnosis')">
           <div class="service-num">04</div>
-          <div class="service-icon">🔬</div>
+          <div class="service-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#00513a" stroke-width="1.8" stroke-linecap="round"><circle cx="13" cy="13" r="9"/><line x1="19.5" y1="19.5" x2="28" y2="28"/></svg></div>
           <div class="service-sub">RACKET FINDER</div>
           <div class="service-title">ラケット診断</div>
           <div class="service-desc">5つの問いに答えるだけ。あなたのプレーに、最適な一本を導く。</div>
         </div>
         <div class="service-card" onclick="navigate('string-diagnosis')">
           <div class="service-num">05</div>
-          <div class="service-icon">🎯</div>
+          <div class="service-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#00513a" stroke-width="1.8" stroke-linecap="round"><circle cx="16" cy="16" r="13"/><circle cx="16" cy="16" r="8"/><circle cx="16" cy="16" r="3" fill="#00513a" stroke="none"/></svg></div>
           <div class="service-sub">STRING FINDER</div>
           <div class="service-title">ガット診断</div>
           <div class="service-desc">打感の好み、求める耐久性、テンション志向。あなたに合うストリングを。</div>
         </div>
         <div class="service-card" onclick="navigate('pair-diagnosis')">
           <div class="service-num">06</div>
-          <div class="service-icon">💞</div>
+          <div class="service-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#00513a" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="16" r="8"/><circle cx="21" cy="16" r="8"/></svg></div>
           <div class="service-sub">PERFECT PAIR</div>
           <div class="service-title">組み合わせ診断</div>
           <div class="service-desc">ラケットとガットの相性は、すべてを変える。最高のペアを見つけ出す。</div>
         </div>
 
-        <!-- 比べる・観る -->
+        <!-- 比べる -->
         <div class="service-card" onclick="navigate('compare')">
           <div class="service-num">07</div>
-          <div class="service-icon">⚖️</div>
+          <div class="service-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#00513a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="16" y1="4" x2="16" y2="28"/><line x1="6" y1="10" x2="26" y2="10"/><path d="M6 10 C6 10 3 18 10 18 C17 18 14 10 14 10"/><path d="M18 10 C18 10 15 18 22 18 C29 18 26 10 26 10"/><line x1="13" y1="28" x2="19" y2="28"/></svg></div>
           <div class="service-sub">COMPARE</div>
           <div class="service-title">ラケット比較</div>
           <div class="service-desc">2本を並べて、スペックを徹底比較。購入前の最終確認に。</div>
@@ -2761,35 +2853,35 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
         <!-- 学ぶ -->
         <div class="service-card" onclick="navigate('column')">
           <div class="service-num">08</div>
-          <div class="service-icon">📝</div>
+          <div class="service-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#00513a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4 L7 28 L25 28 L25 10 L19 4 Z"/><path d="M19 4 L19 10 L25 10"/><line x1="11" y1="15" x2="21" y2="15"/><line x1="11" y1="20" x2="21" y2="20"/><line x1="11" y1="25" x2="16" y2="25"/></svg></div>
           <div class="service-sub">COLUMN</div>
           <div class="service-title">コラム</div>
           <div class="service-desc">ラケット選び、技術解説、フィジカル。読んで強くなる、テニスの教科書。</div>
         </div>
         <div class="service-card" onclick="navigate('training')">
           <div class="service-num">09</div>
-          <div class="service-icon">💪</div>
+          <div class="service-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#00513a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="5" r="3"/><path d="M20 8 L17 18 L11 27"/><path d="M17 18 L23 27"/><path d="M14 14 L8 11"/><path d="M18 14 L24 13"/></svg></div>
           <div class="service-sub">TRAINING</div>
           <div class="service-title">トレーニング</div>
           <div class="service-desc">レベル別の練習動画。コートに立つ前に、ここで磨く。</div>
         </div>
         <div class="service-card" onclick="navigateToMygear()">
           <div class="service-num">10</div>
-          <div class="service-icon">🎒</div>
+          <div class="service-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#00513a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 8 Q11 4 16 4 Q21 4 21 8"/><rect x="7" y="8" width="18" height="20" rx="3"/><path d="M14 8 Q14 5.5 16 5.5 Q18 5.5 18 8"/><line x1="11" y1="15" x2="21" y2="15"/></svg></div>
           <div class="service-sub">MY GEAR</div>
           <div class="service-title">マイギア</div>
           <div class="service-desc">自分のラケット・ガット・グリップを記録。張替えの時期も、ひと目で。</div>
         </div>
         <div class="service-card" onclick="window.location.href='calendar.html'">
           <div class="service-num">11</div>
-          <div class="service-icon">📔</div>
+          <div class="service-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#00513a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="6" width="24" height="22" rx="2"/><line x1="4" y1="13" x2="28" y2="13"/><line x1="10" y1="3" x2="10" y2="9"/><line x1="22" y1="3" x2="22" y2="9"/><line x1="10" y1="19" x2="14" y2="19"/><line x1="17" y1="19" x2="22" y2="19"/><line x1="10" y1="24" x2="14" y2="24"/><line x1="17" y1="24" x2="22" y2="24"/></svg></div>
           <div class="service-sub">LOG</div>
           <div class="service-title">記録</div>
           <div class="service-desc">練習、試合、スコア。コートの一日を、データとして残す。</div>
         </div>
         <div class="service-card" onclick="navigate('stringer')">
           <div class="service-num">12</div>
-          <div class="service-icon">📍</div>
+          <div class="service-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#00513a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 2 C10 2 5 7 5 13 C5 21 16 30 16 30 C16 30 27 21 27 13 C27 7 22 2 16 2 Z"/><circle cx="16" cy="13" r="4"/></svg></div>
           <div class="service-sub">STRINGER FINDER</div>
           <div class="service-title">ストリンガー検索</div>
           <div class="service-desc">地域から、信頼できる張り工房を見つける。ガット張替えに、迷わない。</div>
@@ -2972,6 +3064,9 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
           <button class="str-fbtn" data-sf="gauge" data-val="thick" onclick="onStrFbtn(this,'gauge','thick')">1.30以上</button>
           <div class="str-filter-count" id="strFilterCount" style="display:none"><strong>0</strong>件</div>
         </div>
+        <div class="str-filter-search">
+          <button class="str-search-btn" onclick="onStrSearch()">検索する</button>
+        </div>
       </div>
     </div>
   </div>
@@ -3063,6 +3158,68 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
           </div>
         </div>
         <div id="string-rakuten-results"><div class="loading"><span class="spin"></span>楽天を検索中...</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ACCESSORIES (テニス用品) ===== -->
+<div id="view-accessories" class="view">
+  <div class="page-hero">
+    <div class="container">
+      <div class="page-hero-eyebrow">ACCESSORIES</div>
+      <h1 class="page-hero-title">テニス用品</h1>
+      <p class="page-hero-desc">ボール・バッグ・グリップテープ・振動止めまで、テニスに必要なすべての用品を掲載しています。</p>
+    </div>
+  </div>
+  <div class="page-body">
+    <div class="container">
+      <div class="acc-cat-tabs">
+        <button class="acc-cat-tab active" onclick="onAccCatTab(this,'all')">すべて</button>
+        <button class="acc-cat-tab" onclick="onAccCatTab(this,'balls')">ボール</button>
+        <button class="acc-cat-tab" onclick="onAccCatTab(this,'bags')">バッグ</button>
+        <button class="acc-cat-tab" onclick="onAccCatTab(this,'others')">その他</button>
+      </div>
+      <div id="acc-balls-section">
+        <div class="acc-section-label">テニスボール · BALLS</div>
+        <div class="acc-grid" id="accBallGrid"></div>
+      </div>
+      <div id="acc-bags-section">
+        <div class="acc-section-label">テニスバッグ · BAGS</div>
+        <div class="acc-grid" id="accBagGrid"></div>
+      </div>
+      <div id="acc-others-section">
+        <div class="acc-section-label">その他用品 · OTHERS</div>
+        <div class="acc-grid" id="accOtherGrid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ACCESSORY DETAIL ===== -->
+<div id="view-accessory-detail" class="view">
+  <div class="page-body">
+    <div class="container">
+      <button class="back-btn" onclick="navigate('accessories')">← 用品一覧</button>
+      <div class="detail-layout">
+        <div>
+          <div class="detail-img-area" id="acc-detail-img-area">
+            <div class="empty-icon" style="font-size:56px">📦</div>
+          </div>
+        </div>
+        <div>
+          <div class="detail-brand" id="acc-detail-brand"></div>
+          <h1 class="detail-model" id="acc-detail-model"></h1>
+          <p class="detail-concept" id="acc-detail-desc"></p>
+          <div class="detail-cta-row">
+            <button class="detail-cta-btn detail-cta-rakuten" id="acc-detail-rakuten-btn">楽天で探す →</button>
+            <button class="detail-cta-btn detail-cta-amazon" id="acc-detail-amazon-btn">Amazonで探す →</button>
+          </div>
+        </div>
+      </div>
+      <div class="rakuten-section" id="acc-rakuten-section">
+        <div class="rakuten-section-title">楽天での販売価格</div>
+        <div id="acc-rakuten-results"><div class="loading"><span class="spin"></span>楽天を検索中...</div></div>
       </div>
     </div>
   </div>
@@ -3502,6 +3659,7 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
 <script src="racket-data.js"></script>
 <script src="strings-data.js"></script>
 <script src="grips-data.js"></script>
+<script src="accessories-data.js"></script>
 <!-- ===== MYGEAR ===== -->
 <div id="view-mygear" class="view">
   <div class="container">
@@ -3626,6 +3784,8 @@ window.addEventListener('popstate', (e) => {
       selectGripBrand(state.brand);
     } else if (state.view === 'grip-detail' && state.gripId) {
       selectGrip(state.gripId);
+    } else if (state.view === 'accessory-detail' && state.accId) {
+      selectAccessory(state.accId);
     } else {
       navigate(state.view);
     }
@@ -3646,6 +3806,9 @@ function navigate(view, skipPush) {
 
   // ガットトップに戻ったときはフィルターをすべてリセット
   if (view === 'strings') resetStringFilters();
+
+  // 用品一覧を開いたときにカードを描画
+  if (view === 'accessories') renderAccessoriesPage();
 
   // ブラウザ履歴に追加（戻る/進む対応）
   if (!skipPush && !isHistoryNav) {
@@ -4278,6 +4441,8 @@ function selectRacket(id) {
 
 async function loadRakutenResults(r, retry = 0) {
   const c = document.getElementById('rakuten-results');
+  const section = c ? c.closest('.rakuten-section') : null;
+  if (section) section.style.display = '';
   const cacheKey = imgCacheKey(r);
   const kw = r.searchKeyword || `${r.brand} ${r.model}`;
 
@@ -4307,17 +4472,15 @@ async function loadRakutenResults(r, retry = 0) {
     }
 
     if (!data.items || !data.items.length) {
-      const errMsg = data.error ? `（${data.error}）` : '';
-      c.innerHTML = `<div class="loading">楽天市場で見つかりませんでした${errMsg}</div>`;
+      if (section) section.style.display = 'none';
       return;
     }
 
     // ★ 表示前に「ラケット本体らしくない」商品を強力に除外
     const filteredItems = filterRacketItems(data.items, r);
-    // フィルタで全部消えた = 水着/ヘルメット等の無関係商品しか無い場合は、
-    // 生データに戻さず「見つからない」表示にする（ジャンク表示・誤キャッシュ防止）
+    // フィルタで全部消えた = 水着/ヘルメット等の無関係商品しか無い場合は非表示
     if (filteredItems.length === 0) {
-      c.innerHTML = '<div class="loading">楽天市場で該当商品が見つかりませんでした</div>';
+      if (section) section.style.display = 'none';
       return;
     }
     const itemsToShow = filteredItems;
@@ -4505,6 +4668,63 @@ function ensureRankingsLoaded() {
 }
 
 
+// ===== ACCESSORIES =====
+function renderAccessoriesPage() {
+  renderAccGrid('accBallGrid', ACCESSORIES_DATA.balls);
+  renderAccGrid('accBagGrid', ACCESSORIES_DATA.bags);
+  renderAccGrid('accOtherGrid', ACCESSORIES_DATA.others);
+  document.querySelectorAll('.acc-cat-tab').forEach(t => {
+    if (t.textContent === 'すべて') t.classList.add('active');
+    else t.classList.remove('active');
+  });
+  ['acc-balls-section','acc-bags-section','acc-others-section'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = '';
+  });
+}
+
+function renderAccGrid(containerId, items) {
+  const grid = document.getElementById(containerId);
+  if (!grid) return;
+  grid.innerHTML = items.map(item => `
+    <div class="acc-card" onclick="selectAccessory('${item.id}')">
+      <div class="acc-card-brand">${item.brand}</div>
+      <div class="acc-card-model">${item.model}</div>
+      <div class="acc-card-desc">${item.description}</div>
+      <span class="acc-arrow">→</span>
+    </div>
+  `).join('');
+}
+
+function onAccCatTab(btn, cat) {
+  document.querySelectorAll('.acc-cat-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  const show = { all: ['acc-balls-section','acc-bags-section','acc-others-section'], balls: ['acc-balls-section'], bags: ['acc-bags-section'], others: ['acc-others-section'] };
+  ['acc-balls-section','acc-bags-section','acc-others-section'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = (show[cat] || []).includes(id) ? '' : 'none';
+  });
+}
+
+function selectAccessory(id) {
+  const allItems = [...ACCESSORIES_DATA.balls, ...ACCESSORIES_DATA.bags, ...ACCESSORIES_DATA.others];
+  const item = allItems.find(x => x.id === id);
+  if (!item) return;
+  document.getElementById('acc-detail-brand').textContent = item.brand;
+  document.getElementById('acc-detail-model').textContent = item.model;
+  document.getElementById('acc-detail-desc').textContent = item.description;
+  document.getElementById('acc-detail-img-area').innerHTML = `<div class="empty-icon" style="font-size:56px">${item.icon || '📦'}</div>`;
+  document.getElementById('acc-detail-rakuten-btn').onclick = () => {
+    window.open(`https://search.rakuten.co.jp/search/mall/${encodeURIComponent(item.searchKeyword)}/?sid=213310&f=1&p=1`, '_blank');
+  };
+  document.getElementById('acc-detail-amazon-btn').onclick = () => {
+    window.open(`https://www.amazon.co.jp/s?k=${encodeURIComponent(item.searchKeyword)}&tag=loveteni-22`, '_blank');
+  };
+  loadRakutenResultsGeneric(item, 'acc-rakuten-results', 'acc-detail-img-area', '');
+  navigate('accessory-detail', true);
+  history.pushState({ view: 'accessory-detail', accId: id }, '', `#accessory-detail/${id}`);
+}
+
 // ===== COLUMN タブ =====
 function onColTabClick(btn) {
   document.querySelectorAll('.col-tab').forEach(t => t.classList.remove('active'));
@@ -4541,11 +4761,13 @@ function initStringFilterBrandSelect() {
 function onStrFbtn(btn, key, val) {
   strFilter[key] = val;
   document.querySelectorAll(`.str-fbtn[data-sf="${key}"]`).forEach(b => b.classList.toggle('active', b === btn));
-  renderStringsFiltered();
 }
 
 function onStrFilterChange() {
   strFilter.brand = document.getElementById('sfBrand').value;
+}
+
+function onStrSearch() {
   renderStringsFiltered();
 }
 
@@ -4930,14 +5152,15 @@ function selectGrip(id) {
 async function loadRakutenResultsGeneric(item, resultsId, imgAreaId, suffix) {
   const c = document.getElementById(resultsId);
   if (!c) return;
+  const section = c.closest('.rakuten-section');
+  if (section) section.style.display = '';
   const kw = (item.searchKeyword || `${item.brand} ${item.model}`) + ' ' + suffix;
   c.innerHTML = '<div class="loading"><span class="spin"></span>楽天を検索中...</div>';
   try {
     const res = await rakutenFetch(`/api/rakuten-search?keyword=${encodeURIComponent(kw)}`);
     const data = await res.json();
     if (!data.items || !data.items.length) {
-      const errMsg = data.error ? `（${data.error}）` : '';
-      c.innerHTML = `<div class="loading">楽天市場で見つかりませんでした${errMsg}</div>`;
+      if (section) section.style.display = 'none';
       return;
     }
     const first = data.items.find(i => i.largeImageUrl);

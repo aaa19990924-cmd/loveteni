@@ -1075,17 +1075,15 @@ section {
   align-items: center;
   gap: 5px;
   padding: 4px 10px 4px 6px;
-  border: 2px solid transparent;
   border-radius: 20px;
-  background: var(--cream);
-  cursor: pointer;
-  font-size: 11px;
+  background: rgba(0,0,0,0.04);
+  cursor: default;
+  font-size: 12px;
   font-weight: 500;
-  color: var(--mute);
-  transition: all 0.15s;
+  color: var(--ink);
+  border: none;
+  user-select: none;
 }
-.color-chip-btn:hover { border-color: var(--accent); color: var(--ink); }
-.color-chip-btn.active { border-color: var(--accent); color: var(--ink); background: white; font-weight: 700; }
 .color-dot {
   width: 10px;
   height: 10px;
@@ -4953,14 +4951,13 @@ function getColorHex(colorName) {
   return '#888888';
 }
 
-function buildColorChips(colors, selectedColor, onClickFn) {
-  if (!colors || colors.length <= 1) return '';
+function buildColorChips(colors) {
+  if (!colors || colors.length < 2) return '';
   return `<span class="color-variants-label">カラー</span>` +
     colors.map(c => {
       const hex = getColorHex(c);
       const border = c === 'ホワイト' || c === 'クリア' || c === 'クリアホワイト' ? '#ccc' : 'rgba(0,0,0,0.15)';
-      const active = c === selectedColor ? ' active' : '';
-      return `<button class="color-chip-btn${active}" onclick="${onClickFn}('${c.replace(/'/g,"\\'")}')" title="${c}"><span class="color-dot" style="background:${hex};border-color:${border}"></span>${c}</button>`;
+      return `<span class="color-chip-btn"><span class="color-dot" style="background:${hex};border-color:${border}"></span>${c}</span>`;
     }).join('');
 }
 
@@ -5147,37 +5144,27 @@ function selectString(id) {
     }
   }
 
-  // カラーバリアント表示
-  let _selectedColor = s.color || '';
-  const allColors = s.colors && s.colors.length > 1 ? s.colors : (s.color ? [s.color] : []);
+  // カラー静的表示（クリック不可）
+  const allColors = s.colors && s.colors.length > 1 ? s.colors : [];
   const colorWrap = document.getElementById('string-color-variants');
   if (colorWrap) {
     if (allColors.length > 1) {
       colorWrap.style.display = '';
-      const renderColors = (sel) => {
-        colorWrap.innerHTML = buildColorChips(allColors, sel, '_onStringColorClick');
-        updateStringColorSpec(sel);
-      };
-      window._onStringColorClick = (c) => { _selectedColor = c; renderColors(c); };
-      renderColors(_selectedColor);
+      colorWrap.innerHTML = buildColorChips(allColors);
     } else {
       colorWrap.style.display = 'none';
     }
   }
 
   const formLabel = s.form === 'single' ? '単品のみ' : s.form === 'roll' ? 'ロールのみ' : '単品・ロール';
-  const _renderStringSpecs = (colorOverride) => {
-    const displayColor = colorOverride || s.color || '-';
-    document.getElementById('string-detail-specs').innerHTML = [
-      ['種類', s.type, ''], ['ゲージ', s.gauge, ''],
-      ['長さ', s.length || '-', ''], ['カラー', displayColor, ''],
-      ['販売形態', formLabel, ''],
-      s.year ? ['発売年', s.year, ''] : null,
-      s.players && s.players.length ? ['使用選手', s.players.join('・'), ''] : null
-    ].filter(Boolean).map(([l,v,u]) => `<div class="detail-spec-item"><div class="detail-spec-label">${l}</div><div class="detail-spec-value">${v}<span class="detail-spec-unit">${u}</span></div></div>`).join('');
-  };
-  window.updateStringColorSpec = _renderStringSpecs;
-  _renderStringSpecs(_selectedColor);
+  document.getElementById('string-detail-specs').innerHTML = [
+    ['種類', s.type, ''], ['ゲージ', s.gauge, ''],
+    ['長さ', s.length || '-', ''],
+    s.color ? ['カラー', s.color, ''] : null,
+    ['販売形態', formLabel, ''],
+    s.year ? ['発売年', s.year, ''] : null,
+    s.players && s.players.length ? ['使用選手', s.players.join('・'), ''] : null
+  ].filter(Boolean).map(([l,v,u]) => `<div class="detail-spec-item"><div class="detail-spec-label">${l}</div><div class="detail-spec-value">${v}<span class="detail-spec-unit">${u}</span></div></div>`).join('');
 
   document.getElementById('string-detail-img-area').innerHTML = '<div class="empty-icon">🎾</div>';
 

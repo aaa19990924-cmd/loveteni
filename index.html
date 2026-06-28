@@ -1108,6 +1108,24 @@ section {
   flex-shrink: 0;
 }
 
+/* カード上のゲージ選択ミニボタン */
+.card-gauge-chips { display: flex; gap: 4px; flex-wrap: wrap; margin: 4px 0 2px; }
+.card-gauge-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  background: white;
+  color: var(--mute);
+  cursor: pointer;
+  transition: all 0.12s;
+  letter-spacing: 0.03em;
+}
+.card-gauge-btn:hover { border-color: var(--accent); color: var(--accent); }
+.card-gauge-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(0,81,58,0.07); }
+
 /* ===== String filter bar ===== */
 .str-filter-wrap {
   background: var(--cream);
@@ -4842,10 +4860,11 @@ function renderStringsFiltered() {
 
   const filtered = applyStrFilter(allStrings);
 
-  if (countEl) countEl.innerHTML = `<strong>${filtered.length}</strong>件`;
+  const groups = groupStringsByBase(filtered);
+  if (countEl) countEl.innerHTML = `<strong>${groups.length}</strong>件`;
   const titleEl = document.getElementById('strFilterResultsTitle');
   const typeLabel = strFilter.type !== 'all' ? ` — ${strFilter.type}` : '';
-  if (titleEl) titleEl.textContent = filtered.length + ' MODELS FOUND' + typeLabel;
+  if (titleEl) titleEl.textContent = groups.length + ' MODELS FOUND' + typeLabel;
 
   const grid = document.getElementById('strFilterGrid');
   if (!grid) return;
@@ -4853,9 +4872,17 @@ function renderStringsFiltered() {
     grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🎾</div><div class="empty-text">条件に合うガットが見つかりません</div></div>`;
     return;
   }
-  grid.innerHTML = filtered.map(s => {
+  grid.innerHTML = groups.map(({ canonical: s, members }) => {
     const formLabel = s.form === 'single' ? '単品' : s.form === 'roll' ? 'ロール' : '単品/ロール';
     const chips = buildCardColorDots(s.colors || (s.color ? [s.color] : []));
+    const uniqueGauges = [...new Set(members.map(x => x.gaugeNum).filter(Boolean))].sort((a, b) => a - b);
+    const gaugeChips = uniqueGauges.length > 1
+      ? `<div class="card-gauge-chips">${uniqueGauges.map(g => {
+          const mb = members.find(x => Math.abs((x.gaugeNum || 0) - g) < 0.005);
+          const isActive = mb && mb.id === s.id;
+          return `<button class="card-gauge-btn${isActive ? ' active' : ''}" onclick="event.stopPropagation();selectString('${mb ? mb.id : s.id}')">${g.toFixed(2)}</button>`;
+        }).join('')}</div>`
+      : '';
     return `<div class="racket-card" onclick="selectString('${s.id}')">
       <div class="racket-img" id="csi-f-${s.id}"><div class="ph">🎾</div></div>
       <div class="racket-info">
@@ -4863,15 +4890,16 @@ function renderStringsFiltered() {
         <div class="racket-model">${getModelBaseName(s.model)}</div>
         <div class="racket-specs">
           <div>種類 <strong>${s.type}</strong></div>
-          <div>ゲージ <strong>${s.gauge}</strong></div>
+          ${uniqueGauges.length <= 1 ? `<div>ゲージ <strong>${s.gauge}</strong></div>` : ''}
           <div>形態 <strong>${formLabel}</strong></div>
         </div>
+        ${gaugeChips}
         ${chips}
         <button class="rakuten-btn" onclick="event.stopPropagation();openRakutenString('${s.brand}','${s.model.replace(/'/g,"\\'")}')">楽天で価格チェック →</button>
       </div>
     </div>`;
   }).join('');
-  filtered.forEach((s, i) => setTimeout(() => loadItemImage(s, 'csi-f', 'テニスガット'), i * 250));
+  groups.forEach(({ canonical: s }, i) => setTimeout(() => loadItemImage(s, 'csi-f', 'テニスガット'), i * 250));
 }
 
 // 全フィルターを適用して結果を返す共通関数
@@ -4910,8 +4938,11 @@ const COLOR_HEX = {
   'ブルー':'#1a5fa8','コバルトブルー':'#1a72c8','スカイブルー':'#4aa8d8','クリアブルー':'#4aa8d8',
   'グリーン':'#2a8a2a','オレンジ':'#f07820','ブライトオレンジ':'#f07820','パールオレンジ':'#f08830',
   'ピンク':'#e87090','パープル':'#8040c0','ゴールド':'#c8a020','シャンパンゴールド':'#c8a020','シャンパン':'#b8a080',
-  'グレー':'#888888','ロセ':'#e89090','カーボン':'#2a2a2a','アンスラサイト':'#555555',
+  'グレー':'#888888','ダークグレー':'#555555','ロセ':'#e89090','カーボン':'#2a2a2a','アンスラサイト':'#555555',
   'クリア':'#d8d8d8','クリアホワイト':'#e8e8e8',
+  'メタリックブルー':'#2060a0','クリムゾンレッド':'#b01030','ペトロール':'#1a6060','ティール':'#008080',
+  'ライムグリーン':'#80c820','ライム':'#80c820','フラッシュグリーン':'#50d040',
+  'ターコイズ':'#00b8b0','エクリュ':'#e8e0c8',
 };
 
 function getColorHex(colorName) {
@@ -5018,10 +5049,27 @@ function selectStringSeries(brand, series) {
   if (!isHistoryNav) history.pushState({ view: 'string-series', brand, series }, '', `#string-series/${brand}/${series}`);
 }
 
+// 同ブランド・同ベース名のガットを1グループにまとめる
+function groupStringsByBase(strings) {
+  const groups = {};
+  const order = [];
+  for (const s of strings) {
+    const key = s.brand + '::' + getModelBaseName(s.model);
+    if (!groups[key]) { groups[key] = []; order.push(key); }
+    groups[key].push(s);
+  }
+  return order.map(key => {
+    const members = groups[key];
+    // 1.25mmを基準、なければゲージ数値が最小のものを代表に
+    const canonical = members.find(x => Math.abs((x.gaugeNum || 0) - 1.25) < 0.005)
+      || members.reduce((best, x) => ((x.gaugeNum || 99) < (best.gaugeNum || 99) ? x : best));
+    return { canonical, members };
+  });
+}
+
 function renderStringGrid(allInSeries) {
   const grid = document.getElementById('stringProductGrid');
   if (!grid) return;
-  // タイプフィルターが設定されていれば絞り込む（形態/ゲージはシリーズ内では使わない）
   const strings = strFilter.type === 'all'
     ? allInSeries
     : allInSeries.filter(s => s.type === strFilter.type);
@@ -5033,12 +5081,20 @@ function renderStringGrid(allInSeries) {
     grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🎾</div><div class="empty-text">${msg}</div></div>`;
     return;
   }
-  // シリーズカウント更新
+  const groups = groupStringsByBase(strings);
   const cntEl = document.getElementById('string-series-count');
-  if (cntEl) cntEl.textContent = `${strings.length} モデル${strFilter.type !== 'all' ? ' ('+strFilter.type+'で絞り込み中)' : ''}`;
+  if (cntEl) cntEl.textContent = `${groups.length} モデル${strFilter.type !== 'all' ? ' ('+strFilter.type+'で絞り込み中)' : ''}`;
 
-  grid.innerHTML = strings.map(s => {
+  grid.innerHTML = groups.map(({ canonical: s, members }) => {
     const chips = buildCardColorDots(s.colors || (s.color ? [s.color] : []));
+    const uniqueGauges = [...new Set(members.map(x => x.gaugeNum).filter(Boolean))].sort((a, b) => a - b);
+    const gaugeChips = uniqueGauges.length > 1
+      ? `<div class="card-gauge-chips">${uniqueGauges.map(g => {
+          const mb = members.find(x => Math.abs((x.gaugeNum || 0) - g) < 0.005);
+          const isActive = mb && mb.id === s.id;
+          return `<button class="card-gauge-btn${isActive ? ' active' : ''}" onclick="event.stopPropagation();selectString('${mb ? mb.id : s.id}')">${g.toFixed(2)}</button>`;
+        }).join('')}</div>`
+      : '';
     return `
     <div class="racket-card" onclick="selectString('${s.id}')">
       <div class="racket-img" id="csi-${s.id}"><div class="ph">🎾</div></div>
@@ -5047,15 +5103,16 @@ function renderStringGrid(allInSeries) {
         <div class="racket-model">${getModelBaseName(s.model)}</div>
         <div class="racket-specs">
           <div>種類 <strong>${s.type}</strong></div>
-          <div>ゲージ <strong>${s.gauge}</strong></div>
+          ${uniqueGauges.length <= 1 ? `<div>ゲージ <strong>${s.gauge}</strong></div>` : ''}
           <div>長さ <strong>${s.length||'-'}</strong></div>
         </div>
+        ${gaugeChips}
         ${chips}
         <button class="rakuten-btn" onclick="event.stopPropagation();openRakutenString('${s.brand}','${s.model.replace(/'/g,"\\'")}')">楽天で価格チェック →</button>
       </div>
     </div>`;
   }).join('');
-  strings.forEach((s, i) => setTimeout(() => loadItemImage(s, 'csi', 'テニスガット'), i * 250));
+  groups.forEach(({ canonical: s }, i) => setTimeout(() => loadItemImage(s, 'csi', 'テニスガット'), i * 250));
 }
 
 let _currentString = null;

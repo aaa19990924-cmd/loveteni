@@ -1054,6 +1054,60 @@ section {
 .gauge-btn:hover { border-color: var(--accent); color: var(--accent); }
 .gauge-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
 
+/* ===== Color variants ===== */
+.color-variants-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 4px 0 14px;
+  align-items: center;
+}
+.color-variants-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--mute);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-right: 4px;
+}
+.color-chip-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px 4px 6px;
+  border: 2px solid transparent;
+  border-radius: 20px;
+  background: var(--cream);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--mute);
+  transition: all 0.15s;
+}
+.color-chip-btn:hover { border-color: var(--accent); color: var(--ink); }
+.color-chip-btn.active { border-color: var(--accent); color: var(--ink); background: white; font-weight: 700; }
+.color-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 1px solid rgba(0,0,0,0.15);
+}
+/* カード上の小さいカラーチップ */
+.card-color-chips {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin: 6px 0 4px;
+}
+.card-color-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.15);
+  flex-shrink: 0;
+}
+
 /* ===== String filter bar ===== */
 .str-filter-wrap {
   background: var(--cream);
@@ -3140,6 +3194,7 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
           <div class="detail-brand" id="string-detail-brand"></div>
           <h1 class="detail-model" id="string-detail-model"></h1>
           <div id="string-gauge-variants" class="gauge-variants-row" style="display:none"></div>
+          <div id="string-color-variants" class="color-variants-row" style="display:none"></div>
           <p class="detail-concept" id="string-detail-concept"></p>
           <div class="detail-specs-grid" id="string-detail-specs"></div>
           <div class="detail-cta-row">
@@ -4800,17 +4855,18 @@ function renderStringsFiltered() {
   }
   grid.innerHTML = filtered.map(s => {
     const formLabel = s.form === 'single' ? '単品' : s.form === 'roll' ? 'ロール' : '単品/ロール';
+    const chips = buildCardColorDots(s.colors || (s.color ? [s.color] : []));
     return `<div class="racket-card" onclick="selectString('${s.id}')">
       <div class="racket-img" id="csi-f-${s.id}"><div class="ph">🎾</div></div>
       <div class="racket-info">
         <div class="racket-brand-text">${s.brand}</div>
-        <div class="racket-model">${s.model}</div>
+        <div class="racket-model">${getModelBaseName(s.model)}</div>
         <div class="racket-specs">
           <div>種類 <strong>${s.type}</strong></div>
           <div>ゲージ <strong>${s.gauge}</strong></div>
           <div>形態 <strong>${formLabel}</strong></div>
-          <div>カラー <strong>${(s.color||'-').split('/')[0]}</strong></div>
         </div>
+        ${chips}
         <button class="rakuten-btn" onclick="event.stopPropagation();openRakutenString('${s.brand}','${s.model.replace(/'/g,"\\'")}')">楽天で価格チェック →</button>
       </div>
     </div>`;
@@ -4840,7 +4896,51 @@ function applyStrFilter(list) {
 
 // ゲージ表記をモデル名から除去して基本名を返す
 function getModelBaseName(model) {
-  return model.replace(/\s+1[1-3]\d\b/g, '').replace(/\s{2,}/g, ' ').trim();
+  const colorWords = ['フラッシュイエロー','ブライトイエロー','ブライトレッド','フラッシュレッド','ブライトオレンジ','スカイブルー','コバルトブルー','クリアブルー','シャンパンゴールド','パールオレンジ','シルバー','ブラック','ホワイト','ナチュラル','イエロー','レッド','ブルー','グリーン','オレンジ','ピンク','パープル','ゴールド','グレー','ロセ','アンスラサイト','シャンパン','カーボン'];
+  let name = model.replace(/\s+1[1-3]\d\b/g, '');
+  for (const c of colorWords) name = name.replace(new RegExp('\\s+' + c + '$'), '');
+  return name.replace(/\s{2,}/g, ' ').trim();
+}
+
+// カラー名 → HEXコード
+const COLOR_HEX = {
+  'グラファイト':'#4a4a4a','ブラック':'#1a1a1a','シルバー':'#c0c0c0','ナチュラル':'#d4b896',
+  'ホワイト':'#f0f0f0','フラッシュイエロー':'#f5d800','ブライトイエロー':'#f5d800','イエロー':'#f5d800',
+  'レッド':'#e03030','フラッシュレッド':'#e03030','ブライトレッド':'#e03030',
+  'ブルー':'#1a5fa8','コバルトブルー':'#1a72c8','スカイブルー':'#4aa8d8','クリアブルー':'#4aa8d8',
+  'グリーン':'#2a8a2a','オレンジ':'#f07820','ブライトオレンジ':'#f07820','パールオレンジ':'#f08830',
+  'ピンク':'#e87090','パープル':'#8040c0','ゴールド':'#c8a020','シャンパンゴールド':'#c8a020','シャンパン':'#b8a080',
+  'グレー':'#888888','ロセ':'#e89090','カーボン':'#2a2a2a','アンスラサイト':'#555555',
+  'クリア':'#d8d8d8','クリアホワイト':'#e8e8e8',
+};
+
+function getColorHex(colorName) {
+  if (!colorName) return '#888888';
+  for (const [key, hex] of Object.entries(COLOR_HEX)) {
+    if (colorName.includes(key)) return hex;
+  }
+  return '#888888';
+}
+
+function buildColorChips(colors, selectedColor, onClickFn) {
+  if (!colors || colors.length <= 1) return '';
+  return `<span class="color-variants-label">カラー</span>` +
+    colors.map(c => {
+      const hex = getColorHex(c);
+      const border = c === 'ホワイト' || c === 'クリア' || c === 'クリアホワイト' ? '#ccc' : 'rgba(0,0,0,0.15)';
+      const active = c === selectedColor ? ' active' : '';
+      return `<button class="color-chip-btn${active}" onclick="${onClickFn}('${c.replace(/'/g,"\\'")}')" title="${c}"><span class="color-dot" style="background:${hex};border-color:${border}"></span>${c}</button>`;
+    }).join('');
+}
+
+function buildCardColorDots(colors) {
+  if (!colors || !colors.length) return '';
+  const chips = colors.slice(0, 6).map(c => {
+    const hex = getColorHex(c);
+    const border = c === 'ホワイト' || c === 'クリア' ? '#ccc' : 'rgba(0,0,0,0.15)';
+    return `<span class="card-color-dot" style="background:${hex};border-color:${border}" title="${c}"></span>`;
+  }).join('');
+  return `<div class="card-color-chips">${chips}</div>`;
 }
 
 // ===== STRINGS (ガット) =====
@@ -4937,21 +5037,24 @@ function renderStringGrid(allInSeries) {
   const cntEl = document.getElementById('string-series-count');
   if (cntEl) cntEl.textContent = `${strings.length} モデル${strFilter.type !== 'all' ? ' ('+strFilter.type+'で絞り込み中)' : ''}`;
 
-  grid.innerHTML = strings.map(s => `
+  grid.innerHTML = strings.map(s => {
+    const chips = buildCardColorDots(s.colors || (s.color ? [s.color] : []));
+    return `
     <div class="racket-card" onclick="selectString('${s.id}')">
       <div class="racket-img" id="csi-${s.id}"><div class="ph">🎾</div></div>
       <div class="racket-info">
         <div class="racket-brand-text">${s.brand}</div>
-        <div class="racket-model">${s.model}</div>
+        <div class="racket-model">${getModelBaseName(s.model)}</div>
         <div class="racket-specs">
           <div>種類 <strong>${s.type}</strong></div>
           <div>ゲージ <strong>${s.gauge}</strong></div>
           <div>長さ <strong>${s.length||'-'}</strong></div>
-          <div>カラー <strong>${(s.color||'-').split('/')[0]}</strong></div>
         </div>
+        ${chips}
         <button class="rakuten-btn" onclick="event.stopPropagation();openRakutenString('${s.brand}','${s.model.replace(/'/g,"\\'")}')">楽天で価格チェック →</button>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
   strings.forEach((s, i) => setTimeout(() => loadItemImage(s, 'csi', 'テニスガット'), i * 250));
 }
 
@@ -4987,14 +5090,37 @@ function selectString(id) {
     }
   }
 
+  // カラーバリアント表示
+  let _selectedColor = s.color || '';
+  const allColors = s.colors && s.colors.length > 1 ? s.colors : (s.color ? [s.color] : []);
+  const colorWrap = document.getElementById('string-color-variants');
+  if (colorWrap) {
+    if (allColors.length > 1) {
+      colorWrap.style.display = '';
+      const renderColors = (sel) => {
+        colorWrap.innerHTML = buildColorChips(allColors, sel, '_onStringColorClick');
+        updateStringColorSpec(sel);
+      };
+      window._onStringColorClick = (c) => { _selectedColor = c; renderColors(c); };
+      renderColors(_selectedColor);
+    } else {
+      colorWrap.style.display = 'none';
+    }
+  }
+
   const formLabel = s.form === 'single' ? '単品のみ' : s.form === 'roll' ? 'ロールのみ' : '単品・ロール';
-  document.getElementById('string-detail-specs').innerHTML = [
-    ['種類', s.type, ''], ['ゲージ', s.gauge, ''],
-    ['長さ', s.length || '-', ''], ['カラー', s.color || '-', ''],
-    ['販売形態', formLabel, ''],
-    s.year ? ['発売年', s.year, ''] : null,
-    s.players && s.players.length ? ['使用選手', s.players.join('・'), ''] : null
-  ].filter(Boolean).map(([l,v,u]) => `<div class="detail-spec-item"><div class="detail-spec-label">${l}</div><div class="detail-spec-value">${v}<span class="detail-spec-unit">${u}</span></div></div>`).join('');
+  const _renderStringSpecs = (colorOverride) => {
+    const displayColor = colorOverride || s.color || '-';
+    document.getElementById('string-detail-specs').innerHTML = [
+      ['種類', s.type, ''], ['ゲージ', s.gauge, ''],
+      ['長さ', s.length || '-', ''], ['カラー', displayColor, ''],
+      ['販売形態', formLabel, ''],
+      s.year ? ['発売年', s.year, ''] : null,
+      s.players && s.players.length ? ['使用選手', s.players.join('・'), ''] : null
+    ].filter(Boolean).map(([l,v,u]) => `<div class="detail-spec-item"><div class="detail-spec-label">${l}</div><div class="detail-spec-value">${v}<span class="detail-spec-unit">${u}</span></div></div>`).join('');
+  };
+  window.updateStringColorSpec = _renderStringSpecs;
+  _renderStringSpecs(_selectedColor);
 
   document.getElementById('string-detail-img-area').innerHTML = '<div class="empty-icon">🎾</div>';
 

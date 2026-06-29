@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;900&family=Noto+Serif+JP:wght@400;500;700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="ranking-data.js"></script>
 <style>
 :root {
   --ink: #0d1117;
@@ -321,7 +322,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .vote-option-btn:hover { border-color: var(--accent); color: var(--accent); }
 .vote-option-btn.selected { background: var(--accent); color: white; border-color: var(--accent); }
 .vote-option-brand { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.7; display: block; margin-bottom: 2px; }
-.vote-confirm-row { margin-top: 20px; display: flex; gap: 12px; align-items: center; }
+.vote-confirm-row { margin-top: 20px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 .vote-confirm-btn {
   background: var(--accent);
   color: white;
@@ -335,6 +336,119 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .vote-cancel-btn { font-size: 13px; color: var(--mute); padding: 12px 16px; }
 .vote-cancel-btn:hover { color: var(--ink); }
 .vote-msg { font-size: 12px; color: var(--mute); margin-left: auto; }
+
+/* ===== 2段階ブランド→モデル選択 ===== */
+.vote-stage-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--mute);
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.vote-brand-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.vote-brand-btn {
+  padding: 8px 20px;
+  background: white;
+  border: 1px solid var(--line-strong);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition: all 0.15s;
+}
+.vote-brand-btn:hover { border-color: var(--accent); color: var(--accent); }
+.vote-brand-btn.selected { background: var(--accent); color: white; border-color: var(--accent); }
+.vote-stage-back {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.vote-stage-back-btn {
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 600;
+  padding: 4px 0;
+  border-bottom: 1px solid transparent;
+}
+.vote-stage-back-btn:hover { border-bottom-color: var(--accent); }
+.vote-selected-brand-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--ink);
+}
+/* モデルボタン（画像付き） */
+.vote-model-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.vote-model-btn {
+  padding: 12px;
+  background: white;
+  border: 1px solid var(--line-strong);
+  text-align: left;
+  font-size: 12px;
+  font-weight: 500;
+  transition: all 0.15s;
+  line-height: 1.4;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.vote-model-btn:hover { border-color: var(--accent); }
+.vote-model-btn.selected { border-color: var(--accent); background: var(--accent-dim); }
+.vote-model-img {
+  width: 100%;
+  height: 80px;
+  object-fit: contain;
+  background: var(--silver);
+}
+.vote-model-img-ph {
+  width: 100%;
+  height: 80px;
+  background: var(--silver);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: var(--line-strong);
+}
+.vote-model-name {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.3;
+}
+/* 選択プレビュー */
+.vote-preview-bar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: white;
+  border: 1px solid var(--accent);
+  padding: 12px 16px;
+  margin: 12px 0;
+}
+.vote-preview-bar-img {
+  width: 60px;
+  height: 60px;
+  object-fit: contain;
+  flex-shrink: 0;
+  background: var(--silver);
+}
+.vote-preview-bar-text { font-size: 13px; font-weight: 600; color: var(--ink); }
+.vote-preview-bar-sub { font-size: 11px; color: var(--accent); font-weight: 700; letter-spacing: 0.06em; }
 
 /* ===== LOADING ===== */
 .loading-state {
@@ -442,7 +556,36 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
       <!-- 投票選択エリア -->
       <div class="vote-select-area" id="voteSelectArea">
         <div class="vote-select-title">どれに投票しますか？</div>
-        <div class="vote-options" id="voteOptions"></div>
+
+        <!-- ラケット: Stage 1 ブランド選択 -->
+        <div id="voteBrandStage">
+          <div class="vote-stage-label">ブランドを選ぶ</div>
+          <div class="vote-brand-grid" id="voteBrandGrid"></div>
+        </div>
+
+        <!-- ラケット: Stage 2 モデル選択 -->
+        <div id="voteModelStage" style="display:none">
+          <div class="vote-stage-back">
+            <button class="vote-stage-back-btn" onclick="backToBrandSelect()">← ブランド変更</button>
+            <span class="vote-selected-brand-label" id="voteSelectedBrandLabel"></span>
+          </div>
+          <div class="vote-stage-label">モデルを選ぶ</div>
+          <div class="vote-model-grid" id="voteModelGrid"></div>
+          <!-- 選択プレビュー -->
+          <div id="votePreviewBar" class="vote-preview-bar" style="display:none">
+            <img id="votePreviewImg" class="vote-preview-bar-img" src="" alt="">
+            <div>
+              <div class="vote-preview-bar-sub" id="votePreviewBrand"></div>
+              <div class="vote-preview-bar-text" id="votePreviewName"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- その他カテゴリ: フラットリスト -->
+        <div id="voteFlatStage" style="display:none">
+          <div class="vote-options" id="voteOptions"></div>
+        </div>
+
         <div class="vote-confirm-row">
           <button class="vote-confirm-btn" id="voteConfirmBtn" disabled onclick="submitVote()">投票する</button>
           <button class="vote-cancel-btn" onclick="closeVoteSelect()">キャンセル</button>
@@ -471,26 +614,27 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 const { createClient } = window.supabase;
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-// ===== 投票候補データ =====
+// ===== 投票候補データ（ラケットはranking-data.jsから） =====
+// RANKING_RACKETS は ranking-data.js で定義される
+const _racketsFromData = () => {
+  if (typeof RANKING_RACKETS !== 'undefined') {
+    return RANKING_RACKETS.map(r => ({
+      id: r.id,
+      brand: r.brand,
+      name: r.model,
+      imageUrl: r.imageUrl || null,
+    }));
+  }
+  // フォールバック（ranking-data.js未読み込み時）
+  return [
+    { id: 'wilson-blade-v10', brand: 'Wilson', name: 'Blade V10', imageUrl: null },
+    { id: 'babolat-pure-aero', brand: 'Babolat', name: 'Pure Aero', imageUrl: null },
+    { id: 'head-speed-mp', brand: 'HEAD', name: 'Speed MP', imageUrl: null },
+    { id: 'yonex-vcore-98', brand: 'YONEX', name: 'VCORE 98', imageUrl: null },
+  ];
+};
 const VOTE_ITEMS = {
-  rackets: [
-    { id: 'wilson-blade-v10', brand: 'Wilson', name: 'Blade V10' },
-    { id: 'wilson-pro-staff-97', brand: 'Wilson', name: 'Pro Staff 97' },
-    { id: 'wilson-ultra-tour', brand: 'Wilson', name: 'Ultra Tour' },
-    { id: 'babolat-pure-aero', brand: 'Babolat', name: 'Pure Aero' },
-    { id: 'babolat-pure-drive', brand: 'Babolat', name: 'Pure Drive' },
-    { id: 'babolat-pure-strike', brand: 'Babolat', name: 'Pure Strike' },
-    { id: 'head-speed-mp', brand: 'HEAD', name: 'Speed MP' },
-    { id: 'head-prestige-mp', brand: 'HEAD', name: 'Prestige MP' },
-    { id: 'head-radical-mp', brand: 'HEAD', name: 'Radical MP' },
-    { id: 'yonex-vcore-98', brand: 'YONEX', name: 'VCORE 98' },
-    { id: 'yonex-ezone-98', brand: 'YONEX', name: 'EZONE 98' },
-    { id: 'yonex-percept-97', brand: 'YONEX', name: 'PERCEPT 97' },
-    { id: 'dunlop-cx200', brand: 'Dunlop', name: 'CX 200' },
-    { id: 'dunlop-fx500', brand: 'Dunlop', name: 'FX 500' },
-    { id: 'tecnifibre-tfight', brand: 'Tecnifibre', name: 'TFight 315' },
-    { id: 'prince-beast', brand: 'Prince', name: 'Beast 100' },
-  ],
+  get rackets() { return _racketsFromData(); },
   strings: [
     { id: 'luxilon-alu-power', brand: 'Luxilon', name: 'ALU Power' },
     { id: 'luxilon-4g', brand: 'Luxilon', name: '4G' },
@@ -650,13 +794,15 @@ function renderRanking() {
 }
 
 // ===== 投票選択 =====
+let _selectedBrand = null;
+
 function openVoteSelect(itemId, itemName) {
   if (!currentUser) return;
   if (userVotes[currentCat]) return;
 
   pendingVoteItem = null;
+  _selectedBrand = null;
   const area = document.getElementById('voteSelectArea');
-  const options = document.getElementById('voteOptions');
   const confirmBtn = document.getElementById('voteConfirmBtn');
   const msg = document.getElementById('voteMsg');
 
@@ -665,9 +811,101 @@ function openVoteSelect(itemId, itemName) {
   confirmBtn.disabled = true;
   msg.textContent = '';
 
+  if (currentCat === 'rackets') {
+    _showBrandStage(itemId);
+  } else {
+    _showFlatStage(itemId, itemName);
+  }
+}
+
+function _showBrandStage(preselectedItemId) {
+  document.getElementById('voteBrandStage').style.display = '';
+  document.getElementById('voteModelStage').style.display = 'none';
+  document.getElementById('voteFlatStage').style.display = 'none';
+  document.getElementById('votePreviewBar').style.display = 'none';
+
+  const items = VOTE_ITEMS.rackets;
+  const brands = [...new Set(items.map(i => i.brand))];
+  document.getElementById('voteBrandGrid').innerHTML = brands.map(b =>
+    `<button class="vote-brand-btn" onclick="selectBrand('${escHtml(b)}')">${escHtml(b)}</button>`
+  ).join('');
+
+  // preselect: brandに対応するブランドを開く
+  if (preselectedItemId) {
+    const match = items.find(i => i.id === preselectedItemId);
+    if (match) { setTimeout(() => selectBrand(match.brand, preselectedItemId), 10); }
+  }
+}
+
+function selectBrand(brand, preselectedId) {
+  _selectedBrand = brand;
+  document.querySelectorAll('.vote-brand-btn').forEach(b => b.classList.toggle('selected', b.textContent === brand));
+  document.getElementById('voteBrandStage').style.display = 'none';
+  document.getElementById('voteModelStage').style.display = '';
+  document.getElementById('voteSelectedBrandLabel').textContent = brand;
+
+  const models = VOTE_ITEMS.rackets.filter(i => i.brand === brand);
+  document.getElementById('voteModelGrid').innerHTML = models.map(m => {
+    const imgHtml = m.imageUrl
+      ? `<img class="vote-model-img" src="${escHtml(m.imageUrl)}" alt="${escHtml(m.name)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">`
+        + `<div class="vote-model-img-ph" style="display:none">🎾</div>`
+      : `<div class="vote-model-img-ph">🎾</div>`;
+    return `<button class="vote-model-btn${preselectedId === m.id ? ' selected' : ''}"
+      onclick="selectModelVote(this,'${escHtml(m.id)}','${escHtml(m.name)}','${escHtml(m.brand)}','${escHtml(m.imageUrl||'')}')">
+      ${imgHtml}
+      <div class="vote-model-name">${escHtml(m.name)}</div>
+    </button>`;
+  }).join('');
+
+  if (preselectedId) {
+    const m = models.find(x => x.id === preselectedId);
+    if (m) _setPreview(m.brand, m.name, m.imageUrl);
+    pendingVoteItem = models.find(x => x.id === preselectedId)
+      ? { id: preselectedId, name: models.find(x => x.id === preselectedId).name } : null;
+    document.getElementById('voteConfirmBtn').disabled = !pendingVoteItem;
+  }
+}
+
+function backToBrandSelect() {
+  pendingVoteItem = null;
+  document.getElementById('voteConfirmBtn').disabled = true;
+  document.getElementById('votePreviewBar').style.display = 'none';
+  document.getElementById('voteModelStage').style.display = 'none';
+  document.getElementById('voteBrandStage').style.display = '';
+}
+
+function selectModelVote(btn, id, name, brand, imageUrl) {
+  document.querySelectorAll('.vote-model-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  pendingVoteItem = { id, name };
+  document.getElementById('voteConfirmBtn').disabled = false;
+  _setPreview(brand, name, imageUrl);
+}
+
+function _setPreview(brand, name, imageUrl) {
+  const bar = document.getElementById('votePreviewBar');
+  const img = document.getElementById('votePreviewImg');
+  const brandEl = document.getElementById('votePreviewBrand');
+  const nameEl = document.getElementById('votePreviewName');
+  brandEl.textContent = brand;
+  nameEl.textContent = name;
+  if (imageUrl) {
+    img.src = imageUrl;
+    img.style.display = '';
+  } else {
+    img.style.display = 'none';
+  }
+  bar.style.display = 'flex';
+}
+
+function _showFlatStage(itemId, itemName) {
+  document.getElementById('voteBrandStage').style.display = 'none';
+  document.getElementById('voteModelStage').style.display = 'none';
+  document.getElementById('voteFlatStage').style.display = '';
+
   const items = VOTE_ITEMS[currentCat] || [];
-  options.innerHTML = items.map(it => `
-    <button class="vote-option-btn${it.id === itemId ? ' selected' : ''}" onclick="selectVoteOption(this, '${escHtml(it.id)}', '${escHtml(it.name)}')">
+  document.getElementById('voteOptions').innerHTML = items.map(it => `
+    <button class="vote-option-btn${it.id === itemId ? ' selected' : ''}" onclick="selectVoteOption(this,'${escHtml(it.id)}','${escHtml(it.name)}')">
       <span class="vote-option-brand">${escHtml(it.brand)}</span>
       ${escHtml(it.name)}
     </button>
@@ -675,7 +913,7 @@ function openVoteSelect(itemId, itemName) {
 
   if (itemId) {
     pendingVoteItem = { id: itemId, name: itemName };
-    confirmBtn.disabled = false;
+    document.getElementById('voteConfirmBtn').disabled = false;
   }
 }
 
@@ -689,6 +927,7 @@ function selectVoteOption(btn, id, name) {
 function closeVoteSelect() {
   document.getElementById('voteSelectArea').classList.remove('open');
   pendingVoteItem = null;
+  _selectedBrand = null;
 }
 
 async function submitVote() {

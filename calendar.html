@@ -57,82 +57,6 @@ input,select,textarea{font-family:inherit}
 ::-webkit-scrollbar{width:5px}
 ::-webkit-scrollbar-thumb{background:var(--line-strong);border-radius:4px}
 
-/* ── TOPLINE ─────────────────────────────────── */
-.topline{
-  background:var(--ink);color:rgba(255,255,255,0.85);
-  font-size:12px;padding:8px 0;
-  font-family:'DM Sans',sans-serif;letter-spacing:0.05em;
-  flex-shrink:0;
-}
-.topline-inner{
-  max-width:1360px;margin:0 auto;padding:0 24px;
-  display:flex;justify-content:space-between;align-items:center;
-}
-.topline-left{display:flex;gap:24px}
-.topline-right{display:flex;gap:16px;opacity:0.7;font-size:11px}
-
-/* ── SITE HEADER (standard) ──────────────────── */
-.site-header{
-  flex-shrink:0;
-  background:rgba(255,255,255,0.96);
-  backdrop-filter:saturate(180%) blur(12px);
-  -webkit-backdrop-filter:saturate(180%) blur(12px);
-  border-bottom:1px solid var(--line);
-  position:relative;
-  z-index:50;
-}
-.site-header-inner{
-  max-width:1360px;margin:0 auto;
-  padding:0 24px;height:72px;
-  display:flex;align-items:center;gap:40px;
-}
-.site-logo{
-  display:flex;align-items:center;gap:10px;
-  cursor:pointer;flex-shrink:0;
-}
-.site-logo-mark{
-  width:32px;height:32px;background:var(--ink);color:white;
-  border-radius:50%;display:flex;align-items:center;justify-content:center;
-  font-family:'Noto Serif JP',serif;font-weight:900;font-size:17px;font-style:italic;
-}
-.site-logo-text{
-  font-family:'Noto Serif JP',serif;font-size:18px;font-weight:700;
-  letter-spacing:0.1em;color:var(--ink);
-}
-.site-logo-text em{font-style:italic;color:var(--accent)}
-.site-gnav{
-  display:flex;gap:4px;margin-left:auto;align-items:center;
-}
-.site-gnav a{
-  font-size:14px;font-weight:500;padding:8px 14px;
-  color:var(--ink);border-radius:4px;transition:all .15s;
-  cursor:pointer;white-space:nowrap;
-}
-.site-gnav a:hover{color:var(--accent)}
-.site-gnav a.active{color:var(--accent);font-weight:600}
-.site-search{width:200px;position:relative;flex-shrink:0}
-.site-search input{
-  width:100%;padding:8px 14px 8px 32px;
-  border:1px solid var(--line);border-radius:20px;
-  font-size:12px;font-family:inherit;
-  background:var(--cream);outline:none;transition:all .2s;cursor:pointer;
-}
-.site-search input:focus{border-color:var(--accent);background:white}
-.site-search-icon{
-  position:absolute;left:11px;top:50%;transform:translateY(-50%);
-  font-size:13px;color:var(--mute);pointer-events:none;
-}
-.site-hamburger{
-  display:none;width:28px;height:28px;font-size:22px;
-  align-items:center;justify-content:center;
-  cursor:pointer;background:none;border:none;flex-shrink:0;
-}
-@media(max-width:768px){
-  .site-search{display:none}
-  .site-hamburger{display:flex}
-  .site-gnav{display:none}
-}
-
 /* ── CALENDAR SECONDARY HEADER ───────────────── */
 .tc-header{
   flex-shrink:0;
@@ -142,23 +66,8 @@ input,select,textarea{font-family:inherit}
   border-bottom:1px solid var(--line);
 }
 .header-top{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:8px 20px;
-}
-.header-left{display:flex;align-items:center;gap:12px}
-.header-brand-sub{
-  font-size:10px;font-weight:700;letter-spacing:.22em;
-  color:var(--accent);
-  text-transform:uppercase;font-family:'DM Sans',sans-serif;
-}
-.header-brand-sub::before{
-  content:'';display:inline-block;width:14px;height:1px;
-  background:var(--accent);vertical-align:middle;
-  margin-right:7px;margin-bottom:2px;
-}
-.header-main{
-  font-family:'Noto Serif JP',serif;
-  font-size:17px;font-weight:700;letter-spacing:.02em;color:var(--ink);
+  display:flex;align-items:center;justify-content:flex-end;
+  padding:6px 20px;min-height:40px;
 }
 .month-nav{display:flex;align-items:center;gap:8px}
 .month-nav-btn{
@@ -189,29 +98,29 @@ input,select,textarea{font-family:inherit}
 
 /* ── CALENDAR SUMMARY BAR ────────────────────── */
 .cal-summary{
-  display:flex;gap:16px;
+  display:flex;gap:32px;
   background:var(--cream);
   border-bottom:1px solid var(--line);
-  padding:8px 16px;
+  padding:16px 24px;
   flex-shrink:0;
   overflow-x:auto;
   scrollbar-width:none;
 }
 .cal-summary::-webkit-scrollbar{display:none}
 .cal-summary-item{
-  display:flex;flex-direction:column;
+  display:flex;flex-direction:column;justify-content:center;
   border-left:3px solid var(--accent);
-  padding-left:10px;min-width:72px;flex-shrink:0;
+  padding-left:14px;min-width:100px;flex-shrink:0;
 }
 .cal-summary-label{
-  font-size:9px;font-weight:700;letter-spacing:.14em;color:var(--mute);
-  text-transform:uppercase;font-family:'DM Sans',sans-serif;margin-bottom:2px;
+  font-size:12px;font-weight:700;letter-spacing:.10em;color:var(--mute);
+  text-transform:uppercase;font-family:'DM Sans',sans-serif;margin-bottom:6px;
 }
 .cal-summary-val{
-  font-size:20px;font-weight:700;color:var(--ink);letter-spacing:-.02em;
-  font-family:'DM Sans',sans-serif;font-variant-numeric:tabular-nums;line-height:1.1;
+  font-size:28px;font-weight:700;color:var(--ink);letter-spacing:-.03em;
+  font-family:'DM Sans',sans-serif;font-variant-numeric:tabular-nums;line-height:1;
 }
-.cal-summary-unit{font-size:11px;font-weight:500;color:var(--mute);margin-left:1px}
+.cal-summary-unit{font-size:13px;font-weight:500;color:var(--mute);margin-left:2px}
 
 /* ── CALENDAR ────────────────────────────────── */
 .cal-day-headers{
@@ -521,61 +430,11 @@ input,select,textarea{font-family:inherit}
 </head>
 <body>
 
-<!-- TOPLINE -->
-<div class="topline">
-  <div class="topline-inner">
-    <div class="topline-left">
-      <span>全仏オープン 2026 開幕間近</span>
-      <span>—</span>
-      <span>本戦 5/24（日）スタート</span>
-    </div>
-    <div class="topline-right">
-      <span>JP</span>
-      <span>|</span>
-      <span id="topline-date"></span>
-    </div>
-  </div>
-</div>
-
-<!-- SITE HEADER -->
-<header class="site-header">
-  <div class="site-header-inner">
-    <a href="/" class="site-logo">
-      <div class="site-logo-mark">L</div>
-      <div class="site-logo-text">LOVE<em>TENI</em></div>
-    </a>
-    <nav class="site-gnav" id="siteGnav">
-      <a href="/">ラケット</a>
-      <a href="/">ガット</a>
-      <a href="/">グリップ</a>
-      <a href="/">診断</a>
-      <a href="/">コラム</a>
-      <a href="/">最新情報</a>
-      <a href="/">トレーニング</a>
-      <a href="/">ルール</a>
-      <a href="/">マイギア</a>
-      <a href="/equipment.html">用品</a>
-      <a href="/calendar.html" class="active">手帳</a>
-      <a href="/videos.html">動画</a>
-      <a href="/ranking.html">ランキング</a>
-      <a href="/court-draw.html">乱数表</a>
-    </nav>
-    <div class="site-search">
-      <span class="site-search-icon">&#x2315;</span>
-      <input type="text" placeholder="検索..." onclick="location.href='/'">
-    </div>
-    <button class="site-hamburger" onclick="toggleSiteNav()">&#8801;</button>
-  </div>
-</header>
+<script src="/js/site-header.js"></script>
 
 <!-- CALENDAR SECONDARY HEADER -->
 <header class="tc-header">
   <div class="header-top">
-    <div class="header-left">
-      <div class="header-brand">
-        <div class="header-brand-sub">Tennis Log</div>
-      </div>
-    </div>
     <div id="headerRight"></div>
   </div>
   <div class="tabs" id="tabBar">
@@ -1065,7 +924,7 @@ document.getElementById('fabBtn').addEventListener('click',function(){toggleFab(
 document.getElementById('modalCloseBtn').addEventListener('click',function(){closeModal();});
 document.getElementById('modalBg').addEventListener('click',function(e){if(e.target===e.currentTarget)closeModal();});
 
-function toggleSiteNav(){
+function _unused_toggleSiteNav(){
   var nav=document.getElementById('siteGnav');
   if(!nav)return;
   var open=nav.style.display==='flex';
@@ -1083,7 +942,6 @@ function toggleSiteNav(){
 }
 
 try{render();}catch(e){document.getElementById('mainContent').innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:40vh;gap:12px;color:var(--mute-soft);text-align:center;font-size:13px">読み込みに失敗しました</div>';}
-(function(){var el=document.getElementById('topline-date');if(el)el.textContent=new Date().toLocaleDateString('ja-JP',{year:'numeric',month:'2-digit',day:'2-digit'}).replace(/\//g,'.');})();
 </script>
 </body>
 </html>

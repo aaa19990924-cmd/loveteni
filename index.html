@@ -2697,17 +2697,17 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
   .with-sidebar { grid-template-columns: 1fr; gap: 32px; }
   .sidebar { position: static; }
   .footer-top { grid-template-columns: 1fr 1fr; gap: 16px; }
-  .header-inner { gap: 16px; }
-  .gnav-item { padding: 8px 10px; font-size: 13px; }
+  .header-inner { gap: 12px; }
   .header-search { width: 160px; }
+}
+@media (max-width: 900px) {
+  .header-search, .gnav { display: none; }
+  .hamburger { display: flex; }
+  .topline-right { display: none; }
 }
 @media (max-width: 720px) {
   .container, .container-narrow { padding: 0 20px; }
-  .header-inner { padding: 0 20px; gap: 16px; height: 60px; }
-  .header-search, .gnav { display: none; }
-  .hamburger { display: flex; }
   .topline-inner { padding: 0 20px; font-size: 10px; }
-  .topline-right { display: none; }
   section { padding: 60px 0; }
   .hero { padding: 60px 0 80px; }
   .service-grid, .brand-grid, .column-grid, .video-grid { grid-template-columns: 1fr; }

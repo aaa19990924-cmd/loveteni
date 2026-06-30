@@ -8,6 +8,9 @@
 
   /* ── CSS ─────────────────────────────────────────────── */
   var CSS = [
+    /* CSS custom properties shared across all pages */
+    ':root{--announce-height:36px;--nav-height:64px;}',
+
     /* topline */
     '.sh-topline{background:#0d1117;color:rgba(255,255,255,.85);font-size:12px;',
     'padding:8px 0;font-family:"DM Sans",-apple-system,sans-serif;',
@@ -27,50 +30,50 @@
     'position:sticky;top:0;z-index:100;flex-shrink:0;}',
 
     '.sh-header-inner{max-width:1360px;margin:0 auto;',
-    'padding:0 20px;height:60px;',
+    'padding:0 24px;height:var(--nav-height,64px);',
     'display:flex;align-items:center;gap:12px;}',
 
     /* logo */
-    '.sh-logo{display:flex;align-items:center;gap:8px;flex-shrink:0;',
+    '.sh-logo{display:flex;align-items:center;gap:10px;flex-shrink:0;',
     'cursor:pointer;text-decoration:none;}',
 
-    '.sh-logo-mark{width:26px;height:26px;background:#0d1117;color:#fff;',
+    '.sh-logo-mark{width:32px;height:32px;background:#0d1117;color:#fff;',
     'border-radius:50%;display:flex;align-items:center;justify-content:center;',
-    'font-family:"Noto Serif JP",serif;font-weight:900;font-size:14px;',
+    'font-family:"Noto Serif JP",serif;font-weight:900;font-size:17px;',
     'font-style:italic;flex-shrink:0;}',
 
-    '.sh-logo-text{font-family:"Noto Serif JP",serif;font-size:15px;',
+    '.sh-logo-text{font-family:"Noto Serif JP",serif;font-size:18px;',
     'font-weight:700;letter-spacing:.1em;color:#0d1117;white-space:nowrap;}',
 
     '.sh-logo-text em{font-style:italic;color:#00513a;}',
 
     /* gnav */
-    '.sh-gnav{display:flex;gap:0;margin-left:auto;align-items:center;',
+    '.sh-gnav{display:flex;gap:2px;margin-left:auto;align-items:center;',
     'flex-shrink:1;overflow:hidden;}',
 
-    '.sh-gnav-item{font-size:12px;font-weight:500;padding:5px 7px;',
-    'color:#0d1117;border-radius:3px;transition:color .15s;cursor:pointer;',
+    '.sh-gnav-item{font-size:14px;font-weight:500;padding:8px 6px;',
+    'color:#0d1117;border-radius:4px;transition:color .15s;cursor:pointer;',
     'white-space:nowrap;text-decoration:none;display:inline-block;}',
 
     '.sh-gnav-item:hover{color:#00513a;}',
     '.sh-gnav-item.active{color:#00513a;font-weight:700;}',
 
     /* search */
-    '.sh-search{width:140px;position:relative;flex-shrink:0;}',
+    '.sh-search{width:160px;position:relative;flex-shrink:0;}',
 
-    '.sh-search input{width:100%;padding:6px 12px 6px 26px;',
-    'border:1px solid #e2e2dc;border-radius:16px;font-size:11px;',
+    '.sh-search input{width:100%;padding:8px 14px 8px 32px;',
+    'border:1px solid #e2e2dc;border-radius:20px;font-size:12px;',
     'font-family:inherit;background:#fafaf7;outline:none;',
     'transition:border-color .2s;cursor:pointer;}',
 
     '.sh-search input:focus{border-color:#00513a;background:#fff;}',
 
-    '.sh-search-icon{position:absolute;left:9px;top:50%;',
-    'transform:translateY(-50%);font-size:12px;color:#6b6b65;',
+    '.sh-search-icon{position:absolute;left:11px;top:50%;',
+    'transform:translateY(-50%);font-size:13px;color:#6b6b65;',
     'pointer-events:none;}',
 
     /* hamburger */
-    '.sh-hamburger{display:none;width:28px;height:28px;font-size:20px;',
+    '.sh-hamburger{display:none;width:28px;height:28px;font-size:22px;',
     'align-items:center;justify-content:center;',
     'cursor:pointer;background:none;border:none;flex-shrink:0;}',
 

@@ -20,9 +20,9 @@ const GRIP_DATABASE = [
   { id: 'wilson-premium-leather', brand: 'Wilson', model: 'Premium Leather', type: 'リプレースメントグリップ', texture: 'レザー', thickness: '1.5mm', colors: 'ブラウン', year: 2023, concept: 'プロスタッフ等に合うレザーグリップ', searchKeyword: 'Wilson Premium Leather Grip' },
 
   // ========== Tourna ==========
-  { id: 'tourna-grip-original', brand: 'Tourna', model: 'Tourna Grip Original', type: 'オーバーグリップ', texture: 'ドライ', thickness: '薄め (0.45mm)', colors: 'ブルー', year: 2024, concept: '汗をかけばかくほどグリップ力が増す、伝説のドライグリップ', searchKeyword: 'Tourna Grip Original' },
-  { id: 'tourna-grip-xl', brand: 'Tourna', model: 'Tourna Grip XL', type: 'オーバーグリップ', texture: 'ドライ', thickness: '薄め (0.45mm)', colors: 'イエロー', year: 2024, concept: 'XLサイズで長くカット可能。手汗が多い人の救世主', searchKeyword: 'Tourna Grip XL' },
-  { id: 'tourna-tac', brand: 'Tourna', model: 'Tourna Tac', type: 'オーバーグリップ', texture: 'タッキー(ウェット)', thickness: '標準 (0.50mm)', colors: 'ホワイト/ブラック/ピンク他', year: 2024, concept: 'ウェット系を求める層向けのTourna', searchKeyword: 'Tourna Tac' },
+  { id: 'tourna-grip-original', brand: 'Tourna', model: 'Tourna Grip Original', type: 'オーバーグリップ', texture: 'ドライ', thickness: '薄め (0.45mm)', colors: 'ブルー', year: 2024, concept: '汗をかけばかくほどグリップ力が増す、伝説のドライグリップ', searchKeyword: 'ターナグリップ テニス オーバーグリップ' },
+  { id: 'tourna-grip-xl', brand: 'Tourna', model: 'Tourna Grip XL', type: 'オーバーグリップ', texture: 'ドライ', thickness: '薄め (0.45mm)', colors: 'イエロー', year: 2024, concept: 'XLサイズで長くカット可能。手汗が多い人の救世主', searchKeyword: 'ターナグリップ XL テニス' },
+  { id: 'tourna-tac', brand: 'Tourna', model: 'Tourna Tac', type: 'オーバーグリップ', texture: 'タッキー(ウェット)', thickness: '標準 (0.50mm)', colors: 'ホワイト/ブラック/ピンク他', year: 2024, concept: 'ウェット系を求める層向けのTourna', searchKeyword: 'ターナグリップ タック テニス' },
 
   // ========== YONEX ==========
   { id: 'yonex-super-grap', brand: 'YONEX', model: 'Super Grap', type: 'オーバーグリップ', texture: 'ウェット', thickness: '標準 (0.60mm)', colors: 'ホワイト/ブラック/レッド/ブルー他多色', year: 2024, concept: '日本で最も売れているウェット系オーバーグリップ', searchKeyword: 'ヨネックス Super Grap' },
@@ -31,14 +31,14 @@ const GRIP_DATABASE = [
   { id: 'yonex-ai-grip', brand: 'YONEX', model: 'AIグリップ', type: 'リプレースメントグリップ', texture: 'ウェット', thickness: '1.6mm', colors: 'ブラック', year: 2024, concept: '高い吸汗性とフィット感のリプレースメント', searchKeyword: 'ヨネックス AIグリップ' },
 
   // ========== Babolat ==========
-  { id: 'babolat-pro-tour', brand: 'Babolat', model: 'Pro Tour Overgrip', type: 'オーバーグリップ', texture: 'ウェット', thickness: '薄め (0.55mm)', colors: 'ホワイト/ブラック多色', year: 2024, concept: 'ナダル使用のウェット系定番', searchKeyword: 'Babolat Pro Tour Overgrip', players: ['ナダル'] },
-  { id: 'babolat-vs-original', brand: 'Babolat', model: 'VS Original', type: 'オーバーグリップ', texture: 'ドライ寄り', thickness: '薄め (0.45mm)', colors: 'ホワイト/ブラック', year: 2024, concept: 'Tourna Gripに似たドライ系、高品質仕上げ', searchKeyword: 'Babolat VS Original Overgrip' },
-  { id: 'babolat-syntec-pro', brand: 'Babolat', model: 'Syntec Pro', type: 'リプレースメントグリップ', texture: 'ウェット', thickness: '1.7mm', colors: 'ブラック多色', year: 2023, concept: 'バランスの取れたリプレースメント', searchKeyword: 'Babolat Syntec Pro' },
+  { id: 'babolat-pro-tour', brand: 'Babolat', model: 'Pro Tour Overgrip', type: 'オーバーグリップ', texture: 'ウェット', thickness: '薄め (0.55mm)', colors: 'ホワイト/ブラック多色', year: 2024, concept: 'ナダル使用のウェット系定番', searchKeyword: 'バボラ プロツアー オーバーグリップ', players: ['ナダル'] },
+  { id: 'babolat-vs-original', brand: 'Babolat', model: 'VS Original', type: 'オーバーグリップ', texture: 'ドライ寄り', thickness: '薄め (0.45mm)', colors: 'ホワイト/ブラック', year: 2024, concept: 'Tourna Gripに似たドライ系、高品質仕上げ', searchKeyword: 'バボラ VS Original オーバーグリップ' },
+  { id: 'babolat-syntec-pro', brand: 'Babolat', model: 'Syntec Pro', type: 'リプレースメントグリップ', texture: 'ウェット', thickness: '1.7mm', colors: 'ブラック多色', year: 2023, concept: 'バランスの取れたリプレースメント', searchKeyword: 'バボラ Syntec Pro グリップ' },
 
   // ========== HEAD ==========
-  { id: 'head-hydrosorb-pro', brand: 'HEAD', model: 'HydroSorb Pro', type: 'リプレースメントグリップ', texture: '穴あきウェット', thickness: '1.8mm', colors: 'ブラック多色', year: 2024, concept: '吸汗性に優れたプロ仕様リプレースメント', searchKeyword: 'HEAD HydroSorb Pro' },
-  { id: 'head-prime-tour', brand: 'HEAD', model: 'Prime Tour Overgrip', type: 'オーバーグリップ', texture: 'ドライ寄り', thickness: '薄め (0.55mm)', colors: 'ホワイト/ブラック', year: 2024, concept: 'ジョコビッチが使用するプロ仕様', searchKeyword: 'HEAD Prime Tour Overgrip', players: ['ジョコビッチ'] },
-  { id: 'head-xtremesoft', brand: 'HEAD', model: 'XtremeSoft Grip', type: 'オーバーグリップ', texture: 'ウェット', thickness: '標準 (0.60mm)', colors: 'ホワイト/ブラック/ピンク多色', year: 2024, concept: '柔らかい握り心地のウェット系', searchKeyword: 'HEAD XtremeSoft Grip' },
+  { id: 'head-hydrosorb-pro', brand: 'HEAD', model: 'HydroSorb Pro', type: 'リプレースメントグリップ', texture: '穴あきウェット', thickness: '1.8mm', colors: 'ブラック多色', year: 2024, concept: '吸汗性に優れたプロ仕様リプレースメント', searchKeyword: 'ヘッド HydroSorb Pro グリップ' },
+  { id: 'head-prime-tour', brand: 'HEAD', model: 'Prime Tour Overgrip', type: 'オーバーグリップ', texture: 'ドライ寄り', thickness: '薄め (0.55mm)', colors: 'ホワイト/ブラック', year: 2024, concept: 'ジョコビッチが使用するプロ仕様', searchKeyword: 'ヘッド Prime Tour オーバーグリップ', players: ['ジョコビッチ'] },
+  { id: 'head-xtremesoft', brand: 'HEAD', model: 'XtremeSoft Grip', type: 'オーバーグリップ', texture: 'ウェット', thickness: '標準 (0.60mm)', colors: 'ホワイト/ブラック/ピンク多色', year: 2024, concept: '柔らかい握り心地のウェット系', searchKeyword: 'ヘッド XtremeSoft オーバーグリップ' },
 
   // ========== Tecnifibre ==========
   { id: 'tecnifibre-x-tra-feel', brand: 'Tecnifibre', model: 'X-Tra Feel', type: 'オーバーグリップ', texture: 'ウェット', thickness: '薄め (0.55mm)', colors: 'ホワイト/ブラック', year: 2024, concept: 'メドベージェフが使用する高フィーリングモデル', searchKeyword: 'テクニファイバー X-Tra Feel', players: ['メドベージェフ'] },

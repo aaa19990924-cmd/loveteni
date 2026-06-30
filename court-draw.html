@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>コート抽選 | LOVETENI ラブテニ</title>
+<title>乱数表 | LOVETENI ラブテニ</title>
 <meta name="description" content="テニスのコート割り当てを自動でランダム抽選。シングルス・ダブルス対応、待機者・ローテーション管理付き。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -42,14 +42,23 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 /* ===== Header ===== */
 .topline {
   background: var(--ink);
-  color: rgba(255,255,255,0.8);
-  font-family: 'DM Sans', sans-serif;
+  color: rgba(255,255,255,0.85);
   font-size: 12px;
+  padding: 8px 0;
+  font-family: 'DM Sans', sans-serif;
   letter-spacing: 0.05em;
-  padding: 8px 24px;
+}
+.topline-inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 0 24px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
+.topline-left { display: flex; gap: 24px; }
+.topline-right { display: flex; gap: 16px; opacity: 0.7; font-size: 11px; }
+@media (max-width: 768px) { .topline-right { display: none; } }
 header {
   background: rgba(255,255,255,0.97);
   backdrop-filter: blur(12px);
@@ -547,8 +556,18 @@ footer a:hover { color: white; }
 
 <!-- TOPLINE -->
 <div class="topline">
-  <span>🎾 LOVETENI — テニスプレーヤーのための情報プラットフォーム</span>
-  <span id="topline-date"></span>
+  <div class="topline-inner">
+    <div class="topline-left">
+      <span>全仏オープン 2026 開幕間近</span>
+      <span>—</span>
+      <span>本戦 5/24（日）スタート</span>
+    </div>
+    <div class="topline-right">
+      <span>JP</span>
+      <span>|</span>
+      <span id="topline-date"></span>
+    </div>
+  </div>
 </div>
 
 <!-- HEADER -->
@@ -572,7 +591,7 @@ footer a:hover { color: white; }
       <a href="/calendar.html" class="gnav-item">手帳</a>
       <a href="/videos.html" class="gnav-item">動画</a>
       <a href="/ranking.html" class="gnav-item">ランキング</a>
-      <a href="/court-draw.html" class="gnav-item active">抽選</a>
+      <a href="/court-draw.html" class="gnav-item active">乱数表</a>
     </nav>
     <div class="header-search">
       <span class="header-search-icon">&#x2315;</span>
@@ -586,7 +605,7 @@ footer a:hover { color: white; }
 <div class="page-hero">
   <div class="page-hero-inner">
     <div class="page-hero-eyebrow">COURT DRAW</div>
-    <h1 class="page-hero-title">コート抽選</h1>
+    <h1 class="page-hero-title">乱数表</h1>
     <p class="page-hero-desc">コート数・人数・形式を入力するだけで、ランダムにコートを割り当てます。ローテーションにも対応。</p>
   </div>
 </div>

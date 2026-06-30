@@ -2,7 +2,7 @@
 // ラブテニ テニスボールデータベース
 // ============================================================
 
-const BALL_BRANDS = ['Wilson', 'Babolat', 'Dunlop', 'HEAD', 'YONEX', 'Tecnifibre', 'Penn', 'Slazenger'];
+const BALL_BRANDS = ['Wilson', 'Babolat', 'Dunlop', 'HEAD', 'YONEX', 'Tecnifibre'];
 
 const BALL_BRAND_INFO = {
   'Wilson': {
@@ -34,16 +34,6 @@ const BALL_BRAND_INFO = {
     desc: 'フランス発祥のガット・ボール専門ブランド。TF-X1は独自技術で耐久性と品質を高いレベルで両立させた次世代プレッシャーボール。',
     color: '#16a085', tagline: 'FRENCH INNOVATION',
     official: null
-  },
-  'Penn': {
-    desc: 'アメリカ発祥のボール専門ブランド。Championshipシリーズはコスパに優れた定番練習球として全米で最も売れているボール。Hard Courtへの対応力が高い。',
-    color: '#c0392b', tagline: 'US STAPLE',
-    official: null
-  },
-  'Slazenger': {
-    desc: 'イギリス発祥の老舗スポーツブランド。ウィンブルドン選手権の公式球として130年以上の歴史を持つ伝統のブランド。芝コートに最適化されたプレミアムボール。',
-    color: '#2ecc71', tagline: 'WIMBLEDON OFFICIAL',
-    official: 'ウィンブルドン公式'
   }
 };
 
@@ -58,7 +48,7 @@ const BALL_DATABASE = [
     official: '全米オープン公式',
     concept: '全米オープン公式・ハードコートの王道',
     description: '全米オープンの公式採用球。耐久性フェルトとBraided Coreで安定した飛びを実現。世界中のハードコートプレーヤーの定番。',
-    searchKeyword: 'Wilson US OPEN Extra Duty テニスボール',
+    searchKeyword: 'ウィルソン US OPEN テニスボール',
     year: 2024
   },
   {
@@ -69,8 +59,8 @@ const BALL_DATABASE = [
     surface: ['クレー', 'オムニ', '室内'],
     official: null,
     concept: 'ソフトフェルトでクレー・室内向け',
-    description: 'Extra Dutyより薄いフェルトを使用。クレーコートや室内コートでの使用に最適で、弾みが穏やかで コントロールしやすい。',
-    searchKeyword: 'Wilson US OPEN Regular Duty テニスボール',
+    description: 'Extra Dutyより薄いフェルトを使用。クレーコートや室内コートでの使用に最適で、弾みが穏やかでコントロールしやすい。',
+    searchKeyword: 'ウィルソン テニスボール クレー',
     year: 2024
   },
   {
@@ -82,7 +72,7 @@ const BALL_DATABASE = [
     official: null,
     concept: 'コスパ最高の定番練習球（ハード）',
     description: 'Wilsonのエントリーラインながら安定した品質。ハードコートの練習球として圧倒的なコスパを誇り、スクールや部活に最適。',
-    searchKeyword: 'Wilson Championship Extra Duty テニスボール',
+    searchKeyword: 'ウィルソン チャンピオンシップ テニスボール',
     year: 2024
   },
   {
@@ -94,7 +84,7 @@ const BALL_DATABASE = [
     official: null,
     concept: 'コスパ最高の定番練習球（クレー・室内）',
     description: 'クレー・オムニ・室内コート向けの入門練習球。フェルトが柔らかくクレーでのプレーに適した弾みを実現。',
-    searchKeyword: 'Wilson Championship Regular Duty テニスボール',
+    searchKeyword: 'ウィルソン チャンピオンシップ テニスボール',
     year: 2024
   },
   {
@@ -106,7 +96,7 @@ const BALL_DATABASE = [
     official: null,
     concept: 'プレッシャーレスで1年以上使える革新球',
     description: '従来の缶不要のチューブ入り。空気を入れない構造で圧力が落ちず、一般的なボールの4倍以上の耐久性を誇る。地球環境にも優しい次世代ボール。',
-    searchKeyword: 'Wilson Triniti テニスボール',
+    searchKeyword: 'ウィルソン Triniti テニスボール',
     year: 2024
   },
   {
@@ -118,7 +108,7 @@ const BALL_DATABASE = [
     official: '全仏オープン公式（Roland Garros大会指定）',
     concept: '全仏仕様・クレーコート特化モデル',
     description: '全仏オープン（Roland Garros）のパートナー製品。クレーコートの特性に合わせたフェルト設計で、泥はけが良く一貫したバウンドを提供。',
-    searchKeyword: 'Wilson Roland Garros テニスボール',
+    searchKeyword: 'ウィルソン ローランギャロス テニスボール',
     year: 2024
   },
 
@@ -132,7 +122,7 @@ const BALL_DATABASE = [
     official: '全仏オープン公式',
     concept: '全仏オープン公式・クレー最高峰',
     description: '全仏オープンの公式採用球。クレーコートに最適化されたフェルトで、泥を含んでも一貫した弾みを維持。プロが認めた本物のクレーボール。',
-    searchKeyword: 'Babolat Gold French Open テニスボール',
+    searchKeyword: 'バボラ ゴールド テニスボール',
     year: 2024
   },
   {
@@ -144,7 +134,7 @@ const BALL_DATABASE = [
     official: null,
     concept: 'クレーのBabolatがオールコート対応',
     description: 'Babolatの技術をオールコートに展開。ハード・クレー・オムニどのサーフェスでも安定した弾みを発揮する汎用プレミアムモデル。',
-    searchKeyword: 'Babolat Gold All Court テニスボール',
+    searchKeyword: 'バボラ ゴールド テニスボール オールコート',
     year: 2024
   },
   {
@@ -156,7 +146,7 @@ const BALL_DATABASE = [
     official: null,
     concept: '公式球ライン・クレー特化エントリー版',
     description: 'Gold French Openのスペックを継承しながらコスパを重視。クレーコート練習球の定番として国内外で人気の高いモデル。',
-    searchKeyword: 'Babolat French Open Clay テニスボール',
+    searchKeyword: 'バボラ フレンチオープン テニスボール',
     year: 2024
   },
   {
@@ -168,7 +158,7 @@ const BALL_DATABASE = [
     official: null,
     concept: '練習向けコスパボール',
     description: 'スクールや日常練習に最適なBabolatのエントリーモデル。価格を抑えながらBabolatの品質基準をクリアした信頼の練習球。',
-    searchKeyword: 'Babolat Team テニスボール',
+    searchKeyword: 'バボラ チーム テニスボール',
     year: 2024
   },
 
@@ -182,7 +172,7 @@ const BALL_DATABASE = [
     official: '全豪オープン公式',
     concept: '全豪オープン公式・オールコート最高峰',
     description: '全豪オープンの公式採用球。Titanium Seriesのフェルトがコート表面への付着を抑え、耐久性と一貫した弾みを長時間維持する最高峰モデル。',
-    searchKeyword: 'Dunlop Fort All Court テニスボール',
+    searchKeyword: 'ダンロップ フォート テニスボール',
     year: 2024
   },
   {
@@ -194,7 +184,7 @@ const BALL_DATABASE = [
     official: null,
     concept: 'クレーコート特化版Fort',
     description: 'クレーコートの特性に合わせたフェルト厚設計。泥を吸い込みにくく、砂の摩耗からフェルトを守る専用モデル。欧州クレーシーズンの定番。',
-    searchKeyword: 'Dunlop Fort Clay テニスボール',
+    searchKeyword: 'ダンロップ フォート クレー テニスボール',
     year: 2024
   },
   {
@@ -206,7 +196,7 @@ const BALL_DATABASE = [
     official: null,
     concept: '室内コート専用・静音フェルト設計',
     description: '室内コート（カーペット・フローリング）に最適化。静音性に優れたフェルトで屋内施設での使用に配慮した専用設計。',
-    searchKeyword: 'Dunlop Fort Indoor テニスボール',
+    searchKeyword: 'ダンロップ フォート インドア テニスボール',
     year: 2024
   },
   {
@@ -218,7 +208,7 @@ const BALL_DATABASE = [
     official: 'ATPチャンピオンシップ公式',
     concept: 'ATPチャンピオンシップ採用の実力派',
     description: 'ATPチャンピオンシップで採用された実績を持つ高品質ボール。プロ基準のフェルト品質と安定した内圧でハードゲームにも対応。',
-    searchKeyword: 'Dunlop ATP Championship テニスボール',
+    searchKeyword: 'ダンロップ ATPチャンピオンシップ テニスボール',
     year: 2024
   },
   {
@@ -230,7 +220,7 @@ const BALL_DATABASE = [
     official: '全豪オープン冠名モデル',
     concept: '全豪オープン冠名・ハードコート向け',
     description: '全豪オープンの名を冠したDunlopのプレミアムハードコートモデル。Melbourne Parkの高速サーフェスを想定した耐久フェルト仕様。',
-    searchKeyword: 'Dunlop Australian Open テニスボール',
+    searchKeyword: 'ダンロップ オーストラリアンオープン テニスボール',
     year: 2024
   },
 
@@ -244,7 +234,7 @@ const BALL_DATABASE = [
     official: 'ATPツアー公式',
     concept: 'ATPツアー公式・高耐久フェルト採用',
     description: 'ATPツアーのマスターズ大会で使用されるプロ仕様球。独自のナノパウダーフェルトが毛羽立ちを抑え、試合中に弾みの変化が起きにくい高耐久設計。',
-    searchKeyword: 'HEAD ATP Tour テニスボール',
+    searchKeyword: 'ヘッド ATP Tour テニスボール',
     year: 2024
   },
   {
@@ -256,7 +246,7 @@ const BALL_DATABASE = [
     official: null,
     concept: 'ATPツアー仕様のクレーコート特化版',
     description: 'ATP Tour球の技術をクレーコートに特化させたモデル。砂のコートで汚れても弾みが安定し、長持ちするフェルト設計が採用されている。',
-    searchKeyword: 'HEAD ATP Tour Clay テニスボール',
+    searchKeyword: 'ヘッド ATP Tour クレー テニスボール',
     year: 2024
   },
   {
@@ -268,7 +258,7 @@ const BALL_DATABASE = [
     official: null,
     concept: 'エクストラデューティ・耐久強化版',
     description: 'HEADのオールコート練習向けモデル。Extra Thick（XT）フェルトで耐久性を高め、練習時間が長くても品質が持続する信頼のトレーニング球。',
-    searchKeyword: 'HEAD Tour XT テニスボール',
+    searchKeyword: 'ヘッド Tour XT テニスボール',
     year: 2024
   },
 
@@ -282,7 +272,7 @@ const BALL_DATABASE = [
     official: null,
     concept: '国内大会の定番・高品質プレミアムボール',
     description: '国内公認大会の多くで使用されるYONEXのフラッグシップボール。日本のオムニコートに合わせたフェルト設計で、一貫した弾みと耐久性を発揮する。',
-    searchKeyword: 'ヨネックス Tour テニスボール',
+    searchKeyword: 'ヨネックス テニスボール Tour',
     year: 2024
   },
   {
@@ -294,7 +284,7 @@ const BALL_DATABASE = [
     official: null,
     concept: '練習・日常使いのコスパモデル',
     description: 'YONEXのエントリーボール。学校・スクール・部活動での練習用として広く普及。Tourと同じ製造ラインのコスパ重視バリエーション。',
-    searchKeyword: 'ヨネックス Team テニスボール',
+    searchKeyword: 'ヨネックス テニスボール チーム',
     year: 2024
   },
 
@@ -308,7 +298,7 @@ const BALL_DATABASE = [
     official: null,
     concept: '耐久性と品質を両立した次世代プレミアム球',
     description: '独自のX1テクノロジーによりフェルトの毛羽立ちを最小化。長時間練習でも弾みが安定し、試合での集中力を維持できる高品質ボール。',
-    searchKeyword: 'Tecnifibre TF-X1 テニスボール',
+    searchKeyword: 'テクニファイバー TF-X1 テニスボール',
     year: 2024
   },
   {
@@ -320,71 +310,7 @@ const BALL_DATABASE = [
     official: null,
     concept: 'TF-X1のクレー特化バージョン',
     description: 'TF-X1のクレーコート対応モデル。砂の浸入に強いフェルト構造で、クレーコートのプレーヤーに最適な耐久性と品質を提供。',
-    searchKeyword: 'Tecnifibre TF-X1 Clay テニスボール',
-    year: 2024
-  },
-
-  // ========== Penn ==========
-  {
-    id: 'penn-championship-extra-duty',
-    brand: 'Penn',
-    model: 'Championship Extra Duty',
-    type: 'プレッシャー',
-    surface: ['ハード'],
-    official: null,
-    concept: '全米定番コスパ練習球（ハード）',
-    description: '北米で最も売れているテニスボール。Extra Dutyのフェルトはハードコートの摩耗に強く、長期間使用できる経済的なプレーヤーの強い味方。',
-    searchKeyword: 'Penn Championship Extra Duty テニスボール',
-    year: 2024
-  },
-  {
-    id: 'penn-championship-regular-duty',
-    brand: 'Penn',
-    model: 'Championship Regular Duty',
-    type: 'プレッシャー',
-    surface: ['クレー', 'オムニ', '室内'],
-    official: null,
-    concept: '全米定番コスパ練習球（クレー・室内）',
-    description: 'Pennの定番クレー・室内向けモデル。柔らかいフェルトが室内コートやクレーコートでの快適なプレーを実現する。価格と品質のバランスが秀逸。',
-    searchKeyword: 'Penn Championship Regular Duty テニスボール',
-    year: 2024
-  },
-  {
-    id: 'penn-control-plus',
-    brand: 'Penn',
-    model: 'Control Plus Tournament',
-    type: 'プレッシャー',
-    surface: ['オールコート'],
-    official: null,
-    concept: 'Pennの上位トーナメントモデル',
-    description: 'Pennのプレミアムラインナップ。NaturalFlex技術によりより一貫した弾みを実現。小〜中規模大会での使用に適したトーナメントグレードボール。',
-    searchKeyword: 'Penn Control Plus テニスボール',
-    year: 2024
-  },
-
-  // ========== Slazenger ==========
-  {
-    id: 'slazenger-wimbledon',
-    brand: 'Slazenger',
-    model: 'Wimbledon',
-    type: 'プレッシャー',
-    surface: ['グラス'],
-    official: 'ウィンブルドン公式',
-    concept: 'ウィンブルドン公式・芝コートの至高',
-    description: 'ウィンブルドン選手権の公式球として130年以上使われ続ける伝説のボール。Hydroguardコーティングが芝の湿気からフェルトを保護し、グラスコートに最適な飛びを実現する。',
-    searchKeyword: 'Slazenger Wimbledon テニスボール',
-    year: 2024
-  },
-  {
-    id: 'slazenger-wimbledon-ultra-vis',
-    brand: 'Slazenger',
-    model: 'Wimbledon Ultra Vis',
-    type: 'プレッシャー',
-    surface: ['グラス', 'オールコート'],
-    official: null,
-    concept: 'ウィンブルドン仕様の高視認性オレンジ版',
-    description: '公式ウィンブルドン球の技術をベースに、高視認性のオレンジフェルトを採用。屋内練習や視力に不安のあるプレーヤーに最適なバリエーション。',
-    searchKeyword: 'Slazenger Ultra Vis テニスボール',
+    searchKeyword: 'テクニファイバー TF-X1 テニスボール クレー',
     year: 2024
   }
 ];

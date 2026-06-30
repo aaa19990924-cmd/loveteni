@@ -57,6 +57,20 @@ input,select,textarea{font-family:inherit}
 ::-webkit-scrollbar{width:5px}
 ::-webkit-scrollbar-thumb{background:var(--line-strong);border-radius:4px}
 
+/* ── TOPLINE ─────────────────────────────────── */
+.topline{
+  background:var(--ink);color:rgba(255,255,255,0.85);
+  font-size:12px;padding:8px 0;
+  font-family:'DM Sans',sans-serif;letter-spacing:0.05em;
+  flex-shrink:0;
+}
+.topline-inner{
+  max-width:1360px;margin:0 auto;padding:0 24px;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.topline-left{display:flex;gap:24px}
+.topline-right{display:flex;gap:16px;opacity:0.7;font-size:11px}
+
 /* ── SITE HEADER (standard) ──────────────────── */
 .site-header{
   flex-shrink:0;
@@ -507,6 +521,22 @@ input,select,textarea{font-family:inherit}
 </head>
 <body>
 
+<!-- TOPLINE -->
+<div class="topline">
+  <div class="topline-inner">
+    <div class="topline-left">
+      <span>全仏オープン 2026 開幕間近</span>
+      <span>—</span>
+      <span>本戦 5/24（日）スタート</span>
+    </div>
+    <div class="topline-right">
+      <span>JP</span>
+      <span>|</span>
+      <span id="topline-date"></span>
+    </div>
+  </div>
+</div>
+
 <!-- SITE HEADER -->
 <header class="site-header">
   <div class="site-header-inner">
@@ -528,7 +558,7 @@ input,select,textarea{font-family:inherit}
       <a href="/calendar.html" class="active">手帳</a>
       <a href="/videos.html">動画</a>
       <a href="/ranking.html">ランキング</a>
-      <a href="/court-draw.html">抽選</a>
+      <a href="/court-draw.html">乱数表</a>
     </nav>
     <div class="site-search">
       <span class="site-search-icon">&#x2315;</span>
@@ -544,7 +574,6 @@ input,select,textarea{font-family:inherit}
     <div class="header-left">
       <div class="header-brand">
         <div class="header-brand-sub">Tennis Log</div>
-        <div class="header-main">マイテニス手帳</div>
       </div>
     </div>
     <div id="headerRight"></div>
@@ -1054,6 +1083,7 @@ function toggleSiteNav(){
 }
 
 try{render();}catch(e){document.getElementById('mainContent').innerHTML='<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:40vh;gap:12px;color:var(--mute-soft);text-align:center;font-size:13px">読み込みに失敗しました</div>';}
+(function(){var el=document.getElementById('topline-date');if(el)el.textContent=new Date().toLocaleDateString('ja-JP',{year:'numeric',month:'2-digit',day:'2-digit'}).replace(/\//g,'.');})();
 </script>
 </body>
 </html>

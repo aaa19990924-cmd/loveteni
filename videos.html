@@ -105,6 +105,50 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .gnav-item:hover { color: var(--accent); }
 .gnav-item.active { color: var(--accent); font-weight: 600; }
+.header-search {
+  width: 200px;
+  position: relative;
+  flex-shrink: 0;
+}
+.header-search input {
+  width: 100%;
+  padding: 8px 14px 8px 32px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  font-size: 12px;
+  font-family: inherit;
+  background: var(--cream);
+  outline: none;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.header-search input:focus { border-color: var(--accent); background: white; }
+.header-search-icon {
+  position: absolute;
+  left: 11px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 13px;
+  color: var(--mute);
+  pointer-events: none;
+}
+.hamburger {
+  display: none;
+  width: 28px;
+  height: 28px;
+  font-size: 22px;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: none;
+  border: none;
+  flex-shrink: 0;
+}
+@media (max-width: 768px) {
+  .header-search { display: none; }
+  .hamburger { display: flex; }
+  .gnav { display: none; }
+}
 
 /* ===== PAGE HERO ===== */
 .page-hero {
@@ -395,17 +439,27 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
       <div class="logo-mark">L</div>
       <div class="logo-text">LOVE<em>TENI</em></div>
     </a>
-    <nav class="gnav">
+    <nav class="gnav" id="gnav">
       <a href="/" class="gnav-item">ラケット</a>
       <a href="/" class="gnav-item">ガット</a>
       <a href="/" class="gnav-item">グリップ</a>
       <a href="/" class="gnav-item">診断</a>
+      <a href="/" class="gnav-item">コラム</a>
+      <a href="/" class="gnav-item">最新情報</a>
+      <a href="/" class="gnav-item">トレーニング</a>
       <a href="/" class="gnav-item">ルール</a>
       <a href="/" class="gnav-item">マイギア</a>
+      <a href="/equipment.html" class="gnav-item">用品</a>
       <a href="/calendar.html" class="gnav-item">手帳</a>
       <a href="/videos.html" class="gnav-item active">動画</a>
       <a href="/ranking.html" class="gnav-item">ランキング</a>
+      <a href="/court-draw.html" class="gnav-item">抽選</a>
     </nav>
+    <div class="header-search">
+      <span class="header-search-icon">&#x2315;</span>
+      <input type="text" placeholder="検索..." onclick="location.href='/'">
+    </div>
+    <button class="hamburger" onclick="toggleMobileNav()">&#8801;</button>
   </div>
 </header>
 
@@ -506,6 +560,23 @@ function escHtml(str) {
 
 // 初期描画
 renderVideos('all');
+
+function toggleMobileNav() {
+  var nav = document.getElementById('gnav');
+  if (!nav) return;
+  var open = nav.style.display === 'flex';
+  nav.style.display = open ? 'none' : 'flex';
+  nav.style.flexDirection = 'column';
+  nav.style.position = 'absolute';
+  nav.style.top = '72px';
+  nav.style.left = '0';
+  nav.style.right = '0';
+  nav.style.background = 'white';
+  nav.style.padding = '16px 20px';
+  nav.style.borderBottom = '1px solid var(--line)';
+  nav.style.zIndex = '200';
+  nav.style.boxShadow = '0 8px 24px rgba(0,0,0,0.1)';
+}
 </script>
 </body>
 </html>

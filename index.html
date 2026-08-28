@@ -2783,6 +2783,7 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
       <a href="/videos.html" class="gnav-item" style="text-decoration:none;color:inherit;">動画</a>
       <a href="/ranking.html" class="gnav-item" style="text-decoration:none;color:inherit;">ランキング</a>
       <a href="/court-draw.html" class="gnav-item" style="text-decoration:none;color:inherit;">乱数表</a>
+      <a href="/strings-cheap.html" class="gnav-item" style="text-decoration:none;color:inherit;">最安ガット</a>
     </nav>
     <div class="header-search">
       <span class="header-search-icon">&#x2315;</span>
@@ -4007,7 +4008,13 @@ window.onload = function() {
   // URLハッシュから初期画面を判定
   const hash = location.hash.replace('#', '');
   if (hash && hash !== 'home') {
-    navigate(hash, true);
+    // /strings-cheap.html 等の外部ページからのディープリンク（#string-detail/{id}）に対応
+    const stringDetailMatch = hash.match(/^string-detail\/(.+)$/);
+    if (stringDetailMatch) {
+      selectString(decodeURIComponent(stringDetailMatch[1]));
+    } else {
+      navigate(hash, true);
+    }
   }
 };
 

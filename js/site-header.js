@@ -109,6 +109,7 @@
     { label: '動画',         href: '/videos.html' },
     { label: 'ランキング',   href: '/ranking.html' },
     { label: '乱数表',       href: '/court-draw.html' },
+    { label: '最安ガット',   href: '/strings-cheap.html' },
   ];
 
   function isActive(href) {

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>今日一番安いガット | LOVETENI ラブテニ</title>
+<meta name="description" content="人気テニスガット10モデルの楽天市場価格を毎回自動チェックし、価格が安い順にランキング表示。初心者向け・スピン重視・耐久性重視・コスパ重視で絞り込みもできます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;900&family=Noto+Serif+JP:wght@400;500;700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="/strings-data.js"></script>
+<style>
+:root {
+  --ink: #0d1117;
+  --ink-soft: #1c2128;
+  --paper: #ffffff;
+  --cream: #fafaf7;
+  --silver: #f2f2ee;
+  --line: #e2e2dc;
+  --line-strong: #c9c9c1;
+  --mute: #6b6b65;
+  --mute-soft: #9c9c93;
+  --accent: #00513a;
+  --accent-bright: #008156;
+  --gold: #b8956a;
+  --signal: #d9534f;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: 0.01em;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+::selection { background: var(--accent); color: white; }
+.container { max-width: 1360px; margin: 0 auto; padding: 0 24px; }
+.content-wrap { padding: 48px 0 80px; flex: 1 0 auto; }
+
+/* ===== PAGE HERO ===== */
+.page-hero { background: var(--ink); color: white; padding: 56px 32px 48px; text-align: center; }
+.page-hero-eyebrow {
+  font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.22em;
+  color: var(--gold); margin-bottom: 14px; display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.page-hero-eyebrow::before, .page-hero-eyebrow::after { content: ''; display: block; width: 40px; height: 1px; background: var(--gold); opacity: 0.6; }
+.page-hero-title { font-family: 'Noto Serif JP', serif; font-size: 36px; font-weight: 700; letter-spacing: 0.04em; margin-bottom: 12px; }
+.page-hero-sub { font-size: 14px; color: rgba(255,255,255,0.6); letter-spacing: 0.02em; max-width: 640px; margin: 0 auto; line-height: 1.8; }
+
+/* ===== CONTROLS ===== */
+.sc-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 20px; }
+.sc-updated { font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--mute); }
+.sc-updated strong { color: var(--ink); font-weight: 700; }
+.sc-refresh-btn {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.06em; padding: 8px 16px;
+  border: 1px solid var(--line-strong); border-radius: 100px; color: var(--mute); background: white; transition: all 0.15s;
+}
+.sc-refresh-btn:hover { border-color: var(--ink); color: var(--ink); }
+.sc-refresh-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ===== FILTER BAR (equipment.html と同じパターン) ===== */
+.filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; }
+.filter-btn {
+  padding: 8px 18px; border: 1px solid var(--line); background: white; font-size: 13px;
+  font-family: 'Noto Sans JP', sans-serif; color: var(--mute); cursor: pointer; transition: all 0.15s; border-radius: 100px;
+}
+.filter-btn.active { background: var(--ink); color: white; border-color: var(--ink); }
+.filter-btn:hover { border-color: var(--ink); color: var(--ink); }
+
+/* ===== RANKING LIST (ranking.html の rank-item パターンを流用) ===== */
+.ranking-list { border: 1px solid var(--line); background: white; }
+.rank-item {
+  display: flex; align-items: center; padding: 20px 24px; border-bottom: 1px solid var(--line);
+  gap: 20px; transition: background 0.15s;
+}
+.rank-item:last-child { border-bottom: none; }
+.rank-item:hover { background: var(--cream); }
+.rank-num { font-family: 'DM Sans', sans-serif; font-size: 28px; font-weight: 700; color: var(--line-strong); min-width: 40px; text-align: center; flex-shrink: 0; }
+.rank-item:nth-child(1) .rank-num { color: var(--gold); }
+.rank-thumb {
+  width: 68px; height: 68px; flex-shrink: 0; background: var(--cream); border: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.rank-thumb img { width: 100%; height: 100%; object-fit: contain; }
+.rank-thumb-fallback { font-size: 24px; opacity: 0.2; }
+.rank-info { flex: 1; min-width: 0; }
+.rank-brand { font-size: 10px; letter-spacing: 0.15em; color: var(--mute); text-transform: uppercase; margin-bottom: 2px; }
+.rank-name { font-family: 'Noto Serif JP', serif; font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+.rank-for { font-size: 12px; color: var(--mute); line-height: 1.7; margin-bottom: 8px; }
+.rank-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.rank-tag { font-size: 10px; font-weight: 600; padding: 3px 9px; border: 1px solid var(--line-strong); color: var(--mute); }
+.rank-price-col { text-align: right; min-width: 172px; flex-shrink: 0; }
+.rank-price { font-family: 'DM Sans', sans-serif; font-size: 22px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+.rank-shop { font-size: 10px; color: var(--mute); margin-bottom: 12px; }
+.rank-cta-row { display: flex; flex-direction: column; gap: 6px; }
+.rank-cta-btn { display: block; padding: 9px 14px; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-align: center; transition: all 0.2s; border-radius: 2px; }
+.rank-cta-detail { background: var(--ink); color: white; }
+.rank-cta-detail:hover { background: var(--accent); }
+.rank-cta-rakuten { background: #BF0000; color: white; }
+.rank-cta-rakuten:hover { background: #8B0000; }
+
+.sc-note { font-size: 11px; color: var(--mute); line-height: 1.8; padding: 20px 4px 0; }
+
+/* ===== LOADING ===== */
+.loading-state { text-align: center; padding: 60px 0; font-size: 14px; color: var(--mute); font-family: 'DM Sans', sans-serif; letter-spacing: 0.06em; }
+.spin {
+  display: inline-block; width: 18px; height: 18px; border: 2px solid var(--line-strong);
+  border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 8px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ===== FOOTER ===== */
+.site-footer { border-top: 1px solid var(--line); padding: 32px; text-align: center; font-size: 12px; color: var(--mute); font-family: 'DM Sans', sans-serif; letter-spacing: 0.06em; flex-shrink: 0; }
+.site-footer a { color: var(--accent); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .page-hero { padding: 40px 20px 32px; }
+  .page-hero-title { font-size: 26px; }
+  .container { padding: 0 20px; }
+  .content-wrap { padding: 32px 0 60px; }
+  .rank-item { flex-wrap: wrap; padding: 16px 16px; gap: 12px; }
+  .rank-price-col { text-align: left; min-width: 0; flex: 1 1 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .rank-cta-row { flex-direction: row; flex: 1; }
+  .rank-cta-btn { flex: 1; }
+}
+</style>
+</head>
+<body>
+
+<script src="/js/site-header.js"></script>
+
+<!-- ===== PAGE HERO ===== -->
+<section class="page-hero">
+  <div class="page-hero-eyebrow">PRICE RANKING</div>
+  <h1 class="page-hero-title">今日一番安いガット</h1>
+  <p class="page-hero-sub">人気テニスガット10モデルの楽天市場価格を比較し、安い順にランキング表示。フィルターで自分に合う1本を絞り込めます。</p>
+</section>
+
+<!-- ===== MAIN ===== -->
+<main style="flex:1 0 auto">
+  <div class="container">
+    <div class="content-wrap">
+
+      <div class="sc-controls">
+        <div class="sc-updated" id="sc-updated">価格を取得中です…</div>
+        <button class="sc-refresh-btn" id="sc-refresh-btn" onclick="refreshRanking()">最新価格を再取得</button>
+      </div>
+
+      <div class="filter-bar" id="sc-filters">
+        <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">すべて</button>
+        <button class="filter-btn" data-filter="beginner" onclick="setFilter('beginner')">初心者向け</button>
+        <button class="filter-btn" data-filter="spin" onclick="setFilter('spin')">スピン重視</button>
+        <button class="filter-btn" data-filter="durability" onclick="setFilter('durability')">耐久性重視</button>
+        <button class="filter-btn" data-filter="value" onclick="setFilter('value')">コスパ重視</button>
+      </div>
+
+      <div id="sc-list">
+        <div class="loading-state"><span class="spin"></span>楽天市場の価格を取得しています…</div>
+      </div>
+
+      <div class="sc-note">※価格・ポイントは取得時点の楽天市場の情報です。店舗キャンペーンやSPU等により実際の還元はさらに多くなる場合があります。表示価格には送料が含まれない場合があります。最新の価格・在庫は各商品ページでご確認ください。掲載リンクにはアフィリエイトリンクを含みます。</div>
+
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div>© 2026 <a href="/index.html">LOVETENI</a> — テニスプレーヤーのための情報プラットフォーム</div>
+</footer>
+
+<script>
+// =====================================================================
+// 今日一番安いガット / strings-cheap.html
+// アーキテクチャ: 新規Cron/Supabase等のバッチ基盤は作らず、既存の
+// /api/rakuten-search（楽天検索・エッジキャッシュ付き）をクライアントから
+// 呼び出し、結果をlocalStorageに6時間キャッシュする（B案）。
+// =====================================================================
+
+const SC_CACHE_KEY = 'lt_strings_cheap_cache_v1';
+const SC_CACHE_TTL_MS = 6 * 60 * 60 * 1000; // 6時間
+const SC_CLICK_LOG_KEY = 'lt_strings_cheap_clicks_v1';
+const SC_CLICK_LOG_MAX = 500;
+const SC_FETCH_CONCURRENCY = 3; // 楽天APIは共有APP_IDのため無制限並列は避け、同時実行数を制限する
+
+let scResults = [];   // 取得済みランキングデータ（価格昇順）
+let scFetchedAt = 0;  // 取得日時（epoch ms）
+let scFilter = 'all';
+
+// ---------------------------------------------------------------------
+// 対象モデル選定。現状は静的リストを返すだけだが、将来的には
+// 「検索数・クリック数（trackClickで蓄積するログ）・売上データ」を
+// もとにサーバー/バッチ側で選定したリストに差し替えられるよう、
+// この関数だけを差し替えれば済む設計にしている。
+// ---------------------------------------------------------------------
+function resolveTargets() {
+  const STATIC_TARGETS = [
+    { id: 'luxilon-alu-power-125',        tags: ['spin', 'durability'], forWhom: 'プロ使用率No.1の王道ポリ。本格的に打ち込む中〜上級者に。' },
+    { id: 'babolat-rpm-blast-125',        tags: ['spin'],               forWhom: 'ナダル・アルカラスも使用。とにかくスピンで攻めたい人に。' },
+    { id: 'yonex-polytour-pro-125',       tags: ['value', 'spin'],      forWhom: '日本人向けに設計されたバランス型。初めてのポリエステルにも。' },
+    { id: 'solinco-hyper-g-125',          tags: ['spin'],               forWhom: '五角形断面で圧倒的なスピン量。攻撃的なプレーヤー向け。' },
+    { id: 'wilson-nxt-16',                tags: ['beginner'],           forWhom: 'ナチュラルに最も近い柔らかい打感。腕への負担を抑えたい人に。' },
+    { id: 'gosen-og-sheep-micro-125',     tags: ['beginner', 'value'],  forWhom: '部活生の定番ナイロン。とにかく安くガットを始めたい人に。' },
+    { id: 'tecnifibre-x-one-biphase-130', tags: ['beginner'],           forWhom: '世界最高峰のマルチフィラメント。柔らかい打感がほしい人に。' },
+    { id: 'head-lynx-125',                tags: ['spin', 'durability'], forWhom: '定番のスピン系ポリ。性能とコストのバランスを取りたい人に。' },
+    { id: 'luxilon-4g-125',               tags: ['durability'],         forWhom: 'テンション維持性能No.1。張り替え頻度を減らしたい人に。' },
+    { id: 'gosen-polylon-comfort-125',    tags: ['value', 'beginner'],  forWhom: 'コスパに優れた柔らかめポリ。ポリエステル入門の1本目に。' }
+  ];
+
+  return STATIC_TARGETS
+    .map(t => {
+      const s = (typeof getStringById === 'function') ? getStringById(t.id) : null;
+      if (!s) return null; // strings-data.js側でid変更があっても落ちないようにガード
+      return Object.assign({}, s, t);
+    })
+    .filter(Boolean);
+}
+
+const FILTER_LABEL = { beginner: '初心者向け', spin: 'スピン重視', durability: '耐久性重視', value: 'コスパ重視' };
+
+// ---------------------------------------------------------------------
+// クリック計測（将来の人気度分析の土台。現状はlocalStorageに蓄積するのみ）
+// ---------------------------------------------------------------------
+function trackClick(id, action) {
+  try {
+    const raw = localStorage.getItem(SC_CLICK_LOG_KEY);
+    const log = raw ? JSON.parse(raw) : [];
+    log.push({ id, action, ts: Date.now() });
+    while (log.length > SC_CLICK_LOG_MAX) log.shift();
+    localStorage.setItem(SC_CLICK_LOG_KEY, JSON.stringify(log));
+  } catch (e) { /* localStorage不可時は静かに無視 */ }
+}
+
+// ---------------------------------------------------------------------
+// 同時実行数を制限した並列フェッチ（楽天APIの共有APP_IDレート制限対策）
+// ---------------------------------------------------------------------
+async function runWithConcurrency(items, limit, worker) {
+  const results = new Array(items.length);
+  let next = 0;
+  async function runner() {
+    while (next < items.length) {
+      const i = next++;
+      try { results[i] = await worker(items[i], i); }
+      catch (e) { results[i] = null; }
+    }
+  }
+  const runners = Array.from({ length: Math.min(limit, items.length) }, runner);
+  await Promise.all(runners);
+  return results;
+}
+
+async function fetchPriceFor(target) {
+  const kw = (target.searchKeyword || `${target.brand} ${target.model}`) + ' テニスガット';
+  const res = await fetch(`/api/rakuten-search?keyword=${encodeURIComponent(kw)}`);
+  if (!res.ok) return null;
+  const data = await res.json();
+  if (!data.items || !data.items.length) return null;
+  const priced = data.items.filter(i => i.price > 0).sort((a, b) => a.price - b.price);
+  if (!priced.length) return null;
+  const cheapest = priced[0];
+  return {
+    id: target.id,
+    brand: target.brand,
+    model: target.model,
+    tags: target.tags,
+    forWhom: target.forWhom,
+    price: cheapest.price,
+    shopName: cheapest.shopName,
+    itemUrl: cheapest.itemUrl,
+    imageUrl: cheapest.largeImageUrl || cheapest.imageUrl || ''
+  };
+}
+
+// ---------------------------------------------------------------------
+// キャッシュ読み書き（localStorageに6時間）
+// ---------------------------------------------------------------------
+function readCache() {
+  try {
+    const raw = localStorage.getItem(SC_CACHE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed || !Array.isArray(parsed.items) || !parsed.fetchedAt) return null;
+    if (Date.now() - parsed.fetchedAt > SC_CACHE_TTL_MS) return null;
+    return parsed;
+  } catch (e) { return null; }
+}
+
+function writeCache(items, fetchedAt) {
+  try { localStorage.setItem(SC_CACHE_KEY, JSON.stringify({ items, fetchedAt })); }
+  catch (e) { /* 容量超過等は無視。次回また取得し直す */ }
+}
+
+// ---------------------------------------------------------------------
+// 取得〜描画
+// ---------------------------------------------------------------------
+async function loadRanking(forceRefresh) {
+  if (!forceRefresh) {
+    const cached = readCache();
+    if (cached) {
+      scResults = cached.items;
+      scFetchedAt = cached.fetchedAt;
+      renderList();
+      updateUpdatedLabel();
+      return;
+    }
+  }
+
+  const listEl = document.getElementById('sc-list');
+  listEl.innerHTML = '<div class="loading-state"><span class="spin"></span>楽天市場の価格を取得しています…</div>';
+  document.getElementById('sc-updated').textContent = '価格を取得中です…';
+  const btn = document.getElementById('sc-refresh-btn');
+  btn.disabled = true;
+
+  const targets = resolveTargets();
+  const fetched = await runWithConcurrency(targets, SC_FETCH_CONCURRENCY, fetchPriceFor);
+  const items = fetched.filter(Boolean).sort((a, b) => a.price - b.price);
+
+  scResults = items;
+  scFetchedAt = Date.now();
+  btn.disabled = false;
+
+  if (!items.length) {
+    listEl.innerHTML = '<div class="loading-state">価格情報を取得できませんでした。時間をおいて再度お試しください。</div>';
+    document.getElementById('sc-updated').textContent = '';
+    return;
+  }
+
+  writeCache(items, scFetchedAt);
+  renderList();
+  updateUpdatedLabel();
+}
+
+function refreshRanking() { loadRanking(true); }
+
+function updateUpdatedLabel() {
+  const el = document.getElementById('sc-updated');
+  if (!scFetchedAt) { el.textContent = ''; return; }
+  const d = new Date(scFetchedAt);
+  el.innerHTML = `価格取得日時: <strong>${d.toLocaleString('ja-JP')}</strong>`;
+}
+
+function setFilter(filter) {
+  scFilter = filter;
+  document.querySelectorAll('#sc-filters .filter-btn').forEach(b => b.classList.toggle('active', b.dataset.filter === filter));
+  renderList(); // 追加のAPI通信は発生させず、取得済みデータをクライアント側でフィルタするのみ
+}
+
+function renderList() {
+  const listEl = document.getElementById('sc-list');
+  const items = scFilter === 'all' ? scResults : scResults.filter(it => it.tags.includes(scFilter));
+
+  if (!items.length) {
+    listEl.innerHTML = '<div class="loading-state">条件に合うガットが見つかりませんでした。</div>';
+    return;
+  }
+
+  const rows = items.map((it, i) => {
+    const rank = i + 1;
+    const thumb = it.imageUrl
+      ? `<img src="${it.imageUrl}" alt="${escapeHtml(it.model)}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=rank-thumb-fallback>🎾</div>'">`
+      : '<div class="rank-thumb-fallback">🎾</div>';
+    const tags = it.tags.map(t => `<span class="rank-tag">${FILTER_LABEL[t] || t}</span>`).join('');
+    const detailHref = `/index.html#string-detail/${encodeURIComponent(it.id)}`;
+    return `<div class="rank-item">
+      <div class="rank-num">${rank}</div>
+      <div class="rank-thumb">${thumb}</div>
+      <div class="rank-info">
+        <div class="rank-brand">${escapeHtml(it.brand)}</div>
+        <div class="rank-name">${escapeHtml(it.model)}</div>
+        <div class="rank-for">${escapeHtml(it.forWhom || '')}</div>
+        <div class="rank-tags">${tags}</div>
+      </div>
+      <div class="rank-price-col">
+        <div class="rank-price">¥${it.price.toLocaleString()}</div>
+        <div class="rank-shop">${escapeHtml(it.shopName || '')}</div>
+        <div class="rank-cta-row">
+          <a class="rank-cta-btn rank-cta-detail" href="${detailHref}" onclick="trackClick('${it.id}','detail')">商品詳細を見る</a>
+          <a class="rank-cta-btn rank-cta-rakuten" href="${it.itemUrl}" target="_blank" rel="noopener" onclick="trackClick('${it.id}','rakuten')">楽天で価格を見る →</a>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  listEl.innerHTML = `<div class="ranking-list">${rows}</div>`;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+document.addEventListener('DOMContentLoaded', () => loadRanking(false));
+</script>
+</body>
+</html>

@@ -4008,15 +4008,40 @@ window.onload = function() {
   // URLハッシュから初期画面を判定
   const hash = location.hash.replace('#', '');
   if (hash && hash !== 'home') {
-    // /strings-cheap.html 等の外部ページからのディープリンク（#string-detail/{id}）に対応
-    const stringDetailMatch = hash.match(/^string-detail\/(.+)$/);
-    if (stringDetailMatch) {
-      selectString(decodeURIComponent(stringDetailMatch[1]));
-    } else {
-      navigate(hash, true);
-    }
+    restoreViewFromHash(hash);
   }
 };
+
+// フルリロード・外部/共有リンク等でのアクセス時に、popstateハンドラと同じロジックで
+// ビュー状態を復元する。パラメータ付きルート（#detail/{id} 等）はview名がそのまま
+// 要素IDと一致しないため、navigate()だけでは復元できず、対応するselectXxx()を
+// 呼んで画像・詳細情報を含む完全な状態を再構築する必要がある。
+// （このルーティングの穴は初回コミットから存在しており、#string-detail/{id} だけを
+// 　個別対応していたのを、既存の全パラメータ付きルートに一般化して修正）
+function restoreViewFromHash(hash) {
+  let m;
+  if ((m = hash.match(/^string-detail\/(.+)$/))) {
+    selectString(decodeURIComponent(m[1]));
+  } else if ((m = hash.match(/^string-series\/([^/]+)\/(.+)$/))) {
+    selectStringSeries(decodeURIComponent(m[1]), decodeURIComponent(m[2]));
+  } else if ((m = hash.match(/^string-brand\/(.+)$/))) {
+    selectStringBrand(decodeURIComponent(m[1]));
+  } else if ((m = hash.match(/^grip-detail\/(.+)$/))) {
+    selectGrip(decodeURIComponent(m[1]));
+  } else if ((m = hash.match(/^grip-brand\/(.+)$/))) {
+    selectGripBrand(decodeURIComponent(m[1]));
+  } else if ((m = hash.match(/^accessory-detail\/(.+)$/))) {
+    selectAccessory(decodeURIComponent(m[1]));
+  } else if ((m = hash.match(/^series\/([^/]+)\/(.+)$/))) {
+    selectSeries(decodeURIComponent(m[1]), decodeURIComponent(m[2]));
+  } else if ((m = hash.match(/^brand\/(.+)$/))) {
+    selectBrand(decodeURIComponent(m[1]));
+  } else if ((m = hash.match(/^detail\/(.+)$/))) {
+    selectRacket(decodeURIComponent(m[1]));
+  } else {
+    navigate(hash, true);
+  }
+}
 
 // ブラウザの戻る/進むに対応
 window.addEventListener('popstate', (e) => {

@@ -2,9 +2,10 @@
 // URL: /api/rakuten-search?keyword=...&janCode=...
 
 const APP_ID = '7b627f1f-1924-415a-99fd-288cf2a9cfde';
-const ACCESS_KEY = 'pk_IgvEkDTYVvSiaBtknnPRI49moxxWNTumxumFqtFtvMz';
 const AFFILIATE_ID = '5025c3cb.15c5bf2c.5025c3cc.9bf454b7';
-const API_ENDPOINT = 'https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20220601';
+// 2026-02の楽天API仕様変更・2026-08-17の旧エンドポイント廃止に伴い、最新バージョンのパスに更新
+// バージョン日付は https://webservice.rakuten.co.jp/documentation/ichiba-item-search 記載の値
+const API_ENDPOINT = 'https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Search/20260701';
 
 // エッジキャッシュTTL（秒）: 同じ検索は1時間はCloudflareのCDNから返す
 const EDGE_CACHE_TTL = 3600;
@@ -38,9 +39,13 @@ function mapItem(i) {
 }
 
 export async function onRequest(context) {
-  const { request } = context;
+  const { request, env } = context;
   const url = new URL(request.url);
   const params = url.searchParams;
+
+  // 楽天デベロッパーコンソールの「アクセスキー」。Cloudflare Pagesの環境変数
+  // RAKUTEN_ACCESS_KEY に設定する（リポジトリにはハードコードしない）。
+  const ACCESS_KEY = (env && env.RAKUTEN_ACCESS_KEY) || '';
 
   const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -89,9 +94,10 @@ export async function onRequest(context) {
     const response = await fetch(apiUrl, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${ACCESS_KEY}`,
+        // Authorization: Bearer ヘッダーは付けない。accessKeyはクエリパラメータのみで送る
+        // （Bearerヘッダーを併用するとaccessKeyが認識されないエラーになる報告があるため）
         'Accept': 'application/json',
-        'Referer': 'https://loveteni.pages.dev/',
+        'Referer': 'https://loveteni.pages.dev',
         'Origin': 'https://loveteni.pages.dev',
         'User-Agent': 'Mozilla/5.0 (Linux; Cloudflare Workers) LoveteniBot/1.0'
       }

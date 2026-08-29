@@ -10,6 +10,23 @@ const API_ENDPOINT = 'https://openapi.rakuten.co.jp/ichibams/api/IchibaItem/Sear
 // エッジキャッシュTTL（秒）: 同じ検索は1時間はCloudflareのCDNから返す
 const EDGE_CACHE_TTL = 3600;
 
+// 楽天APIへのリクエスト1回あたりのタイムアウト（ms）。
+// jan検索が外れた場合キーワード検索へフォールバックし最大2回連続で呼ぶことがあるため、
+// 1回あたりを短めにして合計でもクライアント側の総タイムアウト(7秒)に収まるようにする。
+const RAKUTEN_FETCH_TIMEOUT_MS = 4000;
+// 429（レート制限）等のエラーをエッジキャッシュする短時間TTL（秒）。連続リクエストで429を連発させない。
+const ERROR_CACHE_TTL = 20;
+
+async function fetchWithTimeout(url, options, timeoutMs) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    return await fetch(url, { ...options, signal: controller.signal });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 function janCodeMatches(janCode, itemName) {
   if (!janCode || !itemName) return false;
   const normalize = (s) => s.toUpperCase().replace(/[\s\-]/g, '');
@@ -91,17 +108,23 @@ export async function onRequest(context) {
       imageFlag: '1'
     });
     const apiUrl = `${API_ENDPOINT}?${urlParams.toString()}`;
-    const response = await fetch(apiUrl, {
-      method: 'GET',
-      headers: {
-        // Authorization: Bearer ヘッダーは付けない。accessKeyはクエリパラメータのみで送る
-        // （Bearerヘッダーを併用するとaccessKeyが認識されないエラーになる報告があるため）
-        'Accept': 'application/json',
-        'Referer': 'https://loveteni.pages.dev',
-        'Origin': 'https://loveteni.pages.dev',
-        'User-Agent': 'Mozilla/5.0 (Linux; Cloudflare Workers) LoveteniBot/1.0'
-      }
-    });
+    let response;
+    try {
+      response = await fetchWithTimeout(apiUrl, {
+        method: 'GET',
+        headers: {
+          // Authorization: Bearer ヘッダーは付けない。accessKeyはクエリパラメータのみで送る
+          // （Bearerヘッダーを併用するとaccessKeyが認識されないエラーになる報告があるため）
+          'Accept': 'application/json',
+          'Referer': 'https://loveteni.pages.dev',
+          'Origin': 'https://loveteni.pages.dev',
+          'User-Agent': 'Mozilla/5.0 (Linux; Cloudflare Workers) LoveteniBot/1.0'
+        }
+      }, RAKUTEN_FETCH_TIMEOUT_MS);
+    } catch (e) {
+      // タイムアウト（AbortError）やネットワーク断もここに来る。無限待機はさせない。
+      return { error: e && e.name === 'AbortError' ? 'timeout' : 'network_error', detail: e.message || '', items: [] };
+    }
     const responseText = await response.text();
     if (!response.ok) return { error: `HTTP ${response.status}`, detail: responseText.substring(0, 300), items: [] };
     let data;
@@ -134,10 +157,18 @@ export async function onRequest(context) {
 
     const result = await runSearch(searchKey);
     if (result.error) {
-      // エラーはキャッシュしない（短いTTLでブラウザに返す）
-      return new Response(JSON.stringify({
+      // エラー（429連発含む）は短時間だけエッジキャッシュし、同一URLへの直後の再リクエストが
+      // 毎回楽天APIまで到達しないようにする（429の連鎖を抑える）。長くキャッシュすると
+      // 復旧後も失敗扱いが続いてしまうためTTLは短く保つ。
+      const errorBody = JSON.stringify({
         items: [], count: 0, searchKey, error: result.error, errorDetail: result.detail
-      }), { status: 200, headers: { ...corsHeaders, 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=60' } });
+      });
+      const errorResponse = new Response(errorBody, {
+        status: 200,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json', 'Cache-Control': `public, max-age=${ERROR_CACHE_TTL}` }
+      });
+      context.waitUntil(cache.put(cacheKey, errorResponse.clone()));
+      return errorResponse;
     }
 
     let items = result.items;

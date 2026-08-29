@@ -4429,6 +4429,113 @@ function setCachedSeriesItems(key, items) {
   saveSeriesCache();
 }
 
+// ===== 詳細ページの楽天価格取得（一覧ページの画像取得キューから完全分離） =====
+// 一覧ページ（loadSeriesImages/loadOneImage/loadItemImage）は下の rakutenFetch/_rkQueue を使うが、
+// 詳細ページの価格取得は専用のキュー・タイムアウト・リトライ・キャッシュを持つ別経路にする。
+// これにより「一覧ページの画像取得が詰まっていると詳細ページの価格表示が長時間待たされる」問題を解消する。
+let _rkDetailQueue = Promise.resolve();
+let _rkDetailLastTime = 0;
+const RK_DETAIL_MIN_GAP = 1500; // ms（楽天APIレート制限対策。詳細ページ専用キュー内でのみ適用）
+const RK_DETAIL_TIMEOUT = 7000; // ms：リトライも含めた総上限。これを超えたら必ず打ち切る（無限待機防止）
+const RK_DETAIL_MAX_RETRY = 1;  // 429/500時の最大リトライ回数（合計で最大2回まで試行）
+
+// abort可能なsleep（タイムアウト発火時に即座に待機を打ち切る）
+function _sleepAbortable(ms, signal) {
+  return new Promise(resolve => {
+    const t = setTimeout(resolve, ms);
+    if (signal) signal.addEventListener('abort', () => { clearTimeout(t); resolve(); }, { once: true });
+  });
+}
+
+function rakutenFetchDetail(url, signal) {
+  const run = async () => {
+    const wait = _rkDetailLastTime + RK_DETAIL_MIN_GAP - Date.now();
+    if (wait > 0) await _sleepAbortable(wait, signal);
+    _rkDetailLastTime = Date.now();
+    return fetch(url, { signal });
+  };
+  const p = _rkDetailQueue.then(run, run);
+  _rkDetailQueue = p.then(() => {}, () => {});
+  return p;
+}
+
+// ===== 詳細ページ価格の短時間キャッシュ（成功10分・失敗60秒）=====
+// 同じ商品を短時間に何度も楽天APIへ問い合わせないようにする。429連発の防止にもなる。
+const PRICE_CACHE_KEY = 'loveteni_price_cache_v1';
+const PRICE_SUCCESS_TTL = 10 * 60 * 1000;
+const PRICE_ERROR_TTL = 60 * 1000;
+let _priceCache = null;
+function _loadPriceCache() {
+  if (_priceCache) return _priceCache;
+  try {
+    const raw = sessionStorage.getItem(PRICE_CACHE_KEY);
+    _priceCache = raw ? JSON.parse(raw) : {};
+  } catch(e) { _priceCache = {}; }
+  return _priceCache;
+}
+function getCachedPrice(key) {
+  const c = _loadPriceCache();
+  const entry = c[key];
+  if (!entry) return null;
+  const ttl = entry.error ? PRICE_ERROR_TTL : PRICE_SUCCESS_TTL;
+  if (Date.now() - entry.t > ttl) return null;
+  return entry;
+}
+function setCachedPrice(key, entry) {
+  const c = _loadPriceCache();
+  c[key] = { ...entry, t: Date.now() };
+  try { sessionStorage.setItem(PRICE_CACHE_KEY, JSON.stringify(c)); } catch(e) {}
+}
+
+// 詳細ページの価格取得を「失敗時のメッセージ表示」に統一する
+function showRakutenError(c, section) {
+  if (section) section.style.display = '';
+  if (c) c.innerHTML = '<div class="loading">現在価格情報を取得できません</div>';
+}
+
+// 詳細ページ用の楽天検索本体：キャッシュ→専用キュー→総タイムアウト→限定リトライ
+// 戻り値: { items: [...] } または { error: true }（無限待機・無限リトライは発生しない）
+async function fetchRakutenDetailData(fetchUrl, cacheKey) {
+  const cached = getCachedPrice(cacheKey);
+  if (cached) return cached;
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), RK_DETAIL_TIMEOUT);
+  try {
+    let attempt = 0;
+    while (true) {
+      try {
+        const res = await rakutenFetchDetail(fetchUrl, controller.signal);
+        const data = await res.json();
+        if (data.error && /429|500/.test(String(data.error)) && attempt < RK_DETAIL_MAX_RETRY && !controller.signal.aborted) {
+          attempt++;
+          await _sleepAbortable(600 + Math.random() * 300, controller.signal);
+          continue;
+        }
+        if (data.error) {
+          const result = { error: true };
+          setCachedPrice(cacheKey, result);
+          return result;
+        }
+        const result = { items: data.items || [] };
+        setCachedPrice(cacheKey, result);
+        return result;
+      } catch (e) {
+        if (attempt < RK_DETAIL_MAX_RETRY && !controller.signal.aborted) {
+          attempt++;
+          await _sleepAbortable(600, controller.signal);
+          continue;
+        }
+        const result = { error: true };
+        setCachedPrice(cacheKey, result);
+        return result;
+      }
+    }
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 // 商品名からベストマッチを選ぶ
 function pickBestMatch(r, items) {
   if (!items || items.length === 0) return null;
@@ -4719,12 +4826,13 @@ function selectRacket(id) {
   if (!isHistoryNav) history.pushState({ view: 'detail', racketId: id }, '', `#detail/${id}`);
 }
 
-async function loadRakutenResults(r, retry = 0) {
+async function loadRakutenResults(r) {
   const c = document.getElementById('rakuten-results');
   const section = c ? c.closest('.rakuten-section') : null;
   if (section) section.style.display = '';
   const cacheKey = imgCacheKey(r);
   const kw = r.searchKeyword || `${r.brand} ${r.model}`;
+  const priceCacheKey = `racket__${cacheKey}`;
 
   // キャッシュ済み画像があれば即表示
   const cachedImg = getCachedImg(cacheKey);
@@ -4732,52 +4840,44 @@ async function loadRakutenResults(r, retry = 0) {
     document.getElementById('detail-img-area').innerHTML = `<img src="${cachedImg}" alt="${r.model}" onerror="this.parentElement.innerHTML='<div class=empty-icon>🎾</div>'">`;
   }
 
-  c.innerHTML = '<div class="loading"><span class="spin"></span>楽天を検索中...</div>';
-  try {
-    // 品番があれば品番検索（高精度）、なければキーワード検索
-    let fetchUrl;
-    if (r.janCode) {
-      fetchUrl = `/api/rakuten-search?janCode=${encodeURIComponent(r.janCode)}&keyword=${encodeURIComponent(kw)}`;
-    } else {
-      fetchUrl = `/api/rakuten-search?keyword=${encodeURIComponent(kw)}`;
-    }
-    const res = await rakutenFetch(fetchUrl);
-    const data = await res.json();
+  // 価格キャッシュがあれば「検索中」表示なしで即描画（余計なチラつきを防ぐ）
+  const cachedPrice = getCachedPrice(priceCacheKey);
+  if (!cachedPrice) {
+    c.innerHTML = '<div class="loading"><span class="spin"></span>楽天を検索中...</div>';
+  }
 
-    // レート制限(429)やサーバエラー(500)は少し待って自動リトライ
-    if (data.error && /429|500/.test(String(data.error)) && retry < 4) {
-      c.innerHTML = '<div class="loading"><span class="spin"></span>楽天が混雑中…再試行します</div>';
-      setTimeout(() => loadRakutenResults(r, retry + 1), 1500 + retry * 1000 + Math.random() * 600);
-      return;
-    }
+  // 品番があれば品番検索（高精度）、なければキーワード検索
+  let fetchUrl;
+  if (r.janCode) {
+    fetchUrl = `/api/rakuten-search?janCode=${encodeURIComponent(r.janCode)}&keyword=${encodeURIComponent(kw)}`;
+  } else {
+    fetchUrl = `/api/rakuten-search?keyword=${encodeURIComponent(kw)}`;
+  }
 
-    if (!data.items || !data.items.length) {
-      if (section) section.style.display = 'none';
-      return;
-    }
+  const result = cachedPrice || await fetchRakutenDetailData(fetchUrl, priceCacheKey);
+  if (result.error) { showRakutenError(c, section); return; }
 
-    // ★ 表示前に「ラケット本体らしくない」商品を強力に除外
-    const filteredItems = filterRacketItems(data.items, r);
-    // フィルタで全部消えた = 水着/ヘルメット等の無関係商品しか無い場合は非表示
-    if (filteredItems.length === 0) {
-      if (section) section.style.display = 'none';
-      return;
-    }
-    const itemsToShow = filteredItems;
+  // ★ 表示前に「ラケット本体らしくない」商品を強力に除外
+  const filteredItems = filterRacketItems(result.items || [], r);
+  // フィルタで全部消えた = 水着/ヘルメット等の無関係商品しか無い場合は非表示
+  if (filteredItems.length === 0) {
+    if (section) section.style.display = 'none';
+    return;
+  }
+  const itemsToShow = filteredItems;
 
-    // 詳細上部の画像は pickBestMatch を通して最良の1点を選ぶ
-    const bestForImage = r.janCode
-      ? itemsToShow[0]
-      : (pickBestMatch(r, itemsToShow) || itemsToShow[0]);
-    if (bestForImage && bestForImage.largeImageUrl) {
-      setCachedImg(cacheKey, bestForImage.largeImageUrl, bestForImage);
-      document.getElementById('detail-img-area').innerHTML = `<img src="${bestForImage.largeImageUrl}" alt="${r.model}" onerror="this.parentElement.innerHTML='<div class=empty-icon>🎾</div>'">`;
-    }
-    const hasProspo = itemsToShow.some(i => i.isProSports);
-    const headerLabel = hasProspo ? '🏪 PRO SPORTS優先表示' : '🏪 楽天市場';
-    const amazonKw = (r.searchKeyword || `${r.brand} ${r.model}`) + ' テニスラケット';
-    showRkOffers(c, itemsToShow, headerLabel, amazonKw);
-  } catch(e) { c.innerHTML = '<div class="loading">読み込みに失敗しました</div>'; }
+  // 詳細上部の画像は pickBestMatch を通して最良の1点を選ぶ
+  const bestForImage = r.janCode
+    ? itemsToShow[0]
+    : (pickBestMatch(r, itemsToShow) || itemsToShow[0]);
+  if (bestForImage && bestForImage.largeImageUrl) {
+    setCachedImg(cacheKey, bestForImage.largeImageUrl, bestForImage);
+    document.getElementById('detail-img-area').innerHTML = `<img src="${bestForImage.largeImageUrl}" alt="${r.model}" onerror="this.parentElement.innerHTML='<div class=empty-icon>🎾</div>'">`;
+  }
+  const hasProspo = itemsToShow.some(i => i.isProSports);
+  const headerLabel = hasProspo ? '🏪 PRO SPORTS優先表示' : '🏪 楽天市場';
+  const amazonKw = (r.searchKeyword || `${r.brand} ${r.model}`) + ' テニスラケット';
+  showRkOffers(c, itemsToShow, headerLabel, amazonKw);
 }
 
 // 楽天結果から「ラケット本体らしくない」商品を除外
@@ -5527,30 +5627,36 @@ function selectGrip(id) {
   if (!isHistoryNav) history.pushState({ view: 'grip-detail', gripId: id }, '', `#grip-detail/${id}`);
 }
 
-// ガット・グリップ共通の楽天検索（品番なし、キーワードのみ）
+// ガット・グリップ・用品共通の楽天検索（品番なし、キーワードのみ）
 async function loadRakutenResultsGeneric(item, resultsId, imgAreaId, suffix) {
   const c = document.getElementById(resultsId);
   if (!c) return;
   const section = c.closest('.rakuten-section');
   if (section) section.style.display = '';
   const kw = (item.searchKeyword || `${item.brand} ${item.model}`) + ' ' + suffix;
-  c.innerHTML = '<div class="loading"><span class="spin"></span>楽天を検索中...</div>';
-  try {
-    const res = await rakutenFetch(`/api/rakuten-search?keyword=${encodeURIComponent(kw)}`);
-    const data = await res.json();
-    if (!data.items || !data.items.length) {
-      if (section) section.style.display = 'none';
-      return;
-    }
-    const first = data.items.find(i => i.largeImageUrl);
-    if (first) {
-      const imgArea = document.getElementById(imgAreaId);
-      if (imgArea) imgArea.innerHTML = `<img src="${first.largeImageUrl}" alt="${item.model}" onerror="this.parentElement.innerHTML='<div class=empty-icon>🎾</div>'">`;
-    }
-    const hasProspo = data.items.some(i => i.isProSports);
-    const headerLabel = hasProspo ? '🏪 PRO SPORTS優先表示' : '🏪 楽天市場';
-    showRkOffers(c, data.items, headerLabel, kw);
-  } catch(e) { c.innerHTML = '<div class="loading">読み込みに失敗しました</div>'; }
+  const priceCacheKey = `generic__${resultsId}__${kw}`;
+
+  const cachedPrice = getCachedPrice(priceCacheKey);
+  if (!cachedPrice) {
+    c.innerHTML = '<div class="loading"><span class="spin"></span>楽天を検索中...</div>';
+  }
+
+  const result = cachedPrice || await fetchRakutenDetailData(`/api/rakuten-search?keyword=${encodeURIComponent(kw)}`, priceCacheKey);
+  if (result.error) { showRakutenError(c, section); return; }
+
+  const items = result.items || [];
+  if (!items.length) {
+    if (section) section.style.display = 'none';
+    return;
+  }
+  const first = items.find(i => i.largeImageUrl);
+  if (first) {
+    const imgArea = document.getElementById(imgAreaId);
+    if (imgArea) imgArea.innerHTML = `<img src="${first.largeImageUrl}" alt="${item.model}" onerror="this.parentElement.innerHTML='<div class=empty-icon>🎾</div>'">`;
+  }
+  const hasProspo = items.some(i => i.isProSports);
+  const headerLabel = hasProspo ? '🏪 PRO SPORTS優先表示' : '🏪 楽天市場';
+  showRkOffers(c, items, headerLabel, kw);
 }
 
 // ===== QUIZ =====

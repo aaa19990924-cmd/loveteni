@@ -994,6 +994,23 @@ section {
   min-width: 180px;
   margin-bottom: 0;
 }
+/* 主導線（楽天）は常に先頭・全幅・大きめサイズで強調し、副導線（Amazon・ロール）は
+   その下に小さめで並べる。既存の深緑アクセントを縁取りに使い、色そのものは
+   過度な原色演出にしない（サイズ・位置・アクセントの縁取りで視認性を上げる方針）。 */
+.detail-cta-row .detail-cta-rakuten {
+  order: -1;
+  flex: 1 1 100%;
+  padding: 20px;
+  font-size: 15px;
+  box-shadow: 0 0 0 2px var(--accent), 0 8px 20px rgba(0,81,58,0.16);
+}
+.detail-cta-row .detail-cta-amazon,
+.detail-cta-row .detail-cta-rakuten-roll {
+  flex: 1 1 auto;
+  min-width: 160px;
+  padding: 12px;
+  font-size: 12px;
+}
 .detail-cta-btn {
   display: block;
   width: 100%;
@@ -1425,6 +1442,26 @@ section {
   font-size: 10px;
   color: var(--mute);
   margin-bottom: 8px;
+}
+.rakuten-item-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+.rakuten-item-badge {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.02em;
+  padding: 2px 6px;
+  border: 1px solid var(--line-strong);
+  color: var(--mute);
+  border-radius: 3px;
+  white-space: nowrap;
+}
+.rakuten-item-badge.badge-ship {
+  border-color: var(--accent);
+  color: var(--accent);
 }
 .rakuten-item-price {
   font-family: 'DM Sans', sans-serif;
@@ -4774,6 +4811,7 @@ function renderRkOffers(){
       <div class="rakuten-item-info">
         <div class="rakuten-item-name">${it.name}</div>
         <div class="rakuten-item-shop">${it.shopName}</div>
+        ${buildOfferBadges(it)}
         <div class="rakuten-item-price">¥${(it.price||0).toLocaleString()}${badge}</div>
         <div class="rakuten-item-point">
           <div class="rakuten-item-point-num">+${pt.toLocaleString()}pt〜</div>
@@ -4787,6 +4825,21 @@ function renderRkOffers(){
     ? `<div class="amazon-compare-row"><a href="https://www.amazon.co.jp/s?k=${encodeURIComponent(st.amazonKeyword)}&tag=loveteni-22" target="_blank" class="amazon-compare-btn"><span class="amazon-compare-icon">a</span>Amazonでも比較する</a><span class="amazon-compare-note">※Amazonの価格は別途確認してください</span></div>`
     : '';
   st.container.innerHTML = header + toggle + note + `<div class="rakuten-grid">${grid}</div>` + amazonBtn;
+}
+// レビュー件数・評価・送料情報のテキストバッジ（絵文字は使わない）。
+// いずれも /api/rakuten-search が既に返している項目のみを使い、追加のAPI呼び出しは発生させない。
+function buildOfferBadges(it){
+  const badges = [];
+  if (it.reviewCount > 0) {
+    const avg = it.reviewAverage ? Number(it.reviewAverage).toFixed(1) : '';
+    badges.push(`<span class="rakuten-item-badge">レビュー${it.reviewCount.toLocaleString()}件${avg ? ' 評価'+avg : ''}</span>`);
+  }
+  if (it.postageFlag === 0) {
+    badges.push(`<span class="rakuten-item-badge badge-ship">送料込み</span>`);
+  } else if (it.postageFlag === 1) {
+    badges.push(`<span class="rakuten-item-badge">送料別</span>`);
+  }
+  return badges.length ? `<div class="rakuten-item-badges">${badges.join('')}</div>` : '';
 }
 function setRkSort(by){ _rkOffers.sort = by; renderRkOffers(); }
 function showRkOffers(container, items, headerLabel, amazonKeyword){

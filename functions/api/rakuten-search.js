@@ -51,6 +51,8 @@ function mapItem(i) {
     largeImageUrl: imageUrl.replace(/_ex=\d+x\d+/, '_ex=400x400') || imageUrl,
     reviewCount: i.reviewCount || 0,
     reviewAverage: i.reviewAverage || 0,
+    // postageFlag: 0 = 送料込み, 1 = 送料別（楽天APIレスポンスにそのまま含まれる項目。追加API呼び出しは発生しない）
+    postageFlag: typeof i.postageFlag === 'number' ? i.postageFlag : null,
     isProSports: (i.shopCode || '').toLowerCase() === 'prospo'
   };
 }

@@ -1096,6 +1096,7 @@ function accCard(a) {
 // ===== Rakuten =====
 function openRakutenSearch(keyword) {
   const url = 'https://search.rakuten.co.jp/search/mall/' + encodeURIComponent(keyword) + '/?f=1&grp=product&sid=211832&scid=af_ich_link_tbl&icm_agf=loveteni-22';
+  if (window.ltTrackRakutenClick) window.ltTrackRakutenClick({ source: 'openRakutenSearch', label: keyword, url });
   window.open(url, '_blank');
 }
 

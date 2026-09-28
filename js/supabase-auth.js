@@ -50,6 +50,10 @@ async function initAuth() {
         showAuthToast('ログインしました 🎾');
       }
       window.ltUserActionPending = null;
+      // アクセス解析ページ表示中ならログイン後の権限で再描画
+      if (document.getElementById('view-analytics')?.classList.contains('active') && typeof renderAnalyticsView === 'function') {
+        renderAnalyticsView();
+      }
     }
     if (event === 'SIGNED_OUT') {
       if (pending === 'signout') {
@@ -59,6 +63,10 @@ async function initAuth() {
       // マイギアページ表示中ならホームへ
       if (document.getElementById('view-mygear')?.classList.contains('active')) {
         navigate('home');
+      }
+      // アクセス解析ページ表示中ならログイン画面に戻す
+      if (document.getElementById('view-analytics')?.classList.contains('active') && typeof renderAnalyticsView === 'function') {
+        renderAnalyticsView();
       }
     }
   });

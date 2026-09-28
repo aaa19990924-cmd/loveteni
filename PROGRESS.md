@@ -24,7 +24,7 @@
 | STEP6 部活カテゴリ整理 | 完了 | index.html, racket-data.js, strings-data.js, grips-data.js |
 | STEP7 保護者向けコンテンツ | 完了 | parents.html（新規）, js/site-header.js, index.html |
 | STEP8 顧問・コーチ向け練習生成 | 完了 | coach.html（新規）, js/site-header.js, index.html |
-| STEP9 アクセス解析・収益分析 | 未着手 | |
+| STEP9 アクセス解析・収益分析 | 完了 | js/analytics.js（新規）, supabase/analytics-schema.sql（新規）, js/site-header.js, js/supabase-auth.js, index.html, equipment.html |
 
 ## STEP3 詳細（完了）
 
@@ -81,8 +81,21 @@
 - ナビゲーションへの統合: `js/site-header.js`のNAV配列・index.htmlのgnav・フッターHELP列の3箇所に「練習メニュー」リンクを追加
 - Node上で`generatePractice`を5パターンの入力（30分〜240分、人数6〜40名、レベル3種）で実行し、各配分の合計が入力した練習時間と完全に一致することを確認。ステッパーの上限/下限クランプも境界値で確認済み（実ブラウザでの印刷レイアウト・クリップボード動作の確認は未実施）
 
-## 人が確認・設定すべき項目（随時追記）
+## STEP9 詳細（完了）
 
-- [ ] Cloudflare Web Analytics: ダッシュボードでサイト登録し、発行されたトークンで `CF_BEACON_TOKEN`（site-header.js / index.html内）を置き換える
-- [ ] Supabase SQL Editorで `supabase/analytics-schema.sql` を実行し `link_clicks` テーブルを作成する
-- [ ] `supabase/analytics-schema.sql` 内のダミー管理者メール、および index.html 内の `ADMIN_EMAIL` 定数を実際の管理者メールアドレスに書き換える（両方を揃えないと集計ページは閲覧できない仕様）
+- 新規`js/analytics.js`（全ページ共通、index.htmlは直接読み込み、他の静的ページは`js/site-header.js`が自動注入）:
+  1. `window.ltTrackRakutenClick(meta)` — 各所から呼べる計測関数。localStorage（`lt_click_log_v1`、strings-cheap.htmlの既存`trackClick`と同じ発想を踏襲）と、Supabaseの`link_clicks`テーブルへのfire-and-forget送信の両方を行う
+  2. `<a href="...rakuten.co.jp...">` へのクリックを自動捕捉するdocument全体のクリックリスナー（新しいボタンを追加しても自動でカバーされる保険）
+  3. Cloudflare Web Analyticsのビーコン挿入（`CF_BEACON_TOKEN`がダミー値の間は挿入しない設計。無駄な404を出さないため）
+- `window.open()`でリンクを開く経路（`<a href>`を経由しないためリスナー②では捕捉できない）は個別に計測を追加: index.htmlの`openRakuten`/`openRakutenString`/`openRakutenGrip`/`openRakutenStringRoll`、equipment.htmlの`openRakutenSearch`
+- 新規`supabase/analytics-schema.sql`: `link_clicks`テーブルのDDLとRLS（誰でもINSERT可・管理者メールのみSELECT可）。**実行はこのセッションではできないため、人がSupabase側で実行する必要がある**
+- index.html に新規SPAビュー`view-analytics`を追加（新規の認証つき静的ページは作らず、既存のSupabase auth・ログインモーダルをそのまま再利用）。管理者メール（`ADMIN_EMAIL`、ダミー値）と一致する場合のみ、直近500件のクリックログをページ別・商品別に集計して表示。フッターの「アクセス解析」リンクから遷移（目立たせすぎないよう主要ナビには追加していない）
+- `js/supabase-auth.js`のSIGNED_IN/SIGNED_OUTハンドラに、アクセス解析ページ表示中なら再描画するフックを追加
+- Node上で(1)`ltTrackRakutenClick`がSupabaseへ正しい形式でPOSTしlocalStorageにも記録すること (2)`renderAnalyticsView`が未ログイン/権限なし/正常系（50件のモックデータでページ別・商品別集計が正しい件数になること）を確認済み（実ブラウザでの表示・本番Supabase/Cloudflareでの動作確認は未実施）
+
+## 人が確認・設定すべき項目（まとめ）
+
+- [ ] **Cloudflare Web Analytics**: Cloudflareダッシュボード → Analytics & Logs → Web Analytics でサイトを追加し、発行されたトークンで `js/analytics.js` 内の `CF_BEACON_TOKEN`（ダミー値 `'YOUR_CF_BEACON_TOKEN'`）を置き換える
+- [ ] **Supabaseテーブル作成**: Supabase Dashboard の SQL Editor で `supabase/analytics-schema.sql` を実行し `link_clicks` テーブルを作成する（実行するまでクリック計測は静かに失敗し続けるだけでサイトの動作には影響しない）
+- [ ] **管理者メールアドレスの設定**: `supabase/analytics-schema.sql` 内のダミー管理者メール、および `index.html` 内の `const ADMIN_EMAIL = 'ADMIN_EMAIL_PLACEHOLDER@example.com';` を、実際に管理者としてログインするアカウントのメールアドレスに書き換える（**両方を同じ値に揃えないと「アクセス解析」ページは常に非表示のまま**）
+- [ ] 上記3点の設定後、本番環境（loveteni.pages.dev）で実際に楽天リンクをクリックし、`link_clicks`テーブルに行が増えること・「アクセス解析」ページ（フッター内リンク、管理者ログイン後）に集計が表示されることを確認する

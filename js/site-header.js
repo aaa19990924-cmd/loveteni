@@ -172,6 +172,13 @@
   parent.insertBefore(headerNode, script);
   parent.insertBefore(toplineNode, headerNode);
 
+  /* ── STEP9: 楽天クリック計測 + Cloudflare Web Analytics（全静的ページ共通） ── */
+  if (!document.querySelector('script[src="/js/analytics.js"]')) {
+    var analyticsScript = document.createElement('script');
+    analyticsScript.src = '/js/analytics.js';
+    document.head.appendChild(analyticsScript);
+  }
+
   /* ── Date ───────────────────────────────────────── */
   var dateEl = document.getElementById('sh-date');
   if (dateEl) {

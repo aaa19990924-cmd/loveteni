@@ -110,6 +110,7 @@
     { label: 'ランキング',   href: '/ranking.html' },
     { label: '乱数表',       href: '/court-draw.html' },
     { label: '最安ガット',   href: '/strings-cheap.html' },
+    { label: '保護者ガイド', href: '/parents.html' },
   ];
 
   function isActive(href) {

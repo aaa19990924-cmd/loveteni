@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>保護者の方へ | LOVETENI ラブテニ</title>
+<meta name="description" content="お子さんのテニス用品選びで迷っている保護者の方向けのガイド。ラケット・ガットの選び方、予算の目安、買い替え時期、失敗しない買い方を専門用語を使わずに解説します。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;900&family=Noto+Serif+JP:wght@400;500;700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0d1117;
+  --ink-soft: #1c2128;
+  --paper: #ffffff;
+  --cream: #fafaf7;
+  --silver: #f2f2ee;
+  --line: #e2e2dc;
+  --line-strong: #c9c9c1;
+  --mute: #6b6b65;
+  --mute-soft: #9c9c93;
+  --accent: #00513a;
+  --accent-bright: #008156;
+  --gold: #b8956a;
+  --signal: #d9534f;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.85;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: 0.01em;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+::selection { background: var(--accent); color: white; }
+.container { max-width: 980px; margin: 0 auto; padding: 0 24px; }
+.content-wrap { padding: 56px 0 96px; flex: 1 0 auto; }
+
+/* ===== PAGE HERO ===== */
+.page-hero { background: var(--ink); color: white; padding: 64px 24px 56px; }
+.page-hero-inner { max-width: 980px; margin: 0 auto; }
+.page-hero-eyebrow {
+  font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.24em;
+  color: var(--accent-bright); margin-bottom: 18px; text-transform: uppercase;
+}
+.page-hero-title { font-family: 'Noto Serif JP', serif; font-size: clamp(28px, 4vw, 40px); font-weight: 700; line-height: 1.4; margin-bottom: 18px; }
+.page-hero-desc { font-size: 15px; color: rgba(255,255,255,0.7); line-height: 2; max-width: 640px; }
+
+/* ===== SECTIONS ===== */
+.p-section { padding: 52px 0; border-bottom: 1px solid var(--line); }
+.p-section:last-of-type { border-bottom: none; }
+.p-section-num { font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.2em; color: var(--accent); margin-bottom: 14px; }
+.p-section-title { font-family: 'Noto Serif JP', serif; font-size: 24px; font-weight: 700; margin-bottom: 22px; line-height: 1.5; }
+.p-section-body { font-size: 15px; color: var(--ink-soft); }
+.p-section-body p { margin-bottom: 16px; }
+.p-section-body p:last-child { margin-bottom: 0; }
+.p-list { margin: 20px 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 14px; }
+.p-list li { padding-left: 26px; position: relative; font-size: 15px; color: var(--ink-soft); }
+.p-list li::before { content: ''; position: absolute; left: 0; top: 9px; width: 8px; height: 8px; background: var(--accent); border-radius: 50%; }
+.p-list li strong { color: var(--ink); }
+
+/* ===== BUDGET TABLE ===== */
+.p-budget-table { width: 100%; border-collapse: collapse; margin: 24px 0; border: 1px solid var(--line); }
+.p-budget-table th, .p-budget-table td { padding: 16px 18px; text-align: left; border-bottom: 1px solid var(--line); font-size: 14px; }
+.p-budget-table th { background: var(--cream); font-family: 'DM Sans', sans-serif; font-size: 11px; letter-spacing: 0.08em; color: var(--mute); text-transform: uppercase; font-weight: 700; }
+.p-budget-table tr:last-child td { border-bottom: none; }
+.p-budget-table td:first-child { font-weight: 700; white-space: nowrap; }
+.p-note { font-size: 12px; color: var(--mute); line-height: 1.9; margin-top: 12px; }
+
+/* ===== CTA ===== */
+.p-cta-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
+.p-cta-btn {
+  display: inline-block; padding: 13px 26px; font-size: 13px; font-weight: 700; letter-spacing: 0.03em;
+  border-radius: 2px; transition: all 0.2s;
+}
+.p-cta-primary { background: var(--ink); color: white; }
+.p-cta-primary:hover { background: var(--accent); }
+.p-cta-outline { border: 1px solid var(--line-strong); color: var(--ink); background: white; }
+.p-cta-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+/* ===== FINAL CTA BLOCK ===== */
+.p-final { background: var(--cream); border: 1px solid var(--line); padding: 48px 40px; text-align: center; margin-top: 52px; }
+.p-final-title { font-family: 'Noto Serif JP', serif; font-size: 22px; font-weight: 700; margin-bottom: 14px; }
+.p-final-desc { font-size: 14px; color: var(--mute); margin-bottom: 28px; max-width: 520px; margin-left: auto; margin-right: auto; }
+.p-final .p-cta-row { justify-content: center; }
+
+/* ===== FOOTER ===== */
+.site-footer { border-top: 1px solid var(--line); padding: 32px; text-align: center; font-size: 12px; color: var(--mute); font-family: 'DM Sans', sans-serif; letter-spacing: 0.06em; flex-shrink: 0; }
+.site-footer a { color: var(--accent); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 640px) {
+  .page-hero { padding: 44px 20px 40px; }
+  .content-wrap { padding: 40px 0 64px; }
+  .p-section { padding: 36px 0; }
+  .p-section-title { font-size: 20px; }
+  .p-budget-table { display: block; overflow-x: auto; }
+  .p-final { padding: 36px 24px; }
+}
+</style>
+</head>
+<body>
+
+<script src="/js/site-header.js"></script>
+
+<!-- ===== PAGE HERO ===== -->
+<section class="page-hero">
+  <div class="page-hero-inner">
+    <div class="page-hero-eyebrow">FOR PARENTS</div>
+    <h1 class="page-hero-title">保護者の方へ<br>お子さんの用品選びガイド</h1>
+    <p class="page-hero-desc">「テニス部に入りたいって言うけど、何を買えばいいの？」——そんな疑問に、専門用語をできるだけ使わずにお答えします。ラケット・ガットの選び方から、予算の目安、買い替えのタイミングまで。</p>
+  </div>
+</section>
+
+<main style="flex:1 0 auto">
+  <div class="container content-wrap">
+
+    <!-- 01 ラケットの選び方 -->
+    <section class="p-section">
+      <div class="p-section-num">01 / ラケットの選び方</div>
+      <h2 class="p-section-title">まずは「軽くて振りやすいもの」を選べば大丈夫です</h2>
+      <div class="p-section-body">
+        <p>ラケット選びで一番大事なのは、性能の高さよりも「お子さんが振りやすいかどうか」です。重すぎるラケットは手首や肘に負担がかかり、フォームが崩れる原因にもなります。迷ったときは、軽めで面（ボールが当たる部分）が大きめのモデルを選んでおけば、大きな失敗にはなりません。</p>
+        <ul class="p-list">
+          <li><strong>体格に合わせて軽めを選ぶ</strong>：重さで迷ったら軽い方を選んでおくのが安全です。</li>
+          <li><strong>面が大きいと扱いやすい</strong>：ボールが当たる面積が大きいラケットほど、多少ずれても飛んでくれるので初心者向きです。</li>
+          <li><strong>「初心者向け」表記のモデルを目安にする</strong>：LOVETENIでは初心者向けに絞って探せる一覧をご用意しています。</li>
+        </ul>
+        <p>どれを選べばいいか分からない場合は、いくつかの質問に答えるだけでおすすめを提案する「ラケット診断」もぜひ使ってみてください。</p>
+        <div class="p-cta-row">
+          <a class="p-cta-btn p-cta-primary" href="/index.html#diagnosis">ラケット診断をしてみる →</a>
+          <a class="p-cta-btn p-cta-outline" href="/index.html#rackets">初心者向けラケットを見る →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 ガットの選び方 -->
+    <section class="p-section">
+      <div class="p-section-num">02 / ガット（ストリング）の選び方</div>
+      <h2 class="p-section-title">ラケットの「網目部分の糸」は別売りです</h2>
+      <div class="p-section-body">
+        <p>ガット（ストリング）とは、ラケットの網目になっている部分の糸のことです。ラケット本体とは別の消耗品で、使っているうちに緩んだり切れたりするため、数ヶ月に一度は張り替える必要があります。購入店やスポーツショップで「ラケットにガットを張ってもらう」作業が必要になる点も、初めての方には分かりにくいポイントです。</p>
+        <ul class="p-list">
+          <li><strong>最初は「ナイロン」タイプがおすすめ</strong>：やわらかい打感で扱いやすく、価格も手頃なものが多いです。</li>
+          <li><strong>「ポリエステル」は上級者向き</strong>：硬めの打感で、体力や技術がついてから選ぶのがおすすめです。</li>
+          <li><strong>張り替え時にも費用がかかる</strong>：ガット代とは別に、ショップでの「張り代」（工賃）が必要です。</li>
+        </ul>
+        <div class="p-cta-row">
+          <a class="p-cta-btn p-cta-outline" href="/index.html#strings">初心者向けガットを見る →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 予算の目安 -->
+    <section class="p-section">
+      <div class="p-section-num">03 / 予算の目安</div>
+      <h2 class="p-section-title">はじめは無理のない金額で十分です</h2>
+      <div class="p-section-body">
+        <p>「せっかく始めるなら良いものを」と思われるかもしれませんが、最初から高いものを選ぶ必要はありません。続けられるかどうか分からない最初のうちは、無理のない金額で始めて、続けると決まってから少しずつ見直すのがおすすめです。</p>
+      </div>
+      <table class="p-budget-table">
+        <thead><tr><th>時期の目安</th><th>ラケット</th><th>ガット（張り代別）</th></tr></thead>
+        <tbody>
+          <tr><td>はじめの1本</td><td>5,000〜15,000円程度</td><td>1,000〜2,000円程度</td></tr>
+          <tr><td>続けると決めたら</td><td>15,000〜25,000円程度</td><td>1,500〜3,000円程度</td></tr>
+          <tr><td>本格的に打ち込むように</td><td>25,000円〜</td><td>2,000円〜</td></tr>
+        </tbody>
+      </table>
+      <p class="p-note">※上記はあくまで一般的な目安です。ブランドやモデル、購入時期によって価格は変動します。最新の価格は各商品ページでご確認ください。</p>
+    </section>
+
+    <!-- 04 買い替え時期 -->
+    <section class="p-section">
+      <div class="p-section-num">04 / 買い替え時期の目安</div>
+      <h2 class="p-section-title">「壊れたら買い替え」だけではありません</h2>
+      <div class="p-section-body">
+        <ul class="p-list">
+          <li><strong>ラケット</strong>：フレームにひびや歪みが見えたら交換のサインです。成長期のお子さんは、身長が大きく伸びたタイミングで見直すのもおすすめです。</li>
+          <li><strong>ガット</strong>：見た目が切れていなくても、3〜4ヶ月ほどで反発力が落ちてきます。定期的な張り替えで良い状態を保てます。</li>
+          <li><strong>グリップテープ</strong>：汗や皮脂で滑りやすくなるので、月に1回程度の交換が目安です。</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 05 失敗しない買い方 -->
+    <section class="p-section">
+      <div class="p-section-num">05 / 失敗しない買い方</div>
+      <h2 class="p-section-title">買う前に、ちょっとだけ気をつけたいこと</h2>
+      <div class="p-section-body">
+        <ul class="p-list">
+          <li><strong>可能であれば実際に握ってみる</strong>：重さや太さの感覚は人それぞれです。スポーツショップなどで試させてもらえると安心です。</li>
+          <li><strong>通販の場合は型番（品番）をよく確認する</strong>：同じシリーズ名でも、重さや面の大きさが違う複数のモデルがあることがあります。</li>
+          <li><strong>「安さ」より「続けられるか」を基準にする</strong>：とりあえず安いものより、1年続けられそうかどうかで選ぶと失敗しにくいです。</li>
+          <li><strong>顧問の先生やコーチに聞いてみる</strong>：チームで使われているモデルを教えてもらうのも、有力な参考情報になります。</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <div class="p-final">
+      <div class="p-final-title">まずはお子さんに合う1本を探してみませんか</div>
+      <p class="p-final-desc">LOVETENIでは、ラケット・ガットの一覧やあなたに合うモデルを提案する診断を無料でご利用いただけます。</p>
+      <div class="p-cta-row">
+        <a class="p-cta-btn p-cta-primary" href="/index.html#diagnosis">ラケット診断をしてみる →</a>
+        <a class="p-cta-btn p-cta-outline" href="/index.html#rackets">ラケットを探す →</a>
+        <a class="p-cta-btn p-cta-outline" href="/index.html#strings">ガットを探す →</a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div>© 2026 <a href="/index.html">LOVETENI</a> — テニスプレーヤーのための情報プラットフォーム</div>
+</footer>
+
+</body>
+</html>

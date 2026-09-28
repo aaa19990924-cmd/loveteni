@@ -111,6 +111,7 @@
     { label: '乱数表',       href: '/court-draw.html' },
     { label: '最安ガット',   href: '/strings-cheap.html' },
     { label: '保護者ガイド', href: '/parents.html' },
+    { label: '練習メニュー', href: '/coach.html' },
   ];
 
   function isActive(href) {

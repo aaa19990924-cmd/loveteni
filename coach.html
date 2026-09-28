@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>練習メニュー作成 | LOVETENI ラブテニ</title>
+<meta name="description" content="人数・コート数・練習時間・レベルを入力するだけで、部活やスクールの練習メニューを自動生成。外部APIには依存せずブラウザだけで動作し、そのままコピーや印刷ができます。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;900&family=Noto+Serif+JP:wght@400;500;700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0d1117;
+  --ink-soft: #1c2128;
+  --paper: #ffffff;
+  --cream: #fafaf7;
+  --silver: #f2f2ee;
+  --line: #e2e2dc;
+  --line-strong: #c9c9c1;
+  --mute: #6b6b65;
+  --mute-soft: #9c9c93;
+  --accent: #00513a;
+  --accent-bright: #008156;
+  --gold: #b8956a;
+  --signal: #d9534f;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans JP', -apple-system, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+.container { max-width: 980px; margin: 0 auto; padding: 0 24px; }
+
+/* ===== Page Hero ===== */
+.page-hero { background: var(--ink); color: white; padding: 60px 24px 52px; }
+.page-hero-inner { max-width: 980px; margin: 0 auto; }
+.page-hero-eyebrow {
+  font-family: 'DM Sans', sans-serif; font-size: 11px; letter-spacing: 0.3em; color: var(--accent-bright);
+  margin-bottom: 16px; font-weight: 500; text-transform: uppercase;
+}
+.page-hero-title { font-family: 'Noto Serif JP', serif; font-size: clamp(28px, 4vw, 44px); font-weight: 700; line-height: 1.3; margin-bottom: 14px; }
+.page-hero-desc { font-size: 14px; color: rgba(255,255,255,0.65); line-height: 1.9; max-width: 620px; }
+
+/* ===== Main ===== */
+.main { flex: 1 0 auto; padding: 48px 0 80px; }
+
+.settings-panel { background: var(--cream); border: 1px solid var(--line); padding: 36px 40px; margin-bottom: 40px; }
+.settings-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px 40px; margin-bottom: 28px; }
+.field-label { font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--mute); margin-bottom: 10px; }
+.number-input { display: flex; align-items: center; gap: 0; border: 1px solid var(--line-strong); background: white; width: fit-content; }
+.num-btn { width: 36px; height: 36px; background: none; border: none; font-size: 18px; color: var(--accent); cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: 700; transition: background 0.15s; }
+.num-btn:hover { background: var(--silver); }
+.num-val { font-family: 'DM Sans', sans-serif; font-size: 22px; font-weight: 700; min-width: 52px; text-align: center; color: var(--ink); }
+.field-note { font-size: 12px; color: var(--mute); margin-top: 8px; }
+.level-btns { display: flex; gap: 0; width: fit-content; }
+.level-btn { padding: 9px 18px; border: 1px solid var(--line-strong); background: white; color: var(--mute); font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+.level-btn + .level-btn { border-left: none; }
+.level-btn.active { background: var(--ink); color: white; border-color: var(--ink); }
+.generate-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.generate-btn { background: var(--accent); color: white; padding: 14px 36px; font-size: 14px; font-weight: 700; letter-spacing: 0.05em; transition: background 0.2s; }
+.generate-btn:hover { background: var(--accent-bright); }
+.generate-note { font-size: 12px; color: var(--mute); }
+
+/* ===== Result ===== */
+.result-panel { display: none; border: 1px solid var(--line); background: white; }
+.result-summary { padding: 24px 32px; background: var(--ink); color: white; font-family: 'DM Sans', sans-serif; font-size: 13px; letter-spacing: 0.03em; }
+.phase-list { padding: 8px 32px; }
+.phase-block { padding: 24px 0; border-bottom: 1px solid var(--line); }
+.phase-block:last-child { border-bottom: none; }
+.phase-head { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 14px; }
+.phase-title { font-family: 'Noto Serif JP', serif; font-size: 18px; font-weight: 700; }
+.phase-time { font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; color: var(--accent); }
+.phase-items { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+.item-title { font-size: 14px; font-weight: 700; margin-bottom: 3px; }
+.item-desc { font-size: 13px; color: var(--mute); line-height: 1.8; }
+.court-note { padding: 24px 32px; background: var(--cream); border-top: 1px solid var(--line); font-size: 13px; color: var(--ink-soft); line-height: 1.9; }
+.court-note a { color: var(--accent); font-weight: 700; text-decoration: underline; }
+.result-actions { display: flex; gap: 8px; padding: 20px 32px 28px; }
+.btn-icon { padding: 10px 22px; background: var(--silver); border: 1px solid var(--line); font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+.btn-icon:hover { background: var(--line); }
+.btn-icon.accent { background: var(--accent); color: white; border-color: var(--accent); }
+.btn-icon.accent:hover { background: var(--accent-bright); }
+
+/* ===== Toast ===== */
+.toast {
+  position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px);
+  background: var(--ink); color: white; padding: 12px 28px; font-size: 13px; letter-spacing: 0.05em;
+  opacity: 0; transition: all 0.3s; pointer-events: none; z-index: 999;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ===== Footer ===== */
+footer { background: var(--ink); color: rgba(255,255,255,0.5); padding: 32px 24px; text-align: center; font-size: 12px; letter-spacing: 0.04em; flex-shrink: 0; }
+footer a { color: rgba(255,255,255,0.8); }
+
+/* ===== Print ===== */
+@media print {
+  .sh-topline, .sh-header, .settings-panel, .result-actions, footer, .page-hero { display: none !important; }
+  body { display: block; }
+  .main { padding: 0; }
+  .result-panel { display: block !important; border: none; }
+  .result-summary { background: none !important; color: var(--ink) !important; border-bottom: 2px solid var(--ink); padding: 0 0 16px; }
+  .court-note { background: none; border-top: 1px solid var(--line); }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .settings-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 600px) {
+  .settings-grid { grid-template-columns: 1fr; }
+  .settings-panel { padding: 28px 20px; }
+  .result-summary, .phase-list, .court-note, .result-actions { padding-left: 20px; padding-right: 20px; }
+}
+</style>
+</head>
+<body>
+
+<script src="/js/site-header.js"></script>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="page-hero-eyebrow">PRACTICE MENU</div>
+    <h1 class="page-hero-title">練習メニュー作成</h1>
+    <p class="page-hero-desc">人数・コート数・練習時間・レベルを入力するだけで、ウォームアップからゲーム形式まで練習メニューをその場で組み立てます。外部サービスには接続せず、ブラウザの中だけで完結します。</p>
+  </div>
+</div>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="container">
+
+    <div class="settings-panel">
+      <div class="settings-grid">
+        <div>
+          <div class="field-label">参加人数</div>
+          <div class="number-input">
+            <button class="num-btn" onclick="changeVal('players', -1)">−</button>
+            <div class="num-val" id="players-val">12</div>
+            <button class="num-btn" onclick="changeVal('players', +1)">＋</button>
+          </div>
+          <div class="field-note">2 〜 60人</div>
+        </div>
+        <div>
+          <div class="field-label">コート数</div>
+          <div class="number-input">
+            <button class="num-btn" onclick="changeVal('courts', -1)">−</button>
+            <div class="num-val" id="courts-val">3</div>
+            <button class="num-btn" onclick="changeVal('courts', +1)">＋</button>
+          </div>
+          <div class="field-note">1 〜 10面</div>
+        </div>
+        <div>
+          <div class="field-label">練習時間</div>
+          <div class="number-input">
+            <button class="num-btn" onclick="changeVal('minutes', -1)">−</button>
+            <div class="num-val" id="minutes-val">90</div>
+            <button class="num-btn" onclick="changeVal('minutes', +1)">＋</button>
+          </div>
+          <div class="field-note">30 〜 240分（15分刻み）</div>
+        </div>
+        <div>
+          <div class="field-label">レベル</div>
+          <div class="level-btns">
+            <button class="level-btn active" id="lvl-beginner" onclick="setLevel('beginner')">初心者</button>
+            <button class="level-btn" id="lvl-intermediate" onclick="setLevel('intermediate')">中級者</button>
+            <button class="level-btn" id="lvl-advanced" onclick="setLevel('advanced')">上級者</button>
+          </div>
+          <div class="field-note">全体のレベル感に近いものを選択</div>
+        </div>
+      </div>
+      <div class="generate-row">
+        <button class="generate-btn" onclick="onGenerate()">練習メニューを作成する →</button>
+        <span class="generate-note">何度でも作り直せます</span>
+      </div>
+    </div>
+
+    <div class="result-panel" id="resultPanel"></div>
+
+  </div>
+</main>
+
+<!-- Toast -->
+<div class="toast" id="toast">コピーしました</div>
+
+<footer>
+  <div>© 2026 <a href="/index.html">LOVETENI</a> — テニスプレーヤーのための情報プラットフォーム</div>
+</footer>
+
+<script>
+// =====================================================================
+// 練習メニュー作成ツール / coach.html
+// 外部APIには一切依存せず、あらかじめ用意したドリルライブラリから
+// レベル・練習時間・コート数に応じてローカルで組み立てるだけの方式。
+// =====================================================================
+
+const state = { players: 12, courts: 3, minutes: 90, level: 'beginner' };
+
+const LIMITS = { players: [2, 60, 1], courts: [1, 10, 1], minutes: [30, 240, 15] };
+
+function changeVal(key, delta) {
+  const [min, max, step] = LIMITS[key];
+  state[key] = Math.max(min, Math.min(max, state[key] + delta * step));
+  document.getElementById(`${key}-val`).textContent = state[key];
+}
+
+function setLevel(level) {
+  state.level = level;
+  ['beginner', 'intermediate', 'advanced'].forEach(l => {
+    document.getElementById(`lvl-${l}`).classList.toggle('active', l === level);
+  });
+}
+
+const LEVEL_LABEL = { beginner: '初心者', intermediate: '中級者', advanced: '上級者' };
+
+// レベルを問わず使う項目（ウォームアップ・クールダウン）と、レベル別の項目（基礎打ち・技術練習・ゲーム）
+const PRACTICE_LIBRARY = {
+  warmup: [
+    { title: 'ジョギング＆ダイナミックストレッチ', desc: '軽く体を動かしながら、肩・股関節・足首を大きく動かして温める。' },
+    { title: 'ボールフィーリング', desc: 'その場でのバウンド突きやキャッチボールで、ラケットとボールの感覚をつかむ。' }
+  ],
+  basic: {
+    beginner: [
+      { title: '球出しグラウンドストローク', desc: 'コーチや上級者が球出しをし、フォアハンド・バックハンドを交互に打つ。' },
+      { title: 'ミニテニスラリー', desc: 'サービスライン内でのやさしいラリーで、ボールをコントロールする感覚を養う。' }
+    ],
+    intermediate: [
+      { title: 'クロスラリー', desc: 'フォア・バックそれぞれでクロスに深いボールを打ち合う。' },
+      { title: 'ストレート展開練習', desc: 'クロスラリーからストレートに展開するタイミングを練習する。' }
+    ],
+    advanced: [
+      { title: 'パターン練習（クロス→ストレート→決定球）', desc: '実戦を想定した展開パターンで、深さと角度を意識して打ち合う。' },
+      { title: 'ライジングショット', desc: 'バウンド直後の早いタイミングで打ち返す練習。' }
+    ]
+  },
+  drill: {
+    beginner: [
+      { title: 'サーブ基礎（トス〜フォーム確認）', desc: 'トスの位置とスイングの基本フォームを反復して体に覚えさせる。' },
+      { title: 'ボレー基礎', desc: 'ネット前で短い距離から、ボレーの面づくりを繰り返し練習する。' }
+    ],
+    intermediate: [
+      { title: 'サーブ＆リターン', desc: 'サーブとリターンをセットで繰り返し、実戦の入り方を練習する。' },
+      { title: 'アプローチ→ボレー', desc: '浅いボールへのアプローチショットからネットに詰めてボレーで決める流れを練習する。' }
+    ],
+    advanced: [
+      { title: 'サーブ＆ボレー', desc: 'サーブ直後にネットへ詰め、ボレーで決めるパターンを反復する。' },
+      { title: 'パッシングショット対決', desc: 'ネットについた相手を想定し、パッシングショットとボレーの攻防を練習する。' }
+    ]
+  },
+  game: {
+    beginner: [
+      { title: 'ミニゲーム（4ポイントマッチ）', desc: 'サービスライン内でのやさしいルールの試合形式で、楽しみながら実戦感覚を養う。' }
+    ],
+    intermediate: [
+      { title: 'タイブレーク形式のゲーム練習', desc: '短時間で決着がつくタイブレーク形式で、集中力と実戦力を高める。' },
+      { title: 'ダブルス練習試合', desc: '2対2の実戦形式で、コンビネーションと戦術を確認する。' }
+    ],
+    advanced: [
+      { title: 'セット形式のマッチ練習', desc: '1セットを通した実戦形式で、体力配分と戦術の継続力を養う。' },
+      { title: '状況設定ゲーム', desc: '「0-30から」など点差を設定した状態から始め、劣勢・優勢での対応力を鍛える。' }
+    ]
+  },
+  cooldown: [
+    { title: '静的ストレッチ', desc: '使った筋肉を中心に、ゆっくり伸ばして体を落ち着かせる。' },
+    { title: '振り返り', desc: '今日の練習で意識したこと・次回の課題をひと言ずつ共有する。' }
+  ]
+};
+
+function generatePractice(players, courts, minutes, level) {
+  const alloc = [
+    { key: 'warmup',   label: 'ウォームアップ', pct: 0.12 },
+    { key: 'basic',    label: '基礎打ち・ラリー', pct: 0.28 },
+    { key: 'drill',    label: '技術練習', pct: 0.35 },
+    { key: 'game',     label: 'ゲーム形式', pct: 0.20 },
+    { key: 'cooldown', label: 'クールダウン', pct: 0.05 }
+  ];
+  // 5分刻みに丸め、丸め誤差は「技術練習」の枠で吸収して合計を練習時間ちょうどに合わせる
+  const assigned = alloc.map(a => ({ ...a, minutes: Math.max(5, Math.round((minutes * a.pct) / 5) * 5) }));
+  const sum = assigned.reduce((s, a) => s + a.minutes, 0);
+  const drillIdx = assigned.findIndex(a => a.key === 'drill');
+  assigned[drillIdx].minutes = Math.max(5, assigned[drillIdx].minutes + (minutes - sum));
+
+  const perCourt = Math.ceil(players / Math.max(1, courts));
+  const courtNote = `${courts}面のコートに${players}名で練習する場合、1面あたり約${perCourt}名に分かれるとバランスよく回せます。人数が多いグループはローテーションを入れると全員の実施時間を均等にできます。コート割りに迷ったら「乱数表」ツールでランダムに振り分けられます。`;
+
+  const phases = assigned.map(a => ({
+    label: a.label,
+    minutes: a.minutes,
+    items: (a.key === 'warmup' || a.key === 'cooldown') ? PRACTICE_LIBRARY[a.key] : PRACTICE_LIBRARY[a.key][level]
+  }));
+
+  return { phases, courtNote, players, courts, minutes, level };
+}
+
+let lastPlan = null;
+
+function onGenerate() {
+  lastPlan = generatePractice(state.players, state.courts, state.minutes, state.level);
+  renderPractice(lastPlan);
+  const panel = document.getElementById('resultPanel');
+  panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function renderPractice(plan) {
+  const panel = document.getElementById('resultPanel');
+  const dateStr = new Date().toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' });
+
+  const phasesHtml = plan.phases.map(p => `
+    <div class="phase-block">
+      <div class="phase-head">
+        <div class="phase-title">${p.label}</div>
+        <div class="phase-time">${p.minutes}分</div>
+      </div>
+      <ul class="phase-items">
+        ${p.items.map(it => `<li><div class="item-title">${it.title}</div><div class="item-desc">${it.desc}</div></li>`).join('')}
+      </ul>
+    </div>`).join('');
+
+  panel.innerHTML = `
+    <div class="result-summary">${dateStr} ／ 参加${plan.players}名 ／ コート${plan.courts}面 ／ 練習時間${plan.minutes}分 ／ レベル：${LEVEL_LABEL[plan.level]}</div>
+    <div class="phase-list">${phasesHtml}</div>
+    <div class="court-note">${plan.courtNote} <a href="/court-draw.html">乱数表ツールを開く →</a></div>
+    <div class="result-actions">
+      <button class="btn-icon accent" onclick="copyPractice()">コピーする</button>
+      <button class="btn-icon" onclick="window.print()">印刷する</button>
+    </div>`;
+  panel.style.display = 'block';
+}
+
+function copyPractice() {
+  if (!lastPlan) return;
+  const dateStr = new Date().toLocaleDateString('ja-JP', { year: 'numeric', month: '2-digit', day: '2-digit' });
+  let text = `【練習メニュー】${dateStr}\n`;
+  text += `参加人数: ${lastPlan.players}名 / コート数: ${lastPlan.courts}面 / 練習時間: ${lastPlan.minutes}分 / レベル: ${LEVEL_LABEL[lastPlan.level]}\n\n`;
+  lastPlan.phases.forEach(p => {
+    text += `■ ${p.label}（${p.minutes}分）\n`;
+    p.items.forEach(it => { text += `・${it.title}：${it.desc}\n`; });
+    text += `\n`;
+  });
+  text += `【コート割りメモ】\n${lastPlan.courtNote}\n`;
+  navigator.clipboard.writeText(text).then(() => showToast('コピーしました')).catch(() => showToast('コピーできませんでした'));
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+</script>
+
+</body>
+</html>

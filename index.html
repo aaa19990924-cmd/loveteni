@@ -1811,6 +1811,26 @@ section {
   margin-bottom: 32px;
 }
 .quiz-result-buttons { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.quiz-result-intro { font-size: 13px; color: var(--mute); line-height: 1.8; margin-bottom: 28px; }
+.quiz-result-list { text-align: left; display: flex; flex-direction: column; gap: 14px; margin-bottom: 32px; }
+.quiz-result-item { display: flex; align-items: center; gap: 20px; padding: 18px 20px; border: 1px solid var(--line); }
+.quiz-result-rank { font-family: 'DM Sans', sans-serif; font-size: 22px; font-weight: 700; color: var(--line-strong); min-width: 30px; flex-shrink: 0; }
+.quiz-result-item:first-child .quiz-result-rank { color: var(--gold); }
+.quiz-result-body { flex: 1; min-width: 0; }
+.quiz-result-brand { font-size: 10px; letter-spacing: 0.12em; color: var(--mute); text-transform: uppercase; margin-bottom: 2px; }
+.quiz-result-name { font-family: 'Noto Serif JP', serif; font-weight: 700; font-size: 16px; margin-bottom: 6px; }
+.quiz-result-reason { font-size: 12px; color: var(--mute); line-height: 1.7; }
+.quiz-result-actions { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
+.quiz-result-btn { display: block; padding: 8px 18px; font-size: 11px; text-align: center; white-space: nowrap; border-radius: 2px; }
+.quiz-result-btn-detail { background: var(--ink); color: white; }
+.quiz-result-btn-detail:hover { background: var(--accent); }
+.quiz-result-btn-rakuten { background: #BF0000; color: white; }
+.quiz-result-btn-rakuten:hover { background: #8B0000; }
+@media (max-width: 640px) {
+  .quiz-result-item { flex-wrap: wrap; }
+  .quiz-result-actions { flex-direction: row; width: 100%; }
+  .quiz-result-btn { flex: 1; }
+}
 
 /* ===== Column / Card layouts ===== */
 .column-grid {
@@ -3127,7 +3147,7 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
           <div class="service-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#00513a" stroke-width="1.8" stroke-linecap="round"><circle cx="13" cy="13" r="9"/><line x1="19.5" y1="19.5" x2="28" y2="28"/></svg></div>
           <div class="service-sub">RACKET FINDER</div>
           <div class="service-title">ラケット診断</div>
-          <div class="service-desc">5つの問いに答えるだけ。あなたのプレーに、最適な一本を導く。</div>
+          <div class="service-desc">6つの問いに答えるだけ。悩みや予算に合わせて、最適な最大5本を導く。</div>
         </div>
         <div class="service-card" onclick="navigate('string-diagnosis')">
           <div class="service-num">05</div>
@@ -3692,7 +3712,7 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
     <div class="container">
       <div class="page-hero-eyebrow">RACKET DIAGNOSIS</div>
       <h1 class="page-hero-title">ラケット診断</h1>
-      <p class="page-hero-desc">5つの質問に答えるだけで、あなたに最適なラケットをご提案します。</p>
+      <p class="page-hero-desc">6つの質問に答えるだけで、レベル・プレースタイル・悩み・予算からあなたに合うラケットを最大5本ご提案します。</p>
     </div>
   </div>
   <div class="page-body">
@@ -5888,41 +5908,37 @@ async function loadRakutenResultsGeneric(item, resultsId, imgAreaId, suffix) {
   showRkOffers(c, items, headerLabel, kw);
 }
 
-// ===== QUIZ =====
+// ===== STEP4: ラケット診断（RACKET_DATABASEを実スコアリングする方式に刷新） =====
+// 旧実装は5問固定で、結果は RESULTS[Math.floor(Math.random()*RESULTS.length)] という
+// 完全ランダム抽選で回答内容と結果が一切連動していなかった。
+// ここではレベル・プレースタイル・悩み・重さ・重視点・予算の6問の回答から、
+// RACKET_DATABASE全モデルの物理スペック（重量・フェイス面積・パターン・コンセプト文）を
+// スコアリングして上位候補を選ぶ。価格データは静的には持たないため、絞り込んだ上位候補
+// （最大5件）だけ楽天で実売価格を取得し、予算内かどうかを並び替えの参考にする
+// （全件の価格取得はしない＝楽天APIのレート制限対策を維持）。
 const QUIZ = [
-  { q: 'テニス歴はどのくらいですか？', opts: ['始めたばかり（〜1年）', '中級者（1〜5年）', '上級者（5年以上）', '競技者レベル'] },
-  { q: 'どんなプレースタイルですか？', opts: ['パワーで押したい', 'スピンで崩したい', 'コントロール重視', 'オールラウンド'] },
-  { q: 'ラケットの重さの好みは？', opts: ['軽め（270g以下）', '普通（280〜295g）', '重め（300g以上）', 'こだわらない'] },
-  { q: '重視するポイントは？', opts: ['打感の柔らかさ', '操作しやすさ', '振り抜きやすさ', 'パワー'] },
-  { q: '予算はどのくらいですか？', opts: ['〜2万円', '2〜3万円', '3〜4万円', '4万円以上OK'] }
+  { key: 'level',      q: 'テニス歴はどのくらいですか？', opts: ['始めたばかり（〜1年）', '中級者（1〜5年）', '上級者（5年以上）', '競技者レベル'] },
+  { key: 'style',      q: 'どんなプレースタイルですか？', opts: ['パワーで押したい', 'スピンで崩したい', 'コントロール重視', 'オールラウンド'] },
+  { key: 'concern',    q: '今、プレーで困っていることは？', opts: ['ボールが飛ばない・威力が出ない', 'スピンがかかりにくい', 'コントロールが定まらない', '肘や手首に負担を感じる', '特にない'] },
+  { key: 'weightPref', q: 'ラケットの重さの好みは？', opts: ['軽め（270g以下）', '普通（280〜295g）', '重め（300g以上）', 'こだわらない'] },
+  { key: 'priority',   q: '重視するポイントは？', opts: ['打感の柔らかさ', '操作しやすさ', '振り抜きやすさ', 'パワー'] },
+  { key: 'budget',     q: '予算はどのくらいですか？', opts: ['〜2万円', '2〜3万円', '3〜4万円', '4万円以上OK'] }
 ];
-const RESULTS = [
-  { title: 'Wilson CLASH 100', badge: 'BALANCED ALL-ROUNDER', desc: 'しなやかなフレームで打感が柔らかく、コントロールしやすいラケット。初心者から中上級者まで幅広く使えるオールラウンダーです。' },
-  { title: 'Babolat Pure Aero', badge: 'SPIN SPECIALIST', desc: 'ナダルも使用するスピン特化ラケット。重いボールで相手を崩したい攻撃的なプレーヤーに最適です。' },
-  { title: 'YONEX EZONE 100', badge: 'COMFORT MASTER', desc: 'スウィートエリアが広く、快適な打球感が特徴。日本人の体型に合わせた設計で扱いやすさ抜群。' },
-  { title: 'HEAD Speed MP', badge: 'PRECISION & SPEED', desc: 'ジョコビッチが愛用するシリーズ。スピードと精度を求める中上級者に最適な競技志向モデルです。' }
-];
+const QUIZ_BUDGET_MAX = [20000, 30000, 40000, Infinity];
 let quizStep = 0;
+let quizAnswers = {};
 
 function initQuiz() {
   quizStep = 0;
+  quizAnswers = {};
   renderQuiz();
 }
 
 function renderQuiz() {
   const c = document.getElementById('quizContainer');
+  if (!c) return;
   if (quizStep >= QUIZ.length) {
-    const r = RESULTS[Math.floor(Math.random() * RESULTS.length)];
-    c.innerHTML = `<div class="quiz-result">
-      <div class="quiz-result-eyebrow">あなたへのおすすめ</div>
-      <div class="quiz-result-title">${r.title}</div>
-      <div class="quiz-result-badge">${r.badge}</div>
-      <p class="quiz-result-desc">${r.desc}</p>
-      <div class="quiz-result-buttons">
-        <button class="btn btn-primary" style="background:var(--ink);color:white" onclick="initQuiz()">もう一度診断</button>
-        <button class="btn btn-outline" style="color:var(--ink);border-color:var(--ink)" onclick="navigate('rackets')">ラケット一覧へ</button>
-      </div>
-    </div>`;
+    renderQuizResult(c);
     return;
   }
   const q = QUIZ[quizStep];
@@ -5937,7 +5953,162 @@ function renderQuiz() {
   </div>`;
 }
 
-function answerQuiz(i) { quizStep++; renderQuiz(); }
+function answerQuiz(i) {
+  quizAnswers[QUIZ[quizStep].key] = i;
+  quizStep++;
+  renderQuiz();
+}
+
+// レベル×重さ好みから目標重量(g)を決める
+function quizIdealWeight(a) {
+  const base = [268, 285, 300, 312][a.level] ?? 285;
+  if (a.weightPref === 0) return Math.min(base, 275);
+  if (a.weightPref === 2) return Math.max(base, 305);
+  return base;
+}
+
+// スタイル・悩み・重視ポイントから目標フェイス面積(in²)を決める
+function quizIdealHeadSize(a) {
+  let head = [102, 100, 97, 100][a.style] ?? 100;
+  if (a.concern === 0) head += 3; // 飛ばない悩み→大きめ
+  if (a.concern === 3) head += 2; // 肘・手首負担→大きめで楽に飛ぶ面
+  if (a.concern === 2) head -= 2; // コントロールが定まらない→小さめ
+  if (a.priority === 3) head += 2; // パワー重視
+  if (a.priority === 1) head -= 1; // 操作しやすさ重視
+  return Math.max(93, Math.min(head, 118));
+}
+
+// パターン文字列("16x19"等)から縦糸(メイン)の本数を取り出す。少ないほど開き目でスピンが出やすい
+function quizPatternMains(pattern) {
+  const m = (pattern || '').match(/x\s*(\d+)/i);
+  return m ? parseInt(m[1], 10) : 19;
+}
+
+function quizPatternScore(r, a) {
+  const mains = quizPatternMains(r.pattern);
+  let score = 0;
+  if (a.style === 1 || a.concern === 1) score += (20 - mains) * 1.5; // スピン重視／かからない悩み→開き目ほど加点
+  if (a.style === 2 || a.concern === 2) score += (mains - 16) * 1.5; // コントロール重視／定まらない悩み→密なほど加点
+  return score;
+}
+
+function quizConceptScore(r, a) {
+  const text = r.concept || '';
+  let score = 0;
+  if (a.concern === 3 && /柔らか|しなやか|コンフォート|衝撃/.test(text)) score += 6;
+  if (a.priority === 0 && /柔らか|しなやか/.test(text)) score += 4;
+  if (a.priority === 2 && /振り抜き|軽量|操作性/.test(text)) score += 3;
+  if (a.style === 0 && /パワー|反発/.test(text)) score += 3;
+  if (a.style === 1 && /スピン/.test(text)) score += 4;
+  if (a.style === 2 && /コントロール|精密|精度/.test(text)) score += 4;
+  return score;
+}
+
+function scoreRacket(r, a) {
+  let score = 0;
+  score -= Math.abs(r.weight - quizIdealWeight(a)) * 0.6;
+  score -= Math.abs(r.headSize - quizIdealHeadSize(a)) * 1.4;
+  score += quizPatternScore(r, a);
+  score += quizConceptScore(r, a);
+  return score;
+}
+
+// 1本ごとの「選ばれた理由」を回答内容から動的に組み立てる（300+モデル分の個別コピーは用意していないため）
+function buildQuizReason(r, a, price) {
+  const reasons = [];
+  if (Math.abs(r.weight - quizIdealWeight(a)) <= 10) reasons.push(`${r.weight}gとご希望に近い重さ`);
+  const mains = quizPatternMains(r.pattern);
+  if ((a.style === 1 || a.concern === 1) && mains <= 17) reasons.push('開き目のパターンでスピンがかけやすい');
+  if ((a.style === 2 || a.concern === 2) && mains >= 18) reasons.push('密なパターンでコントロール性能が高い');
+  if (a.concern === 0 && r.headSize >= 100) reasons.push(`フェイス面積${r.headSize}in²で楽にボールが飛ぶ`);
+  if (a.concern === 3 && r.headSize >= 100) reasons.push('大きめのフェイス面で衝撃をマイルドに感じやすい');
+  if (a.priority === 0 && /柔らか|しなやか/.test(r.concept || '')) reasons.push('柔らかい打感のフレーム');
+  if (!reasons.length) reasons.push(`重量${r.weight}g・フェイス${r.headSize}in²のバランス型`);
+  if (price !== null) {
+    const budgetMax = QUIZ_BUDGET_MAX[a.budget];
+    reasons.push(price <= budgetMax ? `楽天市場の実売価格は¥${price.toLocaleString()}〜で予算内` : `楽天市場の実売価格は¥${price.toLocaleString()}〜（予算よりやや高め）`);
+  }
+  return reasons.join('。') + '。';
+}
+
+async function renderQuizResult(c) {
+  c.innerHTML = `<div class="quiz-result"><div class="quiz-progress">診断中です...</div></div>`;
+  const a = quizAnswers;
+  const scored = allRackets.map(r => ({ r, score: scoreRacket(r, a) })).sort((x, y) => y.score - x.score);
+
+  // シリーズ単位で重複を避けつつ上位候補（最大5件）を選ぶ
+  const seen = new Set();
+  const uniqueCandidates = [];
+  for (const { r } of scored) {
+    const seriesKey = `${r.brand}__${r.series || r.model}`;
+    if (seen.has(seriesKey)) continue;
+    seen.add(seriesKey);
+    uniqueCandidates.push(r);
+  }
+  const candidates = uniqueCandidates.slice(0, 5);
+
+  if (!candidates.length) {
+    c.innerHTML = `<div class="quiz-result">
+      <div class="quiz-result-eyebrow">あなたへのおすすめ</div>
+      <p class="quiz-result-intro">条件に合うラケットが見つかりませんでした。もう一度お試しください。</p>
+      <div class="quiz-result-buttons"><button class="btn btn-primary" style="background:var(--ink);color:white" onclick="initQuiz()">もう一度診断</button></div>
+    </div>`;
+    return;
+  }
+
+  // 上位候補だけ楽天の実売価格を取得（詳細ページと同じキャッシュ経路のためレート制限対策は維持される）
+  const results = await Promise.all(candidates.map(async r => {
+    try {
+      const cacheKey = `quiz__${r.id}`;
+      const kw = r.searchKeyword || `${r.brand} ${r.model}`;
+      const fetchUrl = r.janCode
+        ? `/api/rakuten-search?janCode=${encodeURIComponent(r.janCode)}&keyword=${encodeURIComponent(kw)}`
+        : `/api/rakuten-search?keyword=${encodeURIComponent(kw)}`;
+      const cached = getCachedPrice(cacheKey);
+      const result = cached || await fetchRakutenDetailData(fetchUrl, cacheKey);
+      if (!result || result.error || !result.items) return { r, price: null };
+      const priced = filterRacketItems(result.items, r).filter(i => i.price > 0);
+      return { r, price: priced.length ? Math.min(...priced.map(i => i.price)) : null };
+    } catch (e) { return { r, price: null }; }
+  }));
+
+  // 予算内の候補を優先（スコア順は維持したまま、予算内/予算外の2グループに安定ソート）
+  const budgetMax = QUIZ_BUDGET_MAX[a.budget];
+  results.sort((x, y) => {
+    const xIn = x.price !== null && x.price <= budgetMax;
+    const yIn = y.price !== null && y.price <= budgetMax;
+    if (xIn !== yIn) return xIn ? -1 : 1;
+    return 0;
+  });
+
+  const introParts = [QUIZ[0].opts[a.level], QUIZ[1].opts[a.style]];
+  if (QUIZ[2].opts[a.concern] !== '特にない') introParts.push(QUIZ[2].opts[a.concern]);
+  const intro = `あなたの回答（${introParts.join('・')}）をもとに、${results.length}本のラケットをおすすめします。`;
+
+  const itemsHtml = results.map(({ r, price }, i) => `
+    <div class="quiz-result-item">
+      <div class="quiz-result-rank">${i + 1}</div>
+      <div class="quiz-result-body">
+        <div class="quiz-result-brand">${r.brand}${r.series ? ' / ' + r.series : ''}</div>
+        <div class="quiz-result-name">${r.model}</div>
+        <div class="quiz-result-reason">${buildQuizReason(r, a, price)}</div>
+      </div>
+      <div class="quiz-result-actions">
+        <span class="quiz-result-btn quiz-result-btn-detail" onclick="selectRacket('${r.id}')">詳細を見る</span>
+        <span class="quiz-result-btn quiz-result-btn-rakuten" onclick="openRakuten(null,'${r.brand}','${r.model.replace(/'/g, "\\'")}')">楽天で見る</span>
+      </div>
+    </div>`).join('');
+
+  c.innerHTML = `<div class="quiz-result">
+    <div class="quiz-result-eyebrow">あなたへのおすすめ ${results.length}本</div>
+    <p class="quiz-result-intro">${intro}</p>
+    <div class="quiz-result-list">${itemsHtml}</div>
+    <div class="quiz-result-buttons">
+      <button class="btn btn-primary" style="background:var(--ink);color:white" onclick="initQuiz()">もう一度診断</button>
+      <button class="btn btn-outline" style="color:var(--ink);border-color:var(--ink)" onclick="navigate('rackets')">ラケット一覧へ</button>
+    </div>
+  </div>`;
+}
 
 // ===== MATCHES =====
 const MATCHES = [

@@ -913,6 +913,23 @@ section {
   transition: all 0.2s;
 }
 .rakuten-btn:hover { background: var(--ink); color: white; }
+.compare-add-btn {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  padding: 9px;
+  border: 1px solid var(--line-strong);
+  background: white;
+  color: var(--mute);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+}
+.compare-add-btn:hover { border-color: var(--accent); color: var(--accent); }
+.compare-add-btn.on { background: var(--accent); border-color: var(--accent); color: white; }
 
 /* ===== Detail ===== */
 .detail-layout {
@@ -1005,7 +1022,8 @@ section {
   box-shadow: 0 0 0 2px var(--accent), 0 8px 20px rgba(0,81,58,0.16);
 }
 .detail-cta-row .detail-cta-amazon,
-.detail-cta-row .detail-cta-rakuten-roll {
+.detail-cta-row .detail-cta-rakuten-roll,
+.detail-cta-row .detail-cta-compare {
   flex: 1 1 auto;
   min-width: 160px;
   padding: 12px;
@@ -1049,6 +1067,14 @@ section {
   box-shadow: 0 4px 14px rgba(255, 153, 0, 0.4);
   transform: translateY(-1px);
 }
+.detail-cta-compare {
+  background: white !important;
+  color: var(--accent) !important;
+  border: 2px solid var(--accent) !important;
+  font-weight: 700;
+}
+.detail-cta-compare:hover { background: var(--cream) !important; }
+.detail-cta-compare.on { background: var(--accent) !important; color: white !important; }
 
 /* ===== Gauge variant buttons (string detail) ===== */
 .gauge-variants-row {
@@ -1525,6 +1551,147 @@ section {
 .amazon-compare-note {
   font-size: 10px;
   color: var(--mute);
+}
+
+/* ===== STEP3: 比較機能 ===== */
+.compare-fab {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 300;
+  background: var(--ink);
+  color: white;
+  display: none;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.18);
+}
+.compare-fab.show { display: block; }
+.compare-fab-inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.compare-fab-label { font-size: 13px; letter-spacing: 0.02em; }
+.compare-fab-label strong { color: var(--accent-bright, #6fd3ae); font-family: 'DM Sans', sans-serif; }
+.compare-fab-spacer { flex: 1; }
+.compare-fab-btn {
+  padding: 10px 20px;
+  background: var(--accent);
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.compare-fab-btn:hover { background: #00704f; }
+.compare-fab-clear {
+  padding: 10px 14px;
+  color: rgba(255,255,255,0.6);
+  font-size: 12px;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.compare-fab-clear:hover { color: white; }
+
+.compare-tabs { display: flex; gap: 8px; margin-bottom: 24px; }
+.compare-tab {
+  padding: 10px 22px;
+  border: 1px solid var(--line-strong);
+  background: white;
+  color: var(--mute);
+  font-size: 13px;
+  cursor: pointer;
+  border-radius: 100px;
+}
+.compare-tab.active { background: var(--ink); color: white; border-color: var(--ink); }
+
+.compare-scroll { overflow-x: auto; border: 1px solid var(--line); }
+.compare-table { width: 100%; border-collapse: collapse; min-width: 640px; }
+.compare-table th, .compare-table td {
+  border-bottom: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  padding: 14px 16px;
+  vertical-align: top;
+  text-align: left;
+}
+.compare-table th:last-child, .compare-table td:last-child { border-right: none; }
+.compare-table thead th {
+  background: var(--cream);
+  position: sticky;
+  top: 0;
+}
+.compare-table .compare-col-label {
+  position: sticky;
+  left: 0;
+  background: var(--cream);
+  font-size: 12px;
+  color: var(--mute);
+  font-weight: 500;
+  min-width: 108px;
+  white-space: nowrap;
+  z-index: 1;
+}
+.compare-table thead .compare-col-label { z-index: 2; }
+.compare-col-head { min-width: 190px; }
+.compare-col-remove {
+  float: right;
+  color: var(--mute);
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+}
+.compare-col-remove:hover { color: var(--signal, #d9534f); }
+.compare-col-img {
+  width: 100%;
+  aspect-ratio: 1;
+  background: white;
+  display: flex; align-items: center; justify-content: center;
+  margin: 8px 0;
+  border: 1px solid var(--line);
+}
+.compare-col-img img { width: 100%; height: 100%; object-fit: contain; padding: 8px; }
+.compare-col-name { font-family: 'Noto Serif JP', serif; font-weight: 700; font-size: 14px; line-height: 1.5; }
+.compare-col-brand { font-size: 10px; color: var(--mute); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 4px; }
+.compare-val { font-family: 'DM Sans', sans-serif; font-size: 14px; }
+.compare-val.cmp-max { color: #BF0000; font-weight: 700; }
+.compare-val.cmp-min { color: var(--accent); font-weight: 700; }
+.compare-price-row .compare-val { font-size: 16px; font-weight: 700; }
+.compare-buy-btn {
+  display: block;
+  margin-top: 8px;
+  padding: 10px;
+  background: #BF0000;
+  color: white;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  border-radius: 2px;
+}
+.compare-buy-btn:hover { background: #8B0000; }
+.compare-detail-link {
+  display: block;
+  margin-top: 6px;
+  padding: 8px;
+  border: 1px solid var(--line-strong);
+  color: var(--ink);
+  text-align: center;
+  font-size: 11px;
+  cursor: pointer;
+}
+.compare-detail-link:hover { border-color: var(--ink); }
+.compare-empty {
+  text-align: center;
+  padding: 80px 20px;
+  color: var(--mute);
+}
+.compare-empty-title { font-family: 'Noto Serif JP', serif; font-size: 20px; color: var(--ink); margin-bottom: 10px; }
+@media (max-width: 640px) {
+  .compare-fab-inner { padding: 10px 16px; gap: 10px; }
+  .compare-fab-label { font-size: 12px; }
 }
 .loading { padding: 40px; text-align: center; color: var(--mute); font-size: 13px; }
 .spin {
@@ -2031,43 +2198,8 @@ section {
 }
 
 /* ===== Compare ===== */
-.compare-layout {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  gap: 32px;
-  align-items: center;
-  margin-bottom: 48px;
-}
-.compare-slot {
-  background: var(--cream);
-  border: 2px dashed var(--line-strong);
-  padding: 56px 32px;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  min-height: 200px;
-}
-.compare-slot:hover { border-color: var(--accent); background: white; }
-.compare-slot.filled { border-style: solid; border-color: var(--accent); background: white; }
-.compare-vs {
-  font-family: 'Noto Serif JP', serif;
-  font-style: italic;
-  font-size: 28px;
-  color: var(--mute);
-}
-.compare-table { width: 100%; border-collapse: collapse; background: white; border: 1px solid var(--line); }
-.compare-table th, .compare-table td {
-  padding: 16px;
-  border-bottom: 1px solid var(--line);
-  text-align: center;
-  font-size: 13px;
-}
-.compare-table th {
-  background: var(--cream);
-  font-family: 'Noto Serif JP', serif;
-  font-weight: 700;
-}
-.compare-table .winner { color: var(--accent); font-weight: 700; }
+/* STEP3で比較テーブル本体は .compare-table（比較UI用CSSブロックに統合）へ置き換え済み。
+   旧2枠固定レイアウト(.compare-layout/.compare-slot/.compare-vs)は新UIで使用しないため削除。 */
 
 /* ===== Footer ===== */
 footer {
@@ -2766,8 +2898,6 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
   .news-arrow { display: none; }
   .footer-top { grid-template-columns: 1fr; }
   .footer-bottom { flex-direction: column; gap: 12px; }
-  .compare-layout { grid-template-columns: 1fr; }
-  .compare-vs { display: none; }
   .stats-bar-inner { grid-template-columns: 1fr 1fr; }
   .rakuten-section { padding: 32px 20px; }
   .stat-num { font-size: 36px; }
@@ -3019,8 +3149,8 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
           <div class="service-num">07</div>
           <div class="service-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="#00513a" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="16" y1="4" x2="16" y2="28"/><line x1="6" y1="10" x2="26" y2="10"/><path d="M6 10 C6 10 3 18 10 18 C17 18 14 10 14 10"/><path d="M18 10 C18 10 15 18 22 18 C29 18 26 10 26 10"/><line x1="13" y1="28" x2="19" y2="28"/></svg></div>
           <div class="service-sub">COMPARE</div>
-          <div class="service-title">ラケット比較</div>
-          <div class="service-desc">2本を並べて、スペックを徹底比較。購入前の最終確認に。</div>
+          <div class="service-title">商品比較</div>
+          <div class="service-desc">ラケット・ガットを最大4本まで並べてスペックを徹底比較。最安値・購入ボタンも比較画面から。</div>
         </div>
 
         <!-- 学ぶ -->
@@ -3188,6 +3318,7 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
           <div class="detail-cta-row">
             <button class="detail-cta-btn detail-cta-rakuten" id="detail-rakuten-btn">楽天で探す →</button>
             <button class="detail-cta-btn detail-cta-amazon" id="detail-amazon-btn">Amazonで探す →</button>
+            <button class="detail-cta-btn detail-cta-compare" id="detail-compare-btn">比較に追加</button>
           </div>
         </div>
       </div>
@@ -3329,6 +3460,7 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
             <button class="detail-cta-btn detail-cta-rakuten" id="string-detail-rakuten-btn">単品を楽天で見る →</button>
             <button class="detail-cta-btn detail-cta-rakuten-roll" id="string-detail-rakuten-roll-btn" style="display:none">ロールを楽天で見る →</button>
             <button class="detail-cta-btn detail-cta-amazon" id="string-detail-amazon-btn">Amazonで探す →</button>
+            <button class="detail-cta-btn detail-cta-compare" id="string-detail-compare-btn">比較に追加</button>
           </div>
         </div>
       </div>
@@ -3877,30 +4009,28 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
   <div class="page-hero">
     <div class="container">
       <div class="page-hero-eyebrow">COMPARE</div>
-      <h1 class="page-hero-title">ラケット比較</h1>
-      <p class="page-hero-desc">2本のラケットを並べてスペックを比べよう。</p>
+      <h1 class="page-hero-title">商品比較</h1>
+      <p class="page-hero-desc">ラケット・ガットをそれぞれ最大4本まで並べて、スペックの違いを一目で確認。比較画面からそのまま最安値・購入導線へ進めます。</p>
     </div>
   </div>
   <div class="page-body">
     <div class="container">
-      <div class="compare-layout">
-        <div class="compare-slot" id="compareSlot1" onclick="openCompareSelect(1)">
-          <div style="font-size:36px;opacity:0.2;margin-bottom:12px">🎾</div>
-          <div style="font-size:13px;color:var(--mute)">ラケットを選ぶ</div>
-        </div>
-        <div class="compare-vs">vs</div>
-        <div class="compare-slot" id="compareSlot2" onclick="openCompareSelect(2)">
-          <div style="font-size:36px;opacity:0.2;margin-bottom:12px">🎾</div>
-          <div style="font-size:13px;color:var(--mute)">ラケットを選ぶ</div>
-        </div>
+      <div class="compare-tabs" id="compare-tabs">
+        <button class="compare-tab" data-ctype="racket" onclick="setCompareTab('racket')">ラケット比較</button>
+        <button class="compare-tab" data-ctype="string" onclick="setCompareTab('string')">ガット比較</button>
       </div>
-      <div id="compareTable" style="display:none">
-        <table class="compare-table">
-          <thead><tr><th id="comp-head-1"></th><th>SPEC</th><th id="comp-head-2"></th></tr></thead>
-          <tbody id="comp-tbody"></tbody>
-        </table>
-      </div>
+      <div id="compare-body"></div>
     </div>
+  </div>
+</div>
+
+<!-- ===== COMPARE FAB（全ビュー共通で表示） ===== -->
+<div class="compare-fab" id="compare-fab">
+  <div class="compare-fab-inner">
+    <div class="compare-fab-label" id="compare-fab-label"></div>
+    <div class="compare-fab-spacer"></div>
+    <span class="compare-fab-clear" onclick="clearCompare()">クリア</span>
+    <button class="compare-fab-btn" onclick="navigate('compare')">比較する →</button>
   </div>
 </div>
 
@@ -3936,7 +4066,7 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
         <h4>HELP</h4>
         <ul>
           <li><a onclick="navigate('rules')">ルールブック</a></li>
-          <li><a onclick="navigate('compare')">ラケット比較</a></li>
+          <li><a onclick="navigate('compare')">商品比較</a></li>
           <li><a>お問い合わせ</a></li>
           <li><a>サイトについて</a></li>
         </ul>
@@ -4028,7 +4158,6 @@ let allGrips = [];
 let currentStringBrand = null;
 let currentStringSeries = null;
 let currentGripBrand = null;
-let compareRackets = [null, null];
 let votes = {};
 let newsCache = null;
 let isHistoryNav = false; // ブラウザの戻る/進むでナビゲートしたフラグ
@@ -4048,6 +4177,8 @@ window.onload = function() {
   renderRules();
   loadNews(); // ニュース読み込み
   updateTodayDate();
+  loadCompareState();
+  renderCompareFab();
 
   // 初期state設定
   history.replaceState({ view: 'home' }, '', '#home');
@@ -4136,6 +4267,12 @@ function navigate(view, skipPush) {
 
   // 用品一覧を開いたときにカードを描画
   if (view === 'accessories') renderAccessoriesPage();
+
+  // 比較画面を開いたときに比較テーブルを描画
+  if (view === 'compare') {
+    if (compareState.racket.length === 0 && compareState.string.length > 0) compareTab = 'string';
+    renderCompareBody();
+  }
 
   // ブラウザ履歴に追加（戻る/進む対応）
   if (!skipPush && !isHistoryNav) {
@@ -4372,6 +4509,7 @@ function renderRacketGrid(rackets) {
           <div>パターン <strong>${r.pattern}</strong></div>
         </div>
         <button class="rakuten-btn" onclick="event.stopPropagation();openRakuten(this, '${r.brand}', '${r.model}')">楽天で価格チェック →</button>
+        ${compareBtnHtml('racket', r.id)}
       </div>
     </div>`).join('');
 
@@ -4906,6 +5044,8 @@ function selectRacket(id) {
   document.getElementById('detail-img-area').innerHTML = '<div class="empty-icon">🎾</div>';
   document.getElementById('detail-rakuten-btn').onclick = () => openRakuten(null, r.brand, r.model);
   document.getElementById('detail-amazon-btn').onclick = () => openAmazon(r.brand, r.model);
+  updateCompareBtn('detail-compare-btn', 'racket', r.id);
+  document.getElementById('detail-compare-btn').onclick = () => { toggleCompare('racket', r.id); updateCompareBtn('detail-compare-btn', 'racket', r.id); };
   loadRakutenResults(r);
   navigate('detail', true);
   if (!isHistoryNav) history.pushState({ view: 'detail', racketId: id }, '', `#detail/${id}`);
@@ -5288,6 +5428,7 @@ function renderStringsFiltered() {
         ${gaugeChips}
         ${chips}
         <button class="rakuten-btn" onclick="event.stopPropagation();openRakutenString('${s.brand}','${s.model.replace(/'/g,"\\'")}')">楽天で価格チェック →</button>
+        ${compareBtnHtml('string', s.id)}
       </div>
     </div>`;
   }).join('');
@@ -5500,6 +5641,7 @@ function renderStringGrid(allInSeries) {
         ${gaugeChips}
         ${chips}
         <button class="rakuten-btn" onclick="event.stopPropagation();openRakutenString('${s.brand}','${s.model.replace(/'/g,"\\'")}')">楽天で価格チェック →</button>
+        ${compareBtnHtml('string', s.id)}
       </div>
     </div>`;
   }).join('');
@@ -5569,6 +5711,8 @@ function selectString(id) {
   document.getElementById('string-detail-rakuten-btn').onclick = () => openRakutenString(s.brand, s.model);
   rollBtn.onclick = () => openRakutenStringRoll(s.brand, s.model, s.searchKeyword);
   document.getElementById('string-detail-amazon-btn').onclick = () => openAmazonString(s.brand, s.model);
+  updateCompareBtn('string-detail-compare-btn', 'string', s.id);
+  document.getElementById('string-detail-compare-btn').onclick = () => { toggleCompare('string', s.id); updateCompareBtn('string-detail-compare-btn', 'string', s.id); };
 
   // モードタブ表示制御
   const modeWrap = document.getElementById('string-rk-mode-wrap');
@@ -5895,37 +6039,212 @@ function renderProPlayers() {
     </div>`).join('');
 }
 
-// ===== COMPARE =====
-function openCompareSelect(slot) {
-  const model = prompt('ラケットモデル名を入力（例: Clash 100 V3.0）');
-  if (!model) return;
-  const r = allRackets.find(x => x.model.toLowerCase().includes(model.toLowerCase()));
-  if (!r) { alert('見つかりませんでした'); return; }
-  compareRackets[slot-1] = r;
-  updateCompare();
+// ===== STEP3: 商品比較機能 =====
+// ラケット・ガットをそれぞれ最大4本までlocalStorageに保持し、一覧/詳細のどこからでも
+// 「比較に追加」でワンクリック追加できるようにする。比較画面では既存のfetchRakutenDetailData/
+// getCachedPrice（詳細ページと同じキャッシュ・レート制限対策付き経路）を1商品ずつ呼び、
+// 最安値と購入導線を表示する。
+const COMPARE_KEY = 'lt_compare_v1';
+const COMPARE_MAX = 4;
+let compareState = { racket: [], string: [] };
+let compareTab = 'racket';
+
+function loadCompareState() {
+  try {
+    const raw = localStorage.getItem(COMPARE_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed.racket)) compareState.racket = parsed.racket.slice(0, COMPARE_MAX);
+    if (Array.isArray(parsed.string)) compareState.string = parsed.string.slice(0, COMPARE_MAX);
+  } catch (e) { /* 無視 */ }
+}
+function saveCompareState() {
+  try { localStorage.setItem(COMPARE_KEY, JSON.stringify(compareState)); } catch (e) { /* 無視 */ }
 }
 
-function updateCompare() {
-  const [r1, r2] = compareRackets;
-  if (r1) {
-    document.getElementById('compareSlot1').innerHTML = `<div class="racket-brand-text">${r1.brand}</div><div style="font-family:'Noto Serif JP',serif;font-weight:700;font-size:18px;margin-top:10px">${r1.model}</div>`;
-    document.getElementById('compareSlot1').classList.add('filled');
+function isInCompare(type, id) { return compareState[type].indexOf(id) !== -1; }
+
+// 一覧カード用の「比較に追加」ボタンHTML（data属性で後から一括同期できるようにする）
+function compareBtnHtml(type, id) {
+  const on = isInCompare(type, id);
+  return `<button class="compare-add-btn${on ? ' on' : ''}" data-compare-btn="${type}:${id}" onclick="event.stopPropagation();toggleCompare('${type}','${id}')">${on ? '比較に追加済み' : '比較に追加'}</button>`;
+}
+// 詳細ページ用の固定ボタン（id指定）の見た目を更新
+function updateCompareBtn(btnId, type, id) {
+  const btn = document.getElementById(btnId);
+  if (!btn) return;
+  const on = isInCompare(type, id);
+  btn.textContent = on ? '比較に追加済み' : '比較に追加';
+  btn.classList.toggle('on', on);
+}
+// 一覧カード側の同一商品ボタン（複数箇所に表示されうる）をまとめて同期
+function syncCompareButtons(type, id) {
+  const on = isInCompare(type, id);
+  document.querySelectorAll(`[data-compare-btn="${type}:${id}"]`).forEach(btn => {
+    btn.classList.toggle('on', on);
+    btn.textContent = on ? '比較に追加済み' : '比較に追加';
+  });
+}
+
+function toggleCompare(type, id) {
+  const list = compareState[type];
+  const idx = list.indexOf(id);
+  if (idx !== -1) {
+    list.splice(idx, 1);
+  } else {
+    if (list.length >= COMPARE_MAX) {
+      alert(`比較は同時に最大${COMPARE_MAX}本までです。他の商品を外してから追加してください。`);
+      return;
+    }
+    list.push(id);
+    compareTab = type;
   }
-  if (r2) {
-    document.getElementById('compareSlot2').innerHTML = `<div class="racket-brand-text">${r2.brand}</div><div style="font-family:'Noto Serif JP',serif;font-weight:700;font-size:18px;margin-top:10px">${r2.model}</div>`;
-    document.getElementById('compareSlot2').classList.add('filled');
+  saveCompareState();
+  syncCompareButtons(type, id);
+  renderCompareFab();
+  const view = document.getElementById('view-compare');
+  if (view && view.classList.contains('active')) renderCompareBody();
+}
+
+function clearCompare() {
+  const ids = { racket: compareState.racket.slice(), string: compareState.string.slice() };
+  compareState = { racket: [], string: [] };
+  saveCompareState();
+  ids.racket.forEach(id => syncCompareButtons('racket', id));
+  ids.string.forEach(id => syncCompareButtons('string', id));
+  renderCompareFab();
+  const view = document.getElementById('view-compare');
+  if (view && view.classList.contains('active')) renderCompareBody();
+}
+
+function renderCompareFab() {
+  const fab = document.getElementById('compare-fab');
+  const label = document.getElementById('compare-fab-label');
+  if (!fab || !label) return;
+  const rCount = compareState.racket.length;
+  const sCount = compareState.string.length;
+  if (rCount + sCount === 0) { fab.classList.remove('show'); return; }
+  fab.classList.add('show');
+  const parts = [];
+  if (rCount) parts.push(`ラケット <strong>${rCount}</strong> 本`);
+  if (sCount) parts.push(`ガット <strong>${sCount}</strong> 本`);
+  label.innerHTML = '比較リスト：' + parts.join(' ・ ');
+}
+
+function setCompareTab(type) {
+  compareTab = type;
+  renderCompareBody();
+}
+
+const COMPARE_SPECS = {
+  racket: [
+    { label: '重量', key: 'weight', unit: 'g', numeric: true, lowerBetter: true },
+    { label: 'フェイス面積', key: 'headSize', unit: 'in²', numeric: true },
+    { label: 'バランス', key: 'balance', unit: 'mm', numeric: true },
+    { label: 'パターン', key: 'pattern', unit: '' },
+    { label: 'ビーム厚', key: 'beam', unit: '' },
+    { label: 'スウィングウェイト', key: 'swingWeight', unit: '', numeric: true },
+    { label: '発売年', key: 'year', unit: '年' }
+  ],
+  string: [
+    { label: '素材', key: 'type', unit: '' },
+    { label: 'ゲージ', key: 'gauge', unit: '' },
+    { label: '長さ', key: 'length', unit: '' },
+    { label: 'カラー', key: 'color', unit: '' },
+    { label: '発売年', key: 'year', unit: '年' }
+  ]
+};
+
+function renderCompareBody() {
+  document.querySelectorAll('#compare-tabs .compare-tab').forEach(t => t.classList.toggle('active', t.dataset.ctype === compareTab));
+  const body = document.getElementById('compare-body');
+  if (!body) return;
+  const db = compareTab === 'racket' ? allRackets : allStrings;
+  const items = compareState[compareTab].map(id => db.find(x => x.id === id)).filter(Boolean);
+  const labelName = compareTab === 'racket' ? 'ラケット' : 'ガット';
+
+  if (!items.length) {
+    body.innerHTML = `<div class="compare-empty">
+      <div class="compare-empty-title">比較する${labelName}がまだありません</div>
+      <p>一覧や商品詳細ページの「比較に追加」ボタンから、最大${COMPARE_MAX}本まで追加できます。</p>
+      <button class="btn btn-primary" style="margin-top:20px" onclick="navigate('${compareTab === 'racket' ? 'rackets' : 'strings'}')">${labelName}一覧へ →</button>
+    </div>`;
+    return;
   }
-  if (r1 && r2) {
-    document.getElementById('compareTable').style.display = 'block';
-    document.getElementById('comp-head-1').textContent = r1.model;
-    document.getElementById('comp-head-2').textContent = r2.model;
-    const specs = [['重量', 'weight', 'g', (a,b)=>a<b], ['フェイス', 'headSize', 'in²', (a,b)=>a>b], ['バランス', 'balance', 'mm', null], ['パターン', 'pattern', '', null]];
-    document.getElementById('comp-tbody').innerHTML = specs.map(([label, key, unit, better]) => {
-      const v1 = r1[key], v2 = r2[key];
-      const w1 = better ? (better(v1,v2)?'winner':'') : '';
-      const w2 = better ? (better(v2,v1)?'winner':'') : '';
-      return `<tr><td class="${w1}">${v1}${unit}</td><td>${label}</td><td class="${w2}">${v2}${unit}</td></tr>`;
+
+  const specs = COMPARE_SPECS[compareTab];
+  const rows = specs.map(spec => {
+    let minV = null, maxV = null;
+    if (spec.numeric) {
+      const nums = items.map(it => parseFloat(it[spec.key])).filter(n => !isNaN(n));
+      if (nums.length > 1 && new Set(nums).size > 1) { minV = Math.min(...nums); maxV = Math.max(...nums); }
+    }
+    const cells = items.map(it => {
+      const v = it[spec.key];
+      let cls = 'compare-val';
+      if (spec.numeric && minV !== null) {
+        const n = parseFloat(v);
+        if (!isNaN(n)) {
+          if (n === (spec.lowerBetter ? minV : maxV)) cls += ' cmp-min';
+          else if (n === (spec.lowerBetter ? maxV : minV)) cls += ' cmp-max';
+        }
+      }
+      const display = (v === undefined || v === null || v === '') ? '-' : `${v}${spec.unit}`;
+      return `<td><span class="${cls}">${display}</span></td>`;
     }).join('');
+    return `<tr><td class="compare-col-label">${spec.label}</td>${cells}</tr>`;
+  }).join('');
+
+  const head = items.map(it => `
+    <th class="compare-col-head">
+      <span class="compare-col-remove" onclick="toggleCompare('${compareTab}','${it.id}')" title="比較から外す">&times;</span>
+      <div class="compare-col-brand">${it.brand}</div>
+      <div class="compare-col-name">${it.model}</div>
+      <div class="compare-col-img" id="cmp-img-${it.id}"><div class="ph" style="font-size:30px;opacity:0.15">🎾</div></div>
+    </th>`).join('');
+
+  const priceRow = `<tr class="compare-price-row"><td class="compare-col-label">最安値</td>${items.map(it => `<td id="cmp-price-${it.id}"><span class="compare-val" style="color:var(--mute);font-size:12px">取得中...</span></td>`).join('')}</tr>`;
+
+  body.innerHTML = `<div class="compare-scroll"><table class="compare-table">
+    <thead><tr><th class="compare-col-label">&nbsp;</th>${head}</tr></thead>
+    <tbody>${priceRow}${rows}</tbody>
+  </table></div>
+  <p class="rakuten-note" style="margin-top:14px">※最安値は楽天市場の取得時点の価格です。在庫・送料は各商品ページでご確認ください。</p>`;
+
+  items.forEach(it => loadComparePrice(compareTab, it));
+}
+
+// 比較画面の各列ごとに1回だけ楽天検索を行う（最大4件・detail画面と同じキャッシュ経路のためレート制限対策は既存のまま維持される）
+async function loadComparePrice(type, item) {
+  const priceCell = document.getElementById(`cmp-price-${item.id}`);
+  if (!priceCell) return;
+  const cacheKey = `compare__${type}__${item.id}`;
+  const kw = item.searchKeyword || `${item.brand} ${item.model}`;
+  const fetchUrl = (type === 'racket' && item.janCode)
+    ? `/api/rakuten-search?janCode=${encodeURIComponent(item.janCode)}&keyword=${encodeURIComponent(kw)}`
+    : `/api/rakuten-search?keyword=${encodeURIComponent(kw + (type === 'racket' ? ' テニスラケット' : ' テニスガット'))}`;
+
+  const cached = getCachedPrice(cacheKey);
+  const result = cached || await fetchRakutenDetailData(fetchUrl, cacheKey);
+  const fail = () => { priceCell.innerHTML = `<span class="compare-val" style="color:var(--mute);font-size:12px">価格情報を取得できません</span>`; };
+  if (!result || result.error || !result.items || !result.items.length) { fail(); return; }
+
+  let candidates = result.items;
+  if (type === 'racket') candidates = filterRacketItems(candidates, item);
+  const priced = candidates.filter(i => i.price > 0).sort((a, b) => a.price - b.price);
+  if (!priced.length) { fail(); return; }
+
+  const cheapest = priced[0];
+  const detailFn = type === 'racket' ? 'selectRacket' : 'selectString';
+  priceCell.innerHTML = `
+    <span class="compare-val">¥${cheapest.price.toLocaleString()}</span><br>
+    <span style="font-size:10px;color:var(--mute)">${cheapest.shopName}</span>
+    <a href="${cheapest.itemUrl}" target="_blank" rel="noopener" class="compare-buy-btn">楽天で見る →</a>
+    <span class="compare-detail-link" onclick="${detailFn}('${item.id}')">商品詳細を見る</span>`;
+
+  const imgCell = document.getElementById(`cmp-img-${item.id}`);
+  if (imgCell && cheapest.largeImageUrl) {
+    imgCell.innerHTML = `<img src="${cheapest.largeImageUrl}" alt="${item.model}">`;
   }
 }
 </script>

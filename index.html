@@ -3327,12 +3327,32 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
     <div class="container">
       <div class="page-hero-eyebrow">RACKETS DATABASE</div>
       <h1 class="page-hero-title">ラケットを探す</h1>
-      <p class="page-hero-desc">9ブランド・180モデル以上の最新テニスラケットを掲載しています。</p>
+      <p class="page-hero-desc">9ブランド・180モデル以上の最新テニスラケットを掲載しています。「部活で使える」タブで初心者向け・部活の定番・コスパ重視から絞り込みできます。</p>
+    </div>
+  </div>
+  <div class="str-filter-wrap">
+    <div class="container">
+      <div class="str-filter-inner">
+        <div class="str-filter-row">
+          <span class="str-filter-label">部活で使える</span>
+          <button class="str-fbtn active" data-rkf="club" data-val="all" onclick="onRkClubFbtn(this,'all')">すべて</button>
+          <button class="str-fbtn" data-rkf="club" data-val="beginner" onclick="onRkClubFbtn(this,'beginner')">初心者向け</button>
+          <button class="str-fbtn" data-rkf="club" data-val="standard" onclick="onRkClubFbtn(this,'standard')">部活の定番</button>
+          <button class="str-fbtn" data-rkf="club" data-val="value" onclick="onRkClubFbtn(this,'value')">コスパ重視</button>
+          <div class="str-filter-count" id="rkFilterCount" style="display:none"><strong>0</strong>件</div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="page-body">
     <div class="container">
-      <div class="brand-grid" id="brandGrid"></div>
+      <div id="racketBrandGridWrap">
+        <div class="brand-grid" id="brandGrid"></div>
+      </div>
+      <div id="rkFilterResultsWrap" style="display:none">
+        <div class="str-filter-results-title" id="rkFilterResultsTitle">FILTERED RESULTS</div>
+        <div class="racket-grid" id="rkFilterGrid"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -3465,6 +3485,13 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
           <button class="str-fbtn" data-sf="gauge" data-val="125" onclick="onStrFbtn(this,'gauge','125')">1.25</button>
           <button class="str-fbtn" data-sf="gauge" data-val="127128" onclick="onStrFbtn(this,'gauge','127128')">1.27〜1.28</button>
           <button class="str-fbtn" data-sf="gauge" data-val="thick" onclick="onStrFbtn(this,'gauge','thick')">1.30以上</button>
+        </div>
+        <div class="str-filter-row">
+          <span class="str-filter-label">部活で使える</span>
+          <button class="str-fbtn active" data-sf="club" data-val="all" onclick="onStrFbtn(this,'club','all')">すべて</button>
+          <button class="str-fbtn" data-sf="club" data-val="beginner" onclick="onStrFbtn(this,'club','beginner')">初心者向け</button>
+          <button class="str-fbtn" data-sf="club" data-val="value" onclick="onStrFbtn(this,'club','value')">コスパ重視</button>
+          <button class="str-fbtn" data-sf="club" data-val="bulk" onclick="onStrFbtn(this,'club','bulk')">まとめ買い向け</button>
           <div class="str-filter-count" id="strFilterCount" style="display:none"><strong>0</strong>件</div>
         </div>
         <div class="str-filter-search">
@@ -4355,6 +4382,9 @@ function navigate(view, skipPush) {
 
   // ガットトップに戻ったときはフィルターをすべてリセット
   if (view === 'strings') resetStringFilters();
+
+  // ラケットトップに戻ったときは部活フィルターをリセット
+  if (view === 'rackets') resetRacketClubFilter();
 
   // 用品一覧を開いたときにカードを描画
   if (view === 'accessories') renderAccessoriesPage();
@@ -5555,13 +5585,125 @@ function onColTabClick(btn) {
 }
 
 // ===== STRINGS フィルター =====
-const strFilter = { brand: 'all', type: 'all', form: 'all', gauge: 'all' };
+// ===== STEP6: 部活カテゴリ整理 =====
+// 「部活で使える」タグは既存データファイルに新フィールドを追加するのではなく、既存の
+// 物理スペック・材質から都度ヒューリスティックに算出する（300+件のデータ移行を避けるため）。
+// 価格データ自体は保持していないため、「コスパ重視」はスペック上の入門・レクリエーション向け
+// 傾向を示す近似であり、実売価格そのものを保証するものではない（判断根拠はPROGRESS.md参照）。
+function clubTagsForRacket(r) {
+  const tags = [];
+  const mains = (r.pattern || '').match(/x\s*(\d+)/i);
+  const mainsNum = mains ? parseInt(mains[1], 10) : 19;
+  if (r.weight <= 290 && r.headSize >= 100) tags.push('beginner');
+  if (r.headSize >= 98 && r.headSize <= 104 && mainsNum >= 19 && r.weight >= 270 && r.weight <= 305) tags.push('standard');
+  if (r.weight <= 295 && r.headSize >= 102) tags.push('value');
+  return tags;
+}
+function clubTagsForString(s) {
+  const tags = [];
+  const type = s.type || '';
+  if (/ナイロン|マルチ/.test(type)) tags.push('beginner');
+  if (/ナイロン/.test(type)) tags.push('value');
+  if (/ナイロン/.test(type) && (s.form === 'roll' || s.form === 'both')) tags.push('bulk');
+  return tags;
+}
+
+// ラケット一覧トップ（ブランド一覧の上）に置く「部活で使える」クイックフィルター。
+// 既存のブランド→シリーズ絞り込みとは独立した、横断検索の入口。
+let rkClubFilter = 'all';
+function resetRacketClubFilter() {
+  rkClubFilter = 'all';
+  document.querySelectorAll('.str-fbtn[data-rkf="club"]').forEach(b => b.classList.toggle('active', b.dataset.val === 'all'));
+  renderRacketsClubFiltered();
+}
+function onRkClubFbtn(btn, val) {
+  rkClubFilter = val;
+  document.querySelectorAll('.str-fbtn[data-rkf="club"]').forEach(b => b.classList.toggle('active', b === btn));
+  renderRacketsClubFiltered();
+}
+const RK_CLUB_LABELS = { beginner: '初心者向け', standard: '部活の定番', value: 'コスパ重視' };
+function renderRacketsClubFiltered() {
+  const brandWrap = document.getElementById('racketBrandGridWrap');
+  const resultWrap = document.getElementById('rkFilterResultsWrap');
+  const countEl = document.getElementById('rkFilterCount');
+  const isListMode = rkClubFilter !== 'all';
+  if (brandWrap) brandWrap.style.display = isListMode ? 'none' : '';
+  if (resultWrap) resultWrap.style.display = isListMode ? '' : 'none';
+  if (countEl) countEl.style.display = isListMode ? '' : 'none';
+  if (!isListMode || !allRackets.length) return;
+
+  // シリーズ単位で代表モデルのみ表示（パターン違いだけの重複でリストが埋まらないように）
+  const seen = new Set();
+  const filtered = [];
+  allRackets.forEach(r => {
+    if (!clubTagsForRacket(r).includes(rkClubFilter)) return;
+    const key = `${r.brand}__${r.series || r.model}`;
+    if (seen.has(key)) return;
+    seen.add(key);
+    filtered.push(r);
+  });
+
+  if (countEl) countEl.innerHTML = `<strong>${filtered.length}</strong>件`;
+  const titleEl = document.getElementById('rkFilterResultsTitle');
+  if (titleEl) titleEl.textContent = `${filtered.length} MODELS FOUND — ${RK_CLUB_LABELS[rkClubFilter] || ''}`;
+
+  const grid = document.getElementById('rkFilterGrid');
+  if (!grid) return;
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><div class="empty-icon">🎾</div><div class="empty-text">条件に合うラケットが見つかりません</div></div>`;
+    return;
+  }
+  grid.innerHTML = filtered.map(r => `
+    <div class="racket-card" onclick="selectRacket('${r.id}')">
+      <div class="racket-img" id="rkf-${r.id}"><div class="ph">🎾</div></div>
+      <div class="racket-info">
+        <div class="racket-brand-text">${r.brand}</div>
+        <div class="racket-model">${r.model}</div>
+        <div class="racket-specs">
+          <div>重量 <strong>${r.weight}g</strong></div>
+          <div>面積 <strong>${r.headSize}in²</strong></div>
+          <div>バランス <strong>${r.balance}mm</strong></div>
+          <div>パターン <strong>${r.pattern}</strong></div>
+        </div>
+        <button class="rakuten-btn" onclick="event.stopPropagation();openRakuten(this, '${r.brand}', '${r.model}')">楽天で価格チェック →</button>
+        ${compareBtnHtml('racket', r.id)}
+      </div>
+    </div>`).join('');
+  filtered.forEach((r, i) => setTimeout(() => loadClubFilterImage(r), i * 200));
+}
+// 「部活で使える」フィルターグリッド専用の画像取得（id接頭辞rkf-を使い、シリーズ一覧側のci-とID衝突しないようにする）
+async function loadClubFilterImage(r) {
+  const key = imgCacheKey(r);
+  const cached = getCachedImg(key);
+  const cell = document.getElementById(`rkf-${r.id}`);
+  if (!cell) return;
+  if (cached) { cell.innerHTML = `<img src="${cached}" alt="${r.model}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=ph>🎾</div>'">`; return; }
+  try {
+    const url = r.janCode
+      ? `/api/rakuten-search?janCode=${encodeURIComponent(r.janCode)}&keyword=${encodeURIComponent(r.searchKeyword || r.model)}`
+      : `/api/rakuten-search?keyword=${encodeURIComponent(r.searchKeyword || `${r.brand} ${r.model}`)}`;
+    const res = await rakutenFetch(url);
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.items && data.items.length) {
+      const item = r.janCode ? data.items[0] : (pickBestMatch(r, data.items) || data.items[0]);
+      if (item && item.largeImageUrl) {
+        setCachedImg(key, item.largeImageUrl, item);
+        const c = document.getElementById(`rkf-${r.id}`);
+        if (c) c.innerHTML = `<img src="${item.largeImageUrl.replace(/_ex=\d+x\d+/, '_ex=300x300')}" alt="${r.model}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=ph>🎾</div>'">`;
+      }
+    }
+  } catch (e) { /* 画像取得失敗時はプレースホルダーのまま */ }
+}
+
+const strFilter = { brand: 'all', type: 'all', form: 'all', gauge: 'all', club: 'all' };
 
 function resetStringFilters() {
   strFilter.brand = 'all'; strFilter.type = 'all';
   strFilter.form = 'all'; strFilter.gauge = 'all';
+  strFilter.club = 'all';
   // ボタンのアクティブ状態をリセット
-  ['type','form','gauge'].forEach(key => {
+  ['type','form','gauge','club'].forEach(key => {
     document.querySelectorAll(`.str-fbtn[data-sf="${key}"]`).forEach(b => {
       b.classList.toggle('active', b.dataset.val === 'all');
     });
@@ -5598,7 +5740,7 @@ function onStrSearch() {
 // ブランド/形態/ゲージが選択されたときだけ全商品リストモードに切り替える。
 function renderStringsFiltered() {
   const isListMode = strFilter.brand !== 'all'
-    || strFilter.form !== 'all' || strFilter.gauge !== 'all';
+    || strFilter.form !== 'all' || strFilter.gauge !== 'all' || strFilter.club !== 'all';
 
   const brandWrap = document.getElementById('stringBrandGridWrap');
   const resultWrap = document.getElementById('strFilterResultsWrap');
@@ -5614,7 +5756,9 @@ function renderStringsFiltered() {
   if (countEl) countEl.innerHTML = `<strong>${groups.length}</strong>件`;
   const titleEl = document.getElementById('strFilterResultsTitle');
   const typeLabel = strFilter.type !== 'all' ? ` — ${strFilter.type}` : '';
-  if (titleEl) titleEl.textContent = groups.length + ' MODELS FOUND' + typeLabel;
+  const clubLabelMap = { beginner: '初心者向け', value: 'コスパ重視', bulk: 'まとめ買い向け' };
+  const clubLabel = strFilter.club !== 'all' ? ` — ${clubLabelMap[strFilter.club] || ''}` : '';
+  if (titleEl) titleEl.textContent = groups.length + ' MODELS FOUND' + typeLabel + clubLabel;
 
   const grid = document.getElementById('strFilterGrid');
   if (!grid) return;
@@ -5669,6 +5813,7 @@ function applyStrFilter(list) {
       if (strFilter.gauge === '127128' && (gn < 1.27 || gn > 1.285)) return false;
       if (strFilter.gauge === 'thick' && gn < 1.30) return false;
     }
+    if (strFilter.club !== 'all' && !clubTagsForString(s).includes(strFilter.club)) return false;
     return true;
   });
 }

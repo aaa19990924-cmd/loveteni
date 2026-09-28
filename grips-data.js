@@ -1,4 +1,10 @@
 // テニスグリップデータベース
+//
+// SPORT区分: このファイルは硬式テニス（hard）専用データ。軟式（ソフトテニス）用のデータは
+// 将来的に別ファイル（例: grips-data-soft.js、GRIP_DATA_SPORT='soft'）・別ルートで管理し、
+// この GRIP_DATABASE には絶対に混在させないこと（別サイト化も視野に入れているため）。
+const GRIP_DATA_SPORT = 'hard';
+
 const GRIP_BRANDS = ['Wilson', 'Tourna', 'YONEX', 'Babolat', 'HEAD', 'Tecnifibre', 'Gosen', 'Prince'];
 
 const GRIP_BRAND_INFO = {

@@ -1,4 +1,10 @@
 // テニスガット（ストリング）データベース
+//
+// SPORT区分: このファイルは硬式テニス（hard）専用データ。軟式（ソフトテニス）用のデータは
+// 将来的に別ファイル（例: strings-data-soft.js、STRING_DATA_SPORT='soft'）・別ルートで管理し、
+// この STRING_DATABASE には絶対に混在させないこと（別サイト化も視野に入れているため）。
+const STRING_DATA_SPORT = 'hard';
+
 const STRING_BRANDS = ['Luxilon', 'Babolat', 'Wilson', 'YONEX', 'HEAD', 'Tecnifibre', 'Solinco', 'Gosen', 'Toalson', 'Prince', 'Dunlop', 'Polyfibre', 'Diadem', 'Kirschbaum', 'MSV', 'Pacific', 'Signum Pro', 'Weiss Cannon'];
 
 const STRING_BRAND_INFO = {

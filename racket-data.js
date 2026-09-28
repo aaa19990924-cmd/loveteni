@@ -1,6 +1,12 @@
 // ラブテニ ラケットデータベース
 // 2026/05/27更新版 - 各ブランドの最新ラインナップを反映
 // 情報源: ウインザーラケット、各ブランド公式サイト、テニスクラシック等
+//
+// SPORT区分: このファイルは硬式テニス（hard）専用データ。軟式（ソフトテニス）用のデータは
+// 将来的に別ファイル（例: racket-data-soft.js、RACKET_DATA_SPORT='soft'）・別ルートで管理し、
+// この RACKET_DATABASE には絶対に混在させないこと（別サイト化も視野に入れているため）。
+// 各データファイルでグローバル名が衝突しないよう、定数名にファイル種別を含めている。
+const RACKET_DATA_SPORT = 'hard';
 
 const BRANDS = ['Wilson', 'Babolat', 'YONEX', 'HEAD', 'DUNLOP', 'Prince', 'Tecnifibre', 'Kneissl', 'DIADEM', 'Snauwaert', 'Lacoste'];
 

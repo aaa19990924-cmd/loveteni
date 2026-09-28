@@ -45,7 +45,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .page-hero {
   background: var(--ink);
   color: white;
-  padding: 56px 32px 48px;
+  padding: 45px 26px 38px;
   text-align: center;
 }
 .page-hero-eyebrow {
@@ -54,11 +54,11 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   font-weight: 700;
   letter-spacing: 0.22em;
   color: var(--gold);
-  margin-bottom: 14px;
+  margin-bottom: 11px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
 }
 .page-hero-eyebrow::before,
 .page-hero-eyebrow::after {
@@ -71,10 +71,10 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 }
 .page-hero-title {
   font-family: 'Noto Serif JP', serif;
-  font-size: 36px;
+  font-size: 28px;
   font-weight: 700;
   letter-spacing: 0.04em;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 .page-hero-sub {
   font-size: 14px;
@@ -84,12 +84,12 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
 /* ===== MAIN CONTENT ===== */
 .container {
-  max-width: 1360px;
+  max-width: 1240px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 19px;
 }
 .content-wrap {
-  padding: 48px 0 80px;
+  padding: 38px 0 64px;
 }
 
 /* ===== FILTER BAR ===== */
@@ -97,7 +97,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 36px;
+  margin-bottom: 29px;
   flex-wrap: wrap;
 }
 .filter-label {
@@ -110,7 +110,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   margin-right: 4px;
 }
 .filter-btn {
-  padding: 7px 18px;
+  padding: 7px 14px;
   border-radius: 2px;
   border: 1px solid var(--line-strong);
   font-size: 12px;
@@ -131,7 +131,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   letter-spacing: 0.06em;
 }
 .video-count strong {
-  font-size: 22px;
+  font-size: 19px;
   font-weight: 700;
   color: var(--ink);
   margin-right: 3px;
@@ -141,7 +141,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 .video-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-  gap: 28px;
+  gap: 22px;
 }
 
 /* ===== VIDEO CARD ===== */
@@ -175,7 +175,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
 /* カード本文 */
 .video-body {
-  padding: 20px 20px 0;
+  padding: 16px 16px 0;
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -184,7 +184,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 .video-tag {
   font-family: 'DM Sans', sans-serif;
@@ -220,12 +220,12 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   flex: 1;
 }
 .video-footer {
-  padding: 14px 20px 18px;
+  padding: 11px 16px 14px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   border-top: 1px solid var(--line);
-  margin-top: 16px;
+  margin-top: 13px;
 }
 .video-tournament {
   font-family: 'DM Sans', sans-serif;
@@ -253,7 +253,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 /* ===== EMPTY STATE ===== */
 .empty-state {
   text-align: center;
-  padding: 80px 0;
+  padding: 64px 0;
 }
 .empty-state-title {
   font-size: 16px;
@@ -268,11 +268,11 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
 /* ===== ADD GUIDE ===== */
 .add-guide {
-  margin-top: 60px;
+  margin-top: 48px;
   background: var(--cream);
   border: 1px solid var(--line);
   border-left: 3px solid var(--accent);
-  padding: 24px 28px;
+  padding: 19px 22px;
 }
 .add-guide-title {
   font-family: 'DM Sans', sans-serif;
@@ -281,7 +281,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   letter-spacing: 0.16em;
   color: var(--accent);
   text-transform: uppercase;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 .add-guide-body {
   font-size: 13px;
@@ -301,7 +301,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 /* ===== FOOTER ===== */
 .site-footer {
   border-top: 1px solid var(--line);
-  padding: 32px;
+  padding: 26px;
   text-align: center;
   font-size: 12px;
   color: var(--mute);
@@ -311,11 +311,11 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .page-hero { padding: 40px 20px 32px; }
-  .page-hero-title { font-size: 26px; }
-  .container { padding: 0 20px; }
-  .content-wrap { padding: 32px 0 60px; }
-  .video-grid { grid-template-columns: 1fr; gap: 20px; }
+  .page-hero { padding: 32px 16px 26px; }
+  .page-hero-title { font-size: 22px; }
+  .container { padding: 0 16px; }
+  .content-wrap { padding: 26px 0 48px; }
+  .video-grid { grid-template-columns: 1fr; gap: 16px; }
 }
 </style>
 </head>

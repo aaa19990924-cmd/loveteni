@@ -41,34 +41,34 @@ body {
 a { color: inherit; text-decoration: none; }
 button { font-family: inherit; cursor: pointer; border: none; background: none; }
 ::selection { background: var(--accent); color: white; }
-.container { max-width: 1360px; margin: 0 auto; padding: 0 24px; }
-.content-wrap { padding: 48px 0 80px; flex: 1 0 auto; }
+.container { max-width: 1240px; margin: 0 auto; padding: 0 19px; }
+.content-wrap { padding: 38px 0 64px; flex: 1 0 auto; }
 
 /* ===== PAGE HERO ===== */
-.page-hero { background: var(--ink); color: white; padding: 56px 32px 48px; text-align: center; }
+.page-hero { background: var(--ink); color: white; padding: 45px 26px 38px; text-align: center; }
 .page-hero-eyebrow {
   font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 700; letter-spacing: 0.22em;
-  color: var(--gold); margin-bottom: 14px; display: flex; align-items: center; justify-content: center; gap: 10px;
+  color: var(--gold); margin-bottom: 11px; display: flex; align-items: center; justify-content: center; gap: 8px;
 }
 .page-hero-eyebrow::before, .page-hero-eyebrow::after { content: ''; display: block; width: 40px; height: 1px; background: var(--gold); opacity: 0.6; }
-.page-hero-title { font-family: 'Noto Serif JP', serif; font-size: 36px; font-weight: 700; letter-spacing: 0.04em; margin-bottom: 12px; }
+.page-hero-title { font-family: 'Noto Serif JP', serif; font-size: 28px; font-weight: 700; letter-spacing: 0.04em; margin-bottom: 10px; }
 .page-hero-sub { font-size: 14px; color: rgba(255,255,255,0.6); letter-spacing: 0.02em; max-width: 640px; margin: 0 auto; line-height: 1.8; }
 
 /* ===== CONTROLS ===== */
-.sc-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; margin-bottom: 20px; }
+.sc-controls { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 11px; margin-bottom: 16px; }
 .sc-updated { font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--mute); }
 .sc-updated strong { color: var(--ink); font-weight: 700; }
 .sc-refresh-btn {
-  font-size: 11px; font-weight: 700; letter-spacing: 0.06em; padding: 8px 16px;
+  font-size: 11px; font-weight: 700; letter-spacing: 0.06em; padding: 8px 13px;
   border: 1px solid var(--line-strong); border-radius: 100px; color: var(--mute); background: white; transition: all 0.15s;
 }
 .sc-refresh-btn:hover { border-color: var(--ink); color: var(--ink); }
 .sc-refresh-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 /* ===== FILTER BAR (equipment.html と同じパターン) ===== */
-.filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 32px; }
+.filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 26px; }
 .filter-btn {
-  padding: 8px 18px; border: 1px solid var(--line); background: white; font-size: 13px;
+  padding: 8px 14px; border: 1px solid var(--line); background: white; font-size: 13px;
   font-family: 'Noto Sans JP', sans-serif; color: var(--mute); cursor: pointer; transition: all 0.15s; border-radius: 100px;
 }
 .filter-btn.active { background: var(--ink); color: white; border-color: var(--ink); }
@@ -77,39 +77,39 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 /* ===== RANKING LIST (ranking.html の rank-item パターンを流用) ===== */
 .ranking-list { border: 1px solid var(--line); background: white; }
 .rank-item {
-  display: flex; align-items: center; padding: 20px 24px; border-bottom: 1px solid var(--line);
-  gap: 20px; transition: background 0.15s;
+  display: flex; align-items: center; padding: 16px 19px; border-bottom: 1px solid var(--line);
+  gap: 16px; transition: background 0.15s;
 }
 .rank-item:last-child { border-bottom: none; }
 .rank-item:hover { background: var(--cream); }
-.rank-num { font-family: 'DM Sans', sans-serif; font-size: 28px; font-weight: 700; color: var(--line-strong); min-width: 40px; text-align: center; flex-shrink: 0; }
+.rank-num { font-family: 'DM Sans', sans-serif; font-size: 24px; font-weight: 700; color: var(--line-strong); min-width: 40px; text-align: center; flex-shrink: 0; }
 .rank-item:nth-child(1) .rank-num { color: var(--gold); }
 .rank-thumb {
   width: 68px; height: 68px; flex-shrink: 0; background: var(--cream); border: 1px solid var(--line);
   display: flex; align-items: center; justify-content: center; overflow: hidden;
 }
 .rank-thumb img { width: 100%; height: 100%; object-fit: contain; }
-.rank-thumb-fallback { font-size: 24px; opacity: 0.2; }
+.rank-thumb-fallback { font-size: 20px; opacity: 0.2; }
 .rank-info { flex: 1; min-width: 0; }
 .rank-brand { font-size: 10px; letter-spacing: 0.15em; color: var(--mute); text-transform: uppercase; margin-bottom: 2px; }
 .rank-name { font-family: 'Noto Serif JP', serif; font-size: 17px; font-weight: 700; margin-bottom: 6px; }
 .rank-for { font-size: 12px; color: var(--mute); line-height: 1.7; margin-bottom: 8px; }
 .rank-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-.rank-tag { font-size: 10px; font-weight: 600; padding: 3px 9px; border: 1px solid var(--line-strong); color: var(--mute); }
+.rank-tag { font-size: 10px; font-weight: 600; padding: 3px 7px; border: 1px solid var(--line-strong); color: var(--mute); }
 .rank-price-col { text-align: right; min-width: 172px; flex-shrink: 0; }
-.rank-price { font-family: 'DM Sans', sans-serif; font-size: 22px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
-.rank-shop { font-size: 10px; color: var(--mute); margin-bottom: 12px; }
+.rank-price { font-family: 'DM Sans', sans-serif; font-size: 19px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+.rank-shop { font-size: 10px; color: var(--mute); margin-bottom: 10px; }
 .rank-cta-row { display: flex; flex-direction: column; gap: 6px; }
-.rank-cta-btn { display: block; padding: 9px 14px; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-align: center; transition: all 0.2s; border-radius: 2px; }
+.rank-cta-btn { display: block; padding: 7px 11px; font-size: 11px; font-weight: 700; letter-spacing: 0.04em; text-align: center; transition: all 0.2s; border-radius: 2px; }
 .rank-cta-detail { background: var(--ink); color: white; }
 .rank-cta-detail:hover { background: var(--accent); }
 .rank-cta-rakuten { background: #BF0000; color: white; }
 .rank-cta-rakuten:hover { background: #8B0000; }
 
-.sc-note { font-size: 11px; color: var(--mute); line-height: 1.8; padding: 20px 4px 0; }
+.sc-note { font-size: 11px; color: var(--mute); line-height: 1.8; padding: 16px 4px 0; }
 
 /* ===== LOADING ===== */
-.loading-state { text-align: center; padding: 60px 0; font-size: 14px; color: var(--mute); font-family: 'DM Sans', sans-serif; letter-spacing: 0.06em; }
+.loading-state { text-align: center; padding: 48px 0; font-size: 14px; color: var(--mute); font-family: 'DM Sans', sans-serif; letter-spacing: 0.06em; }
 .spin {
   display: inline-block; width: 18px; height: 18px; border: 2px solid var(--line-strong);
   border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 8px;
@@ -117,17 +117,17 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 @keyframes spin { to { transform: rotate(360deg); } }
 
 /* ===== FOOTER ===== */
-.site-footer { border-top: 1px solid var(--line); padding: 32px; text-align: center; font-size: 12px; color: var(--mute); font-family: 'DM Sans', sans-serif; letter-spacing: 0.06em; flex-shrink: 0; }
+.site-footer { border-top: 1px solid var(--line); padding: 26px; text-align: center; font-size: 12px; color: var(--mute); font-family: 'DM Sans', sans-serif; letter-spacing: 0.06em; flex-shrink: 0; }
 .site-footer a { color: var(--accent); }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-  .page-hero { padding: 40px 20px 32px; }
-  .page-hero-title { font-size: 26px; }
-  .container { padding: 0 20px; }
-  .content-wrap { padding: 32px 0 60px; }
-  .rank-item { flex-wrap: wrap; padding: 16px 16px; gap: 12px; }
-  .rank-price-col { text-align: left; min-width: 0; flex: 1 1 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .page-hero { padding: 32px 16px 26px; }
+  .page-hero-title { font-size: 22px; }
+  .container { padding: 0 16px; }
+  .content-wrap { padding: 26px 0 48px; }
+  .rank-item { flex-wrap: wrap; padding: 13px 13px; gap: 10px; }
+  .rank-price-col { text-align: left; min-width: 0; flex: 1 1 100%; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
   .rank-cta-row { flex-direction: row; flex: 1; }
   .rank-cta-btn { flex: 1; }
 }

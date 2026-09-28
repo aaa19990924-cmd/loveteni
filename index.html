@@ -1463,6 +1463,16 @@ section {
   border-color: var(--accent);
   color: var(--accent);
 }
+.rakuten-item-badge.badge-recommend {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  font-weight: 700;
+}
+.rakuten-item.is-recommend {
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
 .rakuten-item-price {
   font-family: 'DM Sans', sans-serif;
   font-size: 16px;
@@ -4793,25 +4803,29 @@ function renderRkOffers(){
   if(!st.container) return;
   let s = st.items.slice();
   if(st.sort==='point-desc') s.sort((a,b)=> offerPoint(b)-offerPoint(a) || (a.price||0)-(b.price||0));
+  else if(st.sort==='review-desc') s.sort((a,b)=> reviewScore(b)-reviewScore(a) || (a.price||0)-(b.price||0));
   else s.sort((a,b)=> (a.price||0)-(b.price||0)); // 安い順（デフォルト）
   const prices = s.map(i=>i.price||0).filter(p=>p>0);
   const minPrice = prices.length ? Math.min(...prices) : 0;
-  const header = `<div style="font-size:11px;color:var(--accent);margin-bottom:12px;font-family:'DM Sans',sans-serif;letter-spacing:0.1em">${st.header}</div>`;
+  const recommendId = pickRecommendedOffer(st.items);
+  const header = `<div style="font-size:11px;color:var(--accent);margin-bottom:12px;font-family:'DM Sans',sans-serif;letter-spacing:0.1em">${st.header}（${st.items.length}件のショップを比較）</div>`;
   const toggle = `<div class="offer-sort">
-    <button class="offer-sort-btn ${st.sort!=='point-desc'?'on':''}" onclick="setRkSort('price-asc')">安い順</button>
+    <button class="offer-sort-btn ${st.sort!=='point-desc'&&st.sort!=='review-desc'?'on':''}" onclick="setRkSort('price-asc')">安い順</button>
     <button class="offer-sort-btn ${st.sort==='point-desc'?'on':''}" onclick="setRkSort('point-desc')">ポイント順</button>
+    <button class="offer-sort-btn ${st.sort==='review-desc'?'on':''}" onclick="setRkSort('review-desc')">レビュー順</button>
   </div>`;
   const note = `<div class="rakuten-note">※ポイントは基本付与分（1%）の目安です。店舗キャンペーンやSPU等により実際はさらに多くなる場合があります。</div>`;
-  const grid = s.slice(0,8).map(it=>{
+  const grid = s.slice(0,8).map((it)=>{
     const pt = offerPoint(it);
     const badge = (it.price && it.price===minPrice) ? '<span class="offer-min">最安</span>' : '';
+    const isRecommend = recommendId && offerKey(it) === recommendId;
     const img = it.imageUrl ? `<img src="${it.largeImageUrl||it.imageUrl}" loading="lazy">` : '<div style="font-size:30px;opacity:0.15">🎾</div>';
-    return `<div class="rakuten-item">
+    return `<div class="rakuten-item${isRecommend?' is-recommend':''}">
       <div class="rakuten-item-img">${img}</div>
       <div class="rakuten-item-info">
         <div class="rakuten-item-name">${it.name}</div>
         <div class="rakuten-item-shop">${it.shopName}</div>
-        ${buildOfferBadges(it)}
+        ${buildOfferBadges(it, isRecommend)}
         <div class="rakuten-item-price">¥${(it.price||0).toLocaleString()}${badge}</div>
         <div class="rakuten-item-point">
           <div class="rakuten-item-point-num">+${pt.toLocaleString()}pt〜</div>
@@ -4826,10 +4840,28 @@ function renderRkOffers(){
     : '';
   st.container.innerHTML = header + toggle + note + `<div class="rakuten-grid">${grid}</div>` + amazonBtn;
 }
-// レビュー件数・評価・送料情報のテキストバッジ（絵文字は使わない）。
+// レビュー件数・評価から簡易スコアを算出（レビュー順ソート・おすすめ判定に使用）。
+// 追加のAPI呼び出しは発生させない（/api/rakuten-search の既存レスポンス項目のみ利用）。
+function reviewScore(it){
+  if (!it.reviewCount || !it.reviewAverage) return -1;
+  return Number(it.reviewAverage) * Math.log10(it.reviewCount + 1);
+}
+function offerKey(it){ return `${it.shopCode||''}__${it.itemUrl||it.name}`; }
+// 一覧の中から「おすすめ」バッジを付ける1点を選ぶ。
+// レビュー評価・件数が一定水準に達した商品がない場合はバッジを付けない（根拠のない推薦をしない）。
+function pickRecommendedOffer(items){
+  const candidates = (items||[]).filter(it => (it.reviewCount||0) >= 3 && (it.reviewAverage||0) >= 4.0);
+  if (!candidates.length) return null;
+  candidates.sort((a,b)=> reviewScore(b)-reviewScore(a));
+  return offerKey(candidates[0]);
+}
+// レビュー件数・評価・送料・おすすめ情報のテキストバッジ（絵文字は使わない）。
 // いずれも /api/rakuten-search が既に返している項目のみを使い、追加のAPI呼び出しは発生させない。
-function buildOfferBadges(it){
+function buildOfferBadges(it, isRecommend){
   const badges = [];
+  if (isRecommend) {
+    badges.push(`<span class="rakuten-item-badge badge-recommend">おすすめ</span>`);
+  }
   if (it.reviewCount > 0) {
     const avg = it.reviewAverage ? Number(it.reviewAverage).toFixed(1) : '';
     badges.push(`<span class="rakuten-item-badge">レビュー${it.reviewCount.toLocaleString()}件${avg ? ' 評価'+avg : ''}</span>`);

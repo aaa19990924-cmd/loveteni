@@ -387,6 +387,55 @@ section {
 .section-header-text { flex: 1; min-width: 280px; }
 .section-header .section-desc { margin-bottom: 0; }
 
+/* ===== STEP5: 今日のLOVETENI ===== */
+.today-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border: 1px solid var(--line);
+}
+.today-card {
+  padding: 32px 28px;
+  border-right: 1px solid var(--line);
+}
+.today-card:last-child { border-right: none; }
+.today-card-eyebrow {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--accent);
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+.today-card-title {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.5;
+  margin-bottom: 10px;
+}
+.today-card-sub { font-size: 11px; color: var(--mute); margin-bottom: 14px; }
+.today-card-price { font-family: 'DM Sans', sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+.today-card-shop { font-size: 11px; color: var(--mute); margin-bottom: 16px; }
+.today-card-text { font-size: 13px; color: var(--mute); line-height: 1.9; margin-bottom: 18px; }
+.today-card-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.today-card-btn {
+  padding: 8px 16px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  border-radius: 2px;
+}
+.today-card-btn-primary { background: var(--ink); color: white; }
+.today-card-btn-primary:hover { background: var(--accent); }
+.today-card-btn-rakuten { background: #BF0000; color: white; }
+.today-card-btn-rakuten:hover { background: #8B0000; }
+@media (max-width: 900px) {
+  .today-grid { grid-template-columns: 1fr; }
+  .today-card { border-right: none; border-bottom: 1px solid var(--line); }
+  .today-card:last-child { border-bottom: none; }
+}
+
 /* ===== Service Cards ===== */
 .service-grid {
   display: grid;
@@ -3104,6 +3153,27 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
     </div>
   </div>
 
+  <!-- ===== STEP5: 今日のLOVETENI ===== -->
+  <section>
+    <div class="container">
+      <div class="section-header">
+        <div class="section-header-text">
+          <div class="section-eyebrow">TODAY'S LOVETENI</div>
+          <h2 class="section-title">今日のLOVETENI</h2>
+          <p class="section-desc" id="today-date-desc">今日の最安ガット、注目のラケット、ひと言コラムを毎日更新。</p>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="today-grid" id="today-grid">
+        <div class="today-card">
+          <div class="today-card-eyebrow">今日の最安ガット</div>
+          <div class="loading" style="padding:20px 0"><span class="spin"></span>価格を取得中...</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- SERVICES -->
   <section>
     <div class="container">
@@ -4199,6 +4269,7 @@ window.onload = function() {
   updateTodayDate();
   loadCompareState();
   renderCompareFab();
+  renderTodayWidget();
 
   // 初期state設定
   history.replaceState({ view: 'home' }, '', '#home');
@@ -4305,6 +4376,133 @@ function updateTodayDate() {
   const dateStr = `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}`;
   const el = document.getElementById('topline-date');
   if (el) el.textContent = dateStr;
+}
+
+// ===== STEP5: 今日のLOVETENI =====
+// 日付文字列をシードにした疑似ランダムで「今日の最安ガット」「注目ラケット」「ひと言コラム」を選ぶ
+// （サーバー側のバッチ処理は追加せず、クライアントの日付だけで毎日内容が切り替わる方式）。
+// 最安ガットの価格取得は/api/rakuten-search（Cloudflareエッジで1時間キャッシュ済み）を1件だけ呼び、
+// 取得結果をlocalStorageに「その日の分」としてキャッシュするため、同じ端末での再訪問時は
+// 楽天APIへ新規リクエストが発生しない（レート制限対策を維持）。
+const TODAY_CACHE_KEY = 'lt_today_widget_v1';
+const TODAY_STRING_PICKS = ['luxilon-alu-power-125', 'babolat-rpm-blast-125', 'yonex-polytour-pro-125', 'gosen-og-sheep-micro-125', 'solinco-hyper-g-125', 'wilson-nxt-16'];
+const TODAY_RACKET_PICKS = ['wilson-clash-100-v3', 'babolat-pureaero-2026', 'yonex-ezone-100-2025', 'head-speed-mp-2026', 'wilson-blade-98-16x19-v10', 'babolat-puredrive-2025'];
+const TODAY_TIPS = [
+  'ガットは自然に切れなくても、3〜4ヶ月に一度は張り替えるのがおすすめ。時間とともに反発力が落ちていきます。',
+  'ラケットの重さで迷ったら、少し軽めを選ぶのが安全。振り遅れを防ぎやすく、扱いやすさを優先できます。',
+  'オーバーグリップは汗や皮脂で滑りやすくなるので、月1回を目安に交換するとグリップ力が安定します。',
+  'ポリエステルガットは硬めの打感になりがち。腕への負担が気になる人はナイロン・マルチとのハイブリッドも選択肢です。',
+  'ストリングのテンションは、低めだと飛びやすく、高めだとコントロールしやすくなります。まずは推奨テンションの中間値から試すのがおすすめです。',
+  '練習前にラケットのグリップとガットの状態をチェックする習慣をつけると、突然の切断や滑りを防げます。',
+  'フェイス面積が大きいラケットほどスイートスポットが広く、初心者でも安定して打ちやすくなります。',
+  '同じモデルでもフレックス（しなり）の違いで打感が変わるので、試打できる機会があればぜひ試してみましょう。',
+  '夏場はガットが緩みやすいので、こまめな張り替えで反発力をキープしましょう。',
+  'ダブルスでは操作性重視、シングルスではパワー重視のラケット選びが一般的な傾向です。',
+  '新しいガットに変えた直後は感覚が変わるので、試合の数日前までに張り替えておくと安心です。',
+  '部活動でまとめ買いするなら、コスパの良いナイロン系ガットが定番です。'
+];
+
+function todayDateKey() {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+function todaySeed(offset) {
+  const key = todayDateKey();
+  let hash = 0;
+  for (let i = 0; i < key.length; i++) hash = (hash * 31 + key.charCodeAt(i)) >>> 0;
+  return hash + (offset || 0);
+}
+function pickOfTheDay(arr, offset) {
+  if (!arr || !arr.length) return null;
+  return arr[todaySeed(offset) % arr.length];
+}
+
+async function renderTodayWidget() {
+  const grid = document.getElementById('today-grid');
+  if (!grid) return;
+  const dateEl = document.getElementById('today-date-desc');
+  if (dateEl) dateEl.textContent = `${todayDateKey().replace(/-/g, '.')} の最安ガット、注目のラケット、ひと言コラム。`;
+
+  const stringId = pickOfTheDay(TODAY_STRING_PICKS, 0);
+  const racketId = pickOfTheDay(TODAY_RACKET_PICKS, 17);
+  const tip = pickOfTheDay(TODAY_TIPS, 41);
+
+  const s = stringId ? allStrings.find(x => x.id === stringId) : null;
+  const r = racketId ? allRackets.find(x => x.id === racketId) : null;
+
+  const racketCardHtml = r ? `
+    <div class="today-card">
+      <div class="today-card-eyebrow">注目ラケット</div>
+      <div class="today-card-title">${r.brand} ${r.model}</div>
+      <div class="today-card-sub">${r.weight}g ・ フェイス${r.headSize}in² ・ ${r.pattern}</div>
+      <p class="today-card-text">${(r.concept || 'バランスの取れた1本。まずは詳細ページでスペックをチェック。').slice(0, 60)}</p>
+      <div class="today-card-actions">
+        <span class="today-card-btn today-card-btn-primary" onclick="selectRacket('${r.id}')">詳細を見る</span>
+      </div>
+    </div>` : '';
+
+  const tipCardHtml = `
+    <div class="today-card">
+      <div class="today-card-eyebrow">ひと言コラム</div>
+      <p class="today-card-text" style="margin-bottom:18px">${tip || ''}</p>
+      <div class="today-card-actions">
+        <span class="today-card-btn today-card-btn-primary" onclick="navigate('column')">コラムをもっと見る</span>
+      </div>
+    </div>`;
+
+  // 最安ガットは価格取得が必要なので先に枠だけ描画し、あとから差し替える
+  grid.innerHTML = `
+    <div class="today-card" id="today-string-card">
+      <div class="today-card-eyebrow">今日の最安ガット</div>
+      <div class="loading" style="padding:20px 0"><span class="spin"></span>価格を取得中...</div>
+    </div>
+    ${racketCardHtml}
+    ${tipCardHtml}`;
+
+  if (!s) return;
+
+  const renderStringCard = (data) => {
+    const card = document.getElementById('today-string-card');
+    if (!card) return;
+    const name = `${s.brand} ${getModelBaseName(s.model)}`;
+    if (!data) {
+      card.innerHTML = `<div class="today-card-eyebrow">今日の最安ガット</div>
+        <div class="today-card-title">${name}</div>
+        <p class="today-card-text">現在価格情報を取得できません。</p>
+        <div class="today-card-actions"><span class="today-card-btn today-card-btn-primary" onclick="selectString('${s.id}')">詳細を見る</span></div>`;
+      return;
+    }
+    card.innerHTML = `<div class="today-card-eyebrow">今日の最安ガット</div>
+      <div class="today-card-title">${name}</div>
+      <div class="today-card-price">¥${data.price.toLocaleString()}〜</div>
+      <div class="today-card-shop">${data.shopName}</div>
+      <div class="today-card-actions">
+        <a href="${data.itemUrl}" target="_blank" rel="noopener" class="today-card-btn today-card-btn-rakuten">楽天で見る</a>
+        <span class="today-card-btn today-card-btn-primary" onclick="selectString('${s.id}')">詳細を見る</span>
+      </div>`;
+  };
+
+  let cached = null;
+  try {
+    const raw = JSON.parse(localStorage.getItem(TODAY_CACHE_KEY) || 'null');
+    if (raw && raw.date === todayDateKey() && raw.stringId === s.id) cached = raw;
+  } catch (e) { /* 無視 */ }
+
+  if (cached) { renderStringCard(cached.data); return; }
+
+  try {
+    const kw = (s.searchKeyword || `${s.brand} ${s.model}`) + ' テニスガット';
+    const res = await fetch(`/api/rakuten-search?keyword=${encodeURIComponent(kw)}`);
+    const json = await res.json();
+    const priced = (json.items || []).filter(i => i.price > 0).sort((a, b) => a.price - b.price);
+    if (!priced.length) { renderStringCard(null); return; }
+    const cheapest = priced[0];
+    const data = { price: cheapest.price, shopName: cheapest.shopName, itemUrl: cheapest.itemUrl };
+    try { localStorage.setItem(TODAY_CACHE_KEY, JSON.stringify({ date: todayDateKey(), stringId: s.id, data })); } catch (e) { /* 無視 */ }
+    renderStringCard(data);
+  } catch (e) {
+    renderStringCard(null);
+  }
 }
 
 // ===== NEWS =====

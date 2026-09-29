@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LOVETENI ソフトテニス｜ソフトテニスプレーヤーのためのインフォメーション・プラットフォーム</title>
+<meta name="description" content="ラブテニ ソフトテニス版は、ソフトテニス（軟式）プレーヤー・保護者・部活生のためのラケット・ガット情報サイトです。ヨネックス・ミズノなど実在ブランドの現行モデルを掲載。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;900&family=Noto+Serif+JP:wght@400;500;700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0d1117; --paper: #ffffff; --cream: #fdf3f7; --silver: #f6eef2;
+  --line: #f0dce6; --line-strong: #e3b8cd; --mute: #6b6b65;
+  --accent: #c2255c; --accent-bright: #ec4899; --accent-soft: #fdeef4;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Noto Sans JP', -apple-system, sans-serif; background: var(--paper); color: var(--ink); line-height: 1.7; min-height: 100vh; display: flex; flex-direction: column; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+.container { max-width: 1240px; margin: 0 auto; padding: 0 19px; }
+
+/* ===== Hero ===== */
+.hero { background: linear-gradient(135deg, #3a0619 0%, #c2255c 55%, #ec7ba8 100%); color: white; position: relative; overflow: hidden; padding: 76px 0 88px; }
+.hero::after { content: 'SOFT TENNIS'; position: absolute; bottom: -40px; right: -20px; font-family: 'Noto Serif JP', serif; font-weight: 900; font-size: 170px; color: rgba(255,255,255,0.06); letter-spacing: -0.05em; line-height: 1; pointer-events: none; font-style: italic; }
+.hero-inner { max-width: 1240px; margin: 0 auto; padding: 0 19px; position: relative; z-index: 2; }
+.hero-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: #ffe1ec; margin-bottom: 22px; font-weight: 500; }
+.hero-eyebrow::before { content: ''; display: inline-block; width: 28px; height: 1px; background: #ffe1ec; vertical-align: middle; margin-right: 12px; margin-bottom: 3px; }
+.hero-title { font-family: 'Noto Serif JP', serif; font-size: clamp(30px, 5vw, 56px); font-weight: 900; line-height: 1.25; letter-spacing: -0.02em; margin-bottom: 22px; max-width: 640px; }
+.hero-title em { font-style: italic; font-weight: 400; color: #fff6ab; white-space: nowrap; }
+.hero-desc { font-size: 14px; line-height: 2; color: rgba(255,255,255,0.85); max-width: 560px; margin-bottom: 36px; }
+.hero-cta { display: flex; gap: 10px; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 28px; width: 190px; border-radius: 100px; font-size: 14px; font-weight: 600; letter-spacing: 0.02em; transition: all 0.2s; }
+.btn-primary { background: white; color: var(--ink); }
+.btn-primary:hover { background: #fff6ab; }
+.btn-outline { background: transparent; color: white; border: 1px solid rgba(255,255,255,0.4); }
+.btn-outline:hover { border-color: white; background: rgba(255,255,255,0.08); }
+@media (max-width: 720px) { .hero-cta { flex-direction: column; } .btn { width: 100%; } }
+
+/* ===== Stats ===== */
+.stats-bar { background: var(--cream); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 28px 0; }
+.stats-bar-inner { max-width: 1240px; margin: 0 auto; padding: 0 19px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.stat-item { text-align: center; }
+.stat-num { font-family: 'DM Sans', sans-serif; font-size: 30px; font-weight: 700; color: var(--accent); }
+.stat-num small { font-size: 14px; font-weight: 500; }
+.stat-label { font-size: 11px; color: var(--mute); margin-top: 4px; line-height: 1.6; }
+@media (max-width: 640px) { .stats-bar-inner { grid-template-columns: repeat(2, 1fr); } }
+
+/* ===== Services ===== */
+section.services { padding: 64px 0; }
+.section-header { margin-bottom: 40px; }
+.section-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 11px; letter-spacing: 0.2em; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; }
+.section-title { font-family: 'Noto Serif JP', serif; font-size: 26px; font-weight: 700; margin-bottom: 10px; }
+.section-desc { font-size: 13px; color: var(--mute); line-height: 1.8; }
+.service-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-left: 1px solid var(--line); border-top: 1px solid var(--line); }
+.service-card { padding: 28px 24px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); cursor: pointer; transition: background 0.2s; }
+.service-card:hover { background: var(--cream); }
+.service-num { font-family: 'DM Sans', sans-serif; font-size: 11px; color: var(--line-strong); margin-bottom: 14px; }
+.service-title { font-family: 'Noto Serif JP', serif; font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.service-desc { font-size: 12px; color: var(--mute); line-height: 1.8; }
+@media (max-width: 900px) { .service-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 480px) { .service-grid { grid-template-columns: 1fr; } }
+
+/* ===== Note ===== */
+.hard-note { background: var(--ink); color: rgba(255,255,255,0.85); padding: 40px 0; text-align: center; }
+.hard-note-title { font-family: 'Noto Serif JP', serif; font-size: 18px; font-weight: 700; color: white; margin-bottom: 10px; }
+.hard-note p { font-size: 13px; line-height: 1.9; max-width: 560px; margin: 0 auto 20px; }
+.hard-note a.btn-outline { border-color: rgba(255,255,255,0.4); }
+
+footer { border-top: 1px solid var(--line); padding: 26px; text-align: center; font-size: 12px; color: var(--mute); font-family: 'DM Sans', sans-serif; letter-spacing: 0.06em; flex-shrink: 0; }
+footer a { color: var(--accent); }
+</style>
+</head>
+<body>
+
+<script src="/js/site-header.js"></script>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-eyebrow">INFORMATION PLATFORM FOR SOFT TENNIS PLAYERS</div>
+    <h1 class="hero-title">ソフトテニスを、<em>もっと自分らしく。</em></h1>
+    <p class="hero-desc">中学部活で一番人気のソフトテニス。ヨネックス・ミズノの現行ラケット、ガット、グリップ、公認球まで、部活生・保護者・顧問の先生のための情報をここに集約しました。</p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="/soft-rackets.html">ラケットを探す →</a>
+      <a class="btn btn-outline" href="/soft-diagnosis.html">ラケット診断 →</a>
+      <a class="btn btn-outline" href="/soft-strings.html">ガットを探す →</a>
+    </div>
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stats-bar-inner">
+    <div class="stat-item"><div class="stat-num">2<small>ブランド</small></div><div class="stat-label">ラケット23モデルを収録</div></div>
+    <div class="stat-item"><div class="stat-num">3<small>ブランド</small></div><div class="stat-label">ガット11モデルを収録</div></div>
+    <div class="stat-item"><div class="stat-num">4<small>ブランド</small></div><div class="stat-label">公認球を掲載</div></div>
+    <div class="stat-item"><div class="stat-num">100<small>%</small></div><div class="stat-label">実在ブランド・モデルのみ掲載</div></div>
+  </div>
+</div>
+
+<section class="services">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-eyebrow">ALL FEATURES</div>
+      <h2 class="section-title">ソフトテニスのすべてを、ここに。</h2>
+      <p class="section-desc">選ぶ、診る、続ける。部活生・保護者・顧問の先生のための機能。</p>
+    </div>
+    <div class="service-grid">
+      <div class="service-card" onclick="location.href='/soft-rackets.html'">
+        <div class="service-num">01</div>
+        <div class="service-title">ラケット</div>
+        <div class="service-desc">ヨネックス・ミズノの現行モデルを一覧。前衛・後衛・レベル別に絞り込めます。</div>
+      </div>
+      <div class="service-card" onclick="location.href='/soft-strings.html'">
+        <div class="service-num">02</div>
+        <div class="service-title">ガット</div>
+        <div class="service-desc">ヨネックス・ゴーセン・トアルソンのガットを素材別に比較できます。</div>
+      </div>
+      <div class="service-card" onclick="location.href='/soft-grips.html'">
+        <div class="service-num">03</div>
+        <div class="service-title">グリップ</div>
+        <div class="service-desc">ソフトテニスにもおすすめのオーバーグリップテープを掲載。</div>
+      </div>
+      <div class="service-card" onclick="location.href='/soft-diagnosis.html'">
+        <div class="service-num">04</div>
+        <div class="service-title">ラケット診断</div>
+        <div class="service-desc">5つの質問に答えるだけ。レベル・ポジションに合った一本を提案します。</div>
+      </div>
+      <div class="service-card" onclick="location.href='/soft-equipment.html'">
+        <div class="service-num">05</div>
+        <div class="service-title">用品</div>
+        <div class="service-desc">日本ソフトテニス連盟公認球を中心に、部活で使う用品を掲載。</div>
+      </div>
+      <div class="service-card" onclick="location.href='/soft-parents.html'">
+        <div class="service-num">06</div>
+        <div class="service-title">保護者ガイド</div>
+        <div class="service-desc">硬式との違いや予算の目安を、専門用語を避けてわかりやすく解説。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="hard-note">
+  <div class="container">
+    <div class="hard-note-title">硬式テニスをお探しですか？</div>
+    <p>LOVETENIには硬式テニス版もあります。ラケット・ガットの情報量は硬式の方が豊富です。</p>
+    <a class="btn btn-outline" style="width:auto;display:inline-flex" href="/">硬式テニス版はこちら →</a>
+  </div>
+</div>
+
+<footer>
+  <div>© 2026 <a href="/soft-index.html">LOVETENI ソフトテニス</a> — ソフトテニスプレーヤーのためのインフォメーション・プラットフォーム</div>
+</footer>
+
+</body>
+</html>

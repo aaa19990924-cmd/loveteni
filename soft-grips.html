@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ソフトテニス用グリップを探す | LOVETENI ラブテニ</title>
+<meta name="description" content="ヨネックス・トアルソンなど、ソフトテニスにもおすすめのオーバーグリップテープを一覧・詳細で紹介。楽天市場での価格チェックに対応。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;900&family=Noto+Serif+JP:wght@400;500;700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="/grips-data-soft.js"></script>
+<style>
+:root {
+  --ink: #0d1117; --paper: #ffffff; --cream: #fdf3f7; --silver: #f6eef2;
+  --line: #f0dce6; --line-strong: #e3b8cd; --mute: #6b6b65;
+  --accent: #c2255c; --accent-bright: #ec4899; --accent-soft: #fdeef4;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Noto Sans JP', -apple-system, sans-serif; background: var(--paper); color: var(--ink); line-height: 1.7; min-height: 100vh; display: flex; flex-direction: column; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+.container { max-width: 1240px; margin: 0 auto; padding: 0 19px; }
+.main { flex: 1 0 auto; padding: 40px 0 80px; }
+.page-hero { background: var(--ink); color: white; padding: 48px 0 44px; }
+.page-hero-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 11px; letter-spacing: 0.3em; color: var(--accent-bright); margin-bottom: 14px; font-weight: 500; text-transform: uppercase; }
+.page-hero-title { font-family: 'Noto Serif JP', serif; font-size: clamp(24px, 3.4vw, 36px); font-weight: 700; margin-bottom: 12px; }
+.page-hero-desc { font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.9; max-width: 620px; }
+.filter-wrap { background: var(--cream); border-bottom: 1px solid var(--line); padding: 20px 0; margin-bottom: 32px; }
+.filter-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.filter-label { font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mute); min-width: 60px; }
+.fbtn { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; padding: 6px 14px; border: 1px solid var(--line-strong); border-radius: 2px; background: white; color: var(--mute); cursor: pointer; transition: all 0.15s; }
+.fbtn:hover { border-color: var(--accent); color: var(--accent); }
+.fbtn.active { background: var(--accent); color: white; border-color: var(--accent); }
+.result-count { font-size: 12px; color: var(--mute); margin-left: auto; }
+.racket-grid { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); border-top: none; }
+.racket-card { padding: 20px 16px 24px; border-top: 1px solid var(--line); border-right: 1px solid var(--line); background: white; }
+.racket-card:nth-child(3n) { border-right: none; }
+.badge { font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.05em; padding: 3px 8px; border-radius: 2px; background: var(--accent-soft); color: var(--accent); display: inline-block; margin-bottom: 10px; }
+.racket-brand-text { font-family: 'DM Sans', sans-serif; font-size: 10px; letter-spacing: 0.15em; color: var(--mute); text-transform: uppercase; margin-bottom: 6px; }
+.racket-model { font-family: 'Noto Serif JP', serif; font-size: 16px; font-weight: 700; margin-bottom: 10px; line-height: 1.4; }
+.racket-concept { font-size: 12px; color: var(--mute); line-height: 1.8; margin-bottom: 14px; }
+.racket-btn { display: block; width: 100%; padding: 9px; border: 1px solid var(--ink); background: white; color: var(--ink); font-size: 11px; font-weight: 500; letter-spacing: 0.04em; text-align: center; transition: all 0.2s; }
+.racket-btn:hover { background: var(--ink); color: white; }
+.empty { grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--mute); }
+footer { border-top: 1px solid var(--line); padding: 26px; text-align: center; font-size: 12px; color: var(--mute); font-family: 'DM Sans', sans-serif; letter-spacing: 0.06em; flex-shrink: 0; }
+footer a { color: var(--accent); }
+@media (max-width: 900px) {
+  .racket-grid { grid-template-columns: repeat(2, 1fr); }
+  .racket-card:nth-child(3n) { border-right: 1px solid var(--line); }
+  .racket-card:nth-child(2n) { border-right: none; }
+}
+@media (max-width: 480px) {
+  .racket-grid { grid-template-columns: 1fr; }
+  .racket-card:nth-child(2n) { border-right: 1px solid var(--line); }
+}
+</style>
+</head>
+<body>
+
+<script src="/js/site-header.js"></script>
+
+<div class="page-hero">
+  <div class="container">
+    <div class="page-hero-eyebrow">SOFT TENNIS GRIPS</div>
+    <h1 class="page-hero-title">グリップテープを探す</h1>
+    <p class="page-hero-desc">ヨネックス・トアルソンの、ソフトテニスにもおすすめのオーバーグリップテープを掲載しています。</p>
+  </div>
+</div>
+
+<main class="main">
+  <div class="filter-wrap">
+    <div class="container">
+      <div class="filter-row">
+        <span class="filter-label">ブランド</span>
+        <button class="fbtn active" data-v="all" onclick="setFilter('all',this)">すべて</button>
+        <button class="fbtn" data-v="YONEX" onclick="setFilter('YONEX',this)">YONEX</button>
+        <button class="fbtn" data-v="TOALSON" onclick="setFilter('TOALSON',this)">TOALSON</button>
+        <span class="result-count" id="result-count"></span>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="racket-grid" id="racket-grid"></div>
+  </div>
+</main>
+
+<footer>
+  <div>© 2026 <a href="/soft-index.html">LOVETENI ソフトテニス</a> — <a href="/">硬式テニス版はこちら</a></div>
+</footer>
+
+<script>
+let currentBrand = 'all';
+function setFilter(v, btn) {
+  currentBrand = v;
+  document.querySelectorAll('.fbtn').forEach(b => b.classList.toggle('active', b === btn));
+  renderGrid();
+}
+function openSoftRakuten(brand, model) {
+  const url = `https://search.rakuten.co.jp/search/mall/${encodeURIComponent(brand + ' ' + model)}/`;
+  if (window.ltTrackRakutenClick) window.ltTrackRakutenClick({ source: 'openSoftRakuten', label: `${brand} ${model}`, url });
+  window.open(url, '_blank');
+}
+function renderGrid() {
+  const grid = document.getElementById('racket-grid');
+  const filtered = currentBrand === 'all' ? SOFT_GRIP_DATABASE : SOFT_GRIP_DATABASE.filter(g => g.brand === currentBrand);
+  document.getElementById('result-count').textContent = `${filtered.length}件`;
+  if (!filtered.length) { grid.innerHTML = `<div class="empty">該当する商品が見つかりません</div>`; return; }
+  grid.innerHTML = filtered.map(g => `
+    <div class="racket-card">
+      <span class="badge">${g.texture}</span>
+      <div class="racket-brand-text">${g.brand}</div>
+      <div class="racket-model">${g.model}</div>
+      <div class="racket-concept">${g.concept}</div>
+      <button class="racket-btn" onclick="openSoftRakuten('${g.brand}','${g.model.replace(/'/g, "\\'")}')">楽天で価格チェック →</button>
+    </div>`).join('');
+}
+renderGrid();
+</script>
+
+</body>
+</html>

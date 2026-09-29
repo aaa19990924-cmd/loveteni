@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ソフトテニスラケットを探す | LOVETENI ラブテニ</title>
+<meta name="description" content="ヨネックス・ミズノなど、ソフトテニス（軟式）ラケットの現行モデルを一覧・詳細で紹介。前衛・後衛・レベル別の絞り込み、楽天市場での価格チェックに対応。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;900&family=Noto+Serif+JP:wght@400;500;700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="/racket-data-soft.js"></script>
+<style>
+:root {
+  --ink: #0d1117;
+  --paper: #ffffff;
+  --cream: #fdf3f7;
+  --silver: #f6eef2;
+  --line: #f0dce6;
+  --line-strong: #e3b8cd;
+  --mute: #6b6b65;
+  --accent: #c2255c;
+  --accent-bright: #ec4899;
+  --accent-soft: #fdeef4;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Noto Sans JP', -apple-system, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.7;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+.container { max-width: 1240px; margin: 0 auto; padding: 0 19px; }
+.main { flex: 1 0 auto; padding: 40px 0 80px; }
+
+/* ===== Page Hero ===== */
+.page-hero { background: var(--ink); color: white; padding: 48px 0 44px; }
+.page-hero-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 11px; letter-spacing: 0.3em; color: var(--accent-bright); margin-bottom: 14px; font-weight: 500; text-transform: uppercase; }
+.page-hero-title { font-family: 'Noto Serif JP', serif; font-size: clamp(24px, 3.4vw, 36px); font-weight: 700; margin-bottom: 12px; }
+.page-hero-desc { font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.9; max-width: 620px; }
+
+/* ===== Filter bar ===== */
+.filter-wrap { background: var(--cream); border-bottom: 1px solid var(--line); padding: 20px 0; margin-bottom: 32px; }
+.filter-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+.filter-row:last-child { margin-bottom: 0; }
+.filter-label { font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--mute); min-width: 60px; }
+.fbtn { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; padding: 6px 14px; border: 1px solid var(--line-strong); border-radius: 2px; background: white; color: var(--mute); cursor: pointer; transition: all 0.15s; }
+.fbtn:hover { border-color: var(--accent); color: var(--accent); }
+.fbtn.active { background: var(--accent); color: white; border-color: var(--accent); }
+.result-count { font-size: 12px; color: var(--mute); margin-left: auto; }
+
+/* ===== Grid ===== */
+.racket-grid { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); border-top: none; }
+.racket-card { cursor: pointer; padding: 20px 16px 24px; border-top: 1px solid var(--line); border-right: 1px solid var(--line); background: white; transition: background 0.2s; }
+.racket-card:nth-child(3n) { border-right: none; }
+.racket-card:hover { background: var(--cream); }
+.racket-badges { display: flex; gap: 6px; margin-bottom: 10px; }
+.badge { font-family: 'DM Sans', sans-serif; font-size: 9px; font-weight: 700; letter-spacing: 0.05em; padding: 3px 8px; border-radius: 2px; }
+.badge-position { background: var(--accent-soft); color: var(--accent); }
+.badge-level { background: var(--silver); color: var(--mute); }
+.racket-brand-text { font-family: 'DM Sans', sans-serif; font-size: 10px; letter-spacing: 0.15em; color: var(--mute); text-transform: uppercase; margin-bottom: 6px; }
+.racket-model { font-family: 'Noto Serif JP', serif; font-size: 17px; font-weight: 700; margin-bottom: 10px; line-height: 1.4; }
+.racket-concept { font-size: 12px; color: var(--mute); line-height: 1.8; margin-bottom: 14px; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.racket-btn { display: block; width: 100%; padding: 9px; border: 1px solid var(--ink); background: white; color: var(--ink); font-size: 11px; font-weight: 500; letter-spacing: 0.04em; text-align: center; transition: all 0.2s; }
+.racket-btn:hover { background: var(--ink); color: white; }
+.empty { grid-column: 1/-1; text-align: center; padding: 60px 20px; color: var(--mute); }
+
+/* ===== Detail ===== */
+.detail-wrap { display: none; }
+.detail-wrap.active { display: block; }
+.back-btn { font-size: 12px; color: var(--mute); cursor: pointer; margin-bottom: 20px; display: inline-block; }
+.back-btn:hover { color: var(--accent); }
+.detail-layout { display: grid; grid-template-columns: 320px 1fr; gap: 40px; margin-bottom: 40px; }
+.detail-img-area { aspect-ratio: 1; background: var(--cream); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; }
+.detail-img-area img { max-width: 100%; max-height: 100%; object-fit: contain; padding: 20px; }
+.detail-brand { font-family: 'DM Sans', sans-serif; font-size: 11px; letter-spacing: 0.15em; color: var(--mute); text-transform: uppercase; margin-bottom: 8px; }
+.detail-model { font-family: 'Noto Serif JP', serif; font-size: 28px; font-weight: 700; margin-bottom: 14px; }
+.detail-concept { font-size: 13px; color: var(--mute); line-height: 1.9; margin-bottom: 20px; }
+.detail-specs-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); border-left: 1px solid var(--line); margin-bottom: 24px; }
+.detail-spec-item { padding: 12px 14px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.detail-spec-label { font-family: 'DM Sans', sans-serif; font-size: 9px; letter-spacing: 0.1em; color: var(--mute); text-transform: uppercase; margin-bottom: 4px; }
+.detail-spec-value { font-size: 14px; font-weight: 700; }
+.detail-spec-value.unknown { font-size: 11px; font-weight: 500; color: var(--mute); }
+.detail-cta-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.detail-cta-btn { padding: 14px 28px; font-size: 13px; font-weight: 700; letter-spacing: 0.05em; border-radius: 2px; }
+.detail-cta-rakuten { background: #BF0000; color: white; }
+.detail-cta-rakuten:hover { background: #8B0000; }
+.rakuten-section { border-top: 1px solid var(--line); padding-top: 28px; }
+.rakuten-section-title { font-family: 'DM Sans', sans-serif; font-size: 11px; letter-spacing: 0.15em; color: var(--accent); text-transform: uppercase; margin-bottom: 16px; }
+.loading { padding: 30px; text-align: center; color: var(--mute); font-size: 13px; }
+.spin { display: inline-block; width: 16px; height: 16px; border: 2px solid var(--line); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; vertical-align: middle; margin-right: 8px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.rakuten-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px,1fr)); gap: 16px; }
+.rakuten-item { border: 1px solid var(--line); }
+.rakuten-item-img { aspect-ratio: 1; background: var(--cream); display: flex; align-items: center; justify-content: center; }
+.rakuten-item-img img { width: 100%; height: 100%; object-fit: contain; }
+.rakuten-item-info { padding: 10px; }
+.rakuten-item-name { font-size: 10px; margin-bottom: 6px; line-height: 1.5; }
+.rakuten-item-price { font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700; margin-bottom: 8px; }
+.rakuten-item-btn { display: block; padding: 6px; background: #BF0000; color: white; font-size: 10px; text-align: center; }
+.rakuten-item-btn:hover { background: #8B0000; }
+
+/* ===== Footer ===== */
+footer { border-top: 1px solid var(--line); padding: 26px; text-align: center; font-size: 12px; color: var(--mute); font-family: 'DM Sans', sans-serif; letter-spacing: 0.06em; flex-shrink: 0; }
+footer a { color: var(--accent); }
+
+@media (max-width: 900px) {
+  .racket-grid { grid-template-columns: repeat(2, 1fr); }
+  .racket-card:nth-child(3n) { border-right: 1px solid var(--line); }
+  .racket-card:nth-child(2n) { border-right: none; }
+  .detail-layout { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .racket-grid { grid-template-columns: 1fr; }
+  .racket-card:nth-child(2n) { border-right: 1px solid var(--line); }
+}
+</style>
+</head>
+<body>
+
+<script src="/js/site-header.js"></script>
+
+<div class="page-hero">
+  <div class="container">
+    <div class="page-hero-eyebrow">SOFT TENNIS RACKETS</div>
+    <h1 class="page-hero-title">ソフトテニスラケットを探す</h1>
+    <p class="page-hero-desc">ヨネックス・ミズノの現行ラケットを掲載。前衛・後衛・レベル・部活で使えるかどうかで絞り込めます。</p>
+  </div>
+</div>
+
+<main class="main">
+  <div id="list-view">
+    <div class="filter-wrap">
+      <div class="container">
+        <div class="filter-row">
+          <span class="filter-label">ブランド</span>
+          <button class="fbtn active" data-f="brand" data-v="all" onclick="setFilter('brand','all',this)">すべて</button>
+          <button class="fbtn" data-f="brand" data-v="YONEX" onclick="setFilter('brand','YONEX',this)">YONEX</button>
+          <button class="fbtn" data-f="brand" data-v="Mizuno" onclick="setFilter('brand','Mizuno',this)">Mizuno</button>
+        </div>
+        <div class="filter-row">
+          <span class="filter-label">ポジション</span>
+          <button class="fbtn active" data-f="position" data-v="all" onclick="setFilter('position','all',this)">すべて</button>
+          <button class="fbtn" data-f="position" data-v="前衛" onclick="setFilter('position','前衛',this)">前衛</button>
+          <button class="fbtn" data-f="position" data-v="後衛" onclick="setFilter('position','後衛',this)">後衛</button>
+          <button class="fbtn" data-f="position" data-v="オールラウンド" onclick="setFilter('position','オールラウンド',this)">オールラウンド</button>
+        </div>
+        <div class="filter-row">
+          <span class="filter-label">部活で使える</span>
+          <button class="fbtn active" data-f="club" data-v="all" onclick="setFilter('club','all',this)">すべて</button>
+          <button class="fbtn" data-f="club" data-v="beginner" onclick="setFilter('club','beginner',this)">初心者向け</button>
+          <button class="fbtn" data-f="club" data-v="standard" onclick="setFilter('club','standard',this)">部活の定番</button>
+          <span class="result-count" id="result-count"></span>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="racket-grid" id="racket-grid"></div>
+    </div>
+  </div>
+
+  <div id="detail-view" class="detail-wrap">
+    <div class="container">
+      <span class="back-btn" onclick="showList()">← ラケット一覧に戻る</span>
+      <div class="detail-layout">
+        <div class="detail-img-area" id="detail-img-area"><div style="font-size:36px;opacity:0.15">●</div></div>
+        <div>
+          <div class="detail-brand" id="detail-brand"></div>
+          <h1 class="detail-model" id="detail-model"></h1>
+          <p class="detail-concept" id="detail-concept"></p>
+          <div class="detail-specs-grid" id="detail-specs"></div>
+          <div class="detail-cta-row">
+            <button class="detail-cta-btn detail-cta-rakuten" id="detail-rakuten-btn">楽天で探す →</button>
+          </div>
+        </div>
+      </div>
+      <div class="rakuten-section">
+        <div class="rakuten-section-title">楽天市場での価格</div>
+        <div id="rakuten-results"><div class="loading"><span class="spin"></span>楽天を検索中...</div></div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div>© 2026 <a href="/soft-index.html">LOVETENI ソフトテニス</a> — <a href="/">硬式テニス版はこちら</a></div>
+</footer>
+
+<script>
+// =====================================================================
+// soft-rackets.html: 軟式ラケット一覧・詳細
+// 硬式index.htmlのラケット一覧/詳細と同じ考え方（一覧→詳細→楽天価格）を、
+// ブランド数・モデル数が少ない軟式データに合わせて単一ページの軽量な構成にしたもの。
+// =====================================================================
+
+const filters = { brand: 'all', position: 'all', club: 'all' };
+
+// 「部活で使える」タグ（硬式index.htmlのclubTagsForRacketと同じ考え方をソフトテニス仕様に調整）
+function clubTagsForSoftRacket(r) {
+  const tags = [];
+  if (r.level === '初級') tags.push('beginner');
+  if (r.position === 'オールラウンド' && (r.level === '初級' || r.level === '中級')) tags.push('standard');
+  if (r.level === '中級') tags.push('standard');
+  return tags;
+}
+
+function setFilter(key, val, btn) {
+  filters[key] = val;
+  document.querySelectorAll(`.fbtn[data-f="${key}"]`).forEach(b => b.classList.toggle('active', b === btn));
+  renderGrid();
+}
+
+function applyFilters(list) {
+  return list.filter(r => {
+    if (filters.brand !== 'all' && r.brand !== filters.brand) return false;
+    if (filters.position !== 'all' && r.position !== filters.position) return false;
+    if (filters.club !== 'all' && !clubTagsForSoftRacket(r).includes(filters.club)) return false;
+    return true;
+  });
+}
+
+function renderGrid() {
+  const grid = document.getElementById('racket-grid');
+  const filtered = applyFilters(SOFT_RACKET_DATABASE);
+  document.getElementById('result-count').textContent = `${filtered.length}件`;
+  if (!filtered.length) {
+    grid.innerHTML = `<div class="empty">条件に合うラケットが見つかりません</div>`;
+    return;
+  }
+  grid.innerHTML = filtered.map(r => `
+    <div class="racket-card" onclick="showDetail('${r.id}')">
+      <div class="racket-badges">
+        <span class="badge badge-position">${r.position}</span>
+        <span class="badge badge-level">${r.level}</span>
+      </div>
+      <div class="racket-brand-text">${r.brand}${r.series ? ' / ' + r.series : ''}</div>
+      <div class="racket-model">${r.model}</div>
+      <div class="racket-concept">${r.concept}</div>
+      <button class="racket-btn" onclick="event.stopPropagation();openSoftRakuten('${r.brand}','${r.model.replace(/'/g, "\\'")}')">楽天で価格チェック →</button>
+    </div>`).join('');
+}
+
+function specRow(label, value, unit) {
+  const known = value !== null && value !== undefined && value !== '';
+  return `<div class="detail-spec-item">
+    <div class="detail-spec-label">${label}</div>
+    <div class="detail-spec-value${known ? '' : ' unknown'}">${known ? value + (unit || '') : 'メーカー公表値をご確認ください'}</div>
+  </div>`;
+}
+
+function showDetail(id) {
+  const r = getSoftRacketById(id);
+  if (!r) return;
+  document.getElementById('list-view').style.display = 'none';
+  document.getElementById('detail-view').classList.add('active');
+  window.scrollTo(0, 0);
+
+  document.getElementById('detail-brand').textContent = `${r.brand}${r.series ? ' / ' + r.series : ''}`;
+  document.getElementById('detail-model').textContent = r.model;
+  document.getElementById('detail-concept').textContent = r.concept;
+
+  const weightText = (r.weightMin !== null) ? (r.weightMin === r.weightMax ? `${r.weightMin}` : `${r.weightMin}〜${r.weightMax}`) : null;
+  document.getElementById('detail-specs').innerHTML = [
+    specRow('ポジション', r.position, ''),
+    specRow('レベル', r.level, ''),
+    specRow('重量', weightText, 'g'),
+    specRow('バランス', r.balance, 'mm'),
+    specRow('全長', r.length, 'mm'),
+    specRow('フェイス面積', r.headSize, 'in²'),
+    specRow('グリップサイズ', r.gripSizes, ''),
+    specRow('推奨テンション', r.tensionMin !== null ? `${r.tensionMin}〜${r.tensionMax}` : null, 'lbs'),
+    specRow('発売年', r.year, '年'),
+  ].join('');
+
+  document.getElementById('detail-rakuten-btn').onclick = () => openSoftRakuten(r.brand, r.model);
+  document.getElementById('detail-img-area').innerHTML = '<div style="font-size:36px;opacity:0.15">●</div>';
+  loadSoftRakutenResults(r, 'rakuten-results', 'detail-img-area', 'ソフトテニスラケット');
+
+  if (!history.state || history.state.id !== id) {
+    history.pushState({ view: 'detail', id }, '', `#detail/${id}`);
+  }
+}
+
+function showList() {
+  document.getElementById('detail-view').classList.remove('active');
+  document.getElementById('list-view').style.display = '';
+  if (location.hash) history.pushState({}, '', location.pathname);
+}
+
+window.addEventListener('popstate', (e) => {
+  if (e.state && e.state.view === 'detail') showDetail(e.state.id);
+  else showList();
+});
+
+// ===== 楽天検索（硬式index.htmlのopenRakuten/loadRakutenResultsと同じ発想。クリック計測も共通のjs/analytics.jsを利用） =====
+function openSoftRakuten(brand, model) {
+  const url = `https://search.rakuten.co.jp/search/mall/${encodeURIComponent(brand + ' ' + model + ' ソフトテニス')}/`;
+  if (window.ltTrackRakutenClick) window.ltTrackRakutenClick({ source: 'openSoftRakuten', label: `${brand} ${model}`, url });
+  window.open(url, '_blank');
+}
+
+async function loadSoftRakutenResults(item, resultsId, imgAreaId, suffix) {
+  const c = document.getElementById(resultsId);
+  if (!c) return;
+  const kw = (item.searchKeyword || `${item.brand} ${item.model}`);
+  try {
+    const res = await fetch(`/api/rakuten-search?keyword=${encodeURIComponent(kw)}`);
+    const data = await res.json();
+    const items = (data.items || []).filter(i => i.price > 0);
+    if (!items.length) {
+      c.innerHTML = `<div class="loading">現在価格情報を取得できません</div>`;
+      return;
+    }
+    items.sort((a, b) => a.price - b.price);
+    const imgArea = document.getElementById(imgAreaId);
+    if (imgArea && items[0].largeImageUrl) {
+      imgArea.innerHTML = `<img src="${items[0].largeImageUrl}" alt="${item.model}">`;
+    }
+    c.innerHTML = `<div class="rakuten-grid">${items.slice(0, 8).map(it => `
+      <div class="rakuten-item">
+        <div class="rakuten-item-img">${it.imageUrl ? `<img src="${it.largeImageUrl || it.imageUrl}" loading="lazy">` : ''}</div>
+        <div class="rakuten-item-info">
+          <div class="rakuten-item-name">${it.name}</div>
+          <div class="rakuten-item-price">¥${it.price.toLocaleString()}</div>
+          <a href="${it.itemUrl}" target="_blank" rel="noopener" class="rakuten-item-btn">楽天で見る</a>
+        </div>
+      </div>`).join('')}</div>`;
+  } catch (e) {
+    c.innerHTML = `<div class="loading">現在価格情報を取得できません</div>`;
+  }
+}
+
+// ===== 初期化 =====
+renderGrid();
+const initHash = location.hash.match(/^#detail\/(.+)$/);
+if (initHash) showDetail(decodeURIComponent(initHash[1]));
+</script>
+
+</body>
+</html>

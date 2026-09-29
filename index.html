@@ -215,6 +215,23 @@ header {
   cursor: pointer;
   flex-shrink: 0;
 }
+.sport-toggle {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 7px 14px;
+  border-radius: 100px;
+  white-space: nowrap;
+  text-decoration: none;
+  flex-shrink: 0;
+  background: var(--accent);
+  color: #fff;
+  transition: background 0.15s;
+}
+.sport-toggle:hover { background: var(--accent-bright); }
+@media (max-width: 720px) {
+  .sport-toggle { font-size: 11px; padding: 6px 10px; }
+}
 
 /* ===== Hero ===== */
 .hero {
@@ -3108,6 +3125,7 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
       <span class="header-search-icon">&#x2315;</span>
       <input type="text" placeholder="検索..." oninput="onSearch(this.value)">
     </div>
+    <a class="sport-toggle" id="sport-toggle-link" href="/soft-index.html">軟式へ切替</a>
     <div id="auth-btn"></div>
     <button class="hamburger" onclick="toggleMobileNav()">☰</button>
   </div>
@@ -4496,10 +4514,27 @@ function navigate(view, skipPush) {
   // アクセス解析画面を開いたときに集計を描画
   if (view === 'analytics') renderAnalyticsView();
 
+  // 軟式切り替えボタンの行き先を現在のビューに合わせて更新
+  updateSportToggleLink(view);
+
   // ブラウザ履歴に追加（戻る/進む対応）
   if (!skipPush && !isHistoryNav) {
     history.pushState({ view }, '', '#' + view);
   }
+}
+
+// 硬式/軟式 切り替えボタン：現在表示中のビューに対応する軟式ページへリンクする
+const SPORT_TOGGLE_MAP = {
+  rackets: '/soft-rackets.html', brand: '/soft-rackets.html', series: '/soft-rackets.html', detail: '/soft-rackets.html',
+  strings: '/soft-strings.html', 'string-brand': '/soft-strings.html', 'string-series': '/soft-strings.html', 'string-detail': '/soft-strings.html',
+  grips: '/soft-grips.html', 'grip-brand': '/soft-grips.html', 'grip-detail': '/soft-grips.html',
+  diagnosis: '/soft-diagnosis.html',
+  accessories: '/soft-equipment.html', 'accessory-detail': '/soft-equipment.html',
+};
+function updateSportToggleLink(view) {
+  const link = document.getElementById('sport-toggle-link');
+  if (!link) return;
+  link.href = SPORT_TOGGLE_MAP[view] || '/soft-index.html';
 }
 
 function updateTodayDate() {

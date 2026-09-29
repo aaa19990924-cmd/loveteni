@@ -6,10 +6,27 @@
 (function () {
   'use strict';
 
+  /* ── 硬式/軟式の判定とテーマ色 ──────────────────────────
+     ファイル名が soft- で始まるページ（例: /soft-rackets.html）を軟式ページとみなす。
+     軟式ページのみアクセントカラーをピンク系に切り替える。硬式側の緑には一切影響しない。 */
+  var path = window.location.pathname;
+  var isSoft = /\/soft-[a-z-]+\.html$/.test(path);
+
+  var THEME = isSoft ? {
+    accent: '#c2255c',       // メインピンク（緑 #00513a 相当：文字・下線・ボタン背景など）
+    accentBright: '#ec4899', // ホバー・強調用の鮮やかなピンク（緑 --accent-bright 相当）
+    accentSoft: '#fdeef4',   // 背景アクセント用のごく薄いピンク
+  } : {
+    accent: '#00513a',
+    accentBright: '#008156',
+    accentSoft: '#eaf5f0',
+  };
+
   /* ── CSS ─────────────────────────────────────────────── */
   var CSS = [
     /* CSS custom properties shared across all pages */
-    ':root{--announce-height:36px;--nav-height:64px;}',
+    ':root{--announce-height:36px;--nav-height:64px;',
+    '--sh-accent:' + THEME.accent + ';--sh-accent-bright:' + THEME.accentBright + ';--sh-accent-soft:' + THEME.accentSoft + ';}',
 
     /* topline */
     '.sh-topline{background:#0d1117;color:rgba(255,255,255,.85);font-size: 12px;',
@@ -45,7 +62,7 @@
     '.sh-logo-text{font-family:"Noto Serif JP",serif;font-size: 18px;',
     'font-weight:700;letter-spacing:.1em;color:#0d1117;white-space:nowrap;}',
 
-    '.sh-logo-text em{font-style:italic;color:#00513a;}',
+    '.sh-logo-text em{font-style:italic;color:var(--sh-accent);}',
 
     /* gnav（overflow:hiddenは「その他」ドロップダウンを切り取るため付けない） */
     '.sh-gnav{display:flex;gap: 2px;margin-left: auto;align-items:center;',
@@ -55,8 +72,8 @@
     'color:#0d1117;border-radius:4px;transition:color .15s;cursor:pointer;',
     'white-space:nowrap;text-decoration:none;display:inline-block;}',
 
-    '.sh-gnav-item:hover{color:#00513a;}',
-    '.sh-gnav-item.active{color:#00513a;font-weight:700;}',
+    '.sh-gnav-item:hover{color:var(--sh-accent);}',
+    '.sh-gnav-item.active{color:var(--sh-accent);font-weight:700;}',
 
     /* gnav "その他" dropdown（優先度の低い項目をまとめる） */
     '.sh-gnav-more{position:relative;}',
@@ -66,8 +83,8 @@
     '.sh-gnav-more-panel.open{display:block;}',
     '.sh-gnav-more-item{display:block;padding:9px 16px;font-size:13px;color:#0d1117;',
     'cursor:pointer;white-space:nowrap;text-decoration:none;}',
-    '.sh-gnav-more-item:hover{background:#fafaf7;color:#00513a;}',
-    '.sh-gnav-more-item.active{color:#00513a;font-weight:700;}',
+    '.sh-gnav-more-item:hover{background:#fafaf7;color:var(--sh-accent);}',
+    '.sh-gnav-more-item.active{color:var(--sh-accent);font-weight:700;}',
 
     /* search */
     '.sh-search{width:160px;position:relative;flex-shrink:0;}',
@@ -77,11 +94,17 @@
     'font-family:inherit;background:#fafaf7;outline:none;',
     'transition:border-color .2s;cursor:pointer;}',
 
-    '.sh-search input:focus{border-color:#00513a;background:#fff;}',
+    '.sh-search input:focus{border-color:var(--sh-accent);background:#fff;}',
 
     '.sh-search-icon{position:absolute;left:11px;top:50%;',
     'transform:translateY(-50%);font-size: 13px;color:#6b6b65;',
     'pointer-events:none;}',
+
+    /* 硬式/軟式 切り替えボタン */
+    '.sh-sport-toggle{font-family:"DM Sans",sans-serif;font-size:12px;font-weight:700;',
+    'padding:7px 14px;border-radius:100px;white-space:nowrap;text-decoration:none;',
+    'flex-shrink:0;background:var(--sh-accent);color:#fff;transition:background .15s;}',
+    '.sh-sport-toggle:hover{background:var(--sh-accent-bright);}',
 
     /* hamburger */
     '.sh-hamburger{display:none;width:28px;height:28px;font-size: 19px;',
@@ -97,6 +120,7 @@
     '.sh-topline-left{flex:1;min-width:0;overflow:hidden;white-space:nowrap;}',
     '.sh-topline-left span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}',
     '.sh-topline-left span:first-child{max-width:60%;display:inline-block;vertical-align:bottom;}',
+    '.sh-sport-toggle{font-size:11px;padding:6px 10px;}',
     '}',
   ].join('');
 
@@ -105,12 +129,10 @@
   styleEl.textContent = CSS;
   document.head.appendChild(styleEl);
 
-  /* ── Active page detection ───────────────────────── */
-  var path = window.location.pathname;
-
+  /* ── ナビ項目（硬式・軟式でそれぞれ別セットを持つ。軟式内のリンクは軟式ページ同士に閉じる） ── */
   // 優先度の高い項目は常時表示、残りは「その他」ドロップダウンにまとめる
-  // （1024〜1440px幅で17項目が横に収まりきらずはみ出していた問題の対策）
-  var NAV = [
+  // （1024〜1440px幅で項目が横に収まりきらずはみ出していた問題の対策）
+  var HARD_NAV = [
     { label: 'ラケット',     href: '/' },
     { label: 'ガット',       href: '/' },
     { label: 'グリップ',     href: '/' },
@@ -119,7 +141,7 @@
     { label: 'ランキング',   href: '/ranking.html' },
     { label: '手帳',         href: '/calendar.html' },
   ];
-  var MORE_NAV = [
+  var HARD_MORE_NAV = [
     { label: 'コラム',       href: '/' },
     { label: '最新情報',     href: '/' },
     { label: 'トレーニング', href: '/' },
@@ -131,6 +153,19 @@
     { label: '保護者ガイド', href: '/parents.html' },
     { label: '練習メニュー', href: '/coach.html' },
   ];
+  var SOFT_NAV = [
+    { label: 'トップ',       href: '/soft-index.html' },
+    { label: 'ラケット',     href: '/soft-rackets.html' },
+    { label: 'ガット',       href: '/soft-strings.html' },
+    { label: 'グリップ',     href: '/soft-grips.html' },
+    { label: '用品',         href: '/soft-equipment.html' },
+    { label: '診断',         href: '/soft-diagnosis.html' },
+    { label: '保護者ガイド', href: '/soft-parents.html' },
+  ];
+  var SOFT_MORE_NAV = [];
+
+  var NAV = isSoft ? SOFT_NAV : HARD_NAV;
+  var MORE_NAV = isSoft ? SOFT_MORE_NAV : HARD_MORE_NAV;
 
   function isActive(href) {
     if (href === '/') return false; // SPA items: never active on sub-pages
@@ -143,20 +178,59 @@
     return '<a href="' + item.href + '" class="' + cls + '">' + item.label + '</a>';
   }).join('');
 
-  var moreActive = MORE_NAV.some(function (item) { return isActive(item.href); });
-  var moreItemsHTML = MORE_NAV.map(function (item) {
-    var cls = 'sh-gnav-more-item' + (isActive(item.href) ? ' active' : '');
-    return '<a href="' + item.href + '" class="' + cls + '">' + item.label + '</a>';
-  }).join('');
-  var moreHTML =
-    '<div class="sh-gnav-more" id="sh-gnav-more">' +
-      '<span class="sh-gnav-item sh-gnav-more-toggle' + (moreActive ? ' active' : '') + '" id="sh-gnav-more-toggle">その他 ▾</span>' +
-      '<div class="sh-gnav-more-panel" id="sh-gnav-more-panel">' + moreItemsHTML + '</div>' +
-    '</div>';
-  navHTML += moreHTML;
+  if (MORE_NAV.length) {
+    var moreActive = MORE_NAV.some(function (item) { return isActive(item.href); });
+    var moreItemsHTML = MORE_NAV.map(function (item) {
+      var cls = 'sh-gnav-more-item' + (isActive(item.href) ? ' active' : '');
+      return '<a href="' + item.href + '" class="' + cls + '">' + item.label + '</a>';
+    }).join('');
+    navHTML +=
+      '<div class="sh-gnav-more" id="sh-gnav-more">' +
+        '<span class="sh-gnav-item sh-gnav-more-toggle' + (moreActive ? ' active' : '') + '" id="sh-gnav-more-toggle">その他 ▾</span>' +
+        '<div class="sh-gnav-more-panel" id="sh-gnav-more-panel">' + moreItemsHTML + '</div>' +
+      '</div>';
+  }
+
+  /* ── 硬式/軟式 切り替えボタンの行き先を決める ──────────────────────────
+     ページ単位で1対1対応させる。対応ページがなければ相手側のトップへ。 */
+  var SWITCH_TO_SOFT = {
+    '/equipment.html': '/soft-equipment.html',
+    '/parents.html': '/soft-parents.html',
+  };
+  var SWITCH_TO_HARD = {
+    '/soft-index.html': '/',
+    '/soft-rackets.html': '/#rackets',
+    '/soft-strings.html': '/#strings',
+    '/soft-grips.html': '/#grips',
+    '/soft-diagnosis.html': '/#diagnosis',
+    '/soft-equipment.html': '/equipment.html',
+    '/soft-parents.html': '/parents.html',
+  };
+  var switchHref, switchLabel;
+  if (isSoft) {
+    switchHref = SWITCH_TO_HARD[path] || '/';
+    switchLabel = '硬式へ切替';
+  } else {
+    switchHref = SWITCH_TO_SOFT[path] || '/soft-index.html';
+    switchLabel = '軟式へ切替';
+  }
+  var switchHTML = '<a href="' + switchHref + '" class="sh-sport-toggle">' + switchLabel + '</a>';
 
   /* ── HTML ───────────────────────────────────────── */
-  var toplineHTML =
+  var toplineHTML = isSoft ?
+    '<div class="sh-topline">' +
+      '<div class="sh-topline-inner">' +
+        '<div class="sh-topline-left">' +
+          '<span>ソフトテニス部の用具選びをもっと簡単に</span>' +
+          '<span>—</span>' +
+          '<span>中学部活の定番ブランドを掲載中</span>' +
+        '</div>' +
+        '<div class="sh-topline-right">' +
+          '<span>JP</span><span>|</span><span id="sh-date"></span>' +
+        '</div>' +
+      '</div>' +
+    '</div>'
+  :
     '<div class="sh-topline">' +
       '<div class="sh-topline-inner">' +
         '<div class="sh-topline-left">' +
@@ -170,18 +244,20 @@
       '</div>' +
     '</div>';
 
+  var logoHref = isSoft ? '/soft-index.html' : '/';
   var headerHTML =
     '<header class="sh-header">' +
       '<div class="sh-header-inner">' +
-        '<a href="/" class="sh-logo">' +
+        '<a href="' + logoHref + '" class="sh-logo">' +
           '<div class="sh-logo-mark">L</div>' +
           '<div class="sh-logo-text">LOVE<em>TENI</em></div>' +
         '</a>' +
         '<nav class="sh-gnav" id="sh-gnav">' + navHTML + '</nav>' +
         '<div class="sh-search">' +
           '<span class="sh-search-icon">&#x2315;</span>' +
-          '<input type="text" placeholder="検索..." onclick="location.href=\'/\'">' +
+          '<input type="text" placeholder="検索..." onclick="location.href=\'' + (isSoft ? '/soft-index.html' : '/') + '\'">' +
         '</div>' +
+        switchHTML +
         '<button class="sh-hamburger" id="sh-hamburger">&#8801;</button>' +
       '</div>' +
     '</header>';

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ソフトテニスラケット診断 | LOVETENI ラブテニ</title>
+<meta name="description" content="レベル・ポジション・悩み・予算に答えるだけで、あなたに合うソフトテニスラケットを提案します。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700;900&family=Noto+Serif+JP:wght@400;500;700;900&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="/racket-data-soft.js"></script>
+<style>
+:root {
+  --ink: #0d1117; --paper: #ffffff; --cream: #fdf3f7; --line: #f0dce6; --line-strong: #e3b8cd;
+  --mute: #6b6b65; --accent: #c2255c; --accent-bright: #ec4899; --accent-soft: #fdeef4; --gold: #b8956a;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Noto Sans JP', -apple-system, sans-serif; background: var(--paper); color: var(--ink); line-height: 1.7; min-height: 100vh; display: flex; flex-direction: column; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+.container { max-width: 720px; margin: 0 auto; padding: 0 19px; }
+.main { flex: 1 0 auto; padding: 56px 0 90px; }
+.page-hero { background: var(--ink); color: white; padding: 48px 0 44px; text-align: center; }
+.page-hero-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 11px; letter-spacing: 0.3em; color: var(--accent-bright); margin-bottom: 14px; font-weight: 500; text-transform: uppercase; }
+.page-hero-title { font-family: 'Noto Serif JP', serif; font-size: clamp(24px, 3.4vw, 36px); font-weight: 700; margin-bottom: 12px; }
+.page-hero-desc { font-size: 13px; color: rgba(255,255,255,0.65); line-height: 1.9; max-width: 500px; margin: 0 auto; }
+.quiz-card { background: white; border: 1px solid var(--line); padding: 48px 40px; text-align: center; }
+.quiz-progress { font-family: 'DM Sans', sans-serif; font-size: 11px; color: var(--accent); letter-spacing: 0.15em; margin-bottom: 12px; }
+.quiz-bar { height: 2px; background: var(--line); margin-bottom: 32px; overflow: hidden; }
+.quiz-bar-fill { height: 100%; background: var(--accent); transition: width 0.4s; }
+.quiz-question { font-family: 'Noto Serif JP', serif; font-size: 21px; font-weight: 700; margin-bottom: 28px; line-height: 1.5; }
+.quiz-options { display: grid; gap: 10px; }
+.quiz-option { padding: 14px 20px; border: 1px solid var(--line); background: white; font-size: 13px; cursor: pointer; transition: all 0.2s; text-align: left; font-family: inherit; }
+.quiz-option:hover { border-color: var(--accent); background: var(--cream); padding-left: 26px; }
+.quiz-result { background: white; border: 1px solid var(--line); padding: 44px 40px; }
+.quiz-result-eyebrow { font-family: 'DM Sans', sans-serif; font-size: 11px; color: var(--accent); letter-spacing: 0.2em; margin-bottom: 14px; text-transform: uppercase; text-align: center; }
+.quiz-result-intro { font-size: 13px; color: var(--mute); line-height: 1.8; margin-bottom: 24px; text-align: center; }
+.quiz-result-list { display: flex; flex-direction: column; gap: 14px; margin-bottom: 28px; }
+.quiz-result-item { display: flex; align-items: center; gap: 18px; padding: 16px 18px; border: 1px solid var(--line); }
+.quiz-result-rank { font-family: 'DM Sans', sans-serif; font-size: 20px; font-weight: 700; color: var(--line-strong); min-width: 28px; }
+.quiz-result-item:first-child .quiz-result-rank { color: var(--gold); }
+.quiz-result-body { flex: 1; min-width: 0; }
+.quiz-result-brand { font-size: 10px; letter-spacing: 0.1em; color: var(--mute); text-transform: uppercase; margin-bottom: 2px; }
+.quiz-result-name { font-family: 'Noto Serif JP', serif; font-weight: 700; font-size: 15px; margin-bottom: 5px; }
+.quiz-result-reason { font-size: 12px; color: var(--mute); line-height: 1.7; }
+.quiz-result-btn { display: block; padding: 8px 14px; font-size: 11px; text-align: center; white-space: nowrap; border-radius: 2px; background: var(--ink); color: white; flex-shrink: 0; }
+.quiz-result-btn:hover { background: var(--accent); }
+.quiz-result-buttons { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 26px; border-radius: 100px; font-size: 13px; font-weight: 600; cursor: pointer; }
+.btn-primary { background: var(--ink); color: white; }
+.btn-primary:hover { background: var(--accent); }
+.btn-outline { background: white; color: var(--ink); border: 1px solid var(--line-strong); }
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+footer { border-top: 1px solid var(--line); padding: 26px; text-align: center; font-size: 12px; color: var(--mute); font-family: 'DM Sans', sans-serif; letter-spacing: 0.06em; flex-shrink: 0; }
+footer a { color: var(--accent); }
+@media (max-width: 480px) {
+  .quiz-card, .quiz-result { padding: 32px 20px; }
+  .quiz-result-item { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+
+<script src="/js/site-header.js"></script>
+
+<div class="page-hero">
+  <div class="container">
+    <div class="page-hero-eyebrow">SOFT TENNIS RACKET DIAGNOSIS</div>
+    <h1 class="page-hero-title">ソフトテニスラケット診断</h1>
+    <p class="page-hero-desc">5つの質問に答えるだけで、あなたのレベル・ポジションに合うラケットを提案します。</p>
+  </div>
+</div>
+
+<main class="main">
+  <div class="container" id="quizContainer"></div>
+</main>
+
+<footer>
+  <div>© 2026 <a href="/soft-index.html">LOVETENI ソフトテニス</a> — <a href="/">硬式テニス版はこちら</a></div>
+</footer>
+
+<script>
+// ソフトテニス版ラケット診断。硬式index.htmlの診断（レベル・悩み・重視点・予算からスコアリング）と
+// 同じ考え方だが、軟式特有の「ポジション（前衛/後衛/オールラウンド）」を質問に加えている。
+// 軟式データはweight/balance等の数値が未確認のモデルも多いため、position/level/コンセプト文の
+// キーワード一致を中心にスコアリングする（数値が無い項目は加点・減点の対象にしない）。
+const QUIZ = [
+  { key: 'level', q: 'ソフトテニス歴はどのくらいですか？', opts: ['始めたばかり（〜1年）', '中級者（1〜3年）', '上級者（3年以上）'] },
+  { key: 'position', q: 'ポジションは？', opts: ['前衛', '後衛', 'オールラウンド・まだわからない'] },
+  { key: 'concern', q: '今、プレーで困っていることは？', opts: ['ボールが飛ばない', 'スピンがかからない', 'コントロールが定まらない', '特にない'] },
+  { key: 'priority', q: '重視するポイントは？', opts: ['柔らかい打感', '操作しやすさ', 'パワー・弾き', '耐久性'] },
+  { key: 'budget', q: '予算はどのくらいですか？', opts: ['〜1万円', '1〜2万円', '2万円以上'] },
+];
+const LEVEL_MAP = ['初級', '中級', '上級'];
+const POSITION_MAP = ['前衛', '後衛', 'オールラウンド'];
+let quizStep = 0;
+let quizAnswers = {};
+
+function initQuiz() { quizStep = 0; quizAnswers = {}; renderQuiz(); }
+
+function renderQuiz() {
+  const c = document.getElementById('quizContainer');
+  if (quizStep >= QUIZ.length) { renderResult(c); return; }
+  const q = QUIZ[quizStep];
+  const pct = Math.round((quizStep / QUIZ.length) * 100);
+  c.innerHTML = `<div class="quiz-card">
+    <div class="quiz-progress">QUESTION ${quizStep + 1} / ${QUIZ.length}</div>
+    <div class="quiz-bar"><div class="quiz-bar-fill" style="width:${pct}%"></div></div>
+    <div class="quiz-question">${q.q}</div>
+    <div class="quiz-options">${q.opts.map((o, i) => `<button class="quiz-option" onclick="answerQuiz(${i})">${o}</button>`).join('')}</div>
+  </div>`;
+}
+function answerQuiz(i) { quizAnswers[QUIZ[quizStep].key] = i; quizStep++; renderQuiz(); }
+
+function scoreRacket(r, a) {
+  let score = 0;
+  if (r.position === POSITION_MAP[a.position]) score += 10;
+  else if (a.position === 2) score += 3; // オールラウンド希望なら全ポジションに少し加点
+  if (r.level === LEVEL_MAP[a.level]) score += 8;
+  const text = r.concept || '';
+  if (a.concern === 0 && /(飛|反発|パワー)/.test(text)) score += 5;
+  if (a.concern === 1 && /スピン/.test(text)) score += 5;
+  if (a.concern === 2 && /(コントロール|安定)/.test(text)) score += 5;
+  if (a.priority === 0 && /(柔らか|しなやか)/.test(text)) score += 4;
+  if (a.priority === 1 && /(振りやす|操作)/.test(text)) score += 4;
+  if (a.priority === 2 && /(弾き|パワー|反発)/.test(text)) score += 4;
+  if (a.priority === 3 && /(耐久|安定)/.test(text)) score += 3;
+  return score;
+}
+
+function renderResult(c) {
+  const a = quizAnswers;
+  const scored = SOFT_RACKET_DATABASE.map(r => ({ r, score: scoreRacket(r, a) })).sort((x, y) => y.score - x.score);
+  const seen = new Set();
+  const results = [];
+  for (const { r } of scored) {
+    const key = `${r.brand}__${r.series || r.model}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    results.push(r);
+    if (results.length >= 4) break;
+  }
+  const intro = `あなたの回答（${QUIZ[0].opts[a.level]}・${QUIZ[1].opts[a.position]}）をもとに、${results.length}本のラケットをおすすめします。`;
+  const itemsHtml = results.map((r, i) => `
+    <div class="quiz-result-item">
+      <div class="quiz-result-rank">${i + 1}</div>
+      <div class="quiz-result-body">
+        <div class="quiz-result-brand">${r.brand}${r.series ? ' / ' + r.series : ''}</div>
+        <div class="quiz-result-name">${r.model}</div>
+        <div class="quiz-result-reason">${r.position}・${r.level}者向け。${r.concept}</div>
+      </div>
+      <a class="quiz-result-btn" href="/soft-rackets.html#detail/${r.id}">詳細を見る</a>
+    </div>`).join('');
+
+  c.innerHTML = `<div class="quiz-result">
+    <div class="quiz-result-eyebrow">あなたへのおすすめ</div>
+    <p class="quiz-result-intro">${intro}</p>
+    <div class="quiz-result-list">${itemsHtml}</div>
+    <div class="quiz-result-buttons">
+      <button class="btn btn-primary" onclick="initQuiz()">もう一度診断</button>
+      <a class="btn btn-outline" href="/soft-rackets.html">ラケット一覧へ</a>
+    </div>
+  </div>`;
+}
+
+initQuiz();
+</script>
+
+</body>
+</html>

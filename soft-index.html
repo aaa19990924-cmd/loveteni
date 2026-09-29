@@ -16,7 +16,7 @@
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body { font-family: 'Noto Sans JP', -apple-system, sans-serif; background: var(--paper); color: var(--ink); line-height: 1.7; min-height: 100vh; display: flex; flex-direction: column; }
+body { word-break: keep-all; overflow-wrap: break-word; font-family: 'Noto Sans JP', -apple-system, sans-serif; background: var(--paper); color: var(--ink); line-height: 1.7; min-height: 100vh; display: flex; flex-direction: column; }
 a { color: inherit; text-decoration: none; }
 button { font-family: inherit; cursor: pointer; border: none; background: none; }
 .container { max-width: 1240px; margin: 0 auto; padding: 0 19px; }
@@ -41,7 +41,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 /* ===== Stats ===== */
 .stats-bar { background: var(--cream); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 28px 0; }
 .stats-bar-inner { max-width: 1240px; margin: 0 auto; padding: 0 19px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
-.stat-item { text-align: center; }
+.stat-item { text-align: center; min-width: 0; }
 .stat-num { font-family: 'DM Sans', sans-serif; font-size: 30px; font-weight: 700; color: var(--accent); }
 .stat-num small { font-size: 14px; font-weight: 500; }
 .stat-label { font-size: 11px; color: var(--mute); margin-top: 4px; line-height: 1.6; }
@@ -54,7 +54,7 @@ section.services { padding: 64px 0; }
 .section-title { font-family: 'Noto Serif JP', serif; font-size: 26px; font-weight: 700; margin-bottom: 10px; }
 .section-desc { font-size: 13px; color: var(--mute); line-height: 1.8; }
 .service-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-left: 1px solid var(--line); border-top: 1px solid var(--line); }
-.service-card { padding: 28px 24px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); cursor: pointer; transition: background 0.2s; }
+.service-card { padding: 28px 24px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); cursor: pointer; transition: background 0.2s; min-width: 0; }
 .service-card:hover { background: var(--cream); }
 .service-num { font-family: 'DM Sans', sans-serif; font-size: 11px; color: var(--line-strong); margin-bottom: 14px; }
 .service-title { font-family: 'Noto Serif JP', serif; font-size: 18px; font-weight: 700; margin-bottom: 8px; }

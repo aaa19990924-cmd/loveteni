@@ -28,7 +28,7 @@
 }
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body {
+body { word-break: keep-all; overflow-wrap: break-word;
   font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
   background: var(--paper);
   color: var(--ink);
@@ -146,6 +146,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
 /* ===== VIDEO CARD ===== */
 .video-card {
+  min-width: 0;
   background: var(--paper);
   border: 1px solid var(--line);
   display: flex;

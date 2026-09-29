@@ -144,7 +144,7 @@
     { label: '診断',         href: '/' },
     { label: '用品',         href: '/equipment.html' },
     { label: 'ランキング',   href: '/ranking.html' },
-    { label: '手帳',         href: '/calendar.html' },
+    { label: 'スケジュール', href: '/calendar.html' },
   ];
   var HARD_MORE_NAV = [
     { label: 'コラム',       href: '/' },
@@ -159,7 +159,6 @@
     { label: '練習メニュー', href: '/coach.html' },
   ];
   var SOFT_NAV = [
-    { label: 'トップ',       href: '/soft-index.html' },
     { label: 'ラケット',     href: '/soft-rackets.html' },
     { label: 'ガット',       href: '/soft-strings.html' },
     { label: 'グリップ',     href: '/soft-grips.html' },

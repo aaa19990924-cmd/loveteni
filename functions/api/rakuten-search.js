@@ -40,10 +40,17 @@ function janCodeMatches(janCode, itemName) {
 function mapItem(i) {
   const imageUrl = (i.mediumImageUrls && i.mediumImageUrls[0]) || '';
   const price = i.itemPrice || 0;
+  // pointRate: 楽天APIが返す「その商品限定のポイント倍率」（例: 5 = 5倍）。
+  // 24時間以内に終了するキャンペーンは値が返らないことがあるため、1以下（通常付与のみ）は
+  // 「倍率指定なし」として扱う。pointRateStartTime/EndTimeは付与期間（返らない場合もある）。
+  const pointRate = typeof i.pointRate === 'number' && i.pointRate > 1 ? i.pointRate : null;
   return {
     name: i.itemName || '',
     price: price,
     point: Math.floor(price / 100),
+    pointRate: pointRate,
+    pointRateStartTime: i.pointRateStartTime || null,
+    pointRateEndTime: i.pointRateEndTime || null,
     itemUrl: i.affiliateUrl || i.itemUrl || '',
     shopName: i.shopName || '',
     shopCode: i.shopCode || '',
@@ -104,6 +111,11 @@ export async function onRequest(context) {
       accessKey: ACCESS_KEY,
       affiliateId: AFFILIATE_ID,
       keyword: searchKey,
+      // YONEX「EZONE」等、テニス用品と同じブランド・シリーズ名がゴルフ等の他スポーツ用品にも
+      // 使われているケースがあり、キーワード検索だけでは紛れ込むことがあるため、
+      // 明らかに無関係なジャンルの語を除外する（NGKeywordはSearch APIのみ対応・keywordと同じ形式）。
+      // 完全な除外は保証されないため、クライアント側(OTHER_SPORTS_RE)でも二重にフィルタしている。
+      NGKeyword: 'ゴルフ アイアン バドミントン 卓球',
       hits: '30',
       format: 'json',
       formatVersion: '2',
@@ -201,6 +213,24 @@ export async function onRequest(context) {
       } else {
         fallback = true;
         fallbackKey = searchKey;
+      }
+    } else if (!janCode && items.length === 0) {
+      // 品番なしのキーワード検索で0件だった場合のフォールバック。
+      // keyword は既定でAND検索されるため、"ヨネックス VCORE 98 2026" のように
+      // 発売年を単語として含むキーワードは、出品タイトルに年号表記が無い／異なる
+      // （「2026年モデル」等）だけで丸ごと0件になってしまう（実例: VCORE 98 2026）。
+      // 単独の4桁の年号トークンを取り除いた緩いキーワードで再検索する。
+      const keywordNoYear = keyword
+        .replace(/(?:^|\s)(19|20)\d{2}(?=\s|$)/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+      if (keywordNoYear && keywordNoYear !== keyword) {
+        fallbackKey = keywordNoYear;
+        const fb = await runSearch(fallbackKey);
+        if (!fb.error && fb.items.length) {
+          items = fb.items;
+          fallback = true;
+        }
       }
     }
 

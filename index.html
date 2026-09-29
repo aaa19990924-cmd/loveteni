@@ -33,7 +33,7 @@
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
-body {
+body { word-break: keep-all; overflow-wrap: break-word;
   font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
   background: var(--paper);
   color: var(--ink);
@@ -441,13 +441,38 @@ section {
 /* ===== STEP5: 今日のLOVETENI ===== */
 .today-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: 2fr 1fr;
   gap: 0;
   border: 1px solid var(--line);
 }
+.today-rank-list { display: flex; flex-direction: column; gap: 10px; }
+.today-rank-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+}
+.today-rank-row:last-child { border-bottom: none; }
+.today-rank-row:hover .today-rank-name { color: var(--accent); }
+.today-rank-num {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--line-strong);
+  min-width: 26px;
+  flex-shrink: 0;
+}
+.today-rank-row:first-child .today-rank-num { color: var(--gold, #b8956a); }
+.today-rank-body { flex: 1; min-width: 0; }
+.today-rank-brand { font-size: 10px; letter-spacing: 0.1em; color: var(--mute); text-transform: uppercase; }
+.today-rank-name { font-family: 'Noto Serif JP', serif; font-weight: 700; font-size: 14px; transition: color 0.15s; }
+.today-rank-year { font-family: 'DM Sans', sans-serif; font-size: 11px; color: var(--mute); flex-shrink: 0; white-space: nowrap; }
 .today-card {
   padding: 26px 22px;
   border-right: 1px solid var(--line);
+  min-width: 0; /* グリッドアイテムの既定min-width:autoによる横はみ出しを防ぐ */
 }
 .today-card:last-child { border-right: none; }
 .today-card-eyebrow {
@@ -3104,7 +3129,7 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
       <span class="gnav-item" onclick="navigate('diagnosis')" data-page="diagnosis">診断</span>
       <a href="/equipment.html" class="gnav-item" style="text-decoration:none;color:inherit;">用品</a>
       <a href="/ranking.html" class="gnav-item" style="text-decoration:none;color:inherit;">ランキング</a>
-      <a href="/calendar.html" class="gnav-item" style="text-decoration:none;color:inherit;">手帳</a>
+      <a href="/calendar.html" class="gnav-item" style="text-decoration:none;color:inherit;">スケジュール</a>
       <div class="gnav-more" id="gnav-more">
         <span class="gnav-item gnav-more-toggle" onclick="toggleGnavMore(event)">その他 ▾</span>
         <div class="gnav-more-panel" id="gnav-more-panel">
@@ -3201,7 +3226,7 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
     <div class="hero-inner">
       <div class="hero-eyebrow">INFORMATION PLATFORM FOR TENNIS PLAYERS</div>
       <h1 class="hero-title">テニスを、<em>もっと深く。</em>もっと愉しく。</h1>
-      <p class="hero-desc">テニスプレーヤーのための総合情報プラットフォーム。18ブランド・237モデル以上のガット、9ブランドのラケット、120種類以上のグリップ情報を集約。あなたに最適な一本を、ここで見つけてください。</p>
+      <p class="hero-desc">ラケットもガットも、迷わず選べる。部活生からプロ志向まで、これ一つで足りる。</p>
       <div class="hero-cta">
         <button class="btn btn-primary" onclick="navigate('rackets')">ラケットを探す <span class="btn-arrow">→</span></button>
         <button class="btn btn-outline" onclick="navigate('diagnosis')">ラケット診断 <span class="btn-arrow">→</span></button>
@@ -3215,19 +3240,19 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
     <div class="stats-bar-inner">
       <div class="stat-item">
         <div class="stat-num">237<small>+</small></div>
-        <div class="stat-label">18ブランドのガット<br>モデルを収録</div>
+        <div class="stat-label">ガットモデル<br>（18ブランド）</div>
       </div>
       <div class="stat-item">
         <div class="stat-num">180<small>+</small></div>
-        <div class="stat-label">9ブランドのラケット<br>を網羅</div>
+        <div class="stat-label">ラケットモデル<br>（9ブランド）</div>
       </div>
       <div class="stat-item">
         <div class="stat-num">120<small>+</small></div>
-        <div class="stat-label">グリップテープ<br>・アクセサリー</div>
+        <div class="stat-label">グリップ<br>・アクセサリー</div>
       </div>
       <div class="stat-item">
         <div class="stat-num">12<small>機能</small></div>
-        <div class="stat-label">診断・比較・記録<br>すべてが無料</div>
+        <div class="stat-label">診断・比較・記録<br>すべて無料</div>
       </div>
     </div>
   </div>
@@ -3251,15 +3276,16 @@ textarea.mygear-input { resize: vertical; min-height: 60px; }
         <div class="section-header-text">
           <div class="section-eyebrow">TODAY'S LOVETENI</div>
           <h2 class="section-title">今日のLOVETENI</h2>
-          <p class="section-desc" id="today-date-desc">今日の最安ガット、注目のラケット、ひと言コラムを毎日更新。</p>
+          <p class="section-desc" id="today-date-desc">最新ラケット人気ランキング、ひと言コラムを毎日更新。</p>
         </div>
       </div>
     </div>
     <div class="container">
       <div class="today-grid" id="today-grid">
         <div class="today-card">
-          <div class="today-card-eyebrow">今日の最安ガット</div>
-          <div class="loading" style="padding:20px 0"><span class="spin"></span>価格を取得中...</div>
+          <div class="today-card-eyebrow">最新ラケット人気ランキング TOP5</div>
+          <div id="today-ranking-list" class="today-rank-list"></div>
+          <p class="today-card-sub" style="margin-top:10px;margin-bottom:0">※発売年が新しいモデルから順に掲載しています。</p>
         </div>
       </div>
     </div>
@@ -4545,14 +4571,10 @@ function updateTodayDate() {
 }
 
 // ===== STEP5: 今日のLOVETENI =====
-// 日付文字列をシードにした疑似ランダムで「今日の最安ガット」「注目ラケット」「ひと言コラム」を選ぶ
-// （サーバー側のバッチ処理は追加せず、クライアントの日付だけで毎日内容が切り替わる方式）。
-// 最安ガットの価格取得は/api/rakuten-search（Cloudflareエッジで1時間キャッシュ済み）を1件だけ呼び、
-// 取得結果をlocalStorageに「その日の分」としてキャッシュするため、同じ端末での再訪問時は
-// 楽天APIへ新規リクエストが発生しない（レート制限対策を維持）。
-const TODAY_CACHE_KEY = 'lt_today_widget_v1';
-const TODAY_STRING_PICKS = ['luxilon-alu-power-125', 'babolat-rpm-blast-125', 'yonex-polytour-pro-125', 'gosen-og-sheep-micro-125', 'solinco-hyper-g-125', 'wilson-nxt-16'];
-const TODAY_RACKET_PICKS = ['wilson-clash-100-v3', 'babolat-pureaero-2026', 'yonex-ezone-100-2025', 'head-speed-mp-2026', 'wilson-blade-98-16x19-v10', 'babolat-puredrive-2025'];
+// 「最新ラケット人気ランキング」は既存のracket-data.jsが持つ発売年(year)の新しい順で算出する
+// （閲覧数・レビュー評価はサイト全体を横断して集計する仕組みが無く、レビュー評価を全モデル分
+// 楽天APIから取得するのはレート制限の観点で現実的でないため採用しなかった。判断理由はPROGRESS.md参照）。
+// 「ひと言コラム」は日付文字列をシードにした疑似ランダムで選ぶ（サーバー側のバッチ処理は追加しない）。
 const TODAY_TIPS = [
   'ガットは自然に切れなくても、3〜4ヶ月に一度は張り替えるのがおすすめ。時間とともに反発力が落ちていきます。',
   'ラケットの重さで迷ったら、少し軽めを選ぶのが安全。振り遅れを防ぎやすく、扱いやすさを優先できます。',
@@ -4583,29 +4605,47 @@ function pickOfTheDay(arr, offset) {
   return arr[todaySeed(offset) % arr.length];
 }
 
-async function renderTodayWidget() {
+// 発売年(year)の新しい順に、シリーズ単位で重複を除いた上位n件を返す。
+// 「人気」の指標として閲覧数・レビュー評価を使いたいところだが、閲覧数はサイト内で
+// 集計する仕組みがなく、レビュー評価を全190モデル分楽天APIから取得するのはレート制限の
+// 観点で現実的ではないため、既存データにある発売年を基準にした（PROGRESS.md参照）。
+function getLatestRacketRanking(n) {
+  const seen = new Set();
+  const result = [];
+  const ranked = allRackets
+    .filter(r => typeof r.year === 'number')
+    .slice()
+    .sort((a, b) => b.year - a.year);
+  for (const r of ranked) {
+    const key = `${r.brand}__${r.series || r.model}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    result.push(r);
+    if (result.length >= n) break;
+  }
+  return result;
+}
+
+function renderTodayWidget() {
   const grid = document.getElementById('today-grid');
   if (!grid) return;
   const dateEl = document.getElementById('today-date-desc');
-  if (dateEl) dateEl.textContent = `${todayDateKey().replace(/-/g, '.')} の最安ガット、注目のラケット、ひと言コラム。`;
+  if (dateEl) dateEl.textContent = `${todayDateKey().replace(/-/g, '.')} 更新：最新ラケット人気ランキング、ひと言コラム。`;
 
-  const stringId = pickOfTheDay(TODAY_STRING_PICKS, 0);
-  const racketId = pickOfTheDay(TODAY_RACKET_PICKS, 17);
+  const topRackets = getLatestRacketRanking(5);
   const tip = pickOfTheDay(TODAY_TIPS, 41);
 
-  const s = stringId ? allStrings.find(x => x.id === stringId) : null;
-  const r = racketId ? allRackets.find(x => x.id === racketId) : null;
-
-  const racketCardHtml = r ? `
-    <div class="today-card">
-      <div class="today-card-eyebrow">注目ラケット</div>
-      <div class="today-card-title">${r.brand} ${r.model}</div>
-      <div class="today-card-sub">${r.weight}g ・ フェイス${r.headSize}in² ・ ${r.pattern}</div>
-      <p class="today-card-text">${(r.concept || 'バランスの取れた1本。まずは詳細ページでスペックをチェック。').slice(0, 60)}</p>
-      <div class="today-card-actions">
-        <span class="today-card-btn today-card-btn-primary" onclick="selectRacket('${r.id}')">詳細を見る</span>
-      </div>
-    </div>` : '';
+  const rankingHtml = topRackets.length
+    ? topRackets.map((r, i) => `
+      <div class="today-rank-row" onclick="selectRacket('${r.id}')">
+        <div class="today-rank-num">${i + 1}</div>
+        <div class="today-rank-body">
+          <div class="today-rank-brand">${r.brand}${r.series ? ' / ' + r.series : ''}</div>
+          <div class="today-rank-name">${r.model}</div>
+        </div>
+        <div class="today-rank-year">${r.year}年</div>
+      </div>`).join('')
+    : '<p class="today-card-text">ランキングを準備中です。</p>';
 
   const tipCardHtml = `
     <div class="today-card">
@@ -4616,59 +4656,13 @@ async function renderTodayWidget() {
       </div>
     </div>`;
 
-  // 最安ガットは価格取得が必要なので先に枠だけ描画し、あとから差し替える
   grid.innerHTML = `
-    <div class="today-card" id="today-string-card">
-      <div class="today-card-eyebrow">今日の最安ガット</div>
-      <div class="loading" style="padding:20px 0"><span class="spin"></span>価格を取得中...</div>
+    <div class="today-card">
+      <div class="today-card-eyebrow">最新ラケット人気ランキング TOP5</div>
+      <div class="today-rank-list">${rankingHtml}</div>
+      <p class="today-card-sub" style="margin-top:10px;margin-bottom:0">※発売年が新しいモデルから順に掲載しています。</p>
     </div>
-    ${racketCardHtml}
     ${tipCardHtml}`;
-
-  if (!s) return;
-
-  const renderStringCard = (data) => {
-    const card = document.getElementById('today-string-card');
-    if (!card) return;
-    const name = `${s.brand} ${getModelBaseName(s.model)}`;
-    if (!data) {
-      card.innerHTML = `<div class="today-card-eyebrow">今日の最安ガット</div>
-        <div class="today-card-title">${name}</div>
-        <p class="today-card-text">現在価格情報を取得できません。</p>
-        <div class="today-card-actions"><span class="today-card-btn today-card-btn-primary" onclick="selectString('${s.id}')">詳細を見る</span></div>`;
-      return;
-    }
-    card.innerHTML = `<div class="today-card-eyebrow">今日の最安ガット</div>
-      <div class="today-card-title">${name}</div>
-      <div class="today-card-price">¥${data.price.toLocaleString()}〜</div>
-      <div class="today-card-shop">${data.shopName}</div>
-      <div class="today-card-actions">
-        <a href="${data.itemUrl}" target="_blank" rel="noopener" class="today-card-btn today-card-btn-rakuten">楽天で見る</a>
-        <span class="today-card-btn today-card-btn-primary" onclick="selectString('${s.id}')">詳細を見る</span>
-      </div>`;
-  };
-
-  let cached = null;
-  try {
-    const raw = JSON.parse(localStorage.getItem(TODAY_CACHE_KEY) || 'null');
-    if (raw && raw.date === todayDateKey() && raw.stringId === s.id) cached = raw;
-  } catch (e) { /* 無視 */ }
-
-  if (cached) { renderStringCard(cached.data); return; }
-
-  try {
-    const kw = (s.searchKeyword || `${s.brand} ${s.model}`) + ' テニスガット';
-    const res = await fetch(`/api/rakuten-search?keyword=${encodeURIComponent(kw)}`);
-    const json = await res.json();
-    const priced = (json.items || []).filter(i => i.price > 0).sort((a, b) => a.price - b.price);
-    if (!priced.length) { renderStringCard(null); return; }
-    const cheapest = priced[0];
-    const data = { price: cheapest.price, shopName: cheapest.shopName, itemUrl: cheapest.itemUrl };
-    try { localStorage.setItem(TODAY_CACHE_KEY, JSON.stringify({ date: todayDateKey(), stringId: s.id, data })); } catch (e) { /* 無視 */ }
-    renderStringCard(data);
-  } catch (e) {
-    renderStringCard(null);
-  }
 }
 
 // ===== NEWS =====
@@ -5332,7 +5326,23 @@ function loadCardImg(r) {
 
 // ===== 楽天オファー表示（安い順/ポイント順・最安バッジ・ポイント還元額） =====
 let _rkOffers = { items: [], header: '🏪 楽天市場', container: null, sort: 'price-asc', amazonKeyword: '' };
-function offerPoint(it){ return it.point || Math.floor((it.price||0) / 100); }
+// 楽天APIが商品ごとに返す「アイテム限定ポイント倍率」(pointRate)が取得できた場合は
+// それを反映したポイント数を、取得できない場合は基本付与分(1%)の目安を返す。
+function offerPoint(it){
+  const base = it.point || Math.floor((it.price||0) / 100);
+  return it.pointRate ? base * it.pointRate : base;
+}
+// ポイント欄に表示するラベル。倍率情報がある場合は倍率と（わかれば）終了日を表示し、
+// 無い場合は「基本ポイントの目安」であることを明示する（キャンペーンがあるように誤解させない）。
+function pointCampaignLabel(it){
+  if (!it.pointRate) return '基本ポイントの目安（1%）';
+  let label = `${it.pointRate}倍ポイント対象`;
+  if (it.pointRateEndTime) {
+    const end = String(it.pointRateEndTime).slice(0, 10);
+    if (end) label += `（〜${end}）`;
+  }
+  return label;
+}
 function renderRkOffers(){
   const st = _rkOffers;
   if(!st.container) return;
@@ -5349,12 +5359,13 @@ function renderRkOffers(){
     <button class="offer-sort-btn ${st.sort==='point-desc'?'on':''}" onclick="setRkSort('point-desc')">ポイント順</button>
     <button class="offer-sort-btn ${st.sort==='review-desc'?'on':''}" onclick="setRkSort('review-desc')">レビュー順</button>
   </div>`;
-  const note = `<div class="rakuten-note">※ポイントは基本付与分（1%）の目安です。店舗キャンペーンやSPU等により実際はさらに多くなる場合があります。</div>`;
+  const note = `<div class="rakuten-note">※ポイント数は、楽天APIが商品ごとに返す期間限定のポイント倍率情報が取得できた場合はそれを反映した目安、取得できない場合は基本付与分（1%）の目安です。SPU（スーパーポイントアッププログラム）等の会員特典は含まれていないため、実際の付与ポイントはこれより多くなる場合があります。</div>`;
   const grid = s.slice(0,8).map((it)=>{
     const pt = offerPoint(it);
     const badge = (it.price && it.price===minPrice) ? '<span class="offer-min">最安</span>' : '';
     const isRecommend = recommendId && offerKey(it) === recommendId;
-    const img = it.imageUrl ? `<img src="${it.largeImageUrl||it.imageUrl}" loading="lazy">` : '<div style="font-size:30px;opacity:0.15">🎾</div>';
+    const offerImgUrl = (it.largeImageUrl || it.imageUrl || '').replace(/_ex=\d+x\d+/, '_ex=300x300');
+    const img = it.imageUrl ? `<img src="${offerImgUrl}" loading="lazy" decoding="async">` : '<div style="font-size:30px;opacity:0.15">🎾</div>';
     return `<div class="rakuten-item${isRecommend?' is-recommend':''}">
       <div class="rakuten-item-img">${img}</div>
       <div class="rakuten-item-info">
@@ -5364,7 +5375,7 @@ function renderRkOffers(){
         <div class="rakuten-item-price">¥${(it.price||0).toLocaleString()}${badge}</div>
         <div class="rakuten-item-point">
           <div class="rakuten-item-point-num">+${pt.toLocaleString()}pt〜</div>
-          <div class="rakuten-item-point-campaign">キャンペーンでさらに増量</div>
+          <div class="rakuten-item-point-campaign">${pointCampaignLabel(it)}</div>
         </div>
         <a href="${it.itemUrl}" target="_blank" class="rakuten-item-btn">楽天で見る</a>
       </div>
@@ -5459,7 +5470,7 @@ async function loadRakutenResults(r) {
   // キャッシュ済み画像があれば即表示
   const cachedImg = getCachedImg(cacheKey);
   if (cachedImg) {
-    document.getElementById('detail-img-area').innerHTML = `<img src="${cachedImg}" alt="${r.model}" onerror="this.parentElement.innerHTML='<div class=empty-icon>🎾</div>'">`;
+    document.getElementById('detail-img-area').innerHTML = `<img src="${cachedImg}" alt="${r.model}" fetchpriority="high" decoding="async" onerror="this.parentElement.innerHTML='<div class=empty-icon>🎾</div>'">`;
   }
 
   // 価格キャッシュがあれば「検索中」表示なしで即描画（余計なチラつきを防ぐ）
@@ -5494,7 +5505,12 @@ async function loadRakutenResults(r) {
     : (pickBestMatch(r, itemsToShow) || itemsToShow[0]);
   if (bestForImage && bestForImage.largeImageUrl) {
     setCachedImg(cacheKey, bestForImage.largeImageUrl, bestForImage);
-    document.getElementById('detail-img-area').innerHTML = `<img src="${bestForImage.largeImageUrl}" alt="${r.model}" onerror="this.parentElement.innerHTML='<div class=empty-icon>🎾</div>'">`;
+    // キャッシュ画像をすでに表示済みの場合は、フェッチ完了後に別の画像へ自動的に
+    // 差し替えない（ページを開いた直後に画像が勝手に切り替わるスライドショーのような
+    // 挙動を防ぐため）。キャッシュが無かった場合のみ、取得できた画像を表示する。
+    if (!cachedImg) {
+      document.getElementById('detail-img-area').innerHTML = `<img src="${bestForImage.largeImageUrl}" alt="${r.model}" fetchpriority="high" decoding="async" onerror="this.parentElement.innerHTML='<div class=empty-icon>🎾</div>'">`;
+    }
   }
   const hasProspo = itemsToShow.some(i => i.isProSports);
   const headerLabel = hasProspo ? '🏪 PRO SPORTS優先表示' : '🏪 楽天市場';
@@ -5503,6 +5519,11 @@ async function loadRakutenResults(r) {
 }
 
 // 楽天結果から「ラケット本体らしくない」商品を除外
+// テニス以外のスポーツ用品が紛れ込むケース（例: YONEX EZONE はゴルフのアイアンにも
+// 使われているブランド・シリーズ名のため「EZONE CB302アイアン」等が混入していた）を
+// 除外する共通パターン。ラケット・ガット・グリップ・用品のすべての検索結果に適用する。
+const OTHER_SPORTS_RE = /ゴルフ|golf|アイアン|ドライバー|フェアウェイウッド|ユーティリティ|パター(?!ン)|キャディ|バドミントン|badminton|卓球|table\s?tennis|ピンポン|野球|バット|グローブ|サッカー|soccer|football|バレーボール|volleyball/i;
+
 function filterRacketItems(items, r) {
   const modelKey = (r.model || '').toLowerCase().replace(/\s+/g, '');
   const brandKey = (r.brand || '').toLowerCase();
@@ -5524,6 +5545,7 @@ function filterRacketItems(items, r) {
     const price = item.price || 0;
 
     // 明らかに無関係な商品カテゴリは除外
+    if (OTHER_SPORTS_RE.test(name)) return false;
     if (/水着|スイム|swim|ボクサー|トランクス|アンダーウェア|下着|スパッツ/.test(name)) return false;
     if (/シューズ|スニーカー|shoes|sneaker|靴/.test(name)) return false;
     if (/ウェア|tシャツ|t-shirt|ポロシャツ|パンツ|短パン|スカート|skirt|ジャージ|ジャケット|jacket|パーカー|hoodie/.test(name)) return false;
@@ -6393,7 +6415,9 @@ async function loadRakutenResultsGeneric(item, resultsId, imgAreaId, suffix) {
   const result = cachedPrice || await fetchRakutenDetailData(`/api/rakuten-search?keyword=${encodeURIComponent(kw)}`, priceCacheKey);
   if (result.error) { showRakutenError(c, section); return; }
 
-  const items = result.items || [];
+  // ガット・グリップ・用品の検索結果にも、ゴルフ・バドミントン等の他スポーツ用品が
+  // 混入していないことがあるため、ラケットと同じ除外パターンを適用する
+  const items = (result.items || []).filter(item => !OTHER_SPORTS_RE.test(item.name || ''));
   if (!items.length) {
     if (section) section.style.display = 'none';
     return;
@@ -6401,7 +6425,7 @@ async function loadRakutenResultsGeneric(item, resultsId, imgAreaId, suffix) {
   const first = items.find(i => i.largeImageUrl);
   if (first) {
     const imgArea = document.getElementById(imgAreaId);
-    if (imgArea) imgArea.innerHTML = `<img src="${first.largeImageUrl}" alt="${item.model}" onerror="this.parentElement.innerHTML='<div class=empty-icon>🎾</div>'">`;
+    if (imgArea) imgArea.innerHTML = `<img src="${first.largeImageUrl}" alt="${item.model}" fetchpriority="high" decoding="async" onerror="this.parentElement.innerHTML='<div class=empty-icon>🎾</div>'">`;
   }
   const hasProspo = items.some(i => i.isProSports);
   const headerLabel = hasProspo ? '🏪 PRO SPORTS優先表示' : '🏪 楽天市場';

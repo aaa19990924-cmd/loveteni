@@ -8,9 +8,14 @@
 
   /* ── 硬式/軟式の判定とテーマ色 ──────────────────────────
      ファイル名が soft- で始まるページ（例: /soft-rackets.html）を軟式ページとみなす。
-     軟式ページのみアクセントカラーをピンク系に切り替える。硬式側の緑には一切影響しない。 */
+     軟式ページのみアクセントカラーをピンク系に切り替える。硬式側の緑には一切影響しない。
+     注意: Cloudflare Pagesの既定設定(html_handling: auto-trailing-slash)では、
+     /soft-rackets.html へのアクセスが拡張子なしの /soft-rackets にリダイレクトされるため、
+     location.pathname に .html が付いているとは限らない。判定・パス比較はすべて
+     「.html と末尾スラッシュを取り除いた正規化パス」で行い、拡張子の有無に影響されないようにする。 */
   var path = window.location.pathname;
-  var isSoft = /\/soft-[a-z-]+\.html$/.test(path);
+  var normPath = path.replace(/\.html$/, '').replace(/\/$/, '') || '/';
+  var isSoft = /^\/soft-[a-z-]+$/.test(normPath);
 
   var THEME = isSoft ? {
     accent: '#c2255c',       // メインピンク（緑 #00513a 相当：文字・下線・ボタン背景など）
@@ -170,7 +175,7 @@
   function isActive(href) {
     if (href === '/') return false; // SPA items: never active on sub-pages
     var slug = href.replace(/^\//, '').replace(/\.html$/, '');
-    return path.indexOf(slug) !== -1;
+    return normPath.indexOf(slug) !== -1;
   }
 
   var navHTML = NAV.map(function (item) {
@@ -192,26 +197,27 @@
   }
 
   /* ── 硬式/軟式 切り替えボタンの行き先を決める ──────────────────────────
-     ページ単位で1対1対応させる。対応ページがなければ相手側のトップへ。 */
+     ページ単位で1対1対応させる。対応ページがなければ相手側のトップへ。
+     キーは正規化パス（.html・末尾スラッシュなし）で持ち、normPathと突き合わせる。 */
   var SWITCH_TO_SOFT = {
-    '/equipment.html': '/soft-equipment.html',
-    '/parents.html': '/soft-parents.html',
+    '/equipment': '/soft-equipment.html',
+    '/parents': '/soft-parents.html',
   };
   var SWITCH_TO_HARD = {
-    '/soft-index.html': '/',
-    '/soft-rackets.html': '/#rackets',
-    '/soft-strings.html': '/#strings',
-    '/soft-grips.html': '/#grips',
-    '/soft-diagnosis.html': '/#diagnosis',
-    '/soft-equipment.html': '/equipment.html',
-    '/soft-parents.html': '/parents.html',
+    '/soft-index': '/',
+    '/soft-rackets': '/#rackets',
+    '/soft-strings': '/#strings',
+    '/soft-grips': '/#grips',
+    '/soft-diagnosis': '/#diagnosis',
+    '/soft-equipment': '/equipment.html',
+    '/soft-parents': '/parents.html',
   };
   var switchHref, switchLabel;
   if (isSoft) {
-    switchHref = SWITCH_TO_HARD[path] || '/';
+    switchHref = SWITCH_TO_HARD[normPath] || '/';
     switchLabel = '硬式へ切替';
   } else {
-    switchHref = SWITCH_TO_SOFT[path] || '/soft-index.html';
+    switchHref = SWITCH_TO_SOFT[normPath] || '/soft-index.html';
     switchLabel = '軟式へ切替';
   }
   var switchHTML = '<a href="' + switchHref + '" class="sh-sport-toggle">' + switchLabel + '</a>';
